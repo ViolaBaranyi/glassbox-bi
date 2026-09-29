@@ -34,7 +34,7 @@ A `demo.py` kb. 10 másodperc alatt végigfuttatja a teljes pipeline-t, és a v�
 | 1 | Környezet | a verziók rögzítve vannak a kimenetben |
 | 2 | Adat | ha nincs valódi adat, azonos alakú szintetikusat generál |
 | 3 | Tárház | 9 CSV → csillagséma DuckDB-ben, **V-1 validációval** |
-| 4 | Tesztek | 20 teszt: szivárgásvédelem és V-1; ha bármelyik bukik, **a demó megáll** |
+| 4 | Tesztek | 26 teszt: szivárgásvédelem, V-1 és abláció; ha bármelyik bukik, **a demó megáll** |
 | 5 | Betanítás | LightGBM + izotonikus kalibráció, érintetlen, legkésőbbi időszakon mérve |
 | 6 | Összegzés | rangsorolás, kalibráció, artefaktumok helye |
 
@@ -51,7 +51,8 @@ A `demo.py` kb. 10 másodperc alatt végigfuttatja a teljes pipeline-t, és a v�
 | M2 — jellemzők, point-in-time korrekt (as-of illesztés) | **kész** |
 | M2 — időbeli szétvágás, bővülő ablakos CV | **kész** |
 | M2 — LightGBM baseline, kalibráció, determinisztikus futás | **kész** |
-| Tesztek — szivárgás (13) és V-1 (7) | **kész, 20/20** |
+| M2 — abláció (`--drop`), validációs mérőszámok a `metrics.json`-ban | **kész** |
+| Tesztek — szivárgás (13), V-1 (7), abláció (6) | **kész, 26/26** |
 | M2 — 40 futásos sweep, hiperparaméter-hangolás | következő |
 | M3 — SHAP, ellenpélda, stabilitás | következő |
 | M1 — szemantikus réteg (KAPU ①) | tervezett |
@@ -131,7 +132,22 @@ python -m data.describe_warehouse      # mi van a tárházban (eredet, séma, mi
 python -m pytest tests/ -v             # tesztek
 python -m pipeline.train               # betanítás
 python -m pipeline.train --balance none  # súlyozás nélkül (összehasonlításhoz)
+python -m pipeline.train --balance none --drop honap   # abláció: hónap-jellemzők nélkül
 ```
+
+**Abláció.** A `--drop` jellemzőket zár ki a betanításból: csoportnevet (`honap` =
+`honap_sin`, `honap_cos`; `naptar` = ezek + `unnep_kozeli`) vagy jellemzőneveket
+fogad, vesszővel elválasztva. Elgépelt névre hibát ad — különben a „nélküle" futás
+csendben a teljes modell lenne. A jellemzőszerződés (`FEATURES`) nem változik; a
+kizárt jellemzők a `metrics.json`-ban, a model cardban és a mappanévben
+(`..._minus-honap_seed1`) is látszanak. Több seedes összevetés PowerShellben:
+
+```powershell
+foreach ($d in "", "honap") { foreach ($s in 1..5) { python -m pipeline.train --balance none --seed $s --tag ablacio --drop "$d" | Out-Null } }
+```
+
+A `metrics.json` a teszt mellett a validáció mérőszámait is rögzíti
+(`validacio_kalibralatlan`): konfigurációk közti választás ezen történjen, ne a teszten.
 
 A legutóbbi futás artefaktumainak mappanevét az `artifacts\LATEST.txt` tartalmazza.
 
@@ -156,7 +172,8 @@ glassbox-bi/
 ├── pyproject.toml           pytest-beállítások
 └── tests/
     ├── test_no_leakage.py   13 teszt
-    └── test_warehouse.py    7 teszt
+    ├── test_warehouse.py    7 teszt
+    └── test_ablation.py     6 teszt (az abláció tényleg kizár-e)
 ```
 
 ## A tároló közzététele
@@ -182,7 +199,7 @@ A GitHubon **Private** tárolóként kezdd, üres inicializálással (ne kérj R
 
 Az első push után a `.github/workflows/tests.yml` minden feltöltésnél lefuttatja a
 teljes pipeline-t Python 3.11-en és 3.12-n: adatgenerálás, tárházépítés V-1
-validációval, 20 teszt, betanítás. Ha egy teszt elbukik, a futás pirosra vált, és
+validációval, 26 teszt, betanítás. Ha egy teszt elbukik, a futás pirosra vált, és
 a GitHub e-mailt küld. Ez a szivárgásvédelem hálója: egy elrontott jellemző nem
 maradhat észrevétlen.
 
@@ -221,7 +238,7 @@ A pipeline determinisztikus, tehát az új gépen **ugyanezeket** kell látnod:
 
 ```
 Tárház         38,857 rendelés, 2017-01-01 .. 2018-08-30
-Tesztek        mind átment                     (20 teszt)
+Tesztek        mind átment                     (26 teszt)
 Modell         LightGBM, 20 jellemző, 27 fa
 Rangsorolás    PR-AUC 0.211  (bázisráta 0.077, 2.7x)  ROC-AUC 0.728
 Kalibráció     ECE 0.371 -> 0.009   Brier 0.210 -> 0.067

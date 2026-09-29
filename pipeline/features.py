@@ -70,6 +70,19 @@ FEATURES = NUMERIC_FEATURES + BOOLEAN_FEATURES + CATEGORICAL_FEATURES
 LABEL = "kesett"
 
 # --------------------------------------------------------------------------
+# Jellemzőcsoportok az ablációhoz (python -m pipeline.train --drop ...).
+# Az abláció a FEATURES szerződést NEM módosítja: a build_features mindig a
+# teljes listát adja vissza, a kizárás csak a betanítás előtt történik.
+# --------------------------------------------------------------------------
+FEATURE_GROUPS = {
+    # a naptári hónap kódolása
+    "honap": ["honap_sin", "honap_cos"],
+    # minden, ami a naptárból jön és évszakhatást hordozhat
+    # (az unnep_kozeli a november végét és a decembert jelöli)
+    "naptar": ["honap_sin", "honap_cos", "unnep_kozeli"],
+}
+
+# --------------------------------------------------------------------------
 # Tiltólista — amit soha nem láthat a modell.
 # --------------------------------------------------------------------------
 # Ezek a rendelés leadása UTÁN keletkeznek. Ha bármelyik bekerül a jellemzők
@@ -285,6 +298,39 @@ def suspicious_features(X: pd.DataFrame, y: pd.Series,
         if auc > threshold:
             hits.append((c, round(float(auc), 3)))
     return hits
+
+
+def resolve_drop(names) -> list[str]:
+    """
+    Az ablációhoz kizárandó jellemzők feloldása.
+
+    `names` elemei lehetnek csoportnevek (FEATURE_GROUPS kulcsai) vagy
+    jellemzőnevek. Ismeretlen név -> ValueError: egy elgépelt név (pl.
+    "honap_szin") különben csendben semmit nem zárna ki, és a „nélküle"
+    futás valójában a teljes modell lenne.
+
+    Visszaad: a kizárandó jellemzők listája, a FEATURES sorrendjében.
+    """
+    wanted: set[str] = set()
+    unknown = []
+    for raw in names or []:
+        name = str(raw).strip()
+        if not name:
+            continue
+        if name in FEATURE_GROUPS:
+            wanted.update(FEATURE_GROUPS[name])
+        elif name in FEATURES:
+            wanted.add(name)
+        else:
+            unknown.append(name)
+    if unknown:
+        raise ValueError(
+            "Ismeretlen jellemző vagy csoport az ablációban: " + ", ".join(unknown)
+            + "\n  csoportok: " + ", ".join(FEATURE_GROUPS)
+            + "\n  jellemzők: " + ", ".join(FEATURES))
+    if wanted >= set(FEATURES):
+        raise ValueError("Az abláció minden jellemzőt kizárna — ez nem modell.")
+    return [f for f in FEATURES if f in wanted]
 
 
 def schema(X: pd.DataFrame) -> dict:

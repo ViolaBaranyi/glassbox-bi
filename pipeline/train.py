@@ -14,6 +14,12 @@ A rendszerterv szerinti döntések itt már érvényesek:
 
 Futtatás:
     python -m pipeline.train
+    python -m pipeline.train --balance none --drop honap     # abláció: hónap nélkül
+    python -m pipeline.train --balance none --drop naptar    # hónap + ünnep nélkül
+
+Az abláció csak a betanításból zár ki jellemzőket; a jellemzőszerződés
+(features.FEATURES) és a szivárgásvédelem változatlan. A kizárt jellemzők a
+metrics.json-ban, a model cardban és az artefaktummappa nevében is látszanak.
 """
 
 from __future__ import annotations
@@ -36,7 +42,8 @@ from sklearn.isotonic import IsotonicRegression
 from sklearn.metrics import average_precision_score, brier_score_loss, roc_auc_score
 
 from data.db import DB_PATH, WarehouseUnavailable, connect, use_utf8_console
-from pipeline.features import LeakageError, build_features, schema, suspicious_features
+from pipeline.features import (
+    LeakageError, build_features, resolve_drop, schema, suspicious_features)
 from pipeline.split import temporal_split
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -142,23 +149,32 @@ def _print_reliability(raw_rows, cal_rows):
 
 # ----------------------------------------------------------------- betanítás
 def run(db_path: Path = DB_PATH, seed: int = 42, tag: str = "baseline",
-        balance: str = "balanced", write_artifacts: bool = True) -> dict:
+        balance: str = "balanced", write_artifacts: bool = True,
+        drop=None) -> dict:
     """
     balance: "balanced" — class_weight="balanced" (a rendszerterv jelenlegi alapja)
              "none"     — súlyozás nélkül (természetes eloszlás; lásd a
                           konzultációs kérdést a rendszerterv állapot-szakaszában)
+    drop:    abláció — kizárandó jellemzők vagy csoportok (features.FEATURE_GROUPS),
+             pl. ["honap"]. Ismeretlen névre hibát ad, nem hallgat.
     """
     if balance not in ("balanced", "none"):
         raise ValueError(f"Ismeretlen balance érték: {balance!r}")
+    drop_names = [str(d).strip() for d in (drop or []) if str(d).strip()]
+    drop_cols = resolve_drop(drop_names)   # elgépelésnél itt megáll, még a betöltés előtt
     con = connect(db_path, read_only=True)
     X, y, meta = build_features(con)   # a szivárgásteszt itt fut le
     prov = con.execute("SELECT * FROM meta_build").df().iloc[0].to_dict()
     con.close()
+    if drop_cols:
+        X = X.drop(columns=drop_cols)
 
     forras = str(prov["adatforras"])
     sp = temporal_split(meta["rendeles_idopont"])
     print(f"Adatforrás: {forras.upper()}")
     print(f"Jellemzők: {X.shape[1]} db, {len(X):,} sor, pozitív arány {y.mean():.1%}")
+    if drop_cols:
+        print(f"ABLÁCIÓ — kizárva ({', '.join(drop_names)}): {', '.join(drop_cols)}")
     print(f"Időbeli szétvágás ({sp.source}):")
     print(sp.describe(meta["rendeles_idopont"]))
 
@@ -244,7 +260,15 @@ def run(db_path: Path = DB_PATH, seed: int = 42, tag: str = "baseline",
         "bazisrata": round(base_rate, 4),
         "teszt_kalibralatlan": m_raw,
         "teszt_kalibralt": m_cal,
+        # A konfigurációk (súlyozás, abláció) közti VÁLASZTÁS ezen történjen,
+        # ne a teszten. Optimista becslés: a korai leállítás is ezt figyelte.
+        "validacio_kalibralatlan": evaluate(yva, p_va_raw),
+        "validacio_bazisrata": round(float(yva.mean()), 4),
         "jellemzok": int(X.shape[1]),
+        "kizart_jellemzok": drop_cols,
+        "ablacio": drop_names,
+        # amit a modell ténylegesen látott — ebből ellenőrizhető az abláció
+        "jellemzo_nevek": list(model.booster_.feature_name()),
         "sorok": int(len(X)),
     }
     if not write_artifacts:
@@ -252,7 +276,8 @@ def run(db_path: Path = DB_PATH, seed: int = 42, tag: str = "baseline",
 
     # ------------------------------------------------------------ artefaktum
     stamp = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
-    out = ARTIFACTS / f"{stamp}_lgbm_{tag}_{balance}_seed{seed}"
+    minus = f"_minus-{'+'.join(drop_names)}" if drop_names else ""
+    out = ARTIFACTS / f"{stamp}_lgbm_{tag}_{balance}{minus}_seed{seed}"
     out.mkdir(parents=True, exist_ok=True)
 
     joblib.dump(model, out / "model.joblib")
@@ -300,6 +325,11 @@ def run(db_path: Path = DB_PATH, seed: int = 42, tag: str = "baseline",
         "\n> **SZINTETIKUS ADAT.** Ez a modell generált adaton tanult. A számok a\n"
         "> gépezet működését mutatják, a valóságról semmit nem mondanak.\n"
         if forras == "szintetikus" else "")
+    ablacio_sor = (
+        f"\n**Ablációs futás** — kizárt jellemzők ({', '.join(drop_names)}): "
+        f"{', '.join(drop_cols)}. Ez összehasonlító kísérlet, nem a szállított modell.\n"
+        if drop_cols else "")
+    drop_arg = f" --drop {','.join(drop_names)}" if drop_names else ""
     card = f"""# Model card — {stamp}
 {figyelmeztetes}
 ## Mire tanítottuk
@@ -307,7 +337,7 @@ Bináris osztályozás: késik-e a rendelés a vállalt határidőhöz képest.
 Adat: Olist-alakú tárház ({forras}), {len(X):,} kézbesített rendelés,
 {sp.train_end.date()} előtti időszakon tanítva, {n_trees} fával.
 Osztálysúlyozás: {balance}.
-
+{ablacio_sor}
 ## Jellemzők
 {X.shape[1]} mező, mind a rendelés LEADÁSAKOR ismert információból.
 Az eladói előzmény-jellemzők as-of illesztéssel készülnek: csak a rendelés
@@ -338,7 +368,7 @@ kalibrált oszlop mutatja.
 * Egyetlen adathalmaz, egyetlen modellcsalád — az általánosíthatóság korlátozott.
 
 ## Reprodukálás
-`python -m pipeline.train --seed {seed} --balance {balance}` — determinisztikus beállítással
+`python -m pipeline.train --seed {seed} --balance {balance}{drop_arg}` — determinisztikus beállítással
 (`deterministic=True`, `force_row_wise=True`). Környezet: `metrics.json`.
 """
     (out / "model_card.md").write_text(card, encoding="utf-8")
@@ -357,10 +387,15 @@ def main() -> None:
     ap.add_argument("--tag", type=str, default="baseline")
     ap.add_argument("--balance", choices=["balanced", "none"], default="balanced",
                     help="osztálysúlyozás: balanced (alapértelmezett) vagy none")
+    # nargs="?": a Windows PowerShell 5.1 az üres ("") argumentumot elhagyja,
+    # így egy ciklusban a --drop "" érték nélkül érkezik — az is teljes modell.
+    ap.add_argument("--drop", type=str, nargs="?", const="", default="",
+                    help="abláció: kizárandó csoportok vagy jellemzők vesszővel, "
+                         "pl. honap vagy naptar vagy honap_sin,het_napja")
     a = ap.parse_args()
     try:
-        run(a.db, a.seed, a.tag, a.balance)
-    except (WarehouseUnavailable, LeakageError) as exc:
+        run(a.db, a.seed, a.tag, a.balance, drop=a.drop.split(","))
+    except (WarehouseUnavailable, LeakageError, ValueError) as exc:
         print(f"\nHIBA:\n{exc}", file=sys.stderr)
         sys.exit(1)
 
