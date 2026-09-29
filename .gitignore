@@ -1,0 +1,22 @@
+# Adat soha nem megy a repóba — letöltő/generáló szkript van helyette.
+data/raw/
+data/*.duckdb
+
+# Futásonkénti kimenetek
+artifacts/
+logs/
+
+# Titkok
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# IDE
+.idea/
+.vscode/

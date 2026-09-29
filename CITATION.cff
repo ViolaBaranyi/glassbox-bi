@@ -1,0 +1,24 @@
+cff-version: 1.2.0
+title: "Glassbox BI — XAI és LLM integrálása self-service Business Intelligence rendszerbe"
+message: "Ha hivatkozol erre a munkára, kérlek az alábbi adatokkal tedd."
+type: software
+version: 0.1.0
+license: MIT
+authors:
+  - family-names: Baranyi
+    given-names: Viola
+    affiliation: "Eszterházy Károly Katolikus Egyetem, Matematikai és Informatikai Intézet"
+abstract: >-
+  Self-service Business Intelligence prototípus, amelyben a számokat
+  determinisztikus réteg állítja elő, a nagy nyelvi modell csak megfogalmaz,
+  a magyarázható MI (XAI) réteg pedig megindokolja az előrejelzést. Két
+  ellenőrző kapu zárja ki, hogy nem alátámasztott szám jusson a döntéshozó
+  elé: a séma-validátor a lekérdezés előtt, a numerikus ellenőrző a válasz
+  után. A kutatás az EKÖP-26-I-1 ösztöndíj keretében készül.
+keywords:
+  - explainable artificial intelligence
+  - business intelligence
+  - large language models
+  - hallucination
+  - SHAP
+  - decision support
