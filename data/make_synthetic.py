@@ -1,10 +1,13 @@
 """
 Szintetikus, Olist-alakú adat generálása.
 
-Miért kell: amíg a valódi Kaggle-adat nincs meg, ez teszi lehetővé, hogy a teljes
-pipeline (ETL -> jellemzők -> betanítás) már ma végigfusson és tesztelhető legyen.
-A fájlnevek és oszlopnevek szándékosan azonosak a valódi Olist adathalmazéval,
-ezért a valódi CSV-kre váltás annyi, hogy azokat másolod a data/raw/ mappába.
+Mire kell: a valódi Olist-adat nem kerülhet a tárolóba, ezért a CI (GitHub
+Actions) és a tesztek ezen futnak — így a teljes pipeline (ETL -> jellemzők ->
+betanítás) valódi adat nélkül is végigfuttatható és ellenőrizhető. A fájlnevek
+és oszlopnevek szándékosan azonosak a valódi Olist adathalmazéval.
+
+A demó alapból a valódi adaton fut (data/fetch_olist.py tölti le); szintetikus
+adatot csak a `python demo.py --synthetic` vagy ez a modul állít elő.
 
 FONTOS: ez NEM a valódi adat. Az itt kapott számok semmit nem mondanak a valóságról.
 A generátor szándékosan visz be ismert összefüggéseket, hogy a modellnek legyen mit
@@ -12,6 +15,7 @@ megtanulnia, és hogy a szivárgásteszt is tudjon mibe beleakadni.
 
 Futtatás:
     python -m data.make_synthetic --orders 40000 --seed 42
+    (valódi adatot tartalmazó mappát nem ír felül; másik mappába: --out <mappa>)
 """
 
 from __future__ import annotations
@@ -360,4 +364,10 @@ if __name__ == "__main__":
     ap.add_argument("--seed", type=int, default=42)
     ap.add_argument("--out", type=Path, default=RAW)
     args = ap.parse_args()
+    from data.fetch_olist import data_state
+    if data_state(args.out) == "valós":
+        import sys
+        print(f"A(z) {args.out} mappában valódi Olist-adat van — a szintetikus "
+              "generálás felülírná.\nMásik mappába: --out <mappa>", file=sys.stderr)
+        sys.exit(1)
     generate(n_orders=args.orders, seed=args.seed, out_dir=args.out)

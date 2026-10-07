@@ -15,7 +15,7 @@ Ez a tároló a megvalósítás; a teljes rendszerterv külön dokumentum.
 
 ## Gyorsindítás
 
-Ajánlott: **Python 3.11 vagy 3.12**.
+Ajánlott: **Python 3.11, 3.12 vagy 3.13**.
 
 ```bash
 python -m venv .venv
@@ -24,22 +24,26 @@ pip install -r requirements.txt
 python demo.py
 ```
 
-A `demo.py` kb. 10 másodperc alatt végigfuttatja a teljes pipeline-t, és a végén
-összegzést ír ki. PyCharmban a zöld **Run** gombbal is indítható.
+Első indításkor a `demo.py` letölti a valódi Olist-adatot a Kaggle-ről (kb. 45 MB,
+Kaggle-fiók nem kell), utána kb. egy perc alatt végigfuttatja a teljes pipeline-t,
+és a végén összegzést ír ki. A további indítások a már letöltött adatot használják.
+PyCharmban a zöld **Run** gombbal is indítható.
 
 ## Mit csinál a demó
 
 | # | Lépés | Mit bizonyít |
 |---|---|---|
 | 1 | Környezet | a verziók rögzítve vannak a kimenetben |
-| 2 | Adat | ha nincs valódi adat, azonos alakú szintetikusat generál |
+| 2 | Adat | a valódi Olist-adat; ha még nincs meg, letölti a Kaggle-ről |
 | 3 | Tárház | 9 CSV → csillagséma DuckDB-ben, **V-1 validációval** |
 | 4 | Tesztek | 26 teszt: szivárgásvédelem, V-1 és abláció; ha bármelyik bukik, **a demó megáll** |
 | 5 | Betanítás | LightGBM + izotonikus kalibráció, érintetlen, legkésőbbi időszakon mérve |
 | 6 | Összegzés | rangsorolás, kalibráció, artefaktumok helye |
 
-> **A szintetikus adat nem a valóság.** A kapott számok a gépezet működését
-> mutatják. Ahol szintetikus adat fut, azt a kimenet minden lépésben jelzi.
+**Valódi adat nélkül:** `python demo.py --synthetic` azonos szerkezetű, generált
+adaton futtatja végig a gépezetet. Erre a CI-nek és a teszteknek van szüksége, mert
+a valódi adat nem kerülhet a tárolóba. A szintetikus adat nem a valóság: a kimenet
+ilyenkor minden lépésben jelzi, hogy a számok csak a gépezet működését mutatják.
 
 ---
 
@@ -48,6 +52,7 @@ A `demo.py` kb. 10 másodperc alatt végigfuttatja a teljes pipeline-t, és a v�
 | Modul | Állapot |
 |---|---|
 | M0 — adattárház, V-1 validáció, adateredet (SHA256) | **kész** |
+| M0 — a valódi adat automatikus letöltése (`data/fetch_olist.py`) | **kész** |
 | M2 — jellemzők, point-in-time korrekt (as-of illesztés) | **kész** |
 | M2 — időbeli szétvágás, bővülő ablakos CV | **kész** |
 | M2 — LightGBM baseline, kalibráció, determinisztikus futás | **kész** |
@@ -113,20 +118,36 @@ valamint hogy szintetikus vagy valós adatból épült (`meta_build`).
 
 ---
 
-## Valódi adatra váltás
+## Az adat
 
-1. Töltsd le a *Brazilian E-Commerce Public Dataset by Olist* adathalmazt a Kaggle-ről.
-   **Ellenőrizd a licencet**, és hivatkozz rá a dolgozatban.
-2. Másold mind a 9 CSV-t a `data\raw\` mappába (a szintetikusak helyére).
-3. Futtasd: `python demo.py`
+**Forrás:** *Brazilian E-Commerce Public Dataset by Olist* — Kaggle,
+[`olistbr/brazilian-ecommerce`](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce).
+Kb. 99 ezer rendelés 2016 és 2018 között, 9 CSV-fájlban.
+**Licenc:** CC BY-NC-SA 4.0 — nem kereskedelmi felhasználás, forrásmegjelöléssel;
+a dolgozatban hivatkozni kell rá.
 
-A kód egy sorát sem kell átírni. Ha csak néhány fájlt cserélsz, a tárház
-**vegyes forrású adatot** jelez, és leáll — szándékosan.
+**Letöltés:** automatikus. A `python demo.py` első indításkor letölti a `kagglehub`
+csomaggal, és a 9 CSV-t a `data\raw\` mappába másolja. Külön is futtatható:
+
+```bash
+python -m data.fetch_olist            # letölti, ha még nincs meg
+python -m data.fetch_olist --force    # akkor is újra letölti, ha megvan
+```
+
+A `kagglehub` a saját gyorsítótárába tölt (`%USERPROFILE%\.cache\kagglehub`), ezért
+egy új klónban már nem kell újra letölteni.
+
+**Kézi letöltés** (ha a gépről nem érhető el a Kaggle): a fenti oldalon
+**Download**, a ZIP-ből mind a 9 CSV-t a `data\raw\` mappába, majd `python demo.py`.
+
+**Védelmek.** A valódi adat soha nem kerül a tárolóba (`.gitignore`). A szintetikus
+generátor nem írja felül a valódi adatot. Ha a `data\raw\` mappában valódi és
+generált fájlok keverednek, a tárház **vegyes forrású adatot** jelez, és leáll.
 
 ## Egyenként futtatható lépések
 
 ```bash
-python -m data.make_synthetic          # szintetikus adat
+python -m data.fetch_olist             # valódi adat letöltése (ha még nincs meg)
 python -m data.build_warehouse         # tárház + V-1
 python -m data.describe_warehouse      # mi van a tárházban (eredet, séma, minta)
 python -m pytest tests/ -v             # tesztek
@@ -157,7 +178,8 @@ A legutóbbi futás artefaktumainak mappanevét az `artifacts\LATEST.txt` tartal
 glassbox-bi/
 ├── demo.py                  teljes pipeline egy paranccsal
 ├── data/
-│   ├── make_synthetic.py    Olist-alakú szintetikus adat + ujjlenyomat
+│   ├── fetch_olist.py       a valódi Olist-adat letöltése (kagglehub)
+│   ├── make_synthetic.py    szintetikus adat a CI-hez és a tesztekhez
 │   ├── build_warehouse.py   CSV → csillagséma, V-1 validáció, eredet
 │   ├── describe_warehouse.py  a tárház tartalma
 │   └── db.py                kapcsolat, érthető hibaüzenetek
@@ -198,10 +220,11 @@ A GitHubon **Private** tárolóként kezdd, üres inicializálással (ne kérj R
 ### Folyamatos ellenőrzés (CI)
 
 Az első push után a `.github/workflows/tests.yml` minden feltöltésnél lefuttatja a
-teljes pipeline-t Python 3.11-en és 3.12-n: adatgenerálás, tárházépítés V-1
-validációval, 26 teszt, betanítás. Ha egy teszt elbukik, a futás pirosra vált, és
-a GitHub e-mailt küld. Ez a szivárgásvédelem hálója: egy elrontott jellemző nem
-maradhat észrevétlen.
+teljes pipeline-t Python 3.11-en és 3.12-n, **szintetikus adaton**
+(`python demo.py --synthetic`), mert a valódi adat nem kerülhet a tárolóba:
+adatgenerálás, tárházépítés V-1 validációval, 26 teszt, betanítás. Ha egy teszt
+elbukik, a futás pirosra vált, és a GitHub e-mailt küld. Ez a szivárgásvédelem
+hálója: egy elrontott jellemző nem maradhat észrevétlen.
 
 ## Másik gépre
 
@@ -211,12 +234,12 @@ környezet mind újraépülnek; a `.gitignore` pontosan ezeket zárja ki.
 | Átvinni | NEM átvinni | Miért |
 |---|---|---|
 | minden, ami a tárolóban van | `.venv\` | gépfüggő, abszolút útvonalakkal |
-| | `data\raw\`, `data\*.duckdb` | a generátor rögzített maggal dolgozik: ugyanaz jön ki |
+| | `data\raw\`, `data\*.duckdb` | a demó első indításkor újra letölti az adatot, a tárházat minden futás újraépíti |
 | | `artifacts\` | a betanítás újra előállítja |
 
 Az új gépen:
 
-1. **Python 3.11 vagy 3.12** a python.org-ról — telepítéskor pipáld be az
+1. **Python 3.11, 3.12 vagy 3.13** a python.org-ról — telepítéskor pipáld be az
    *„Add python.exe to PATH"* dobozt.
 2. Ezután:
 
@@ -234,15 +257,20 @@ felajánlja a virtuális környezet létrehozását a `requirements.txt` alapjá
 
 ### Ellenőrzés: egyeznek-e a számok?
 
-A pipeline determinisztikus, tehát az új gépen **ugyanezeket** kell látnod:
+A pipeline determinisztikus, tehát az új gépen a `python demo.py` összegzésében
+**ugyanezeket** kell látnod (Windowson és Linuxon is így jött ki):
 
 ```
-Tárház         38,857 rendelés, 2017-01-01 .. 2018-08-30
+Tárház         96,470 rendelés, 2016-09-15 .. 2018-08-29
+V-1 validáció  rendben, karanténban 0 sor
 Tesztek        mind átment                     (26 teszt)
-Modell         LightGBM, 20 jellemző, 27 fa
-Rangsorolás    PR-AUC 0.211  (bázisráta 0.077, 2.7x)  ROC-AUC 0.728
-Kalibráció     ECE 0.371 -> 0.009   Brier 0.210 -> 0.067
+Modell         LightGBM, 20 jellemző, 56 fa, súlyozás: balanced
+Rangsorolás    PR-AUC 0.083  (bázisráta 0.036, 2.3x)  ROC-AUC 0.744
+Kalibráció     ECE 0.278 -> 0.035   Brier 0.118 -> 0.036
 ```
+
+A `--synthetic` futás (és a CI) összegzése: 38,857 rendelés, 27 fa,
+PR-AUC 0.211, ROC-AUC 0.728.
 
 Ha egyeznek, az átvitel hibátlan. Ha nem, a demó 1. lépése kiírja a Python- és
 csomagverziókat — azzal kezdd a keresést.
@@ -250,8 +278,8 @@ csomagverziókat — azzal kezdd a keresést.
 ## Licenc és hivatkozás
 
 A kód MIT licenc alatt áll (`LICENSE`). Az Olist adathalmaz **nem** része a
-tárolónak, és a saját feltételei alatt áll — azokat a forrásoldalon kell
-ellenőrizni, és a dolgozatban hivatkozni rá.
+tárolónak, és a saját licence alatt áll (CC BY-NC-SA 4.0, lásd [Az adat](#az-adat));
+a dolgozatban hivatkozni kell rá.
 
 A munkára való hivatkozás adatait a `CITATION.cff` tartalmazza; a GitHub ebből
 „Cite this repository" gombot tesz a tároló oldalára.
@@ -263,3 +291,7 @@ A munkára való hivatkozás adatait a `CITATION.cff` tartalmazza; a GitHub ebb�
 
 **„A tárházfájlt egy másik program zárolja"** — zárd be a kapcsolatot a DBeaverben
 vagy a PyCharm adatbázis-paneljén.
+
+**„Az Olist adathalmaz letöltése nem sikerült"** — nincs internet, vagy a hálózat
+(pl. egyetemi proxy) nem engedi a Kaggle-t. A hibaüzenet leírja a kézi letöltést;
+lásd [Az adat](#az-adat).

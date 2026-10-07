@@ -1,12 +1,12 @@
 """
 Üvegdoboz BI — a teljes pipeline egyetlen paranccsal, bemutatáshoz.
 
-    python demo.py            # meglévő adatot használ; ha nincs, szintetikusat generál
-    python demo.py --fresh    # a szintetikus adatot újragenerálja (valódi adatot soha nem ír felül)
+    python demo.py              # a valódi Olist-adaton fut; ha még nincs meg, letölti
+    python demo.py --synthetic  # szintetikus adaton (CI, gépezet-próba valódi adat nélkül)
 
 Lépések:
   1. környezet ellenőrzése
-  2. adat (szintetikus, ha nincs valódi)
+  2. adat — a valódi Olist-adat; első indításkor letöltés a Kaggle-ről
   3. tárház felépítése — V-1 validáció
   4. tesztek — szivárgás és V-1; ha bármelyik elbukik, a demó leáll
   5. betanítás — LightGBM + kalibráció, érintetlen teszthalmazon mérve
@@ -18,7 +18,6 @@ PyCharmban a zöld Run gombbal is indítható.
 from __future__ import annotations
 
 import argparse
-import json
 import platform
 import sys
 import time
@@ -47,24 +46,12 @@ def fail(msg: str) -> None:
     sys.exit(1)
 
 
-def raw_state(raw_dir: Path) -> str:
-    """'nincs' | 'szintetikus' | 'valós' — a build_warehouse logikájával."""
-    from data.build_warehouse import SOURCES, SYNTHETIC_MARKER, sha256
-    if not all((raw_dir / f).exists() for f in SOURCES.values()):
-        return "nincs"
-    marker = raw_dir / SYNTHETIC_MARKER
-    if not marker.exists():
-        return "valós"
-    rec = json.loads(marker.read_text(encoding="utf-8")).get("files", {})
-    same = all(rec.get(f) == sha256(raw_dir / f) for f in SOURCES.values())
-    return "szintetikus" if same else "valós"
-
-
 def main() -> None:
     use_utf8_console()
     ap = argparse.ArgumentParser(description="Üvegdoboz BI — teljes pipeline")
-    ap.add_argument("--fresh", action="store_true",
-                    help="szintetikus adat újragenerálása (valódit nem ír felül)")
+    ap.add_argument("--synthetic", action="store_true",
+                    help="szintetikus adaton fut (CI, gépezet-próba); "
+                         "valódi adatot nem ír felül")
     ap.add_argument("--balance", choices=["balanced", "none"], default="balanced")
     args = ap.parse_args()
 
@@ -87,16 +74,30 @@ def main() -> None:
 
     # ------------------------------------------------------------------ 2. adat
     t = header(2, "Adat")
+    from data.fetch_olist import FetchError, data_state, fetch
     from data.make_synthetic import RAW, generate
-    state = raw_state(RAW)
-    if state == "valós":
-        print("   Valódi (nem generált) forrásfájlok vannak a data\\raw mappában —")
-        print("   ezeket használjuk." + ("  A --fresh ezeket NEM írja felül." if args.fresh else ""))
-    elif state == "nincs" or args.fresh:
-        print("   Szintetikus, Olist-alakú adat generálása...")
-        generate(out_dir=RAW)
+    state = data_state(RAW)
+    if args.synthetic:
+        if state == "valós":
+            fail("A data\\raw mappában valódi Olist-adat van, a --synthetic felülírná.\n"
+                 "Szintetikus futáshoz használj egy friss klónt, vagy nevezd át a\n"
+                 "data\\raw mappát (a valódi adat bármikor újra letölthető).")
+        if state == "szintetikus":
+            print("   A korábban generált szintetikus adatot használjuk (--synthetic).")
+        else:
+            print("   Szintetikus, Olist-alakú adat generálása (--synthetic)...")
+            generate(out_dir=RAW)
+    elif state == "valós":
+        print("   A valódi Olist-adatot használjuk (data\\raw).")
     else:
-        print("   A korábban generált szintetikus adatot használjuk.")
+        if state == "szintetikus":
+            print("   A data\\raw mappában szintetikus adat van — lecseréljük a valódira.")
+        else:
+            print("   Még nincs adat a data\\raw mappában — első indítás.")
+        try:
+            fetch(RAW)
+        except FetchError as exc:
+            fail(str(exc))
     done(t)
 
     # ---------------------------------------------------------------- 3. tárház
