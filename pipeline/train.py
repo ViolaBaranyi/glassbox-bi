@@ -16,8 +16,20 @@ A rendszerterv és a témavezetői egyeztetés (okt. 2.) szerinti döntések:
   * determinisztikus futás: azonos adat + mag -> azonos modell (NF-1)
   * a szivárgásteszt a betanítás ELŐTT fut, és megállítja a folyamatot
 
+A fák száma (--trees):
+  korai   korai leállítás a validációs ablakon — az eddigi út, ez az alapértelmezés,
+          amíg a lezárt v3 alapfutás protokollját jóvá nem hagyjuk
+  cv      bővülő ablakos keresztvalidáció a TANÍTÓ időszakon belül, N_fix =
+          max(50, medián) — a validációs ablak semmit nem befolyásol (útiterv T5,
+          lásd pipeline/model_selection.py)
+  <szám>  pontosan ennyi fa
+--purge: címke-tisztítás — csak azokon a tanító sorokon tanul, amelyeknek a
+         kimenete a vágás pillanatában már eldőlt (split.settled_before)
+
 Futtatás:
     python -m pipeline.train
+    python -m pipeline.train --trees cv                  # T5: fa-szám a tanító időszakon belül
+    python -m pipeline.train --trees cv --purge          # + címke-tisztítás
     python -m pipeline.train --balance balanced          # összehasonlításhoz
     python -m pipeline.train --drop honap                # abláció: hónap nélkül
     python -m pipeline.train --drop naptar               # hónap + ünnep nélkül
@@ -30,7 +42,6 @@ metrics.json-ban, a model cardban és az artefaktummappa nevében is látszanak.
 from __future__ import annotations
 
 import argparse
-import inspect
 import json
 import platform
 import subprocess
@@ -49,7 +60,7 @@ from sklearn.metrics import average_precision_score, brier_score_loss, roc_auc_s
 from data.db import DB_PATH, WarehouseUnavailable, connect, use_utf8_console
 from pipeline.features import (
     LeakageError, build_features, resolve_drop, schema, suspicious_features)
-from pipeline.split import temporal_split
+from pipeline.split import settled_before, temporal_split
 
 ROOT = Path(__file__).resolve().parent.parent
 ARTIFACTS = ROOT / "artifacts"
@@ -193,18 +204,38 @@ def _print_reliability(rows):
 
 
 # ----------------------------------------------------------------- betanítás
+def _trees_mode(trees) -> tuple[str, int | None]:
+    """'korai' | 'cv' | pozitív egész → (mód, fix fa-szám vagy None)."""
+    if isinstance(trees, str) and trees.strip().lower() in ("korai", "cv"):
+        return trees.strip().lower(), None
+    try:
+        n = int(trees)
+    except (TypeError, ValueError):
+        raise ValueError(f"Ismeretlen --trees érték: {trees!r} (korai, cv vagy pozitív egész)")
+    if n < 1:
+        raise ValueError(f"A fák száma legalább 1 kell legyen, nem {n}.")
+    return "rogzitett", n
+
+
 def run(db_path: Path = DB_PATH, seed: int = 42, tag: str = "baseline",
         balance: str = "none", write_artifacts: bool = True,
-        drop=None) -> dict:
+        drop=None, trees="korai", purge: bool = False,
+        return_predictions: bool = False) -> dict:
     """
     balance: "none"     — súlyozás nélkül (alapértelmezés, okt. 2-i döntés)
              "balanced" — class_weight="balanced"; csak összehasonlításhoz: a
                           nyers valószínűségei erősen torzak (ECE kb. 0,28)
     drop:    abláció — kizárandó jellemzők vagy csoportok (features.FEATURE_GROUPS),
              pl. ["honap"]. Ismeretlen névre hibát ad, nem hallgat.
+    trees:   "korai" (korai leállítás a validáción), "cv" (bővülő ablakos CV a
+             tanító időszakon), vagy egy pozitív egész (pontosan ennyi fa)
+    purge:   címke-tisztítás — csak a vágás előtt lezárult kimenetű tanító sorok
+    return_predictions: a validációs és a teszt előrejelzéseket is visszaadja
+             (a lezárt alapfutás bootstrapjához); a metrics.json-ba nem kerülnek
     """
     if balance not in ("balanced", "none"):
         raise ValueError(f"Ismeretlen balance érték: {balance!r}")
+    mode, n_fixed = _trees_mode(trees)
     drop_names = [str(d).strip() for d in (drop or []) if str(d).strip()]
     drop_cols = resolve_drop(drop_names)   # elgépelésnél itt megáll, még a betöltés előtt
     con = connect(db_path, read_only=True)
@@ -223,7 +254,16 @@ def run(db_path: Path = DB_PATH, seed: int = 42, tag: str = "baseline",
     print(f"Időbeli szétvágás ({sp.source}):")
     print(sp.describe(meta["rendeles_idopont"]))
 
-    Xtr, ytr = X.loc[sp.train], y.loc[sp.train]
+    # Címke-tisztítás: csak azok a tanító sorok, amelyeknek a kimenete a vágáskor
+    # már eldőlt (a vállalt határidejük napja a vágás előtt véget ért).
+    train_idx = sp.train
+    if purge:
+        train_idx = settled_before(sp.train, meta["vallalt_hatarido"], sp.train_end)
+        print(f"Címke-tisztítás: {len(sp.train) - len(train_idx):,} tanító sor kimarad "
+              f"(a vállalt határidejük {sp.train_end.date()} vagy később) — "
+              f"marad {len(train_idx):,}")
+
+    Xtr, ytr = X.loc[train_idx], y.loc[train_idx]
     Xva, yva = X.loc[sp.valid], y.loc[sp.valid]
     Xte, yte = X.loc[sp.test], y.loc[sp.test]
 
@@ -236,23 +276,27 @@ def run(db_path: Path = DB_PATH, seed: int = 42, tag: str = "baseline",
             + ", ".join(f"{c} (AUC {a})" for c, a in gyanus))
     print("Szivárgásvédelem: névszűrő és AUC-őr rendben.")
 
-    params = dict(PARAMS, random_state=seed)
-    params["class_weight"] = "balanced" if balance == "balanced" else None
-    model = lgb.LGBMClassifier(**params)
-    callbacks = [
-        lgb.early_stopping(EARLY_STOPPING_ROUNDS, first_metric_only=True, verbose=False),
-        lgb.log_evaluation(0),
-    ]
-    # A LightGBM 4.7 óta az eval_set helyett eval_X / eval_y a javasolt forma.
-    # Mindkettőt kezeljük, hogy a kód régebbi verzióval is fusson.
-    if "eval_X" in inspect.signature(model.fit).parameters:
-        model.fit(Xtr, ytr, eval_X=Xva, eval_y=yva,
-                  eval_metric="average_precision", callbacks=callbacks)
+    # (körkörös importot kerülünk: a model_selection a train konstansait használja)
+    from pipeline.model_selection import (
+        cross_validate, fit_early_stopping, fit_fixed, model_params)
+    params = model_params(seed, balance)
+    cv = None
+    if mode == "korai":
+        model, n_trees = fit_early_stopping(params, Xtr, ytr, Xva, yva)
+        fa_indok = "korai leállítás a validációs ablakon, PR-AUC alapján"
+    elif mode == "cv":
+        cv = cross_validate(X, y, meta, sp.train, purge=purge, balance=balance)
+        n_trees = cv["n_fix"]
+        model = fit_fixed(params, Xtr, ytr, n_trees)
+        fa_indok = (f"bővülő ablakos CV a tanító időszakon: medián {cv['median']:g}, "
+                    f"alsó korlát {cv['n_min']}")
     else:
-        model.fit(Xtr, ytr, eval_set=[(Xva, yva)],
-                  eval_metric="average_precision", callbacks=callbacks)
-    n_trees = int(model.best_iteration_ or params["n_estimators"])
-    print(f"\nBetanítva: {n_trees} fa (korai leállítás a validáción, PR-AUC alapján)")
+        n_trees = n_fixed
+        model = fit_fixed(params, Xtr, ytr, n_trees)
+        fa_indok = "rögzített fa-szám (parancssorból)"
+    if mode != "korai":
+        params = dict(params, n_estimators=n_trees)
+    print(f"\nBetanítva: {n_trees} fa ({fa_indok})")
 
     p_va = model.predict_proba(Xva)[:, 1]
     p_te = model.predict_proba(Xte)[:, 1]
@@ -316,6 +360,14 @@ def run(db_path: Path = DB_PATH, seed: int = 42, tag: str = "baseline",
         "adatforras": forras,
         "seed": seed,
         "fak_szama": n_trees,
+        "fa_szam_mod": mode,                  # korai | cv | rogzitett
+        "fa_szam_indoklas": fa_indok,
+        "modellvalasztas": cv,                # a bővülő ablakos CV részletei (cv módban)
+        "cimke_tisztitas": {
+            "be": bool(purge),
+            "tanito_sorok": int(len(train_idx)),
+            "kizart_tanito_sorok": int(len(sp.train) - len(train_idx)),
+        },
         "bazisrata": round(base_rate, 4),
         "tanito_bazisrata": round(train_rate, 4),
         "teszt": m_te,
@@ -324,8 +376,9 @@ def run(db_path: Path = DB_PATH, seed: int = 42, tag: str = "baseline",
             "brier_keszseg": skill,
             "izotonikus_validacion_illesztve": m_iso,
         },
-        # A konfigurációk (súlyozás, abláció) közti VÁLASZTÁS ezen történjen,
-        # ne a teszten. Optimista becslés: a korai leállítás is ezt figyelte.
+        # korai módban optimista (a korai leállítás is ezt figyelte); cv és
+        # rögzített módban tiszta, időn kívüli ellenőrzés. Konfigurációk között
+        # a bővülő ablakos CV-n (modellvalasztas) választunk, nem a teszten.
         "validacio": evaluate(yva, p_va),
         "validacio_bazisrata": round(float(yva.mean()), 4),
         "jellemzok": int(X.shape[1]),
@@ -335,13 +388,26 @@ def run(db_path: Path = DB_PATH, seed: int = 42, tag: str = "baseline",
         "jellemzo_nevek": list(model.booster_.feature_name()),
         "sorok": int(len(X)),
     }
+    preds = None
+    if return_predictions:
+        preds = {
+            "tanito_arany": train_rate,
+            "valid": {"y": yva.to_numpy(), "p": p_va,
+                      "ido": meta.loc[sp.valid, "rendeles_idopont"].to_numpy()},
+            "teszt": {"y": yte.to_numpy(), "p": p_te,
+                      "ido": meta.loc[sp.test, "rendeles_idopont"].to_numpy()},
+        }
     if not write_artifacts:
+        if preds is not None:
+            result["elorejelzesek"] = preds
         return result
 
     # ------------------------------------------------------------ artefaktum
     stamp = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
     minus = f"_minus-{'+'.join(drop_names)}" if drop_names else ""
-    out = ARTIFACTS / f"{stamp}_lgbm_{tag}_{balance}{minus}_seed{seed}"
+    fa = {"korai": "", "cv": "_cv", "rogzitett": f"_n{n_trees}"}[mode]
+    tiszt = "_tisztitott" if purge else ""
+    out = ARTIFACTS / f"{stamp}_lgbm_{tag}_{balance}{minus}{fa}{tiszt}_seed{seed}"
     out.mkdir(parents=True, exist_ok=True)
 
     joblib.dump(model, out / "model.joblib")
@@ -396,14 +462,21 @@ def run(db_path: Path = DB_PATH, seed: int = 42, tag: str = "baseline",
         f"{', '.join(drop_cols)}. Ez összehasonlító kísérlet, nem a szállított modell.\n"
         if drop_cols else "")
     drop_arg = f" --drop {','.join(drop_names)}" if drop_names else ""
+    trees_arg = "" if mode == "korai" else f" --trees {'cv' if mode == 'cv' else n_trees}"
+    purge_arg = " --purge" if purge else ""
+    tisztitas_sor = (
+        f"Címke-tisztítás: csak a vágás előtt lezárult kimenetű tanító sorok "
+        f"({len(train_idx):,} tanító sor; {len(sp.train) - len(train_idx):,} kimaradt).\n"
+        if purge else "")
     card = f"""# Model card — {stamp}
 {figyelmeztetes}
 ## Mire tanítottuk
 Bináris osztályozás: késik-e a rendelés a vállalt határidőhöz képest.
 Adat: Olist-alakú tárház ({forras}), {len(X):,} kézbesített rendelés,
-{sp.train_end.date()} előtti időszakon tanítva, {n_trees} fával.
+{sp.train_end.date()} előtti időszakon tanítva, {n_trees} fával
+(a fák száma: {fa_indok}).
 Osztálysúlyozás: {balance}.
-{ablacio_sor}
+{tisztitas_sor}{ablacio_sor}
 ## Jellemzők
 {X.shape[1]} mező, mind a rendelés LEADÁSAKOR ismert információból.
 Az eladói előzmény-jellemzők as-of illesztéssel készülnek: csak a rendelés
@@ -442,7 +515,7 @@ Brier-készség a tanító időszak arányához: {skill['tanito_bazisratahoz']:.
 * Egyetlen adathalmaz, egyetlen modellcsalád — az általánosíthatóság korlátozott.
 
 ## Reprodukálás
-`python -m pipeline.train --seed {seed} --balance {balance}{drop_arg}` — determinisztikus beállítással
+`python -m pipeline.train --seed {seed} --balance {balance}{drop_arg}{trees_arg}{purge_arg}` — determinisztikus beállítással
 (`deterministic=True`, `force_row_wise=True`). Környezet: `metrics.json`.
 """
     (out / "model_card.md").write_text(card, encoding="utf-8")
@@ -450,6 +523,8 @@ Brier-készség a tanító időszak arányához: {skill['tanito_bazisratahoz']:.
 
     print(f"\nArtefaktumok: {out}")
     result["artifacts"] = str(out)
+    if preds is not None:
+        result["elorejelzesek"] = preds
     return result
 
 
@@ -466,9 +541,15 @@ def main() -> None:
     ap.add_argument("--drop", type=str, nargs="?", const="", default="",
                     help="abláció: kizárandó csoportok vagy jellemzők vesszővel, "
                          "pl. honap vagy naptar vagy honap_sin,het_napja")
+    ap.add_argument("--trees", type=str, default="korai",
+                    help="a fák száma: korai (korai leállítás a validáción, alapértelmezett), "
+                         "cv (bővülő ablakos CV a tanító időszakon) vagy egy pozitív egész")
+    ap.add_argument("--purge", action="store_true",
+                    help="címke-tisztítás: csak a vágás előtt lezárult kimenetű tanító sorok")
     a = ap.parse_args()
     try:
-        run(a.db, a.seed, a.tag, a.balance, drop=a.drop.split(","))
+        run(a.db, a.seed, a.tag, a.balance, drop=a.drop.split(","),
+            trees=a.trees, purge=a.purge)
     except (WarehouseUnavailable, LeakageError, ValueError) as exc:
         print(f"\nHIBA:\n{exc}", file=sys.stderr)
         sys.exit(1)

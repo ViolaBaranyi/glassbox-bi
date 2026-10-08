@@ -1,0 +1,56 @@
+{
+  "nev": "Üvegdoboz BI — lezárt v3 alapfutás",
+  "verzio": 1,
+  "allapot": "tervezet",
+  "jovahagyas": {
+    "ki": null,
+    "mikor": null,
+    "megjegyzes": null
+  },
+  "nyitott_dontesek": [
+    "cimke_tisztitas: true vagy false (javaslat: true — lásd docs/v3_protokoll.md, 1. pont)",
+    "modellvalasztas.n_min: 50 megerősítése (lásd docs/v3_protokoll.md, 2. pont)"
+  ],
+  "adat": {
+    "forras": "valós",
+    "kohorsz": "A — csak a kézbesített rendelések (v2); a B változat csak érzékenységi jelentés",
+    "jellemzok": 22
+  },
+  "ablakok": {
+    "tanito_vege": "2018-03-01",
+    "validacio_vege": "2018-06-01",
+    "megjegyzes": "a rendszerterv vágásai (v2), a rendelés időpontja szerint; a végső modell csak a tanító ablakon tanul"
+  },
+  "cimke_tisztitas": null,
+  "modellvalasztas": {
+    "modszer": "bővülő ablakos keresztvalidáció a tanító időszakon belül (napra kerekített kvantilis-vágások)",
+    "hajtasok": 4,
+    "magok": [1, 2, 3],
+    "korai_leallitas_kor": 150,
+    "metrika": "average_precision (PR-AUC)",
+    "n_min": 50,
+    "szabaly": "N_fix = max(n_min, a legjobb iterációk mediánja)"
+  },
+  "vegso_modell": {
+    "mag": 42,
+    "kiegyensulyozas": "none",
+    "utolagos_kalibrator": false,
+    "learning_rate": 0.05
+  },
+  "kiertekeles": {
+    "fo_mutato": "pr_auc",
+    "mutatok": ["pr_auc", "roc_auc", "brier", "ece", "ece_egyenlo_elemszam"],
+    "ablakok": "validáció (időn kívüli ellenőrzés, semmit nem befolyásol) és teszt"
+  },
+  "bizonytalansag": {
+    "modszer": "heti blokk-bootstrap (ISO-hét, a rendelés időpontja szerint)",
+    "B": 2000,
+    "mag": 20261008,
+    "intervallum": "percentilis, 95%",
+    "paros_osszevetes": "a modell és a tanító időszak arányát mondó konstans előrejelzés (PR-AUC, Brier)"
+  },
+  "tanitasi_veletlen": {
+    "magok": [1, 2, 3, 4, 5],
+    "jelentes": "átlag ± szórás, a bootstrap-intervallumtól külön"
+  }
+}

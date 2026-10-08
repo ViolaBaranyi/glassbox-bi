@@ -63,9 +63,10 @@ ilyenkor minden lépésben jelzi, hogy a számok csak a gépezet működését m
 | M2 — időbeli szétvágás, bővülő ablakos CV | **kész** |
 | M2 — LightGBM súlyozás nélkül, kalibrációs diagnosztika (CORP), determinisztikus futás | **kész** |
 | M2 — abláció (`--drop`), validációs mérőszámok a `metrics.json`-ban | **kész** |
-| Tesztek — szivárgás (14), V-1 és adatmodell (10), abláció (6), betanítás (5), kohorsz (2) | **kész, 37/37** |
+| M2 — modellválasztás bővülő ablakos CV-n, rögzített fa-szám, címke-tisztítás (`--trees cv`, `--purge`) | **kész** |
+| M2 — heti blokk-bootstrap, lezárt v3 alapfutás protokollal (`pipeline/v3_baseline.py`) | **kész — a protokoll jóváhagyásra vár** |
+| Tesztek — szivárgás (14), V-1 és adatmodell (10), abláció (6), betanítás (5), kohorsz (2), modellválasztás (8), bootstrap (6), lezárt futás (11) | **kész, 62/62** |
 | Tároló — MIT licenc, CI (Ubuntu + Windows), `requirements.lock`, döntési napló | **kész** |
-| M2 — modellválasztás bővülő ablakos CV-n, rögzített fa-szám (a lezárt v3 alapfutás előtt) | következő |
 | M2 — 40 futásos sweep, hiperparaméter-hangolás | következő |
 | M3 — SHAP, ellenpélda, stabilitás | következő |
 | M1 — szemantikus réteg (KAPU ①) | tervezett |
@@ -107,6 +108,36 @@ a tanító időszak arányához, és a megbízhatósági táblázat tizedekben.
 
 **Determinisztikus futás.** `deterministic=True`, `force_row_wise=True`:
 azonos adat + mag → bitre azonos modell.
+
+**A fák számát a tanító időszakon belül választjuk.** Eddig a korai leállítás a
+validációs ablakon döntött, de abban éles rendszerváltás van (március 19,0% késés →
+április 4,5%), és egyetlen ablak alapján választani kockázatos (10. lelet). Az új út:
+bővülő ablakos keresztvalidáció a tanító időszakon (4 hajtás × 3 mag, korai leállítás
+PR-AUC-ra), a végső fa-szám `N_fix = max(50, medián)`, a végső modell pontosan ennyi
+fával tanul — a validációs ablak semmit nem befolyásol. → `pipeline/model_selection.py`
+
+**A címke is point-in-time (javaslat, jóváhagyásra vár).** A jellemzőkre már érvényes,
+hogy csak a leadáskor ismert információt látják. A tanító *címkékre* ugyanez igaz: egy
+február végén leadott rendelésről március 1-jén még nem tudjuk, késik-e. A valódi
+adatban a 2018-03-01-i vágásnál a tanító sorok 6,2%-ának a kimenete még ismeretlen volt,
+és ezek 26,6%-a késett (a márciusi válság). A `--purge` csak azokon tanul, amelyeknek a
+vállalt határideje a vágás előtt lejárt — a leadáskor ismert határidő szerint szűr, nem
+a kimenet szerint, így nem torzít. A keresztvalidáció mutatja, hogy számít: a
+2017. november 22-én kezdődő (Black Friday-t is tartalmazó) hajtásban tisztítás nélkül
+a PR-AUC 0,246, tisztítással 0,17 — azonos fa-számmal is. A nyugodt időszakok hajtásaiban
+nincs különbség: a még ismeretlen címkék épp a zavarok kezdetét árulták el.
+→ `split.settled_before`
+
+**Bizonytalanság heti blokk-bootstrappal, a tanítási véletlen külön.** A késések hétről
+hétre együtt mozognak, ezért egész heteket húzunk visszatevéssel (B = 2000, percentilis
+95%); a rendelésenkénti újramintavétel hamisan szűk intervallumot adna. A modell
+magjából eredő szórást öt maggal, külön jelentjük. → `pipeline/bootstrap.py`
+
+**Lezárt alapfutás.** A teszthalmazt eddig sokszor láttuk (döntési napló). A végleges
+mérés előtt minden döntés a `docs/v3_protokoll.json`-ban rögzül; a
+`python -m pipeline.v3_baseline` csak jóváhagyott, hiánytalan, a kóddal egyező
+protokollal indul, elmenti a protokoll ujjlenyomatát (SHA256), és csak egyszer fut.
+→ `docs/v3_protokoll.md`
 
 ---
 
@@ -236,6 +267,10 @@ python -m pipeline.train               # betanítás (súlyozás nélkül)
 python -m pipeline.train --balance balanced   # súlyozott ág, csak összehasonlításhoz
 python -m pipeline.train --drop honap  # abláció: hónap-jellemzők nélkül
 python -m pipeline.cohort_report       # kohorsz-érzékenységi jelentés
+python -m pipeline.model_selection     # fa-szám bővülő ablakos CV-n (csak a tanító időszak)
+python -m pipeline.model_selection --purge    # ugyanez címke-tisztítással
+python -m pipeline.train --trees cv --purge   # betanítás a CV-s fa-számmal
+python -m pipeline.v3_baseline         # lezárt alapfutás — csak jóváhagyott protokollal
 ```
 
 **Abláció.** A `--drop` jellemzőket zár ki a betanításból: csoportnevet (`honap` =
@@ -249,8 +284,9 @@ kizárt jellemzők a `metrics.json`-ban, a model cardban és a mappanévben
 foreach ($d in "", "honap") { foreach ($s in 1..5) { python -m pipeline.train --seed $s --tag ablacio --drop "$d" | Out-Null } }
 ```
 
-A `metrics.json` a teszt mellett a validáció mérőszámait is rögzíti
-(`validacio_kalibralatlan`): konfigurációk közti választás ezen történjen, ne a teszten.
+A `metrics.json` a teszt mellett a validáció mérőszámait is rögzíti (`validacio`), a
+`--trees cv` futásé a keresztvalidáció hajtásait is (`modellvalasztas`). Konfigurációk
+között a keresztvalidáción válasszunk, ne a teszten.
 
 A legutóbbi futás artefaktumainak mappanevét az `artifacts\LATEST.txt` tartalmazza.
 
@@ -267,11 +303,16 @@ glassbox-bi/
 │   └── db.py                kapcsolat, érthető hibaüzenetek
 ├── pipeline/
 │   ├── features.py          22 jellemző + jellemzőtáblázat, as-of előzmények, szivárgásvédelem
-│   ├── split.py             időbeli szétvágás, bővülő ablakos CV
+│   ├── split.py             időbeli szétvágás, bővülő ablakos CV, címke-tisztítás
 │   ├── train.py             LightGBM, kalibrációs diagnosztika, model card
+│   ├── model_selection.py   fa-szám a tanító időszakon belül (bővülő ablakos CV)
+│   ├── bootstrap.py         heti blokk-bootstrap (egyes és páros)
+│   ├── v3_baseline.py       a lezárt v3 alapfutás (csak jóváhagyott protokollal)
 │   └── cohort_report.py     kohorsz-érzékenységi jelentés (kizárt rendelések)
 ├── docs/
-│   └── dontesi_naplo.md     minden módszertani döntés: mikor, miért, látta-e már a tesztet
+│   ├── dontesi_naplo.md     minden módszertani döntés: mikor, miért, látta-e már a tesztet
+│   ├── v3_protokoll.json    a lezárt futás protokollja (gépi, ezt ellenőrzi a futás)
+│   └── v3_protokoll.md      ugyanez magyarázattal, a nyitott döntésekkel
 ├── .github/workflows/       CI: minden push lefuttatja a teljes pipeline-t (szintetikus adaton)
 ├── LICENSE                  MIT (a kódra; az adat saját licenc alatt áll)
 ├── requirements.txt         közvetlen függőségek, alsó korláttal
@@ -285,7 +326,10 @@ glassbox-bi/
     ├── test_warehouse.py    10 teszt (V-1, két ténytábla, fő tétel, geolokáció, zárónap)
     ├── test_ablation.py     6 teszt (az abláció tényleg kizár-e)
     ├── test_train.py        5 teszt (súlyozatlan alapértelmezés, nincs kalibrátor, diagnosztika)
-    └── test_cohort.py       2 teszt (Wilson-intervallum, érzékenységi változat)
+    ├── test_cohort.py       2 teszt (Wilson-intervallum, érzékenységi változat)
+    ├── test_model_selection.py  8 teszt (hajtások, fa-szám szabály, címke-tisztítás, a validáció nem hat)
+    ├── test_bootstrap.py    6 teszt (egész hetek, reprodukálhatóság, páros összevetés)
+    └── test_v3_baseline.py  11 teszt (a protokoll-kapu, ujjlenyomat, egyszeri futás)
 ```
 
 ## A tároló közzététele
@@ -361,9 +405,14 @@ Rangsorolás    PR-AUC 0.097  (bázisráta 0.036, 2.7x)  ROC-AUC 0.761
 Kalibráció     ECE 0.007 (egyenlő elemszámú sávokkal 0.015)   Brier 0.0338, készség 5.3%
 ```
 
-Ez egyetlen mag (42) eredménye. Öt maggal (1–5) a teszten PR-AUC 0,090 ± 0,005,
-ROC-AUC 0,749 ± 0,005, Brier 0,0340 — a 42-es mag a sáv felső szélén van. A lezárt
-v3 alapfutás a modellválasztás átállítása (bővülő ablakos CV) után készül.
+Ez egyetlen mag (42) eredménye, a régi, korai leállításos úton. Öt maggal (1–5) a
+teszten PR-AUC 0,090 ± 0,005, ROC-AUC 0,749 ± 0,005, Brier 0,0340 — a 42-es mag a sáv
+felső szélén van.
+
+A modellválasztás (csak a tanító időszakot olvassa) a valódi adaton:
+`python -m pipeline.model_selection` → medián 66,5 → **67 fa**;
+`--purge`-dzsal → medián 118,5 → **119 fa**. A lezárt v3 alapfutás a protokoll
+jóváhagyása után készül (`docs/v3_protokoll.md`); utána a demó is arra vált.
 
 A `--synthetic` futás (és a CI) összegzése: 38,857 rendelés, 22 jellemző, 28 fa,
 PR-AUC 0.203, ROC-AUC 0.722.

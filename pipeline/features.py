@@ -257,7 +257,8 @@ def build_features(con) -> tuple[pd.DataFrame, pd.Series, pd.DataFrame]:
     Visszaadja: (X, y, meta)
       X    – csak a FEATURES listában szereplő oszlopok
       y    – a címke (kesett)
-      meta – order_key és rendeles_idopont, a szétvágáshoz és a nyomon követéshez
+      meta – order_key, rendeles_idopont és vallalt_hatarido — a szétvágáshoz,
+             a címke-tisztításhoz és a nyomon követéshez (nem jellemző)
     """
     df = load_frame(con).reset_index(drop=True)
 
@@ -308,7 +309,9 @@ def build_features(con) -> tuple[pd.DataFrame, pd.Series, pd.DataFrame]:
 
     X = df[FEATURES].copy()
     y = df[LABEL].astype(int)
-    meta = df[["order_key", "rendeles_idopont"]].copy()
+    # A meta NEM jellemző: a szétvágáshoz, a címke-tisztításhoz (vállalt
+    # határidő) és a heti blokkokhoz kell, a modell sosem látja.
+    meta = df[["order_key", "rendeles_idopont", "vallalt_hatarido"]].copy()
 
     # A szivárgásteszt itt, minden hívásnál lefut — nem csak a CI-ban.
     assert_no_leakage(X.columns)

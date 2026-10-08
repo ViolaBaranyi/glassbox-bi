@@ -22,12 +22,25 @@ szintetikus adaton futott a rendszer.
 | 2026-10-08 | Kalibrációs diagnosztika: ECE két sávolással, CORP-felbontás, Brier-készség | igen (diagnosztika, nem választás) | csak egyenlő szélességű ECE | az előrejelzések 98%-a 10% alatt van; az egyenlő szélességű ECE főleg az átlagot méri |
 | 2026-10-08 | Python 3.14 rögzítve | nem | 3.11–3.13 | a 3.14.8-on a teljes projekt bitre azonos számokat adott; a 3.15-höz még nincs duckdb és pyarrow |
 | 2026-10-08 | A v3 adatmodell 5 magon lefuttatva (teszt PR-AUC 0,090 ± 0,005) | **igen** | — | **nem választottunk ennek alapján**: a változtatások témavezetői kérésre készültek; a teljesítmény a zajon belül változatlan (korábban 0,093 ± 0,006) |
+| 2026-10-08 | **Fa-szám a tanító időszakon belül:** bővülő ablakos CV (4 hajtás, napra kerekített kvantilis-vágás × 3 mag, korai leállítás PR-AUC-ra), `N_fix = max(50, medián)`; a végső modell pontosan N_fix fával, a validáció csak időn kívüli ellenőrzés (`--trees cv`) | nem (csak a tanító ablak) | korai leállítás a validációs ablakon | a validációs ablakban éles rendszerváltás (márc. 19,0% → ápr. 4,5%); egyetlen ablakon választani kockázatos (10. lelet). Valódi adaton: medián 66,5 → 67 fa (a legjobb iterációk szórása nagy: 16–151) |
+| 2026-10-08 | **Végső modell a tanító ablakon** (nem újratanítás tanító + validáción) | nem | újratanítás a validációs ablakkal együtt | a v2 ablakai változatlanok maradnak; a validáció így tiszta, időn kívüli ellenőrzés |
+| 2026-10-08 | **Bizonytalanság: heti blokk-bootstrap** (ISO-hét, B = 2000, percentilis 95%); tanítási véletlen külön, 5 maggal (`pipeline/bootstrap.py`) | nem | rendelésenkénti bootstrap; csak magok | a késések hetente együtt mozognak → rendelésenkénti újramintavétel hamisan szűk CI-t adna; témavezetői kérés: bootstrap a magok helyett |
+| 2026-10-08 | **Lezárt alapfutás protokoll-kapuval** (`docs/v3_protokoll.json`, SHA256, egyszeri futás; `pipeline/v3_baseline.py`) | nem | — | a tesztet eddig sokszor láttuk (fent); innentől a döntések a futás ELŐTT rögzülnek |
+| 2026-10-08 | **Új lelet — címke-szivárgás a vágásnál** (még NEM döntés, lásd lent) | nem (csak a tanító ablak) | — | a 2018-03-01-i vágásnál a tanító sorok 6,2%-ának a kimenete még ismeretlen volt (26,6%-uk késett). CV-n, azonos fa-számmal: a Black Friday-s hajtásban PR-AUC 0,246 tisztítás nélkül vs 0,17 tisztítással; a nyugodt hajtásokban nincs különbség |
 
 ## Következő, még nyitott döntések
 
-* **Modellválasztás:** bővülő ablakos CV a tanító időszakon, a végső fa-szám a hajtások
-  legjobb iterációinak mediánja, alsó korláttal. Ez után készül a **lezárt v3 alapfutás**,
-  amelyet egyszer futtatunk a teszten.
+* **Címke-tisztítás a vágásnál** (a lezárt futás előtt el kell dönteni): csak azokon a
+  tanító sorokon tanuljunk, amelyeknek a vállalt határideje a vágás előtt lejárt
+  (`--purge`, `split.settled_before`). Javaslat: **igen** — a jellemzőknél már egyeztetett
+  point-in-time elv következetes alkalmazása; a határidő szerinti szűrés a kimenettől
+  független. Ára: a tanító ablak 11,7%-a (a legfrissebb hetek); a fa-szám 67 helyett 119.
+  Mivel a tanító halmazt érinti, témavezetői jóváhagyás javasolt. Részletek:
+  `docs/v3_protokoll.md`.
+* **A fa-szám alsó korlátja (50):** megerősítendő; a valódi adaton egyik változatban sem
+  ez dönt.
+* **Lezárt v3 alapfutás:** a fenti kettő után a protokoll jóváhagyása, majd egyetlen
+  futás (`python -m pipeline.v3_baseline`).
 * **Kontrafaktuális magyarázat:** a dice-ml helyett saját rácskeresés a vállalt határidőre
   (egyetlen akcionálható jellemző) — témavezetői jóváhagyásra vár.
 * **Szakértői átnézés (3–5 fő):** a kutatási terv 5. hónapja miatt a minimum — témavezetői
