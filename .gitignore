@@ -12,8 +12,9 @@ logs/
 # Python
 __pycache__/
 *.py[cod]
-.venv/
-venv/
+# minden virtuális környezet (.venv, .venv-1, venv314 …)
+.venv*/
+venv*/
 .pytest_cache/
 .ipynb_checkpoints/
 

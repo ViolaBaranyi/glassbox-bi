@@ -1,0 +1,36 @@
+# Folyamatos ellenőrzés: minden push és pull request lefuttatja a teljes
+# pipeline-t SZINTETIKUS adaton (a valódi Olist-adat nem kerülhet a tárolóba):
+# adatgenerálás -> tárház V-1 validációval -> tesztek -> betanítás.
+# Ha bármelyik teszt elbukik, a futás piros, és a GitHub e-mailt küld.
+name: tests
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  pipeline:
+    name: ${{ matrix.os }} · Python 3.14
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.14"
+          cache: pip
+          cache-dependency-path: requirements.lock
+
+      - name: Függőségek a rögzített változatokkal
+        run: python -m pip install -r requirements.lock
+
+      - name: Teljes pipeline szintetikus adaton
+        run: python demo.py --synthetic
+
+      - name: Kohorsz-érzékenységi jelentés
+        run: python -m pipeline.cohort_report

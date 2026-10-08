@@ -1,0 +1,35 @@
+# Üvegdoboz BI — rögzített környezet (Python 3.14, Windows és Linux).
+# Telepítés:  pip install -r requirements.lock
+# Újragenerálás:  uv pip compile requirements.txt --universal --python-version 3.14 -o requirements.lock
+# NE szerkeszd kézzel.
+
+certifi==2026.7.22        # via requests
+charset-normalizer==3.5.2  # via requests
+cloudpickle==3.1.2        # via joblib
+colorama==0.4.6 ; sys_platform == 'win32'  # via pytest, tqdm
+duckdb==1.5.6             # via -r requirements.txt
+idna==3.20                # via requests
+iniconfig==2.3.1          # via pytest
+joblib==1.6.0             # via scikit-learn, -r requirements.txt
+kagglehub==1.0.2          # via -r requirements.txt
+kagglesdk==0.1.37         # via kagglehub
+lightgbm==4.7.0           # via -r requirements.txt
+narwhals==2.26.0          # via lightgbm, scikit-learn
+numpy==2.5.3              # via lightgbm, pandas, scikit-learn, scipy, -r requirements.txt
+packaging==26.3           # via kagglehub, pytest
+pandas==3.0.6             # via -r requirements.txt
+pluggy==1.6.0             # via pytest
+protobuf==7.36.2          # via kagglesdk
+pyarrow==25.0.1           # via -r requirements.txt
+pygments==2.21.0          # via pytest
+pytest==9.1.1             # via -r requirements.txt
+python-dateutil==2.9.0.post0  # via pandas
+pyyaml==6.0.3             # via kagglehub
+requests==2.34.2          # via kagglehub, kagglesdk
+scikit-learn==1.9.1       # via -r requirements.txt
+scipy==1.18.1             # via lightgbm, scikit-learn
+six==1.17.0               # via python-dateutil
+threadpoolctl==3.7.0      # via scikit-learn
+tqdm==4.70.1              # via kagglehub
+tzdata==2026.5 ; sys_platform == 'emscripten' or sys_platform == 'win32'  # via pandas
+urllib3==2.8.0            # via requests

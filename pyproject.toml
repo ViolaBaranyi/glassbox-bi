@@ -1,3 +1,13 @@
+[project]
+name = "glassbox-bi"
+version = "0.3.0"
+description = "Üvegdoboz BI — XAI és LLM integrálása self-service BI rendszerbe (EKÖP-26-I-1)"
+readme = "README.md"
+license = "MIT"
+# Rögzítve a 3.14-re. A 3.15-re akkor váltunk, ha a duckdb és a pyarrow is
+# kiadja hozzá a telepítőcsomagot (2026. okt. 8-án még egyik sem).
+requires-python = ">=3.14,<3.15"
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-q"

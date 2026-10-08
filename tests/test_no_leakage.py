@@ -37,8 +37,8 @@ from pipeline.split import temporal_split
 def data():
     if not DB_PATH.exists():
         pytest.skip(
-            "Nincs tárház. Futtasd előbb:\n"
-            "  python -m data.make_synthetic\n"
+            "Nincs tárház. Futtasd előbb (vagy: python demo.py):\n"
+            "  python -m data.fetch_olist\n"
             "  python -m data.build_warehouse"
         )
     con = connect()
@@ -60,6 +60,14 @@ def test_csak_feherlistas_oszlopok(data):
     """A jellemzőmátrix pontosan a FEATURES szerződést követi."""
     X, *_ = data
     assert list(X.columns) == FEATURES
+
+
+def test_minden_jellemzonek_van_leirasa():
+    """A jellemzőtáblázat (FEATURE_INFO) a szerződéssel együtt mozog — a
+    dolgozat és a README ebből készül, nem csúszhat el a kódtól."""
+    from pipeline.features import FEATURE_INFO
+    assert set(FEATURE_INFO) == set(FEATURES)
+    assert len(FEATURES) == 22
 
 
 def test_tiltott_oszlop_nincs_bent(data):

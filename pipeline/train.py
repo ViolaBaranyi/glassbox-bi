@@ -1,21 +1,26 @@
 """
-M2 — Betanítás: LightGBM baseline, kalibrációval és becsületes kiértékeléssel.
+M2 — Betanítás: LightGBM baseline, becsületes kiértékeléssel.
 
 Ez még nem a 40 futásos sweep, hanem az az EGY modell, amire a többi épül.
-A rendszerterv szerinti döntések itt már érvényesek:
+A rendszerterv és a témavezetői egyeztetés (okt. 2.) szerinti döntések:
 
   * learning_rate = 0.05, RÖGZÍTETT (nem hangoljuk — rendszerterv 10.)
   * a korai leállítás KIZÁRÓLAG a PR-AUC-t figyeli (lásd PARAMS megjegyzés)
   * időbeli szétvágás, nem véletlen
-  * PR-AUC a fő mérőszám, nem pontosság (a pozitív osztály ~8%)
-  * izotonikus kalibráció a validáción, mert a felületen valószínűséget mutatunk
+  * PR-AUC a fő mérőszám, nem pontosság (a pozitív osztály kb. 6,8%)
+  * SÚLYOZÁS NÉLKÜL tanítunk, és NINCS utólagos kalibrátor: a súlyozatlan
+    modell nyers kimenete magától is jól kalibrált, az izotonikus leképezés
+    az időbeli alapráta-eltolódás miatt rontott rajta (7. és 9. lelet). Így a
+    SHAP pontosan a megjelenített számot bontja fel. A kalibráció csak
+    DIAGNOSZTIKA: ECE két sávolással, CORP-felbontás, Brier-készség.
   * determinisztikus futás: azonos adat + mag -> azonos modell (NF-1)
   * a szivárgásteszt a betanítás ELŐTT fut, és megállítja a folyamatot
 
 Futtatás:
     python -m pipeline.train
-    python -m pipeline.train --balance none --drop honap     # abláció: hónap nélkül
-    python -m pipeline.train --balance none --drop naptar    # hónap + ünnep nélkül
+    python -m pipeline.train --balance balanced          # összehasonlításhoz
+    python -m pipeline.train --drop honap                # abláció: hónap nélkül
+    python -m pipeline.train --drop naptar               # hónap + ünnep nélkül
 
 Az abláció csak a betanításból zár ki jellemzőket; a jellemzőszerződés
 (features.FEATURES) és a szivárgásvédelem változatlan. A kizárt jellemzők a
@@ -54,8 +59,8 @@ PARAMS = dict(
     objective="binary",
     # A korai leállítás metrikája KIZÁRÓLAG az average_precision (PR-AUC).
     # Ha az alapértelmezett binary_logloss is futna, a class_weight="balanced"
-    # miatt az azonnal romlani kezdene a validáción, és a leállítás pár fa
-    # után megállítaná a tanítást (az első változatnál 7 fánál állt meg).
+    # (összehasonlító ág) mellett az azonnal romlani kezdene a validáción, és a
+    # leállítás pár fa után megállítaná a tanítást (egyszer 7 fánál állt meg).
     metric="average_precision",
     first_metric_only=True,
     learning_rate=0.05,        # RÖGZÍTETT
@@ -66,7 +71,7 @@ PARAMS = dict(
     bagging_fraction=0.85,
     bagging_freq=1,
     reg_lambda=1.0,
-    class_weight="balanced",
+    class_weight=None,         # súlyozás nélkül (okt. 2-i döntés); --balance balanced: összevetés
     # NF-1 reprodukálhatóság: szálszámtól független, bitre azonos eredmény.
     deterministic=True,
     force_row_wise=True,
@@ -77,39 +82,87 @@ EARLY_STOPPING_ROUNDS = 150
 
 
 # ----------------------------------------------------------------- mérőszámok
-def _bins(p, n_bins):
-    edges = np.linspace(0.0, 1.0, n_bins + 1)
-    return edges, np.clip(np.digitize(p, edges[1:-1], right=False), 0, n_bins - 1)
+def _bins(p, n_bins, strategy="uniform"):
+    """
+    Sávhatárok és sávindexek.
+      uniform  — 10 egyenlő szélességű sáv (0–0,1, 0,1–0,2, …)
+      quantile — 10 egyenlő elemszámú sáv (tizedek). Ritka eseménynél ez a
+                 beszédesebb: ha az előrejelzések 98%-a 10% alatt van, az
+                 egyenlő szélességű sávolás szinte mindent egy sávba tesz, és az
+                 ECE főleg az ÁTLAGOT méri.
+    """
+    p = np.asarray(p, dtype=float)
+    if strategy == "uniform":
+        edges = np.linspace(0.0, 1.0, n_bins + 1)
+    elif strategy == "quantile":
+        edges = np.unique(np.quantile(p, np.linspace(0.0, 1.0, n_bins + 1)))
+        if len(edges) < 2:                      # minden előrejelzés azonos
+            edges = np.array([p.min(), p.max()])
+    else:
+        raise ValueError(f"Ismeretlen sávolás: {strategy!r}")
+    idx = np.clip(np.digitize(p, edges[1:-1], right=False), 0, len(edges) - 2)
+    return edges, idx
 
 
-def expected_calibration_error(y_true, p, n_bins: int = 10) -> float:
-    """ECE: binenként |átlagos becslés − tényleges arány|, mintaszámmal súlyozva."""
+def expected_calibration_error(y_true, p, n_bins: int = 10,
+                               strategy: str = "uniform") -> float:
+    """ECE: sávonként |átlagos becslés − tényleges arány|, elemszámmal súlyozva."""
     y_true = np.asarray(y_true, dtype=float)
     p = np.asarray(p, dtype=float)
-    _, idx = _bins(p, n_bins)
+    edges, idx = _bins(p, n_bins, strategy)
     ece = 0.0
-    for b in range(n_bins):
+    for b in range(len(edges) - 1):
         m = idx == b
         if m.any():
             ece += (m.sum() / len(p)) * abs(p[m].mean() - y_true[m].mean())
     return float(ece)
 
 
-def reliability_table(y_true, p, n_bins: int = 10) -> list[dict]:
+def reliability_table(y_true, p, n_bins: int = 10, strategy: str = "uniform") -> list[dict]:
     y_true = np.asarray(y_true, dtype=float)
     p = np.asarray(p, dtype=float)
-    edges, idx = _bins(p, n_bins)
+    edges, idx = _bins(p, n_bins, strategy)
     rows = []
-    for b in range(n_bins):
+    for b in range(len(edges) - 1):
         m = idx == b
         if m.any():
             rows.append({
-                "bin": f"{edges[b]:.1f}-{edges[b + 1]:.1f}",
+                "bin": f"{edges[b]:.3f}-{edges[b + 1]:.3f}",
                 "n": int(m.sum()),
                 "atlag_becsles": round(float(p[m].mean()), 4),
                 "tenyleges_arany": round(float(y_true[m].mean()), 4),
             })
     return rows
+
+
+def corp_decomposition(y_true, p) -> dict:
+    """
+    A Brier-pontszám CORP-felbontása (Dimitriadis, Gneiting & Jordan, PNAS 2021):
+        Brier = MCB − DSC + UNC
+      MCB  (miscalibration)  — mennyit javítana egy utólagos, monoton
+            újrakalibrálás UGYANEZEN az adaton (PAV / izotonikus regresszió);
+            0 = tökéletesen kalibrált
+      DSC  (discrimination)  — mennyivel jobb az újrakalibrált előrejelzés a
+            konstans átlagnál; ez a felbontás / megkülönböztető erő
+      UNC  (uncertainty)     — a konstans átlag Brier-értéke, az adat nehézsége
+    Ez diagnosztika (mintán belüli újrakalibrálás), nem javító lépés.
+    """
+    y = np.asarray(y_true, dtype=float)
+    p = np.asarray(p, dtype=float)
+    iso = IsotonicRegression(y_min=0.0, y_max=1.0, out_of_bounds="clip")
+    p_rc = iso.fit(p, y).predict(p)
+    brier = float(np.mean((p - y) ** 2))
+    s_rc = float(np.mean((p_rc - y) ** 2))
+    unc = float(np.mean((y.mean() - y) ** 2))
+    return {"brier": round(brier, 6), "mcb": round(brier - s_rc, 6),
+            "dsc": round(unc - s_rc, 6), "unc": round(unc, 6)}
+
+
+def brier_skill(y_true, p, reference_rate: float) -> float:
+    """1 − Brier / Brier(konstans előrejelzés a megadott aránnyal)."""
+    y = np.asarray(y_true, dtype=float)
+    ref = float(np.mean((reference_rate - y) ** 2))
+    return round(1.0 - float(np.mean((np.asarray(p, dtype=float) - y) ** 2)) / ref, 4)
 
 
 def evaluate(y_true, p) -> dict:
@@ -118,6 +171,7 @@ def evaluate(y_true, p) -> dict:
         "roc_auc": round(float(roc_auc_score(y_true, p)), 4),
         "brier": round(float(brier_score_loss(y_true, p)), 5),
         "ece": round(expected_calibration_error(y_true, p), 5),
+        "ece_egyenlo_elemszam": round(expected_calibration_error(y_true, p, strategy="quantile"), 5),
     }
 
 
@@ -130,31 +184,22 @@ def git_hash() -> str:
         return "nincs-git"
 
 
-def _print_reliability(raw_rows, cal_rows):
+def _print_reliability(rows):
     print("\nMEGBÍZHATÓSÁG — ha a modell X%-ot mond, tényleg X% késik-e?")
-    print(f"  {'becslés':<10}{'kalibrálatlan':>28}{'kalibrált':>28}")
-    print(f"  {'sáv':<10}{'n':>8}{'mond':>10}{'valóság':>10}{'n':>8}{'mond':>10}{'valóság':>10}")
-    raw_by = {r["bin"]: r for r in raw_rows}
-    cal_by = {r["bin"]: r for r in cal_rows}
-
-    def cell(r):
-        if r is None:
-            return f"{'':>8}{'':>10}{'':>10}"
-        return f"{r['n']:>8}{r['atlag_becsles']:>10.2f}{r['tenyleges_arany']:>10.2f}"
-
-    for b in sorted(set(raw_by) | set(cal_by)):
-        print(f"  {b:<10}{cell(raw_by.get(b))}{cell(cal_by.get(b))}")
-    print("  (kis mintájú sávokban — n < 100 — a becslés bizonytalan)")
+    print("  (tizedek: mindegyik sávban a rendelések kb. tizede)")
+    print(f"  {'becslési sáv':<16}{'n':>8}{'mond':>10}{'valóság':>10}")
+    for r in rows:
+        print(f"  {r['bin']:<16}{r['n']:>8}{r['atlag_becsles']:>10.3f}{r['tenyleges_arany']:>10.3f}")
 
 
 # ----------------------------------------------------------------- betanítás
 def run(db_path: Path = DB_PATH, seed: int = 42, tag: str = "baseline",
-        balance: str = "balanced", write_artifacts: bool = True,
+        balance: str = "none", write_artifacts: bool = True,
         drop=None) -> dict:
     """
-    balance: "balanced" — class_weight="balanced" (a rendszerterv jelenlegi alapja)
-             "none"     — súlyozás nélkül (természetes eloszlás; lásd a
-                          konzultációs kérdést a rendszerterv állapot-szakaszában)
+    balance: "none"     — súlyozás nélkül (alapértelmezés, okt. 2-i döntés)
+             "balanced" — class_weight="balanced"; csak összehasonlításhoz: a
+                          nyers valószínűségei erősen torzak (ECE kb. 0,28)
     drop:    abláció — kizárandó jellemzők vagy csoportok (features.FEATURE_GROUPS),
              pl. ["honap"]. Ismeretlen névre hibát ad, nem hallgat.
     """
@@ -192,8 +237,7 @@ def run(db_path: Path = DB_PATH, seed: int = 42, tag: str = "baseline",
     print("Szivárgásvédelem: névszűrő és AUC-őr rendben.")
 
     params = dict(PARAMS, random_state=seed)
-    if balance == "none":
-        params["class_weight"] = None
+    params["class_weight"] = "balanced" if balance == "balanced" else None
     model = lgb.LGBMClassifier(**params)
     callbacks = [
         lgb.early_stopping(EARLY_STOPPING_ROUNDS, first_metric_only=True, verbose=False),
@@ -210,35 +254,50 @@ def run(db_path: Path = DB_PATH, seed: int = 42, tag: str = "baseline",
     n_trees = int(model.best_iteration_ or params["n_estimators"])
     print(f"\nBetanítva: {n_trees} fa (korai leállítás a validáción, PR-AUC alapján)")
 
-    p_va_raw = model.predict_proba(Xva)[:, 1]
-    p_te_raw = model.predict_proba(Xte)[:, 1]
+    p_va = model.predict_proba(Xva)[:, 1]
+    p_te = model.predict_proba(Xte)[:, 1]
 
-    # Izotonikus kalibráció a VALIDÁCIÓN, alkalmazva a teszten.
-    # Megjegyzés: a kalibrált PR-AUC / ROC-AUC kicsit alacsonyabb lehet, mert az
-    # izotonikus regresszió lépcsős függvény, ami holtversenyeket hoz létre a
-    # rangsorban. A RANGSOROLÓ képességet a kalibrálatlan, a VALÓSZÍNŰSÉG
-    # hitelességét a kalibrált számok mutatják — mindkettőt közöljük.
-    iso = IsotonicRegression(out_of_bounds="clip")
-    iso.fit(p_va_raw, yva)
-    p_te_cal = iso.predict(p_te_raw)
-
-    m_raw = evaluate(yte, p_te_raw)
-    m_cal = evaluate(yte, p_te_cal)
+    # A megjelenített szám a NYERS modellkimenet — utólagos kalibrátor nincs.
+    m_te = evaluate(yte, p_te)
     base_rate = float(yte.mean())
-    rel_raw = reliability_table(yte, p_te_raw)
-    rel_cal = reliability_table(yte, p_te_cal)
+    train_rate = float(ytr.mean())
+    rel = reliability_table(yte, p_te, strategy="quantile")
+    rel_uniform = reliability_table(yte, p_te, strategy="uniform")
 
-    print("\nTESZT — érintetlen, legkésőbbi időszak")
-    print(f"  bázisráta (a késések aránya):  {base_rate:.4f}  <- a PR-AUC ehhez viszonyítandó")
-    print(f"  {'':<14}{'PR-AUC':>9}{'ROC-AUC':>9}{'Brier':>9}{'ECE':>9}")
-    for label, m in [("kalibrálatlan", m_raw), ("kalibrált", m_cal)]:
-        print(f"  {label:<14}{m['pr_auc']:>9.4f}{m['roc_auc']:>9.4f}"
-              f"{m['brier']:>9.4f}{m['ece']:>9.4f}")
-    print(f"  emelés a bázisrátához képest: {m_raw['pr_auc'] / base_rate:.1f}x")
+    # ---- kalibrációs DIAGNOSZTIKA (semmi nem módosítja a modell kimenetét)
+    corp = corp_decomposition(yte, p_te)
+    skill = {
+        # a predikció idején is ismert referencia: a tanító időszak aránya
+        "tanito_bazisratahoz": brier_skill(yte, p_te, train_rate),
+        # „orákulum": a teszt saját aránya, amit előre nem tudhattunk
+        "teszt_bazisratahoz": brier_skill(yte, p_te, base_rate),
+    }
+    # Mi történt volna egy validáción illesztett izotonikus kalibrátorral?
+    # (Ezt NEM használjuk — a 7. és 9. lelet szerint az eltolódás miatt ront.)
+    iso = IsotonicRegression(out_of_bounds="clip").fit(p_va, yva)
+    m_iso = evaluate(yte, iso.predict(p_te))
 
-    _print_reliability(rel_raw, rel_cal)
+    print("\nTESZT — érintetlen, legkésőbbi időszak (a modell nyers kimenete)")
+    print(f"  bázisráta (a késések aránya):  {base_rate:.4f}  <- a PR-AUC ehhez viszonyítandó"
+          f"   (tanító időszak: {train_rate:.4f})")
+    print(f"  {'':<10}{'PR-AUC':>9}{'ROC-AUC':>9}{'Brier':>9}{'ECE':>9}")
+    print(f"  {'modell':<10}{m_te['pr_auc']:>9.4f}{m_te['roc_auc']:>9.4f}"
+          f"{m_te['brier']:>9.4f}{m_te['ece']:>9.4f}")
+    print(f"  emelés a bázisrátához képest: {m_te['pr_auc'] / base_rate:.1f}x")
 
-    if m_cal["roc_auc"] > 0.97:
+    print("\nKALIBRÁCIÓ — diagnosztika (a megjelenített szám nem változik)")
+    print(f"  ECE, 10 egyenlő szélességű sáv:  {m_te['ece']:.4f}"
+          f"   egyenlő elemszámú sáv: {m_te['ece_egyenlo_elemszam']:.4f}")
+    print(f"  Brier-felbontás (CORP):  MCB {corp['mcb']:.5f} · DSC {corp['dsc']:.5f}"
+          f" · UNC {corp['unc']:.5f}   (Brier = MCB − DSC + UNC)")
+    print(f"  Brier-készség:  a tanító időszak arányához {skill['tanito_bazisratahoz']:.1%}"
+          f" · a teszt saját arányához {skill['teszt_bazisratahoz']:.1%}")
+    print(f"  validáción illesztett izotonikus kalibrátorral (NEM használjuk): "
+          f"ECE {m_iso['ece']:.4f}, Brier {m_iso['brier']:.4f}")
+
+    _print_reliability(rel)
+
+    if m_te["roc_auc"] > 0.97:
         print("\n  FIGYELEM: 0.97 fölötti ROC-AUC. Tabuláris üzleti adaton ez "
               "szinte mindig adatszivárgásra utal, nem sikerre.")
 
@@ -258,11 +317,16 @@ def run(db_path: Path = DB_PATH, seed: int = 42, tag: str = "baseline",
         "seed": seed,
         "fak_szama": n_trees,
         "bazisrata": round(base_rate, 4),
-        "teszt_kalibralatlan": m_raw,
-        "teszt_kalibralt": m_cal,
+        "tanito_bazisrata": round(train_rate, 4),
+        "teszt": m_te,
+        "teszt_diagnosztika": {
+            "corp": corp,
+            "brier_keszseg": skill,
+            "izotonikus_validacion_illesztve": m_iso,
+        },
         # A konfigurációk (súlyozás, abláció) közti VÁLASZTÁS ezen történjen,
         # ne a teszten. Optimista becslés: a korai leállítás is ezt figyelte.
-        "validacio_kalibralatlan": evaluate(yva, p_va_raw),
+        "validacio": evaluate(yva, p_va),
         "validacio_bazisrata": round(float(yva.mean()), 4),
         "jellemzok": int(X.shape[1]),
         "kizart_jellemzok": drop_cols,
@@ -281,7 +345,7 @@ def run(db_path: Path = DB_PATH, seed: int = 42, tag: str = "baseline",
     out.mkdir(parents=True, exist_ok=True)
 
     joblib.dump(model, out / "model.joblib")
-    joblib.dump(iso, out / "calibrator.joblib")
+    # Kalibrátort SZÁNDÉKOSAN nem mentünk: a szállított kimenet a nyers modell.
     model.booster_.save_model(str(out / "model.txt"))
     (out / "feature_schema.json").write_text(
         json.dumps(schema(X), ensure_ascii=False, indent=2), encoding="utf-8")
@@ -298,6 +362,8 @@ def run(db_path: Path = DB_PATH, seed: int = 42, tag: str = "baseline",
             "jellemzok": int(X.shape[1]),
             "pozitiv_arany": round(float(y.mean()), 4),
             "karanten_sorok": int(prov["karanten_osszes"]),
+            "megfigyelesi_zarnap": str(prov.get("megfigyelesi_zarnap", "")),
+            "kizart_rendelesek": int(prov.get("kizart_rendelesek", 0) or 0),
         },
         "szetvagas": {
             "forras": sp.source,
@@ -305,8 +371,8 @@ def run(db_path: Path = DB_PATH, seed: int = 42, tag: str = "baseline",
             "valid_vege": str(sp.valid_end.date()),
             "meret": {"train": len(sp.train), "valid": len(sp.valid), "test": len(sp.test)},
         },
-        "megbizhatosag_kalibralatlan": rel_raw,
-        "megbizhatosag_kalibralt": rel_cal,
+        "megbizhatosag_tizedek": rel,
+        "megbizhatosag_egyenlo_szelesseg": rel_uniform,
         "jellemzofontossag_gain": {k: round(float(v), 4) for k, v in imp.items()},
         "kornyezet": {
             "python": platform.python_version(),
@@ -346,16 +412,19 @@ Tiltólistán: tényleges kézbesítés, feladás dátuma, értékelés, a címk
 A szivárgásteszt minden betanítás előtt lefut.
 
 ## Teljesítmény (érintetlen teszthalmaz, {sp.valid_end.date()} utáni időszak)
-| mérőszám | kalibrálatlan | kalibrált |
-|---|---|---|
-| PR-AUC | {m_raw['pr_auc']} | {m_cal['pr_auc']} |
-| ROC-AUC | {m_raw['roc_auc']} | {m_cal['roc_auc']} |
-| Brier | {m_raw['brier']} | {m_cal['brier']} |
-| ECE | {m_raw['ece']} | {m_cal['ece']} |
+A kimenet a NYERS modellvalószínűség — utólagos kalibrátor nincs.
 
-Bázisráta (a késések aránya a teszten): {base_rate:.4f}.
-A rangsoroló képességet a kalibrálatlan, a valószínűség hitelességét a
-kalibrált oszlop mutatja.
+| mérőszám | érték |
+|---|---|
+| PR-AUC | {m_te['pr_auc']} |
+| ROC-AUC | {m_te['roc_auc']} |
+| Brier | {m_te['brier']} |
+| ECE (10 egyenlő szélességű sáv) | {m_te['ece']} |
+| ECE (10 egyenlő elemszámú sáv) | {m_te['ece_egyenlo_elemszam']} |
+
+Bázisráta (a késések aránya a teszten): {base_rate:.4f}; a tanító időszakban: {train_rate:.4f}.
+Brier-felbontás (CORP): MCB {corp['mcb']}, DSC {corp['dsc']}, UNC {corp['unc']}.
+Brier-készség a tanító időszak arányához: {skill['tanito_bazisratahoz']:.1%}.
 
 ## Mire NEM használható
 * Más webáruházra, más országra, más időszakra — az eladói viselkedés adatfüggő.
@@ -363,7 +432,12 @@ kalibrált oszlop mutatja.
 * Oksági következtetésre: a modell együttjárást tanul, nem okot.
 
 ## Ismert korlátok
-* Osztálysúlyozással (`balanced`) a nyers valószínűségek erősen torzak; ezért van kalibráció.
+* Az előrejelzések szinte mind alacsonyak (ritka esemény, gyenge jel): a modell értéke a
+  rangsorolásban van, a pontos százalék helyett a relatív kockázat a beszédesebb.
+* A teszt időszak alaprátája eltér a tanítóétól (időbeli eltolódás); utólagos kalibrátor
+  ezért nincs — egy validáción illesztett izotonikus leképezés rontana.
+* Osztálysúlyozással (`--balance balanced`) a nyers valószínűségek erősen torzak; ez az ág
+  csak összehasonlításra szolgál.
 * Új eladónál az előzmény-jellemzők hiányoznak (NaN); a LightGBM ezt natívan kezeli.
 * Egyetlen adathalmaz, egyetlen modellcsalád — az általánosíthatóság korlátozott.
 
@@ -385,8 +459,8 @@ def main() -> None:
     ap.add_argument("--db", type=Path, default=DB_PATH)
     ap.add_argument("--seed", type=int, default=42)
     ap.add_argument("--tag", type=str, default="baseline")
-    ap.add_argument("--balance", choices=["balanced", "none"], default="balanced",
-                    help="osztálysúlyozás: balanced (alapértelmezett) vagy none")
+    ap.add_argument("--balance", choices=["none", "balanced"], default="none",
+                    help="osztálysúlyozás: none (alapértelmezett) vagy balanced (összevetéshez)")
     # nargs="?": a Windows PowerShell 5.1 az üres ("") argumentumot elhagyja,
     # így egy ciklusban a --drop "" érték nélkül érkezik — az is teljes modell.
     ap.add_argument("--drop", type=str, nargs="?", const="", default="",

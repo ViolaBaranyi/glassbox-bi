@@ -1,9 +1,39 @@
 """
 M0 — Adattárház: 9 Olist CSV  ->  csillagséma DuckDB-ben.
 
-Szemcsézettség: egy sor a fact_orders táblában = egy rendelés.
-A tételszintű adatot aggregáljuk, mert a döntés (késik-e a szállítmány)
-rendelésszinten értelmes.
+KÉT TÉNYTÁBLA, KÉT SZEMCSÉZETTSÉG
+---------------------------------
+* fact_order_items — egy sor = egy rendelési tétel (az Olistban egy tétel egy
+  darab: két egyforma termék két sor). Ez a forrás minden rendelésszintű
+  összegzéshez.
+* fact_orders      — egy sor = egy rendelés. A döntés (késik-e a szállítmány)
+  rendelésszinten értelmes, ezért a modell és a késési arány itt számol.
+
+Számlálási szabály: minden arány és darabszám RENDELÉST számol (fact_orders),
+soha nem tételt. A tételszintű tábla csak az összegzés forrása.
+
+A rendelés FŐ TÉTELE a legnagyobb értékű tétel (egyezésnél a legkisebb
+tételsorszámú); ebből jön a rendelés terméke, kategóriája és eladója. A súly
+és a térfogat az összes tétel összege; ha egy tétel mérete hiányzik, az
+összeg is hiányzó (NaN), nem alulbecsült.
+
+TÁVOLSÁG — közelítés
+--------------------
+Az Olist irányítószám-előtagonként sok koordinátát ad. Előtagonként a
+MEDIÁNT vesszük (a kiugró pontok nem húzzák el), a Brazílián kívüli pontokat
+pedig karanténba tesszük. Az eladó–vevő távolság e két előtag-pont légvonalbeli
+távolsága — közelítés, nem úthossz. Ha valamelyik előtaghoz nincs koordináta,
+a távolság hiányzó (NaN); a LightGBM ezt natívan kezeli, a darabszám a
+meta_build táblába kerül.
+
+MEGFIGYELÉSI ZÁRÓNAP ÉS KIZÁRT RENDELÉSEK
+----------------------------------------
+A zárónap a nyers adat utolsó eseménye. Csak a kézbesített rendelésnek van
+címkéje; a többi (feladva, számlázva, lemondva…) a kizart_rendelesek táblába
+kerül, azzal együtt, hogy a vállalt határidő lejárt-e a zárónapig. A fő elemzés
+ezeket kizárja (v2, a témavezetővel egyeztetve); az érzékenységi jelentés
+(python -m pipeline.cohort_report) megmutatja, mi változna, ha a lejárt
+határidejű, még úton lévőket késésnek tekintenénk.
 
 V-1 VALIDÁCIÓS RÉTEG — két szigorúsági szint
 --------------------------------------------
@@ -45,6 +75,17 @@ RAW = ROOT / "data" / "raw"
 DB_PATH = ROOT / "data" / "warehouse.duckdb"
 
 TOLERANCE = 0.001  # a sorszintű hibák megengedett aránya (0,1%)
+
+# Brazília szélső pontjai kis pufferrel (fok): Monte Caburaí É 5,27°; Arroio Chuí
+# D 33,75°; Serra do Divisor Ny kb. 73,99°; Martim Vaz-szigetek K 28,85°.
+# A keret a szigeteket (pl. Fernando de Noronha) is tartalmazza.
+BRAZIL_LAT = (-33.85, 5.37)
+BRAZIL_LNG = (-74.10, -28.75)
+
+# Ezek a státuszok még úton lévő (vagy elakadt) rendelést jelentenek; ha a vállalt
+# határidő a zárónapig lejárt, az érzékenységi változatban késésnek számítanak.
+# A lemondott / nem elérhető rendelés más kimenet, ezt egyik változat sem számolja.
+IN_PROGRESS_STATUSES = ("shipped", "invoiced", "processing", "approved", "created")
 
 SOURCES = {
     "orders": "olist_orders_dataset.csv",
@@ -170,14 +211,38 @@ def build(raw_dir: Path = RAW, db_path: Path = DB_PATH, verbose: bool = True) ->
     check(len(orders) > 0, "Az orders tábla üres.")
     check(orders["order_id"].is_unique, "Duplikált order_id az orders táblában.")
 
+    # Megfigyelési zárónap: a nyers adat utolsó tényleges eseménye. (A vállalt
+    # határidő ígéret a jövőre, ezért nem számít eseménynek.)
+    zarnap = max(orders[c].max() for c in [
+        "order_purchase_timestamp", "order_approved_at",
+        "order_delivered_carrier_date", "order_delivered_customer_date"])
+    check(pd.notna(zarnap), "Egyetlen értelmezhető időpont sincs az orders táblában.")
+
     # Csak a ténylegesen kézbesített rendelésekkel dolgozunk: máshol nincs címke.
-    delivered = orders[
+    is_delivered = (
         orders["order_status"].eq("delivered")
         & orders["order_delivered_customer_date"].notna()
         & orders["order_estimated_delivery_date"].notna()
-    ].copy()
+    )
+    delivered = orders[is_delivered].copy()
     check(len(delivered) > 0, "Nincs egyetlen kézbesített rendelés sem.")
     n_delivered_raw = len(delivered)
+
+    # A többi rendelés nem tűnik el nyomtalanul: külön táblába kerül, hogy az
+    # érzékenységi jelentés megmutathassa, mi változna nélkülük / velük.
+    excl = orders[~is_delivered]
+    vallalt_excl = excl["order_estimated_delivery_date"].dt.normalize()
+    lejart = (vallalt_excl < zarnap.normalize()).fillna(False).astype(bool)
+    folyamatban = excl["order_status"].isin(IN_PROGRESS_STATUSES)
+    kizart_rendelesek = pd.DataFrame({
+        "order_key": excl["order_id"],
+        "statusz": excl["order_status"],
+        "rendeles_idopont": excl["order_purchase_timestamp"],
+        "vallalt_hatarido": vallalt_excl,
+        "lejart_a_zarnapig": lejart,
+        # érzékenységi változat: lejárt határidejű, de még úton lévő -> késett
+        "kesett_erzekenysegi": (folyamatban & lejart),
+    })
 
     # ---------------------------------------------------- V-1: sorszintű
     delivered = q.apply(delivered, delivered["order_purchase_timestamp"].isna(),
@@ -193,9 +258,16 @@ def build(raw_dir: Path = RAW, db_path: Path = DB_PATH, verbose: bool = True) ->
         "vállalt határidő a rendelés előtt")
 
     # -------------------------------------------------------- dimenziók
-    geo = (raw["geo"]
+    # Geolokáció: a Brazílián kívüli pontok karanténba kerülnek (az Olistban
+    # néhány tucat ilyen van, pl. európai koordináta brazil irányítószámmal),
+    # előtagonként pedig a MEDIÁN számít — egy kiugró pont nem húzza el.
+    geo_raw = raw["geo"]
+    in_box = (geo_raw["geolocation_lat"].between(*BRAZIL_LAT)
+              & geo_raw["geolocation_lng"].between(*BRAZIL_LNG))
+    geo_raw = q.apply(geo_raw, ~in_box, "Brazílián kívüli koordináta")
+    geo = (geo_raw
            .groupby("geolocation_zip_code_prefix", as_index=False)
-           .agg(lat=("geolocation_lat", "mean"), lng=("geolocation_lng", "mean")))
+           .agg(lat=("geolocation_lat", "median"), lng=("geolocation_lng", "median")))
 
     cust = raw["customers"].merge(
         geo, left_on="customer_zip_code_prefix",
@@ -231,15 +303,45 @@ def build(raw_dir: Path = RAW, db_path: Path = DB_PATH, verbose: bool = True) ->
         "szelesseg_cm": prod["product_width_cm"],
     }).drop_duplicates("product_key")
 
-    # -------------------------------------------------------- tételek aggregálása
+    # -------------------------------------------------------- tételek
     items = raw["items"].copy()
-    agg = items.groupby("order_id").agg(
+    check(not items.duplicated(["order_id", "order_item_id"]).any(),
+          "Duplikált tétel (order_id + order_item_id) az items táblában.")
+    # A pénzösszegek két tizedesre kerekítve: így a rendelésszintű összeg pontosan
+    # a tételek DECIMAL összege lesz (ezt teszt ellenőrzi).
+    items["price"] = items["price"].round(2)
+    items["freight_value"] = items["freight_value"].round(2)
+    items = items.merge(
+        dim_product[["product_key", "kategoria", "suly_g",
+                     "hossz_cm", "magassag_cm", "szelesseg_cm"]],
+        left_on="product_id", right_on="product_key", how="left")
+    items["terfogat_cm3"] = items["hossz_cm"] * items["magassag_cm"] * items["szelesseg_cm"]
+
+    # A rendelés FŐ TÉTELE: a legnagyobb értékű; egyezésnél a legkisebb sorszámú.
+    main = (items
+            .sort_values(["order_id", "price", "order_item_id"],
+                         ascending=[True, False, True], kind="mergesort")
+            .drop_duplicates("order_id")
+            [["order_id", "order_item_id", "product_id", "seller_id"]]
+            .rename(columns={"order_item_id": "fo_tetel_sorszam",
+                             "product_id": "product_key", "seller_id": "seller_key"}))
+
+    g = items.groupby("order_id")
+    agg = g.agg(
         tetel_szam=("order_item_id", "count"),
         kosar_ertek=("price", "sum"),
         szallitasi_dij=("freight_value", "sum"),
-        product_key=("product_id", "first"),   # a rendelés fő terméke
-        seller_key=("seller_id", "first"),     # a rendelés fő eladója
-    ).reset_index()
+        elado_szam=("seller_id", "nunique"),
+        kategoria_szam=("kategoria", "nunique"),
+        suly_g=("suly_g", "sum"),
+        terfogat_cm3=("terfogat_cm3", "sum"),
+    )
+    # Ha egy tétel mérete hiányzik, az összeg se legyen csendben alulbecsült.
+    hiany = items.assign(_s=items["suly_g"].isna(), _v=items["terfogat_cm3"].isna()) \
+                 .groupby("order_id")[["_s", "_v"]].any()
+    agg.loc[hiany["_s"], "suly_g"] = np.nan
+    agg.loc[hiany["_v"], "terfogat_cm3"] = np.nan
+    agg = agg.reset_index().merge(main, on="order_id", how="left")
 
     fact = delivered.merge(agg, on="order_id", how="inner")
     check(len(fact) > 0, "A rendelés–tétel összekapcsolás üres eredményt adott.")
@@ -266,6 +368,11 @@ def build(raw_dir: Path = RAW, db_path: Path = DB_PATH, verbose: bool = True) ->
         "tetel_szam": fact["tetel_szam"].astype("int32"),
         "kosar_ertek": fact["kosar_ertek"].round(2),
         "szallitasi_dij": fact["szallitasi_dij"].round(2),
+        "elado_szam": fact["elado_szam"].astype("int32"),
+        "kategoria_szam": fact["kategoria_szam"].astype("int32"),
+        "suly_g": fact["suly_g"],                 # az összes tétel összege
+        "terfogat_cm3": fact["terfogat_cm3"],     # az összes tétel összege
+        "fo_tetel_sorszam": fact["fo_tetel_sorszam"].astype("int32"),
         "vallalt_hatarido": fact["order_estimated_delivery_date"].dt.normalize(),
 
         # utólag ismert — CSAK a címkéhez és az as-of előzményhez, jellemzőnek tilos
@@ -292,6 +399,21 @@ def build(raw_dir: Path = RAW, db_path: Path = DB_PATH, verbose: bool = True) ->
         on="customer_key", how="left")
     fact_orders["tavolsag_km"] = haversine_km(
         f["s_lat"], f["s_lon"], f["c_lat"], f["c_lon"]).round(2)
+    tavolsag_hianyzik = int(fact_orders["tavolsag_km"].isna().sum())
+
+    # -------------------------------------------------------- fact_order_items
+    # Csak a ténytáblába bekerült rendelések tételei; a fő tétel megjelölve.
+    foi = items[items["order_id"].isin(set(fact_orders["order_key"]))]
+    fo_kulcs = set(zip(fact_orders["order_key"], fact_orders["fo_tetel_sorszam"]))
+    fact_order_items = pd.DataFrame({
+        "order_key": foi["order_id"],
+        "tetel_sorszam": foi["order_item_id"].astype("int32"),
+        "product_key": foi["product_id"],
+        "seller_key": foi["seller_id"],
+        "ar": foi["price"],
+        "szallitasi_dij": foi["freight_value"],
+        "fo_tetel": [k in fo_kulcs for k in zip(foi["order_id"], foi["order_item_id"])],
+    })
 
     # -------------------------------------------------------- dim_date
     days = pd.date_range(fact_orders["date_key"].min(), fact_orders["date_key"].max(), freq="D")
@@ -309,6 +431,7 @@ def build(raw_dir: Path = RAW, db_path: Path = DB_PATH, verbose: bool = True) ->
     dim_date["date_key"] = dim_date["date_key"].dt.date
     fact_orders["date_key"] = fact_orders["date_key"].dt.date
     fact_orders["vallalt_hatarido"] = fact_orders["vallalt_hatarido"].dt.date
+    kizart_rendelesek["vallalt_hatarido"] = kizart_rendelesek["vallalt_hatarido"].dt.date
 
     # -------------------------------------------------------- eredet
     built_at = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
@@ -318,9 +441,14 @@ def build(raw_dir: Path = RAW, db_path: Path = DB_PATH, verbose: bool = True) ->
         "rendelesek_nyers": len(orders),
         "kezbesitett": n_delivered_raw,
         "fact_sorok": len(fact_orders),
+        "tetel_sorok": len(fact_order_items),
         "kesesi_arany": round(late_rate, 4),
         "karanten_osszes": sum(n for _, n in q.log),
         "turehatar": TOLERANCE,
+        "megfigyelesi_zarnap": zarnap,
+        "kizart_rendelesek": len(kizart_rendelesek),
+        "kizart_lejart_uton": int(kizart_rendelesek["kesett_erzekenysegi"].sum()),
+        "tavolsag_hianyzik": tavolsag_hianyzik,
     }])
     meta_sources = pd.DataFrame(
         [{"fajl": f, "sha256": h, "sorok": len(raw[k])}
@@ -347,6 +475,10 @@ def build(raw_dir: Path = RAW, db_path: Path = DB_PATH, verbose: bool = True) ->
             "SELECT * REPLACE ("
             "CAST(kosar_ertek AS DECIMAL(12,2)) AS kosar_ertek, "
             "CAST(szallitasi_dij AS DECIMAL(12,2)) AS szallitasi_dij) FROM tmp_df"),
+        "fact_order_items": (
+            "SELECT * REPLACE ("
+            "CAST(ar AS DECIMAL(12,2)) AS ar, "
+            "CAST(szallitasi_dij AS DECIMAL(12,2)) AS szallitasi_dij) FROM tmp_df"),
     }
     con = connect(db_path, read_only=False)
     for name, df in [
@@ -355,6 +487,8 @@ def build(raw_dir: Path = RAW, db_path: Path = DB_PATH, verbose: bool = True) ->
         ("dim_seller", dim_seller),
         ("dim_product", dim_product),
         ("fact_orders", fact_orders.sort_values(["date_key", "order_key"])),
+        ("fact_order_items", fact_order_items.sort_values(["order_key", "tetel_sorszam"])),
+        ("kizart_rendelesek", kizart_rendelesek.sort_values(["rendeles_idopont", "order_key"])),
         ("meta_build", meta_build),
         ("meta_sources", meta_sources),
         ("meta_quarantine", meta_quarantine),
@@ -369,18 +503,28 @@ def build(raw_dir: Path = RAW, db_path: Path = DB_PATH, verbose: bool = True) ->
         "db": str(db_path),
         "adatforras": source,
         "fact_sorok": len(fact_orders),
+        "tetel_sorok": len(fact_order_items),
         "kesesi_arany": late_rate,
         "karanten": q.log,
         "idoszak": (str(fact_orders["date_key"].min()), str(fact_orders["date_key"].max())),
+        "zarnap": str(zarnap),
+        "kizart": len(kizart_rendelesek),
+        "kizart_lejart_uton": int(kizart_rendelesek["kesett_erzekenysegi"].sum()),
+        "tavolsag_hianyzik": tavolsag_hianyzik,
         "dimenziok": {"date": len(dim_date), "customer": len(dim_customer),
                       "seller": len(dim_seller), "product": len(dim_product)},
     }
     if verbose:
         print(f"Tárház felépítve: {db_path}")
         print(f"  adatforrás:   {source.upper()}")
-        print(f"  fact_orders:  {len(fact_orders):,} sor")
-        print(f"  időszak:      {summary['idoszak'][0]} .. {summary['idoszak'][1]}")
+        print(f"  fact_orders:  {len(fact_orders):,} rendelés "
+              f"({len(fact_order_items):,} tétel a fact_order_items táblában)")
+        print(f"  időszak:      {summary['idoszak'][0]} .. {summary['idoszak'][1]}"
+              f"   (megfigyelési zárónap: {zarnap:%Y-%m-%d %H:%M})")
         print(f"  késési arány: {late_rate:.1%}")
+        print(f"  kizárt (nem kézbesített) rendelés: {len(kizart_rendelesek):,}, ebből "
+              f"lejárt határidejű és még úton: {summary['kizart_lejart_uton']:,}")
+        print(f"  távolság hiányzik (nincs koordináta): {tavolsag_hianyzik:,} rendelés")
         d = summary["dimenziok"]
         print(f"  dimenziók:    date={d['date']:,}  customer={d['customer']:,}  "
               f"seller={d['seller']:,}  product={d['product']:,}")

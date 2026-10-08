@@ -39,6 +39,8 @@ import pandas as pd
 # --------------------------------------------------------------------------
 NUMERIC_FEATURES = [
     "tetel_szam",
+    "elado_szam",
+    "kategoria_szam",
     "kosar_ertek",
     "szallitasi_dij",
     "dij_arany",
@@ -68,6 +70,44 @@ CATEGORICAL_FEATURES = [
 
 FEATURES = NUMERIC_FEATURES + BOOLEAN_FEATURES + CATEGORICAL_FEATURES
 LABEL = "kesett"
+
+# --------------------------------------------------------------------------
+# A jellemzőtáblázat — a dolgozat és a README ebből készül, egy teszt pedig
+# őrzi, hogy minden jellemzőhöz legyen leírás (a dokumentáció nem csúszhat el).
+# (csoport, mit mér, honnan jön — mind a rendelés LEADÁSAKOR ismert)
+# --------------------------------------------------------------------------
+FEATURE_INFO = {
+    "tetel_szam": ("kosár", "a rendelés tételeinek száma (darab)", "fact_order_items"),
+    "elado_szam": ("kosár", "hány különböző eladótól jön a rendelés", "fact_order_items"),
+    "kategoria_szam": ("kosár", "hány különböző termékkategória van a rendelésben",
+                       "fact_order_items + dim_product"),
+    "kosar_ertek": ("kosár", "a tételek árának összege (BRL)", "fact_order_items"),
+    "szallitasi_dij": ("kosár", "a szállítási díjak összege (BRL)", "fact_order_items"),
+    "dij_arany": ("kosár", "szállítási díj / kosárérték", "számított"),
+    "tavolsag_km": ("földrajz", "eladó–vevő légvonalbeli távolság az irányítószám-előtagok "
+                    "mediánpontja között (közelítés)", "geolokáció"),
+    "suly_g": ("termék", "az összes tétel súlyának összege (g)", "fact_order_items + dim_product"),
+    "terfogat_cm3": ("termék", "az összes tétel térfogatának összege (cm³)",
+                     "fact_order_items + dim_product"),
+    "vallalt_ido_nap": ("ígéret", "a platform (Olist) által vállalt szállítási idő (nap)",
+                        "orders"),
+    "honap_sin": ("naptár", "a rendelés hónapja körön kódolva (szinusz)", "orders"),
+    "honap_cos": ("naptár", "a rendelés hónapja körön kódolva (koszinusz)", "orders"),
+    "het_napja": ("naptár", "a hét napja (0 = hétfő)", "orders"),
+    "elado_korabbi_keses_arany": ("előzmény", "a fő eladó korábbi, MÁR KÉZBESÍTETT rendeléseinek "
+                                  "késési aránya (as-of)", "fact_orders"),
+    "elado_korabbi_rendelesek": ("előzmény", "a fő eladó korábban leadott rendeléseinek száma",
+                                 "fact_orders"),
+    "elado_atlagos_feladas_nap": ("előzmény", "a fő eladó átlagos feladási ideje a MÁR futárnak "
+                                  "átadott korábbi rendelésein (nap, as-of)", "fact_orders"),
+    "vevo_korabbi_rendelesek": ("előzmény", "a vevő (customer_unique_id) korábbi rendeléseinek "
+                                "száma", "fact_orders"),
+    "azonos_allam": ("földrajz", "az eladó és a vevő ugyanabban az államban van-e", "számított"),
+    "unnep_kozeli": ("naptár", "november 20. és december 31. közötti rendelés", "dim_date"),
+    "kategoria": ("termék", "a fő tétel (legdrágább tétel) kategóriája", "dim_product"),
+    "elado_allam": ("földrajz", "a fő eladó állama", "dim_seller"),
+    "vevo_allam": ("földrajz", "a vevő állama", "dim_customer"),
+}
 
 # --------------------------------------------------------------------------
 # Jellemzőcsoportok az ablációhoz (python -m pipeline.train --drop ...).
@@ -143,8 +183,12 @@ def load_frame(con) -> pd.DataFrame:
             f.rendeles_idopont,
             f.date_key,
             f.tetel_szam,
+            f.elado_szam,
+            f.kategoria_szam,
             f.kosar_ertek,
             f.szallitasi_dij,
+            f.suly_g,
+            f.terfogat_cm3,
             f.vallalt_hatarido,
             f.tavolsag_km,
             f.kesett,
@@ -156,8 +200,6 @@ def load_frame(con) -> pd.DataFrame:
             c.allam            AS vevo_allam,
             c.customer_unique_key,
             p.kategoria,
-            p.suly_g,
-            p.hossz_cm, p.magassag_cm, p.szelesseg_cm,
             d.unnep_kozeli
         FROM fact_orders f
         LEFT JOIN dim_seller   s ON f.seller_key   = s.seller_key
@@ -220,8 +262,11 @@ def build_features(con) -> tuple[pd.DataFrame, pd.Series, pd.DataFrame]:
     df = load_frame(con).reset_index(drop=True)
 
     # ---------------------------------------------------- egyszerű jellemzők
+    # A pénzösszegek a tárházban DECIMAL típusúak; a modellnek lebegőpontos kell.
+    for c in ["kosar_ertek", "szallitasi_dij"]:
+        df[c] = df[c].astype(float)
     df["dij_arany"] = df["szallitasi_dij"] / df["kosar_ertek"].replace(0, np.nan)
-    df["terfogat_cm3"] = df["hossz_cm"] * df["magassag_cm"] * df["szelesseg_cm"]
+    # A súly és a térfogat a rendelés ÖSSZES tételének összege (a tárház számolja).
     df["azonos_allam"] = (df["elado_allam"] == df["vevo_allam"])
     df["vallalt_ido_nap"] = (df["vallalt_hatarido"] - df["date_key"]).dt.days
 

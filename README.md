@@ -15,31 +15,39 @@ Ez a tároló a megvalósítás; a teljes rendszerterv külön dokumentum.
 
 ## Gyorsindítás
 
-Ajánlott: **Python 3.11 vagy 3.12**.
+**Python 3.14** (rögzítve: `pyproject.toml`, `.python-version`).
 
 ```bash
-python -m venv .venv
-.venv\Scripts\activate            # Windows (PowerShellben: .venv\Scripts\Activate.ps1)
-pip install -r requirements.txt
+py -3.14 -m venv .venv               # Windows; Linuxon: python3.14 -m venv .venv
+.venv\Scripts\activate               # PowerShellben: .venv\Scripts\Activate.ps1
+pip install -r requirements.lock     # pontosan a kipróbált változatok
 python demo.py
 ```
 
-A `demo.py` kb. 10 másodperc alatt végigfuttatja a teljes pipeline-t, és a végén
-összegzést ír ki. PyCharmban a zöld **Run** gombbal is indítható.
+A `requirements.lock` minden csomagot pontos verzióval rögzít (Windowsra és Linuxra
+is) — ezzel jönnek ki bitre ugyanazok a számok. A `requirements.txt` csak a közvetlen
+függőségeket sorolja fel, alsó korláttal.
+
+Első indításkor a `demo.py` letölti a valódi Olist-adatot a Kaggle-ről (kb. 45 MB,
+Kaggle-fiók nem kell), utána egy-két perc alatt végigfuttatja a teljes pipeline-t,
+és a végén összegzést ír ki. A további indítások a már letöltött adatot használják.
+PyCharmban a zöld **Run** gombbal is indítható.
 
 ## Mit csinál a demó
 
 | # | Lépés | Mit bizonyít |
 |---|---|---|
 | 1 | Környezet | a verziók rögzítve vannak a kimenetben |
-| 2 | Adat | ha nincs valódi adat, azonos alakú szintetikusat generál |
+| 2 | Adat | a valódi Olist-adat; ha még nincs meg, letölti a Kaggle-ről |
 | 3 | Tárház | 9 CSV → csillagséma DuckDB-ben, **V-1 validációval** |
-| 4 | Tesztek | 26 teszt: szivárgásvédelem, V-1 és abláció; ha bármelyik bukik, **a demó megáll** |
-| 5 | Betanítás | LightGBM + izotonikus kalibráció, érintetlen, legkésőbbi időszakon mérve |
-| 6 | Összegzés | rangsorolás, kalibráció, artefaktumok helye |
+| 4 | Tesztek | 37 teszt: szivárgásvédelem, V-1, adatmodell, abláció, betanítás, kohorsz; ha bármelyik bukik, **a demó megáll** |
+| 5 | Betanítás | LightGBM **súlyozás nélkül**, érintetlen, legkésőbbi időszakon mérve; a kalibráció csak diagnosztika |
+| 6 | Összegzés | rangsorolás, kalibráció, kizárt rendelések, artefaktumok helye |
 
-> **A szintetikus adat nem a valóság.** A kapott számok a gépezet működését
-> mutatják. Ahol szintetikus adat fut, azt a kimenet minden lépésben jelzi.
+**Valódi adat nélkül:** `python demo.py --synthetic` azonos szerkezetű, generált
+adaton futtatja végig a gépezetet. Erre a CI-nek és a teszteknek van szüksége, mert
+a valódi adat nem kerülhet a tárolóba. A szintetikus adat nem a valóság: a kimenet
+ilyenkor minden lépésben jelzi, hogy a számok csak a gépezet működését mutatják.
 
 ---
 
@@ -48,11 +56,16 @@ A `demo.py` kb. 10 másodperc alatt végigfuttatja a teljes pipeline-t, és a v�
 | Modul | Állapot |
 |---|---|
 | M0 — adattárház, V-1 validáció, adateredet (SHA256) | **kész** |
-| M2 — jellemzők, point-in-time korrekt (as-of illesztés) | **kész** |
+| M0 — két ténytábla (tétel- és rendelésszint), fő tétel, medián geolokáció | **kész** |
+| M0 — megfigyelési zárónap, kizárt rendelések, kohorsz-érzékenységi jelentés | **kész** |
+| M0 — a valódi adat automatikus letöltése (`data/fetch_olist.py`) | **kész** |
+| M2 — 22 jellemző, point-in-time korrekt (as-of illesztés), jellemzőtáblázat | **kész** |
 | M2 — időbeli szétvágás, bővülő ablakos CV | **kész** |
-| M2 — LightGBM baseline, kalibráció, determinisztikus futás | **kész** |
+| M2 — LightGBM súlyozás nélkül, kalibrációs diagnosztika (CORP), determinisztikus futás | **kész** |
 | M2 — abláció (`--drop`), validációs mérőszámok a `metrics.json`-ban | **kész** |
-| Tesztek — szivárgás (13), V-1 (7), abláció (6) | **kész, 26/26** |
+| Tesztek — szivárgás (14), V-1 és adatmodell (10), abláció (6), betanítás (5), kohorsz (2) | **kész, 37/37** |
+| Tároló — MIT licenc, CI (Ubuntu + Windows), `requirements.lock`, döntési napló | **kész** |
+| M2 — modellválasztás bővülő ablakos CV-n, rögzített fa-szám (a lezárt v3 alapfutás előtt) | következő |
 | M2 — 40 futásos sweep, hiperparaméter-hangolás | következő |
 | M3 — SHAP, ellenpélda, stabilitás | következő |
 | M1 — szemantikus réteg (KAPU ①) | tervezett |
@@ -79,12 +92,18 @@ késni fog-e. Ezért as-of illesztés a kézbesítés időpontjára. → `pipeli
 **Rögzített tanulási ütem (0,05).** Nem hangoljuk: ha futásonként változna,
 confounding változó lenne a komplexitás és a magyarázat-stabilitás vizsgálatában.
 
-**Korai leállítás kizárólag PR-AUC-ra.** A `class_weight="balanced"` mellett az
-alapértelmezett logloss azonnal romlik a validáción, és pár fa után megállítaná
-a tanítást. → `pipeline/train.py`, `PARAMS`
+**Korai leállítás kizárólag PR-AUC-ra.** Az összehasonlító `--balance balanced` ág
+mellett az alapértelmezett logloss azonnal romlik a validáción, és pár fa után
+megállítaná a tanítást. → `pipeline/train.py`, `PARAMS`
 
-**Kalibráció.** A felületen valószínűséget mutatunk, tehát a „72%" jelentsen
-72%-ot. Izotonikus regresszió a validáción, ECE és megbízhatósági táblázat a teszten.
+**Súlyozás nélkül, utólagos kalibrátor nélkül.** A felületen valószínűséget mutatunk,
+tehát a „7%" jelentsen 7%-ot. A súlyozás nélküli modell nyers kimenete magától is jól
+kalibrált; egy validáción illesztett izotonikus kalibrátor viszont az időbeli
+alapráta-eltolódás miatt (validáció 10,1%, teszt 3,6%) rontana rajta. Ezért nincs
+kalibrátor, és a SHAP pontosan a megjelenített számot bontja fel. A kalibráció csak
+**diagnosztika**: ECE egyenlő szélességű és egyenlő elemszámú sávokkal, a Brier-pontszám
+CORP-felbontása (Dimitriadis, Gneiting és Jordan, 2021: MCB − DSC + UNC), Brier-készség
+a tanító időszak arányához, és a megbízhatósági táblázat tizedekben.
 
 **Determinisztikus futás.** `deterministic=True`, `force_row_wise=True`:
 azonos adat + mag → bitre azonos modell.
@@ -113,26 +132,110 @@ valamint hogy szintetikus vagy valós adatból épült (`meta_build`).
 
 ---
 
-## Valódi adatra váltás
+## Az adat
 
-1. Töltsd le a *Brazilian E-Commerce Public Dataset by Olist* adathalmazt a Kaggle-ről.
-   **Ellenőrizd a licencet**, és hivatkozz rá a dolgozatban.
-2. Másold mind a 9 CSV-t a `data\raw\` mappába (a szintetikusak helyére).
-3. Futtasd: `python demo.py`
+**Forrás:** *Brazilian E-Commerce Public Dataset by Olist* — Kaggle,
+[`olistbr/brazilian-ecommerce`](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce).
+Kb. 99 ezer rendelés 2016 és 2018 között, 9 CSV-fájlban.
+**Licenc:** CC BY-NC-SA 4.0 — nem kereskedelmi felhasználás, forrásmegjelöléssel;
+a dolgozatban hivatkozni kell rá.
 
-A kód egy sorát sem kell átírni. Ha csak néhány fájlt cserélsz, a tárház
-**vegyes forrású adatot** jelez, és leáll — szándékosan.
+**Letöltés:** automatikus. A `python demo.py` első indításkor letölti a `kagglehub`
+csomaggal, és a 9 CSV-t a `data\raw\` mappába másolja. Külön is futtatható:
+
+```bash
+python -m data.fetch_olist            # letölti, ha még nincs meg
+python -m data.fetch_olist --force    # akkor is újra letölti, ha megvan
+```
+
+A `kagglehub` a saját gyorsítótárába tölt (`%USERPROFILE%\.cache\kagglehub`), ezért
+egy új klónban már nem kell újra letölteni.
+
+**Kézi letöltés** (ha a gépről nem érhető el a Kaggle): a fenti oldalon
+**Download**, a ZIP-ből mind a 9 CSV-t a `data\raw\` mappába, majd `python demo.py`.
+
+**Védelmek.** A valódi adat soha nem kerül a tárolóba (`.gitignore`). A szintetikus
+generátor nem írja felül a valódi adatot. Ha a `data\raw\` mappában valódi és
+generált fájlok keverednek, a tárház **vegyes forrású adatot** jelez, és leáll.
+
+## Adatmodell
+
+| Tábla | Egy sor | Mire való |
+|---|---|---|
+| `fact_order_items` | egy rendelési tétel (egy darab) | minden rendelésszintű összeg forrása |
+| `fact_orders` | egy rendelés | a címke, a jellemzők és minden arány |
+| `dim_customer`, `dim_seller`, `dim_product`, `dim_date` | dimenziók | állam, koordináta, kategória, méretek, naptár |
+| `kizart_rendelesek` | egy nem kézbesített rendelés | státusz, vállalt határidő, lejárt-e a zárónapig |
+| `meta_build`, `meta_sources`, `meta_quarantine` | eredet | építés ideje, zárónap, SHA256, karantén |
+
+* **Számlálási szabály:** minden arány és darabszám **rendelést** számol, soha nem tételt.
+* **Fő tétel:** a legnagyobb értékű tétel (egyezésnél a legkisebb sorszámú); ebből jön a
+  rendelés kategóriája és eladója. A súly és a térfogat az összes tétel összege.
+* **Távolság — közelítés:** irányítószám-előtagonként a koordináták **mediánja**, a
+  Brazílián kívüli pontok karanténba kerülnek (a valódi adatban 31 pont). A távolság a két
+  előtag-pont légvonalbeli távolsága; ha valamelyikhez nincs koordináta (477 rendelés),
+  a távolság hiányzó, és a LightGBM ezt natívan kezeli.
+* **Megfigyelési zárónap és kizárt rendelések:** a zárónap a nyers adat utolsó eseménye
+  (2018-10-17). A fő elemzés csak a kézbesített rendeléseket használja; a többi a
+  `kizart_rendelesek` táblába kerül. Az érzékenységi jelentés megmutatja, mi változna,
+  ha a lejárt határidejű, még úton lévő rendeléseket (1 729 db) késésnek tekintenénk:
+
+```bash
+python -m pipeline.cohort_report      # ablakonként és havonta, 95%-os Wilson-intervallummal
+```
+
+| Ablak | A: csak kézbesített | B: + lejárt, még úton lévő = késett |
+|---|---|---|
+| tanító (–2018-02) | 6,60% | 8,47% |
+| validációs (2018-03–05) | 10,11% | 11,70% |
+| teszt (2018-06–08) | 3,61% | 4,59% |
+
+A többlet a tanító időszakban a legnagyobb (2017-es rendelések, amelyek a zárónapon is
+„feladva" állapotúak) — ez inkább elveszett vagy nem frissített rendelés, mint késés,
+ezért a fő elemzés az A változat. A 2018. májusi késési arány 6,56%; az ígért nap szerint
+a kamionos-sztrájk ablakába (május 21. – június 10.) eső rendeléseknél 8,08%.
+
+## Jellemzők (22)
+
+Mind a rendelés **leadásakor** ismert. A táblázat a `pipeline/features.py`
+`FEATURE_INFO` szótárából készül; egy teszt őrzi, hogy minden jellemzőnek legyen leírása.
+
+| # | Jellemző | Csoport | Mit mér | Forrás |
+|---|---|---|---|---|
+| 1 | `tetel_szam` | kosár | a rendelés tételeinek száma (darab) | fact_order_items |
+| 2 | `elado_szam` | kosár | hány különböző eladótól jön a rendelés | fact_order_items |
+| 3 | `kategoria_szam` | kosár | hány különböző termékkategória van a rendelésben | fact_order_items + dim_product |
+| 4 | `kosar_ertek` | kosár | a tételek árának összege (BRL) | fact_order_items |
+| 5 | `szallitasi_dij` | kosár | a szállítási díjak összege (BRL) | fact_order_items |
+| 6 | `dij_arany` | kosár | szállítási díj / kosárérték | számított |
+| 7 | `tavolsag_km` | földrajz | eladó–vevő légvonalbeli távolság az irányítószám-előtagok mediánpontja között (közelítés) | geolokáció |
+| 8 | `suly_g` | termék | az összes tétel súlyának összege (g) | fact_order_items + dim_product |
+| 9 | `terfogat_cm3` | termék | az összes tétel térfogatának összege (cm³) | fact_order_items + dim_product |
+| 10 | `vallalt_ido_nap` | ígéret | a platform (Olist) által vállalt szállítási idő (nap) | orders |
+| 11 | `honap_sin` | naptár | a rendelés hónapja körön kódolva (szinusz) | orders |
+| 12 | `honap_cos` | naptár | a rendelés hónapja körön kódolva (koszinusz) | orders |
+| 13 | `het_napja` | naptár | a hét napja (0 = hétfő) | orders |
+| 14 | `elado_korabbi_keses_arany` | előzmény | a fő eladó korábbi, MÁR KÉZBESÍTETT rendeléseinek késési aránya (as-of) | fact_orders |
+| 15 | `elado_korabbi_rendelesek` | előzmény | a fő eladó korábban leadott rendeléseinek száma | fact_orders |
+| 16 | `elado_atlagos_feladas_nap` | előzmény | a fő eladó átlagos feladási ideje a MÁR futárnak átadott korábbi rendelésein (nap, as-of) | fact_orders |
+| 17 | `vevo_korabbi_rendelesek` | előzmény | a vevő (customer_unique_id) korábbi rendeléseinek száma | fact_orders |
+| 18 | `azonos_allam` | földrajz | az eladó és a vevő ugyanabban az államban van-e | számított |
+| 19 | `unnep_kozeli` | naptár | november 20. és december 31. közötti rendelés | dim_date |
+| 20 | `kategoria` | termék | a fő tétel (legdrágább tétel) kategóriája | dim_product |
+| 21 | `elado_allam` | földrajz | a fő eladó állama | dim_seller |
+| 22 | `vevo_allam` | földrajz | a vevő állama | dim_customer |
 
 ## Egyenként futtatható lépések
 
 ```bash
-python -m data.make_synthetic          # szintetikus adat
+python -m data.fetch_olist             # valódi adat letöltése (ha még nincs meg)
 python -m data.build_warehouse         # tárház + V-1
 python -m data.describe_warehouse      # mi van a tárházban (eredet, séma, minta)
 python -m pytest tests/ -v             # tesztek
-python -m pipeline.train               # betanítás
-python -m pipeline.train --balance none  # súlyozás nélkül (összehasonlításhoz)
-python -m pipeline.train --balance none --drop honap   # abláció: hónap-jellemzők nélkül
+python -m pipeline.train               # betanítás (súlyozás nélkül)
+python -m pipeline.train --balance balanced   # súlyozott ág, csak összehasonlításhoz
+python -m pipeline.train --drop honap  # abláció: hónap-jellemzők nélkül
+python -m pipeline.cohort_report       # kohorsz-érzékenységi jelentés
 ```
 
 **Abláció.** A `--drop` jellemzőket zár ki a betanításból: csoportnevet (`honap` =
@@ -143,7 +246,7 @@ kizárt jellemzők a `metrics.json`-ban, a model cardban és a mappanévben
 (`..._minus-honap_seed1`) is látszanak. Több seedes összevetés PowerShellben:
 
 ```powershell
-foreach ($d in "", "honap") { foreach ($s in 1..5) { python -m pipeline.train --balance none --seed $s --tag ablacio --drop "$d" | Out-Null } }
+foreach ($d in "", "honap") { foreach ($s in 1..5) { python -m pipeline.train --seed $s --tag ablacio --drop "$d" | Out-Null } }
 ```
 
 A `metrics.json` a teszt mellett a validáció mérőszámait is rögzíti
@@ -157,23 +260,32 @@ A legutóbbi futás artefaktumainak mappanevét az `artifacts\LATEST.txt` tartal
 glassbox-bi/
 ├── demo.py                  teljes pipeline egy paranccsal
 ├── data/
-│   ├── make_synthetic.py    Olist-alakú szintetikus adat + ujjlenyomat
+│   ├── fetch_olist.py       a valódi Olist-adat letöltése (kagglehub)
+│   ├── make_synthetic.py    szintetikus adat a CI-hez és a tesztekhez
 │   ├── build_warehouse.py   CSV → csillagséma, V-1 validáció, eredet
 │   ├── describe_warehouse.py  a tárház tartalma
 │   └── db.py                kapcsolat, érthető hibaüzenetek
 ├── pipeline/
-│   ├── features.py          jellemzők, as-of előzmények, szivárgásvédelem
+│   ├── features.py          22 jellemző + jellemzőtáblázat, as-of előzmények, szivárgásvédelem
 │   ├── split.py             időbeli szétvágás, bővülő ablakos CV
-│   └── train.py             LightGBM, kalibráció, model card
-├── .github/workflows/       CI: minden push lefuttatja a teljes pipeline-t
+│   ├── train.py             LightGBM, kalibrációs diagnosztika, model card
+│   └── cohort_report.py     kohorsz-érzékenységi jelentés (kizárt rendelések)
+├── docs/
+│   └── dontesi_naplo.md     minden módszertani döntés: mikor, miért, látta-e már a tesztet
+├── .github/workflows/       CI: minden push lefuttatja a teljes pipeline-t (szintetikus adaton)
 ├── LICENSE                  MIT (a kódra; az adat saját licenc alatt áll)
+├── requirements.txt         közvetlen függőségek, alsó korláttal
+├── requirements.lock        minden csomag pontos verzióval (Python 3.14, Windows + Linux)
+├── .python-version          3.14
 ├── CITATION.cff             hogyan hivatkozzanak a munkára
 ├── .env.example             minta a későbbi LLM-kulcsokhoz (a .env sosem kerül be)
 ├── pyproject.toml           pytest-beállítások
 └── tests/
-    ├── test_no_leakage.py   13 teszt
-    ├── test_warehouse.py    7 teszt
-    └── test_ablation.py     6 teszt (az abláció tényleg kizár-e)
+    ├── test_no_leakage.py   14 teszt (szivárgás, point-in-time, jellemzőtáblázat)
+    ├── test_warehouse.py    10 teszt (V-1, két ténytábla, fő tétel, geolokáció, zárónap)
+    ├── test_ablation.py     6 teszt (az abláció tényleg kizár-e)
+    ├── test_train.py        5 teszt (súlyozatlan alapértelmezés, nincs kalibrátor, diagnosztika)
+    └── test_cohort.py       2 teszt (Wilson-intervallum, érzékenységi változat)
 ```
 
 ## A tároló közzététele
@@ -198,10 +310,12 @@ A GitHubon **Private** tárolóként kezdd, üres inicializálással (ne kérj R
 ### Folyamatos ellenőrzés (CI)
 
 Az első push után a `.github/workflows/tests.yml` minden feltöltésnél lefuttatja a
-teljes pipeline-t Python 3.11-en és 3.12-n: adatgenerálás, tárházépítés V-1
-validációval, 26 teszt, betanítás. Ha egy teszt elbukik, a futás pirosra vált, és
-a GitHub e-mailt küld. Ez a szivárgásvédelem hálója: egy elrontott jellemző nem
-maradhat észrevétlen.
+teljes pipeline-t Python 3.14-en, Ubuntun és Windowson, **szintetikus adaton**
+(`python demo.py --synthetic`), mert a valódi adat nem kerülhet a tárolóba:
+adatgenerálás, tárházépítés V-1 validációval, 37 teszt, betanítás, kohorsz-jelentés.
+A csomagokat a `requirements.lock` rögzíti. Ha egy teszt
+elbukik, a futás pirosra vált, és a GitHub e-mailt küld. Ez a szivárgásvédelem
+hálója: egy elrontott jellemző nem maradhat észrevétlen.
 
 ## Másik gépre
 
@@ -211,21 +325,21 @@ környezet mind újraépülnek; a `.gitignore` pontosan ezeket zárja ki.
 | Átvinni | NEM átvinni | Miért |
 |---|---|---|
 | minden, ami a tárolóban van | `.venv\` | gépfüggő, abszolút útvonalakkal |
-| | `data\raw\`, `data\*.duckdb` | a generátor rögzített maggal dolgozik: ugyanaz jön ki |
+| | `data\raw\`, `data\*.duckdb` | a demó első indításkor újra letölti az adatot, a tárházat minden futás újraépíti |
 | | `artifacts\` | a betanítás újra előállítja |
 
 Az új gépen:
 
-1. **Python 3.11 vagy 3.12** a python.org-ról — telepítéskor pipáld be az
+1. **Python 3.14** a python.org-ról — telepítéskor pipáld be az
    *„Add python.exe to PATH"* dobozt.
 2. Ezután:
 
 ```bash
 git clone https://github.com/<felhasznalonev>/glassbox-bi.git
 cd glassbox-bi
-python -m venv .venv
+py -3.14 -m venv .venv
 .venv\Scripts\activate
-pip install -r requirements.txt
+pip install -r requirements.lock
 python demo.py
 ```
 
@@ -234,15 +348,25 @@ felajánlja a virtuális környezet létrehozását a `requirements.txt` alapjá
 
 ### Ellenőrzés: egyeznek-e a számok?
 
-A pipeline determinisztikus, tehát az új gépen **ugyanezeket** kell látnod:
+A pipeline determinisztikus, tehát az új gépen a `python demo.py` összegzésében
+**ugyanezeket** kell látnod (Windowson és Linuxon is így jött ki):
 
 ```
-Tárház         38,857 rendelés, 2017-01-01 .. 2018-08-30
-Tesztek        mind átment                     (26 teszt)
-Modell         LightGBM, 20 jellemző, 27 fa
-Rangsorolás    PR-AUC 0.211  (bázisráta 0.077, 2.7x)  ROC-AUC 0.728
-Kalibráció     ECE 0.371 -> 0.009   Brier 0.210 -> 0.067
+Tárház         96,470 rendelés, 2016-09-15 .. 2018-08-29
+V-1 validáció  rendben, karantén: Brazílián kívüli koordináta: 31
+Kizárva        2,971 nem kézbesített rendelés (zárónap 2018-10-17; ...)
+Tesztek        mind átment
+Modell         LightGBM, 22 jellemző, 56 fa, súlyozás: none
+Rangsorolás    PR-AUC 0.097  (bázisráta 0.036, 2.7x)  ROC-AUC 0.761
+Kalibráció     ECE 0.007 (egyenlő elemszámú sávokkal 0.015)   Brier 0.0338, készség 5.3%
 ```
+
+Ez egyetlen mag (42) eredménye. Öt maggal (1–5) a teszten PR-AUC 0,090 ± 0,005,
+ROC-AUC 0,749 ± 0,005, Brier 0,0340 — a 42-es mag a sáv felső szélén van. A lezárt
+v3 alapfutás a modellválasztás átállítása (bővülő ablakos CV) után készül.
+
+A `--synthetic` futás (és a CI) összegzése: 38,857 rendelés, 22 jellemző, 28 fa,
+PR-AUC 0.203, ROC-AUC 0.722.
 
 Ha egyeznek, az átvitel hibátlan. Ha nem, a demó 1. lépése kiírja a Python- és
 csomagverziókat — azzal kezdd a keresést.
@@ -250,8 +374,8 @@ csomagverziókat — azzal kezdd a keresést.
 ## Licenc és hivatkozás
 
 A kód MIT licenc alatt áll (`LICENSE`). Az Olist adathalmaz **nem** része a
-tárolónak, és a saját feltételei alatt áll — azokat a forrásoldalon kell
-ellenőrizni, és a dolgozatban hivatkozni rá.
+tárolónak, és a saját licence alatt áll (CC BY-NC-SA 4.0, lásd [Az adat](#az-adat));
+a dolgozatban hivatkozni kell rá.
 
 A munkára való hivatkozás adatait a `CITATION.cff` tartalmazza; a GitHub ebből
 „Cite this repository" gombot tesz a tároló oldalára.
@@ -263,3 +387,11 @@ A munkára való hivatkozás adatait a `CITATION.cff` tartalmazza; a GitHub ebb�
 
 **„A tárházfájlt egy másik program zárolja"** — zárd be a kapcsolatot a DBeaverben
 vagy a PyCharm adatbázis-paneljén.
+
+**„A projekt a Python 3.14-re van rögzítve"** — a demó más Python-verzióval is fut, de
+figyelmeztet: a bitre azonos számok csak a rögzített környezetben garantáltak
+(`py -3.14 -m venv .venv`, `pip install -r requirements.lock`).
+
+**„Az Olist adathalmaz letöltése nem sikerült"** — nincs internet, vagy a hálózat
+(pl. egyetemi proxy) nem engedi a Kaggle-t. A hibaüzenet leírja a kézi letöltést;
+lásd [Az adat](#az-adat).
