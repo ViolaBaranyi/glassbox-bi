@@ -1,0 +1,843 @@
+{
+  "nev": "Üvegdoboz BI — referencia-modellek lezárt összevetése",
+  "protokoll_sha256": "6ea464ac7fd7c4cda825282c2cd324d132495dd306c5eec9a7fb8cf33fcce34f",
+  "alap_protokoll_sha256": "9407febe2a77b8945baa8500dc8f66831c615325b9bbe9ef4d326d743b7da134",
+  "protokoll": {
+    "nev": "Üvegdoboz BI — referencia-modellek lezárt összevetése",
+    "verzio": 1,
+    "allapot": "jovahagyva",
+    "jovahagyas": {
+      "ki": "Baranyi Viola",
+      "mikor": "2026-10-09",
+      "megjegyzes": "A rácsok, a választási szabály és a CV-ből várt beállítások (C = 0,1 · mélység 10 · levélméret 10) változatlanok."
+    },
+    "alap_protokoll": {
+      "fajl": "docs/v3_protokoll.json",
+      "sha256": "9407febe2a77b8945baa8500dc8f66831c615325b9bbe9ef4d326d743b7da134",
+      "megjegyzes": "ugyanaz az adat, ablakok, jellemzők és címke-tisztítás; a LightGBM a lezárt v3 modell, nem tanul újra mást"
+    },
+    "modellek": {
+      "logreg": {
+        "param": "C",
+        "racs": [
+          0.001,
+          0.01,
+          0.1,
+          1.0
+        ],
+        "max_iter": 5000,
+        "megjegyzes": "L2-regularizáció; standardizált számjellemzők"
+      },
+      "dontesi_fa": {
+        "param": "max_depth",
+        "racs": [
+          3,
+          4,
+          5,
+          6,
+          8,
+          10,
+          12,
+          15,
+          20
+        ],
+        "min_samples_leaf": 50
+      },
+      "random_forest": {
+        "param": "min_samples_leaf",
+        "racs": [
+          100,
+          30,
+          10,
+          5,
+          2
+        ],
+        "n_estimators": 300,
+        "max_features": "sqrt"
+      }
+    },
+    "elofeldolgozas": "hiányzó számérték: medián + hiány-jelző oszlop; kategória: one-hot, a 20-nál ritkább kategóriák összevonva; a logisztikus regressziónál standardizálás",
+    "valasztasi_szabaly": "a legnagyobb átlagos PR-AUC a 4 tisztított hajtáson (bővülő ablakos CV, a tanító ablakon); egyezésnél az egyszerűbb (a rács eleje)",
+    "cv_valasztas_elvart": {
+      "logreg": 0.1,
+      "dontesi_fa": 10,
+      "random_forest": 10
+    },
+    "cv_valasztas_megjegyzes": "a `python -m pipeline.reference_models` eredménye 2026-10-09-én (csak a tanító ablak); a döntési fa és a random forest rácsát kibővítettük, mert az első futásban a rács szélén volt a legjobb érték — a kibővített rácsban a legjobb belül van",
+    "mag": 42,
+    "tanitasi_veletlen": {
+      "modell": "random_forest",
+      "magok": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "megjegyzes": "a logisztikus regresszió determinisztikus; a döntési fa a rögzített maggal szintén"
+    },
+    "bizonytalansag": {
+      "modszer": "heti blokk-bootstrap (ISO-hét, a rendelés időpontja szerint)",
+      "B": 2000,
+      "mag": 20261008,
+      "intervallum": "percentilis, 95%"
+    },
+    "paros_osszevetes": "LightGBM (lezárt) − referencia, ugyanazokon a húzott heteken: PR-AUC, ROC-AUC, Brier",
+    "fo_mutato": "pr_auc"
+  },
+  "futas": {
+    "idopont_utc": "2026-10-09 11:24:42",
+    "ismetles": false,
+    "git": "76934b1",
+    "git_allapot": {
+      "git": true,
+      "commit": "76934b1",
+      "protokoll_commitolva": true,
+      "munkapeldany_tiszta": true
+    },
+    "commit_nelkul_engedve": false,
+    "python": "3.14.3",
+    "os": "Windows-11-10.0.26200-SP0"
+  },
+  "adat": {
+    "adatforras": "valós",
+    "tarhaz_epitve": "2026-10-08 12:18:19 UTC",
+    "rendelesek": 96470,
+    "megfigyelesi_zarnap": "2018-10-17 17:30:18",
+    "forrasfajlok": {
+      "olist_customers_dataset.csv": {
+        "sha256": "983a422239e1712ded753b3bf9ecf47dc73f144d306029dcfa99e70a226883d2",
+        "sorok": 99441
+      },
+      "olist_geolocation_dataset.csv": {
+        "sha256": "b514f6fc991b9566aeba02aa5d67e2c3630f034b60a0e05aa0d082a3b66d88d6",
+        "sorok": 1000163
+      },
+      "olist_order_items_dataset.csv": {
+        "sha256": "0bc4d068c4fe38cbb01bd90e8746e3c613fe7b4baef75fab7b0e329701c3e279",
+        "sorok": 112650
+      },
+      "olist_order_payments_dataset.csv": {
+        "sha256": "4f713964f2815dbbaa40b9488268c55aac3627bfce5aa96cf58d1f3616de3cc0",
+        "sorok": 103886
+      },
+      "olist_order_reviews_dataset.csv": {
+        "sha256": "012b61c7593e34f51fa614efdf802b9c7056ce6aae5307ddb93236e7cfc797d7",
+        "sorok": 99224
+      },
+      "olist_orders_dataset.csv": {
+        "sha256": "8df58ef3d2d7e9944010f7beecd9b75367f5588ec6e3c91cec19ae3345ef9ecf",
+        "sorok": 99441
+      },
+      "olist_products_dataset.csv": {
+        "sha256": "3e6569628a17fbc75fd206ee357b59e20364b9afa90f5b6cd5b4d624c58aa9cc",
+        "sorok": 32951
+      },
+      "olist_sellers_dataset.csv": {
+        "sha256": "1f643d2b950373b85735e7794b20986f528d7a000432e7c6f9bcbb44d0846a0e",
+        "sorok": 3095
+      },
+      "product_category_name_translation.csv": {
+        "sha256": "a81f0d1f27b27e7293f761bc79e3ce8f348ee39c4b3ed3e49bde38f478586278",
+        "sorok": 71
+      }
+    }
+  },
+  "cimke_tisztitas": true,
+  "tanito_sorok": 50623,
+  "teszt_bazisrata": 0.0361,
+  "cv": {
+    "modszer": "bővülő ablakos CV a tanító időszakon, ugyanazokon a hajtásokon",
+    "hajtasok": 4,
+    "cimke_tisztitas": true,
+    "mag": 42,
+    "modellek": {
+      "lightgbm": {
+        "modell": "lightgbm",
+        "nev": "LightGBM",
+        "param": "a fák száma",
+        "racs": [
+          {
+            "ertek": 119,
+            "hajtasok": 4,
+            "pr_auc": 0.1258,
+            "roc_auc": 0.6391,
+            "brier": 0.0672,
+            "ece": 0.0398,
+            "ece_egyenlo_elemszam": 0.0408
+          }
+        ],
+        "valasztott": 119,
+        "cv": {
+          "ertek": 119,
+          "hajtasok": 4,
+          "pr_auc": 0.1258,
+          "roc_auc": 0.6391,
+          "brier": 0.0672,
+          "ece": 0.0398,
+          "ece_egyenlo_elemszam": 0.0408
+        }
+      },
+      "logreg": {
+        "modell": "logreg",
+        "nev": "logisztikus regresszió",
+        "param": "C",
+        "racs": [
+          {
+            "ertek": 0.001,
+            "hajtasok": 4,
+            "pr_auc": 0.1079,
+            "roc_auc": 0.6177,
+            "brier": 0.0679,
+            "ece": 0.0418,
+            "ece_egyenlo_elemszam": 0.0423
+          },
+          {
+            "ertek": 0.01,
+            "hajtasok": 4,
+            "pr_auc": 0.1219,
+            "roc_auc": 0.6361,
+            "brier": 0.0678,
+            "ece": 0.0457,
+            "ece_egyenlo_elemszam": 0.0458
+          },
+          {
+            "ertek": 0.1,
+            "hajtasok": 4,
+            "pr_auc": 0.1241,
+            "roc_auc": 0.6338,
+            "brier": 0.068,
+            "ece": 0.048,
+            "ece_egyenlo_elemszam": 0.0484
+          },
+          {
+            "ertek": 1.0,
+            "hajtasok": 4,
+            "pr_auc": 0.1224,
+            "roc_auc": 0.6262,
+            "brier": 0.0684,
+            "ece": 0.0493,
+            "ece_egyenlo_elemszam": 0.0502
+          }
+        ],
+        "valasztott": 0.1,
+        "cv": {
+          "ertek": 0.1,
+          "hajtasok": 4,
+          "pr_auc": 0.1241,
+          "roc_auc": 0.6338,
+          "brier": 0.068,
+          "ece": 0.048,
+          "ece_egyenlo_elemszam": 0.0484
+        }
+      },
+      "dontesi_fa": {
+        "modell": "dontesi_fa",
+        "nev": "döntési fa",
+        "param": "max_depth",
+        "racs": [
+          {
+            "ertek": 3,
+            "hajtasok": 4,
+            "pr_auc": 0.0843,
+            "roc_auc": 0.5455,
+            "brier": 0.0686,
+            "ece": 0.0449,
+            "ece_egyenlo_elemszam": 0.0436
+          },
+          {
+            "ertek": 4,
+            "hajtasok": 4,
+            "pr_auc": 0.0862,
+            "roc_auc": 0.5484,
+            "brier": 0.0688,
+            "ece": 0.048,
+            "ece_egyenlo_elemszam": 0.0459
+          },
+          {
+            "ertek": 5,
+            "hajtasok": 4,
+            "pr_auc": 0.0879,
+            "roc_auc": 0.5431,
+            "brier": 0.0689,
+            "ece": 0.048,
+            "ece_egyenlo_elemszam": 0.0463
+          },
+          {
+            "ertek": 6,
+            "hajtasok": 4,
+            "pr_auc": 0.0888,
+            "roc_auc": 0.5481,
+            "brier": 0.0692,
+            "ece": 0.0496,
+            "ece_egyenlo_elemszam": 0.0488
+          },
+          {
+            "ertek": 8,
+            "hajtasok": 4,
+            "pr_auc": 0.0925,
+            "roc_auc": 0.5629,
+            "brier": 0.0691,
+            "ece": 0.0472,
+            "ece_egyenlo_elemszam": 0.0464
+          },
+          {
+            "ertek": 10,
+            "hajtasok": 4,
+            "pr_auc": 0.0934,
+            "roc_auc": 0.5713,
+            "brier": 0.0692,
+            "ece": 0.0474,
+            "ece_egyenlo_elemszam": 0.0484
+          },
+          {
+            "ertek": 12,
+            "hajtasok": 4,
+            "pr_auc": 0.0919,
+            "roc_auc": 0.5619,
+            "brier": 0.0697,
+            "ece": 0.0485,
+            "ece_egyenlo_elemszam": 0.0543
+          },
+          {
+            "ertek": 15,
+            "hajtasok": 4,
+            "pr_auc": 0.0915,
+            "roc_auc": 0.5607,
+            "brier": 0.0698,
+            "ece": 0.0486,
+            "ece_egyenlo_elemszam": 0.0548
+          },
+          {
+            "ertek": 20,
+            "hajtasok": 4,
+            "pr_auc": 0.0912,
+            "roc_auc": 0.5613,
+            "brier": 0.0699,
+            "ece": 0.0489,
+            "ece_egyenlo_elemszam": 0.055
+          }
+        ],
+        "valasztott": 10,
+        "cv": {
+          "ertek": 10,
+          "hajtasok": 4,
+          "pr_auc": 0.0934,
+          "roc_auc": 0.5713,
+          "brier": 0.0692,
+          "ece": 0.0474,
+          "ece_egyenlo_elemszam": 0.0484
+        }
+      },
+      "random_forest": {
+        "modell": "random_forest",
+        "nev": "random forest",
+        "param": "min_samples_leaf",
+        "racs": [
+          {
+            "ertek": 100,
+            "hajtasok": 4,
+            "pr_auc": 0.111,
+            "roc_auc": 0.633,
+            "brier": 0.0674,
+            "ece": 0.0399,
+            "ece_egyenlo_elemszam": 0.04
+          },
+          {
+            "ertek": 30,
+            "hajtasok": 4,
+            "pr_auc": 0.1122,
+            "roc_auc": 0.6307,
+            "brier": 0.0672,
+            "ece": 0.0391,
+            "ece_egyenlo_elemszam": 0.0391
+          },
+          {
+            "ertek": 10,
+            "hajtasok": 4,
+            "pr_auc": 0.1131,
+            "roc_auc": 0.624,
+            "brier": 0.067,
+            "ece": 0.0376,
+            "ece_egyenlo_elemszam": 0.0376
+          },
+          {
+            "ertek": 5,
+            "hajtasok": 4,
+            "pr_auc": 0.113,
+            "roc_auc": 0.6177,
+            "brier": 0.0669,
+            "ece": 0.0365,
+            "ece_egyenlo_elemszam": 0.0361
+          },
+          {
+            "ertek": 2,
+            "hajtasok": 4,
+            "pr_auc": 0.1081,
+            "roc_auc": 0.6089,
+            "brier": 0.0674,
+            "ece": 0.0389,
+            "ece_egyenlo_elemszam": 0.0375
+          }
+        ],
+        "valasztott": 10,
+        "cv": {
+          "ertek": 10,
+          "hajtasok": 4,
+          "pr_auc": 0.1131,
+          "roc_auc": 0.624,
+          "brier": 0.067,
+          "ece": 0.0376,
+          "ece_egyenlo_elemszam": 0.0376
+        }
+      }
+    }
+  },
+  "modellek": {
+    "lightgbm": {
+      "nev": "LightGBM (lezárt)",
+      "beallitas": "119 fa",
+      "teszt": {
+        "pr_auc": {
+          "ertek": 0.09782,
+          "ci95": [
+            0.05524,
+            0.12742
+          ],
+          "se": 0.01803,
+          "ervenyes_huzasok": 2000
+        },
+        "roc_auc": {
+          "ertek": 0.76397,
+          "ci95": [
+            0.72288,
+            0.78774
+          ],
+          "se": 0.01657,
+          "ervenyes_huzasok": 2000
+        },
+        "brier": {
+          "ertek": 0.03388,
+          "ci95": [
+            0.01883,
+            0.04948
+          ],
+          "se": 0.00793,
+          "ervenyes_huzasok": 2000
+        },
+        "ece": {
+          "ertek": 0.00777,
+          "ci95": [
+            0.00264,
+            0.01958
+          ],
+          "se": 0.00474,
+          "ervenyes_huzasok": 2000
+        },
+        "ece_egyenlo_elemszam": {
+          "ertek": 0.00993,
+          "ci95": [
+            0.00803,
+            0.0195
+          ],
+          "se": 0.00299,
+          "ervenyes_huzasok": 2000
+        },
+        "_beallitas": {
+          "B": 2000,
+          "mag": 20261008,
+          "blokkok": 14,
+          "intervallum": "percentilis, 95%"
+        }
+      },
+      "validacio": {
+        "pr_auc": 0.1791,
+        "roc_auc": 0.6497,
+        "brier": 0.0906,
+        "ece": 0.04897,
+        "ece_egyenlo_elemszam": 0.04824
+      }
+    },
+    "logreg": {
+      "nev": "logisztikus regresszió",
+      "beallitas": "C = 0.1",
+      "teszt": {
+        "pr_auc": {
+          "ertek": 0.08363,
+          "ci95": [
+            0.06031,
+            0.10299
+          ],
+          "se": 0.01081,
+          "ervenyes_huzasok": 2000
+        },
+        "roc_auc": {
+          "ertek": 0.74011,
+          "ci95": [
+            0.69223,
+            0.78104
+          ],
+          "se": 0.02291,
+          "ervenyes_huzasok": 2000
+        },
+        "brier": {
+          "ertek": 0.03412,
+          "ci95": [
+            0.01824,
+            0.05029
+          ],
+          "se": 0.00828,
+          "ervenyes_huzasok": 2000
+        },
+        "ece": {
+          "ertek": 0.0041,
+          "ci95": [
+            0.00261,
+            0.01746
+          ],
+          "se": 0.00405,
+          "ervenyes_huzasok": 2000
+        },
+        "ece_egyenlo_elemszam": {
+          "ertek": 0.0115,
+          "ci95": [
+            0.0071,
+            0.02187
+          ],
+          "se": 0.00397,
+          "ervenyes_huzasok": 2000
+        },
+        "_beallitas": {
+          "B": 2000,
+          "mag": 20261008,
+          "blokkok": 14,
+          "intervallum": "percentilis, 95%"
+        }
+      },
+      "validacio": {
+        "pr_auc": 0.2665,
+        "roc_auc": 0.7547,
+        "brier": 0.08845,
+        "ece": 0.05475,
+        "ece_egyenlo_elemszam": 0.05466
+      },
+      "paros_lightgbm_minusz_referencia": {
+        "pr_auc": {
+          "a": 0.09782,
+          "b": 0.08363,
+          "kulonbseg": 0.01419,
+          "ci95": [
+            -0.0101,
+            0.02923
+          ],
+          "se": 0.00988,
+          "ervenyes_huzasok": 2000
+        },
+        "roc_auc": {
+          "a": 0.76397,
+          "b": 0.74011,
+          "kulonbseg": 0.02386,
+          "ci95": [
+            -0.01753,
+            0.05676
+          ],
+          "se": 0.01925,
+          "ervenyes_huzasok": 2000
+        },
+        "brier": {
+          "a": 0.03388,
+          "b": 0.03412,
+          "kulonbseg": -0.00024,
+          "ci95": [
+            -0.00102,
+            0.00056
+          ],
+          "se": 0.0004,
+          "ervenyes_huzasok": 2000
+        },
+        "_beallitas": {
+          "B": 2000,
+          "mag": 20261008,
+          "blokkok": 14,
+          "intervallum": "percentilis, 95%"
+        }
+      }
+    },
+    "dontesi_fa": {
+      "nev": "döntési fa",
+      "beallitas": "max_depth = 10",
+      "teszt": {
+        "pr_auc": {
+          "ertek": 0.06088,
+          "ci95": [
+            0.03737,
+            0.08368
+          ],
+          "se": 0.01162,
+          "ervenyes_huzasok": 2000
+        },
+        "roc_auc": {
+          "ertek": 0.59718,
+          "ci95": [
+            0.57261,
+            0.63379
+          ],
+          "se": 0.01531,
+          "ervenyes_huzasok": 2000
+        },
+        "brier": {
+          "ertek": 0.0363,
+          "ci95": [
+            0.02046,
+            0.05268
+          ],
+          "se": 0.00828,
+          "ervenyes_huzasok": 2000
+        },
+        "ece": {
+          "ertek": 0.01591,
+          "ci95": [
+            0.01343,
+            0.0301
+          ],
+          "se": 0.00448,
+          "ervenyes_huzasok": 2000
+        },
+        "ece_egyenlo_elemszam": {
+          "ertek": 0.02317,
+          "ci95": [
+            0.02089,
+            0.02992
+          ],
+          "se": 0.00244,
+          "ervenyes_huzasok": 2000
+        },
+        "_beallitas": {
+          "B": 2000,
+          "mag": 20261008,
+          "blokkok": 14,
+          "intervallum": "percentilis, 95%"
+        }
+      },
+      "validacio": {
+        "pr_auc": 0.1506,
+        "roc_auc": 0.5844,
+        "brier": 0.09293,
+        "ece": 0.06224,
+        "ece_egyenlo_elemszam": 0.05658
+      },
+      "paros_lightgbm_minusz_referencia": {
+        "pr_auc": {
+          "a": 0.09782,
+          "b": 0.06088,
+          "kulonbseg": 0.03694,
+          "ci95": [
+            0.00233,
+            0.05338
+          ],
+          "se": 0.01306,
+          "ervenyes_huzasok": 2000
+        },
+        "roc_auc": {
+          "a": 0.76397,
+          "b": 0.59718,
+          "kulonbseg": 0.16679,
+          "ci95": [
+            0.10497,
+            0.2014
+          ],
+          "se": 0.02369,
+          "ervenyes_huzasok": 2000
+        },
+        "brier": {
+          "a": 0.03388,
+          "b": 0.0363,
+          "kulonbseg": -0.00242,
+          "ci95": [
+            -0.00341,
+            -0.00135
+          ],
+          "se": 0.00053,
+          "ervenyes_huzasok": 2000
+        },
+        "_beallitas": {
+          "B": 2000,
+          "mag": 20261008,
+          "blokkok": 14,
+          "intervallum": "percentilis, 95%"
+        }
+      }
+    },
+    "random_forest": {
+      "nev": "random forest",
+      "beallitas": "min_samples_leaf = 10",
+      "teszt": {
+        "pr_auc": {
+          "ertek": 0.08796,
+          "ci95": [
+            0.05043,
+            0.11821
+          ],
+          "se": 0.01713,
+          "ervenyes_huzasok": 2000
+        },
+        "roc_auc": {
+          "ertek": 0.73847,
+          "ci95": [
+            0.69585,
+            0.76194
+          ],
+          "se": 0.0167,
+          "ervenyes_huzasok": 2000
+        },
+        "brier": {
+          "ertek": 0.03419,
+          "ci95": [
+            0.01929,
+            0.04953
+          ],
+          "se": 0.00781,
+          "ervenyes_huzasok": 2000
+        },
+        "ece": {
+          "ertek": 0.01801,
+          "ci95": [
+            0.0096,
+            0.03122
+          ],
+          "se": 0.00558,
+          "ervenyes_huzasok": 2000
+        },
+        "ece_egyenlo_elemszam": {
+          "ertek": 0.01801,
+          "ci95": [
+            0.01274,
+            0.03122
+          ],
+          "se": 0.00493,
+          "ervenyes_huzasok": 2000
+        },
+        "_beallitas": {
+          "B": 2000,
+          "mag": 20261008,
+          "blokkok": 14,
+          "intervallum": "percentilis, 95%"
+        }
+      },
+      "validacio": {
+        "pr_auc": 0.1744,
+        "roc_auc": 0.6422,
+        "brier": 0.09105,
+        "ece": 0.04667,
+        "ece_egyenlo_elemszam": 0.04667
+      },
+      "paros_lightgbm_minusz_referencia": {
+        "pr_auc": {
+          "a": 0.09782,
+          "b": 0.08796,
+          "kulonbseg": 0.00986,
+          "ci95": [
+            0.0004,
+            0.01757
+          ],
+          "se": 0.00435,
+          "ervenyes_huzasok": 2000
+        },
+        "roc_auc": {
+          "a": 0.76397,
+          "b": 0.73847,
+          "kulonbseg": 0.02551,
+          "ci95": [
+            0.01344,
+            0.03863
+          ],
+          "se": 0.00639,
+          "ervenyes_huzasok": 2000
+        },
+        "brier": {
+          "a": 0.03388,
+          "b": 0.03419,
+          "kulonbseg": -0.00031,
+          "ci95": [
+            -0.00062,
+            5e-05
+          ],
+          "se": 0.00017,
+          "ervenyes_huzasok": 2000
+        },
+        "_beallitas": {
+          "B": 2000,
+          "mag": 20261008,
+          "blokkok": 14,
+          "intervallum": "percentilis, 95%"
+        }
+      }
+    }
+  },
+  "random_forest_magok": {
+    "futasok": [
+      {
+        "mag": 1,
+        "pr_auc": 0.0856,
+        "roc_auc": 0.7392,
+        "brier": 0.03419,
+        "ece": 0.01757,
+        "ece_egyenlo_elemszam": 0.01757
+      },
+      {
+        "mag": 2,
+        "pr_auc": 0.0936,
+        "roc_auc": 0.7423,
+        "brier": 0.0341,
+        "ece": 0.01824,
+        "ece_egyenlo_elemszam": 0.01798
+      },
+      {
+        "mag": 3,
+        "pr_auc": 0.0956,
+        "roc_auc": 0.7473,
+        "brier": 0.03407,
+        "ece": 0.01897,
+        "ece_egyenlo_elemszam": 0.01897
+      },
+      {
+        "mag": 4,
+        "pr_auc": 0.0954,
+        "roc_auc": 0.7474,
+        "brier": 0.03407,
+        "ece": 0.01864,
+        "ece_egyenlo_elemszam": 0.01873
+      },
+      {
+        "mag": 5,
+        "pr_auc": 0.093,
+        "roc_auc": 0.7404,
+        "brier": 0.0341,
+        "ece": 0.01756,
+        "ece_egyenlo_elemszam": 0.01721
+      }
+    ],
+    "osszegzes": {
+      "pr_auc": {
+        "atlag": 0.09264,
+        "szoras": 0.00409
+      },
+      "roc_auc": {
+        "atlag": 0.74332,
+        "szoras": 0.00384
+      },
+      "brier": {
+        "atlag": 0.03411,
+        "szoras": 5e-05
+      },
+      "ece": {
+        "atlag": 0.0182,
+        "szoras": 0.00063
+      },
+      "ece_egyenlo_elemszam": {
+        "atlag": 0.01809,
+        "szoras": 0.00075
+      }
+    }
+  }
+}
