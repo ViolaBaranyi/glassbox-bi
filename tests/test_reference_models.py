@@ -94,25 +94,30 @@ def _draft():
     return json.loads((DOCS / "v3_referencia_protokoll.json").read_text(encoding="utf-8"))
 
 
-def test_a_tarolt_referencia_protokoll_tervezet_ezert_nem_fut():
+def test_tervezet_referencia_protokollal_nem_fut():
     _, base_sha = vb.load_protocol(DOCS / "v3_protokoll.json")
     locked = json.loads((DOCS / "v3_lezart_eredmeny.json").read_text(encoding="utf-8"))
+    p = _draft() | {"allapot": "tervezet"}
     with pytest.raises(vb.ProtocolError, match="jovahagyva"):
-        vr.check_reference_protocol(_draft(), base_sha, locked)
+        vr.check_reference_protocol(p, base_sha, locked)
 
 
-def test_a_tarolt_referencia_protokoll_egyezik_a_koddal_es_a_lezart_futassal():
-    """Csak a jóváhagyás hiányzik belőle; a rácsok, a mag és az alap ujjlenyomata rendben."""
+def test_a_jovahagyott_referencia_protokoll_egyezik_a_koddal_es_a_lezart_futassal():
+    """
+    A tárolt protokoll jóvá van hagyva, és pontosan azt írja le, amit a kód csinál
+    (rácsok, mag, erdőméret), az alapja pedig a lezárt v3 futás protokollja. Ha
+    valaki utólag a kódban átírja a rácsot, ez a teszt elbukik.
+    """
     _, base_sha = vb.load_protocol(DOCS / "v3_protokoll.json")
     locked = json.loads((DOCS / "v3_lezart_eredmeny.json").read_text(encoding="utf-8"))
     p = _draft()
-    p.update(allapot="jovahagyva", jovahagyas={"ki": "x", "mikor": "y"})
+    assert p["allapot"] == "jovahagyva"
     vr.check_reference_protocol(p, base_sha, locked)
     p["alap_protokoll"]["sha256"] = "0" * 64
     with pytest.raises(vb.ProtocolError, match="ujjlenyomata"):
         vr.check_reference_protocol(p, base_sha, locked)
     with pytest.raises(vb.ProtocolError, match="nincs lezárt"):
-        vr.check_reference_protocol(_draft() | {"allapot": "jovahagyva"}, base_sha, None)
+        vr.check_reference_protocol(_draft(), base_sha, None)
 
 
 @pytest.fixture

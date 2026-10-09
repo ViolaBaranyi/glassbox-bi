@@ -65,7 +65,7 @@ ilyenkor minden lépésben jelzi, hogy a számok csak a gépezet működését m
 | M2 — abláció (`--drop`), validációs mérőszámok a `metrics.json`-ban | **kész** |
 | M2 — modellválasztás bővülő ablakos CV-n, rögzített fa-szám, címke-tisztítás (`--trees cv`, `--purge`) | **kész** |
 | M2 — heti blokk-bootstrap, lezárt v3 alapfutás protokollal (`pipeline/v3_baseline.py`) | **kész — lefutott okt. 9.** (`docs/v3_lezart_eredmeny.md`) |
-| M2 — referencia-modellek: logisztikus regresszió, döntési fa, random forest (`pipeline/reference_models.py`), lezárt összevetés (`pipeline/v3_reference.py`) | **kész — a protokoll jóváhagyásra vár** |
+| M2 — referencia-modellek: logisztikus regresszió, döntési fa, random forest (`pipeline/reference_models.py`), lezárt összevetés (`pipeline/v3_reference.py`) | **kész — a protokoll jóváhagyva, a lezárt összevetés következik** |
 | Tesztek — szivárgás (14), V-1 és adatmodell (10), abláció (6), betanítás (6), kohorsz (2), modellválasztás (8), bootstrap (6), lezárt futás (14), referencia-modellek (9) | **kész, 75/75** |
 | Tároló — MIT licenc, CI (Ubuntu + Windows), `requirements.lock`, döntési napló | **kész** |
 | M2 — 40 futásos sweep, hiperparaméter-hangolás | következő |

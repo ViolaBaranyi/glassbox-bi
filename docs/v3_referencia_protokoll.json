@@ -1,11 +1,11 @@
 {
   "nev": "Üvegdoboz BI — referencia-modellek lezárt összevetése",
   "verzio": 1,
-  "allapot": "tervezet",
+  "allapot": "jovahagyva",
   "jovahagyas": {
-    "ki": null,
-    "mikor": null,
-    "megjegyzes": null
+    "ki": "Baranyi Viola",
+    "mikor": "2026-10-09",
+    "megjegyzes": "A rácsok, a választási szabály és a CV-ből várt beállítások (C = 0,1 · mélység 10 · levélméret 10) változatlanok."
   },
   "alap_protokoll": {
     "fajl": "docs/v3_protokoll.json",

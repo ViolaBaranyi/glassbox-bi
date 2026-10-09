@@ -1,7 +1,7 @@
 # Referencia-modellek — a lezárt összevetés protokollja
 
-**Állapot: TERVEZET** — jóváhagyásra vár. Amíg a `docs/v3_referencia_protokoll.json`
-nincs jóváhagyva és commitolva, a `python -m pipeline.v3_reference` nem indul el.
+**Állapot: JÓVÁHAGYVA** — Baranyi Viola, 2026. október 9. A lezárt összevetés csak akkor
+indul, ha a jóváhagyott protokoll és a kód commitolva van (`python -m pipeline.v3_reference`).
 
 ## Miért kellenek referencia-modellek?
 
@@ -65,8 +65,7 @@ protokollban áll (`cv_valasztas_elvart`: C = 0,1 · mélység 10 · levélmére
 
 ## Jóváhagyás és futtatás
 
-1. A `docs/v3_referencia_protokoll.json`-ban: `"allapot": "jovahagyva"`, és a
-   `"jovahagyas"` mezőben ki és mikor.
+1. ~~A `docs/v3_referencia_protokoll.json` jóváhagyása~~ — kész (okt. 9.).
 2. Commit + push — ez a futás előtti időbélyeg (a futás ellenőrzi).
 3. `.\.venv-1\Scripts\python.exe -m pipeline.v3_reference` (kb. 5–10 perc).
 4. Commit + push: `docs/v3_referencia_eredmeny.json` és `.md`.

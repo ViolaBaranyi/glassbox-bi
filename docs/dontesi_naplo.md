@@ -34,12 +34,13 @@ szintetikus adaton futott a rendszer.
 | 2026-10-09 | A demó és a `pipeline.train` alapbeállítása a lezárt protokollra vált (`--trees cv`, címke-tisztítás) | igen (a lezárt futás után) | korai leállítás a validáción | a bemutatott szám = a lezárt mérés; a régi út `--trees korai --no-purge`-dzsal elérhető összehasonlításra |
 | 2026-10-09 | **Referencia-modellek:** logisztikus regresszió (C), döntési fa (max_depth; levél ≥ 50), random forest (min_samples_leaf; 300 fa) — közös előfeldolgozás (medián + hiány-jelző, one-hot), választás ugyanazon a bővülő ablakos CV-n (4 tisztított hajtás, legnagyobb átlagos PR-AUC, egyezésnél az egyszerűbb) | nem (csak a tanító ablak) | a validációs ablakon hangolni; több hiperparaméter | tisztességes összevetés: mindegyik modell egy bonyolultsági paramétert kap, mint a LightGBM (fák száma) |
 | 2026-10-09 | A döntési fa és a random forest rácsának kibővítése (fa: 12, 15, 20; erdő: 5, 2) | nem (csak a tanító ablak) | az eredeti rács | az első futásban a rács szélén volt a legjobb érték; a kibővítettben belül van, a választás nem változott |
+| 2026-10-09 | **A referencia-összevetés protokollja jóváhagyva** (`docs/v3_referencia_protokoll.json`; jóváhagyta: Baranyi Viola) | nem | — | a rácsok, a választási szabály és a CV-ből várt beállítások a futás előtt rögzülnek; a futás a teszt előtt megáll, ha a CV mást választana |
 | 2026-10-09 | CV-eredmény (tanító ablak): LightGBM PR-AUC 0,126 / ROC 0,639 · logisztikus regresszió (C = 0,1) 0,124 / 0,634 · random forest (levél 10) 0,113 / 0,624 · döntési fa (mélység 10) 0,093 / 0,571 | nem | — | a teszten a páros, lezárt összevetés dönti el, kimutatható-e a különbség (`docs/v3_referencia_protokoll.md`) |
 
 ## Következő, még nyitott döntések
 
-* **A referencia-összevetés protokolljának jóváhagyása** (`docs/v3_referencia_protokoll.json`),
-  majd egyetlen futás: `python -m pipeline.v3_reference`.
+* **Referencia-összevetés:** a protokoll jóváhagyva (okt. 9.) → commit + push, majd
+  egyetlen futás: `python -m pipeline.v3_reference`, végül az eredmény commitja.
 
 * **Kontrafaktuális magyarázat:** a dice-ml helyett saját rácskeresés a vállalt határidőre
   (egyetlen akcionálható jellemző) — témavezetői jóváhagyásra vár.
