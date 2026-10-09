@@ -27,6 +27,15 @@ def test_az_alapertelmezes_a_sulyozatlan_ag():
     assert PARAMS["class_weight"] is None
 
 
+def test_az_alapertelmezes_a_lezart_protokoll():
+    """A demó és a `python -m pipeline.train` a lezárt v3 protokoll szerint fut."""
+    proto = json.loads((train.ROOT / "docs" / "v3_protokoll.json").read_text(encoding="utf-8"))
+    alap = inspect.signature(train.run).parameters
+    assert alap["trees"].default == "cv"
+    assert alap["purge"].default is proto["cimke_tisztitas"] is True
+    assert alap["seed"].default == proto["vegso_modell"]["mag"]
+
+
 def test_corp_felbontas_azonossaga_es_elojelei():
     rng = np.random.default_rng(0)
     p = rng.beta(1, 12, 5000)

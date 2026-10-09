@@ -16,20 +16,18 @@ A rendszerterv és a témavezetői egyeztetés (okt. 2.) szerinti döntések:
   * determinisztikus futás: azonos adat + mag -> azonos modell (NF-1)
   * a szivárgásteszt a betanítás ELŐTT fut, és megállítja a folyamatot
 
-A fák száma (--trees):
-  korai   korai leállítás a validációs ablakon — az eddigi út, ez az alapértelmezés,
-          amíg a lezárt v3 alapfutás protokollját jóvá nem hagyjuk
-  cv      bővülő ablakos keresztvalidáció a TANÍTÓ időszakon belül, N_fix =
-          max(50, medián) — a validációs ablak semmit nem befolyásol (útiterv T5,
-          lásd pipeline/model_selection.py)
-  <szám>  pontosan ennyi fa
---purge: címke-tisztítás — csak azokon a tanító sorokon tanul, amelyeknek a
-         kimenete a vágás pillanatában már eldőlt (split.settled_before)
+Az alapbeállítás a LEZÁRT v3 PROTOKOLL (docs/v3_protokoll.json, okt. 9.):
+  --trees cv   bővülő ablakos keresztvalidáció a TANÍTÓ időszakon belül, N_fix =
+               max(50, medián) — a validációs ablak semmit nem befolyásol (útiterv
+               T5, lásd pipeline/model_selection.py)
+  --purge      címke-tisztítás — csak azokon a tanító sorokon tanul, amelyeknek a
+               kimenete a vágás pillanatában már eldőlt (split.settled_before)
+Összehasonlításhoz: --trees korai (korai leállítás a validációs ablakon, a régi út),
+--trees <szám> (pontosan ennyi fa), --no-purge (címke-tisztítás nélkül).
 
 Futtatás:
-    python -m pipeline.train
-    python -m pipeline.train --trees cv                  # T5: fa-szám a tanító időszakon belül
-    python -m pipeline.train --trees cv --purge          # + címke-tisztítás
+    python -m pipeline.train                             # a lezárt protokoll szerint
+    python -m pipeline.train --trees korai --no-purge    # a régi út, összehasonlításhoz
     python -m pipeline.train --balance balanced          # összehasonlításhoz
     python -m pipeline.train --drop honap                # abláció: hónap nélkül
     python -m pipeline.train --drop naptar               # hónap + ünnep nélkül
@@ -219,7 +217,7 @@ def _trees_mode(trees) -> tuple[str, int | None]:
 
 def run(db_path: Path = DB_PATH, seed: int = 42, tag: str = "baseline",
         balance: str = "none", write_artifacts: bool = True,
-        drop=None, trees="korai", purge: bool = False,
+        drop=None, trees="cv", purge: bool = True,
         return_predictions: bool = False) -> dict:
     """
     balance: "none"     — súlyozás nélkül (alapértelmezés, okt. 2-i döntés)
@@ -227,9 +225,11 @@ def run(db_path: Path = DB_PATH, seed: int = 42, tag: str = "baseline",
                           nyers valószínűségei erősen torzak (ECE kb. 0,28)
     drop:    abláció — kizárandó jellemzők vagy csoportok (features.FEATURE_GROUPS),
              pl. ["honap"]. Ismeretlen névre hibát ad, nem hallgat.
-    trees:   "korai" (korai leállítás a validáción), "cv" (bővülő ablakos CV a
-             tanító időszakon), vagy egy pozitív egész (pontosan ennyi fa)
+    trees:   "cv" (bővülő ablakos CV a tanító időszakon — a lezárt protokoll),
+             "korai" (korai leállítás a validáción, a régi út), vagy egy pozitív
+             egész (pontosan ennyi fa)
     purge:   címke-tisztítás — csak a vágás előtt lezárult kimenetű tanító sorok
+             (a lezárt protokoll szerint be)
     return_predictions: a validációs és a teszt előrejelzéseket is visszaadja
              (a lezárt alapfutás bootstrapjához); a metrics.json-ba nem kerülnek
     """
@@ -462,8 +462,8 @@ def run(db_path: Path = DB_PATH, seed: int = 42, tag: str = "baseline",
         f"{', '.join(drop_cols)}. Ez összehasonlító kísérlet, nem a szállított modell.\n"
         if drop_cols else "")
     drop_arg = f" --drop {','.join(drop_names)}" if drop_names else ""
-    trees_arg = "" if mode == "korai" else f" --trees {'cv' if mode == 'cv' else n_trees}"
-    purge_arg = " --purge" if purge else ""
+    trees_arg = "" if mode == "cv" else f" --trees {'korai' if mode == 'korai' else n_trees}"
+    purge_arg = "" if purge else " --no-purge"
     tisztitas_sor = (
         f"Címke-tisztítás: csak a vágás előtt lezárult kimenetű tanító sorok "
         f"({len(train_idx):,} tanító sor; {len(sp.train) - len(train_idx):,} kimaradt).\n"
@@ -541,11 +541,13 @@ def main() -> None:
     ap.add_argument("--drop", type=str, nargs="?", const="", default="",
                     help="abláció: kizárandó csoportok vagy jellemzők vesszővel, "
                          "pl. honap vagy naptar vagy honap_sin,het_napja")
-    ap.add_argument("--trees", type=str, default="korai",
-                    help="a fák száma: korai (korai leállítás a validáción, alapértelmezett), "
-                         "cv (bővülő ablakos CV a tanító időszakon) vagy egy pozitív egész")
-    ap.add_argument("--purge", action="store_true",
-                    help="címke-tisztítás: csak a vágás előtt lezárult kimenetű tanító sorok")
+    ap.add_argument("--trees", type=str, default="cv",
+                    help="a fák száma: cv (bővülő ablakos CV a tanító időszakon, "
+                         "alapértelmezett — a lezárt protokoll), korai (korai leállítás "
+                         "a validáción, a régi út) vagy egy pozitív egész")
+    ap.add_argument("--purge", action=argparse.BooleanOptionalAction, default=True,
+                    help="címke-tisztítás: csak a vágás előtt lezárult kimenetű tanító sorok "
+                         "(alapértelmezett; --no-purge kikapcsolja)")
     a = ap.parse_args()
     try:
         run(a.db, a.seed, a.tag, a.balance, drop=a.drop.split(","),

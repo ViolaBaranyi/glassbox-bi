@@ -40,8 +40,8 @@ PyCharmban a zöld **Run** gombbal is indítható.
 | 1 | Környezet | a verziók rögzítve vannak a kimenetben |
 | 2 | Adat | a valódi Olist-adat; ha még nincs meg, letölti a Kaggle-ről |
 | 3 | Tárház | 9 CSV → csillagséma DuckDB-ben, **V-1 validációval** |
-| 4 | Tesztek | 37 teszt: szivárgásvédelem, V-1, adatmodell, abláció, betanítás, kohorsz; ha bármelyik bukik, **a demó megáll** |
-| 5 | Betanítás | LightGBM **súlyozás nélkül**, érintetlen, legkésőbbi időszakon mérve; a kalibráció csak diagnosztika |
+| 4 | Tesztek | 66 teszt: szivárgásvédelem, V-1, adatmodell, abláció, betanítás, kohorsz, modellválasztás, bootstrap, lezárt futás; ha bármelyik bukik, **a demó megáll** |
+| 5 | Betanítás | a **lezárt v3 protokoll** szerint: LightGBM súlyozás nélkül, a fák száma bővülő ablakos CV-vel, címke-tisztítással; érintetlen, legkésőbbi időszakon mérve; a kalibráció csak diagnosztika |
 | 6 | Összegzés | rangsorolás, kalibráció, kizárt rendelések, artefaktumok helye |
 
 **Valódi adat nélkül:** `python demo.py --synthetic` azonos szerkezetű, generált
@@ -64,8 +64,8 @@ ilyenkor minden lépésben jelzi, hogy a számok csak a gépezet működését m
 | M2 — LightGBM súlyozás nélkül, kalibrációs diagnosztika (CORP), determinisztikus futás | **kész** |
 | M2 — abláció (`--drop`), validációs mérőszámok a `metrics.json`-ban | **kész** |
 | M2 — modellválasztás bővülő ablakos CV-n, rögzített fa-szám, címke-tisztítás (`--trees cv`, `--purge`) | **kész** |
-| M2 — heti blokk-bootstrap, lezárt v3 alapfutás protokollal (`pipeline/v3_baseline.py`) | **kész — a protokoll jóváhagyva, a lezárt futás következik** |
-| Tesztek — szivárgás (14), V-1 és adatmodell (10), abláció (6), betanítás (5), kohorsz (2), modellválasztás (8), bootstrap (6), lezárt futás (14) | **kész, 65/65** |
+| M2 — heti blokk-bootstrap, lezárt v3 alapfutás protokollal (`pipeline/v3_baseline.py`) | **kész — lefutott okt. 9.** (`docs/v3_lezart_eredmeny.md`) |
+| Tesztek — szivárgás (14), V-1 és adatmodell (10), abláció (6), betanítás (6), kohorsz (2), modellválasztás (8), bootstrap (6), lezárt futás (14) | **kész, 66/66** |
 | Tároló — MIT licenc, CI (Ubuntu + Windows), `requirements.lock`, döntési napló | **kész** |
 | M2 — 40 futásos sweep, hiperparaméter-hangolás | következő |
 | M3 — SHAP, ellenpélda, stabilitás | következő |
@@ -74,6 +74,29 @@ ilyenkor minden lépésben jelzi, hogy a számok csak a gépezet működését m
 | M5 — Streamlit felület | tervezett |
 
 ---
+
+## A lezárt v3 alapfutás eredménye (2026. október 9.)
+
+A teszthalmaz (2018. június–augusztus, 18 603 rendelés, késési arány 3,6%) egyetlen,
+előre rögzített mérése. Protokoll: `docs/v3_protokoll.json` (SHA256 `9407febe…`),
+git `6f1b792`, tiszta munkapéldány. Részletek: `docs/v3_lezart_eredmeny.md`.
+
+| mérőszám | teszt [95% CI, heti blokk-bootstrap] | 5 mag (átlag ± szórás) |
+|---|---|---|
+| PR-AUC | 0,098 [0,055; 0,127] | 0,101 ± 0,003 |
+| ROC-AUC | 0,764 [0,723; 0,788] | 0,767 ± 0,004 |
+| Brier | 0,0339 [0,0188; 0,0495] | 0,0337 ± 0,0001 |
+| ECE (tizedek) | 0,010 [0,008; 0,020] | 0,009 ± 0,001 |
+
+* A modell kimutathatóan jobb a konstans előrejelzésnél (a tanító időszak 5,6%-os
+  aránya): PR-AUC +0,062 [+0,035; +0,078], Brier −0,0013 [−0,0019; −0,0007]. A
+  Brier-készség viszont csak 3,8%: az érték a **rangsorolásban** van, nem a pontos százalékban.
+* A bizonytalanság nagyobbik része a teszt heteiből jön (14 hét); a tanítási véletlen
+  (a mag) ehhez képest kicsi.
+* A validációs ablakon (2018. márc.–máj., időn kívüli ellenőrzés) gyengébb: PR-AUC 0,179
+  (alapráta 10,1%), ROC-AUC 0,650, ECE 0,049 — az ablak eleji márciusi válságot (19% késés)
+  a vágás előtti adatból nem lehetett előre látni.
+* Windowson és Linuxon bitre azonos.
 
 ## A legfontosabb módszertani döntések
 
@@ -114,7 +137,8 @@ validációs ablakon döntött, de abban éles rendszerváltás van (március 19
 április 4,5%), és egyetlen ablak alapján választani kockázatos (10. lelet). Az új út:
 bővülő ablakos keresztvalidáció a tanító időszakon (4 hajtás × 3 mag, korai leállítás
 PR-AUC-ra), a végső fa-szám `N_fix = max(50, medián)`, a végső modell pontosan ennyi
-fával tanul — a validációs ablak semmit nem befolyásol. → `pipeline/model_selection.py`
+fával tanul — a validációs ablak semmit nem befolyásol. Ez az alapbeállítás; a régi út
+összehasonlításhoz: `--trees korai`. → `pipeline/model_selection.py`
 
 **A címke is point-in-time (jóváhagyva okt. 9.).** A jellemzőkre már érvényes,
 hogy csak a leadáskor ismert információt látják. A tanító *címkékre* ugyanez igaz: egy
@@ -263,14 +287,14 @@ python -m data.fetch_olist             # valódi adat letöltése (ha még nincs
 python -m data.build_warehouse         # tárház + V-1
 python -m data.describe_warehouse      # mi van a tárházban (eredet, séma, minta)
 python -m pytest tests/ -v             # tesztek
-python -m pipeline.train               # betanítás (súlyozás nélkül)
+python -m pipeline.train               # betanítás a lezárt protokoll szerint
 python -m pipeline.train --balance balanced   # súlyozott ág, csak összehasonlításhoz
 python -m pipeline.train --drop honap  # abláció: hónap-jellemzők nélkül
 python -m pipeline.cohort_report       # kohorsz-érzékenységi jelentés
 python -m pipeline.model_selection     # fa-szám bővülő ablakos CV-n (csak a tanító időszak)
 python -m pipeline.model_selection --purge    # ugyanez címke-tisztítással
-python -m pipeline.train --trees cv --purge   # betanítás a CV-s fa-számmal
-python -m pipeline.v3_baseline         # lezárt alapfutás — csak jóváhagyott, commitolt protokollal
+python -m pipeline.train --trees korai --no-purge   # a régi út, összehasonlításhoz
+python -m pipeline.v3_baseline         # lezárt alapfutás (okt. 9-én lefutott; újra csak --ismetles)
 ```
 
 **Abláció.** A `--drop` jellemzőket zár ki a betanításból: csoportnevet (`honap` =
@@ -312,7 +336,9 @@ glassbox-bi/
 ├── docs/
 │   ├── dontesi_naplo.md     minden módszertani döntés: mikor, miért, látta-e már a tesztet
 │   ├── v3_protokoll.json    a lezárt futás protokollja (gépi, ezt ellenőrzi a futás)
-│   └── v3_protokoll.md      ugyanez magyarázattal, a nyitott döntésekkel
+│   ├── v3_protokoll.md      ugyanez magyarázattal és a döntésekkel
+│   ├── v3_lezart_eredmeny.json  a lezárt futás teljes eredménye (ujjlenyomattal)
+│   └── v3_lezart_eredmeny.md    ugyanez röviden, táblázattal
 ├── .github/workflows/       CI: minden push lefuttatja a teljes pipeline-t (szintetikus adaton)
 ├── LICENSE                  MIT (a kódra; az adat saját licenc alatt áll)
 ├── requirements.txt         közvetlen függőségek, alsó korláttal
@@ -325,7 +351,7 @@ glassbox-bi/
     ├── test_no_leakage.py   14 teszt (szivárgás, point-in-time, jellemzőtáblázat)
     ├── test_warehouse.py    10 teszt (V-1, két ténytábla, fő tétel, geolokáció, zárónap)
     ├── test_ablation.py     6 teszt (az abláció tényleg kizár-e)
-    ├── test_train.py        5 teszt (súlyozatlan alapértelmezés, nincs kalibrátor, diagnosztika)
+    ├── test_train.py        6 teszt (alapbeállítás = a lezárt protokoll, nincs kalibrátor, diagnosztika)
     ├── test_cohort.py       2 teszt (Wilson-intervallum, érzékenységi változat)
     ├── test_model_selection.py  8 teszt (hajtások, fa-szám szabály, címke-tisztítás, a validáció nem hat)
     ├── test_bootstrap.py    6 teszt (egész hetek, reprodukálhatóság, páros összevetés)
@@ -400,22 +426,18 @@ Tárház         96,470 rendelés, 2016-09-15 .. 2018-08-29
 V-1 validáció  rendben, karantén: Brazílián kívüli koordináta: 31
 Kizárva        2,971 nem kézbesített rendelés (zárónap 2018-10-17; ...)
 Tesztek        mind átment
-Modell         LightGBM, 22 jellemző, 56 fa, súlyozás: none
-Rangsorolás    PR-AUC 0.097  (bázisráta 0.036, 2.7x)  ROC-AUC 0.761
-Kalibráció     ECE 0.007 (egyenlő elemszámú sávokkal 0.015)   Brier 0.0338, készség 5.3%
+Modell         LightGBM, 22 jellemző, 119 fa (bővülő ablakos CV, címke-tisztítással), súlyozás: none
+Rangsorolás    PR-AUC 0.098  (bázisráta 0.036, 2.7x)  ROC-AUC 0.764
+Kalibráció     ECE 0.008 (egyenlő elemszámú sávokkal 0.010)   Brier 0.0339, készség 3.8%
 ```
 
-Ez egyetlen mag (42) eredménye, a régi, korai leállításos úton. Öt maggal (1–5) a
-teszten PR-AUC 0,090 ± 0,005, ROC-AUC 0,749 ± 0,005, Brier 0,0340 — a 42-es mag a sáv
-felső szélén van.
+Ez a lezárt v3 alapfutás elsődleges modellje (mag 42) — a számok egyeznek a
+`docs/v3_lezart_eredmeny.md`-vel. A modellválasztás önmagában (csak a tanító időszakot
+olvassa): `python -m pipeline.model_selection --purge` → medián 118,5 → **119 fa**
+(címke-tisztítás nélkül: 66,5 → 67 fa).
 
-A modellválasztás (csak a tanító időszakot olvassa) a valódi adaton:
-`python -m pipeline.model_selection` → medián 66,5 → **67 fa**;
-`--purge`-dzsal → medián 118,5 → **119 fa**. A protokollt okt. 9-én jóváhagytuk
-(címke-tisztítással, `docs/v3_protokoll.md`); a lezárt futás után a demó is arra vált.
-
-A `--synthetic` futás (és a CI) összegzése: 38,857 rendelés, 22 jellemző, 28 fa,
-PR-AUC 0.203, ROC-AUC 0.722.
+A `--synthetic` futás (és a CI) összegzése: 38,857 rendelés, 22 jellemző, 50 fa (itt az
+alsó korlát dönt), PR-AUC 0.202, ROC-AUC 0.726.
 
 Ha egyeznek, az átvitel hibátlan. Ha nem, a demó 1. lépése kiírja a Python- és
 csomagverziókat — azzal kezdd a keresést.

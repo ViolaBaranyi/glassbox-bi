@@ -30,13 +30,11 @@ szintetikus adaton futott a rendszer.
 | 2026-10-09 | **Címke-tisztítás: IGEN** — csak a vágás előtt lejárt határidejű tanító sorok, a CV-hajtásokban és a végső modellnél is (döntött: Baranyi Viola) | nem (csak a tanító ablak) | tisztítás nélkül (a v2 eredeti vágása) | point-in-time elv a címkékre is; CV-n azonos fa-számmal a Black Friday-s hajtás PR-AUC-ja 0,246 → 0,17, a nyugodt hajtásokban nincs különbség; a határidő szerinti szűrés a kimenettől független. Ára: a tanító ablak 11,7%-a; a fa-szám 119 |
 | 2026-10-09 | A fa-szám alsó korlátja: 50 (változatlan) | nem | — | a valódi adaton nem ez dönt (medián 118,5) |
 | 2026-10-09 | **A lezárt v3 alapfutás protokollja jóváhagyva** (`docs/v3_protokoll.json`) | nem | — | a futás csak a protokoll és a kód commitja után indul (a git időbélyege bizonyítja a sorrendet); az ujjlenyomat sorvégfüggetlen |
+| 2026-10-09 | **LEZÁRT v3 ALAPFUTÁS** — protokoll `9407febe…`, git `6f1b792` (tiszta munkapéldány), Windows 11, Python 3.14.3; Linuxon bitre azonos | **igen — ez a lezárt mérés** | — | teszt: PR-AUC 0,098 [0,055; 0,127], ROC-AUC 0,764 [0,723; 0,788], Brier 0,0339, ECE 0,008 (tizedek 0,010); jobb a konstans előrejelzésnél (PR-AUC +0,062 [+0,035; +0,078], Brier −0,0013 [−0,0019; −0,0007]); 5 mag: PR-AUC 0,101 ± 0,003. Validáció: PR-AUC 0,179, ROC 0,650, ECE 0,049. **Innentől a protokoll változatlan: minden eltérés új, külön jelölt futás** |
+| 2026-10-09 | A demó és a `pipeline.train` alapbeállítása a lezárt protokollra vált (`--trees cv`, címke-tisztítás) | igen (a lezárt futás után) | korai leállítás a validáción | a bemutatott szám = a lezárt mérés; a régi út `--trees korai --no-purge`-dzsal elérhető összehasonlításra |
 
 ## Következő, még nyitott döntések
 
-* **Lezárt v3 alapfutás:** a protokoll jóváhagyva (okt. 9.) → commit + push, majd
-  `python -m pipeline.v3_baseline`, végül az eredményfájlok
-  (`docs/v3_lezart_eredmeny.json`, `.md`) commitja. Utána a demó alapbeállítása a
-  protokollra vált (`--trees cv --purge`).
 * **Kontrafaktuális magyarázat:** a dice-ml helyett saját rácskeresés a vállalt határidőre
   (egyetlen akcionálható jellemző) — témavezetői jóváhagyásra vár.
 * **Szakértői átnézés (3–5 fő):** a kutatási terv 5. hónapja miatt a minimum — témavezetői

@@ -9,8 +9,9 @@ Lépések:
   2. adat — a valódi Olist-adat; első indításkor letöltés a Kaggle-ről
   3. tárház felépítése — V-1 validáció
   4. tesztek — szivárgás és V-1; ha bármelyik elbukik, a demó leáll
-  5. betanítás — LightGBM súlyozás nélkül, érintetlen teszthalmazon mérve;
-     a kalibráció csak diagnosztika (nincs utólagos kalibrátor)
+  5. betanítás — a lezárt v3 protokoll szerint: LightGBM súlyozás nélkül, a fák
+     száma bővülő ablakos CV-vel a tanító időszakon, címke-tisztítással; érintetlen
+     teszthalmazon mérve; a kalibráció csak diagnosztika (nincs utólagos kalibrátor)
   6. összegzés
 
 PyCharmban a zöld Run gombbal is indítható.
@@ -151,7 +152,8 @@ def main() -> None:
     print(f"   Kizárva        {wh['kizart']:,} nem kézbesített rendelés "
           f"(zárónap {wh['zarnap'][:10]}; érzékenység: python -m pipeline.cohort_report)")
     print("   Tesztek        mind átment")
-    print(f"   Modell         LightGBM, {res['jellemzok']} jellemző, {res['fak_szama']} fa, "
+    print(f"   Modell         LightGBM, {res['jellemzok']} jellemző, {res['fak_szama']} fa "
+          f"(bővülő ablakos CV{', címke-tisztítással' if res['cimke_tisztitas']['be'] else ''}), "
           f"súlyozás: {res['kiegyensulyozas']}")
     print(f"   Rangsorolás    PR-AUC {m['pr_auc']:.3f}  "
           f"(bázisráta {res['bazisrata']:.3f}, {m['pr_auc'] / res['bazisrata']:.1f}x)  "
