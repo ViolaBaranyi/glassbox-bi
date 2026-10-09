@@ -64,8 +64,8 @@ ilyenkor minden lépésben jelzi, hogy a számok csak a gépezet működését m
 | M2 — LightGBM súlyozás nélkül, kalibrációs diagnosztika (CORP), determinisztikus futás | **kész** |
 | M2 — abláció (`--drop`), validációs mérőszámok a `metrics.json`-ban | **kész** |
 | M2 — modellválasztás bővülő ablakos CV-n, rögzített fa-szám, címke-tisztítás (`--trees cv`, `--purge`) | **kész** |
-| M2 — heti blokk-bootstrap, lezárt v3 alapfutás protokollal (`pipeline/v3_baseline.py`) | **kész — a protokoll jóváhagyásra vár** |
-| Tesztek — szivárgás (14), V-1 és adatmodell (10), abláció (6), betanítás (5), kohorsz (2), modellválasztás (8), bootstrap (6), lezárt futás (11) | **kész, 62/62** |
+| M2 — heti blokk-bootstrap, lezárt v3 alapfutás protokollal (`pipeline/v3_baseline.py`) | **kész — a protokoll jóváhagyva, a lezárt futás következik** |
+| Tesztek — szivárgás (14), V-1 és adatmodell (10), abláció (6), betanítás (5), kohorsz (2), modellválasztás (8), bootstrap (6), lezárt futás (14) | **kész, 65/65** |
 | Tároló — MIT licenc, CI (Ubuntu + Windows), `requirements.lock`, döntési napló | **kész** |
 | M2 — 40 futásos sweep, hiperparaméter-hangolás | következő |
 | M3 — SHAP, ellenpélda, stabilitás | következő |
@@ -116,7 +116,7 @@ bővülő ablakos keresztvalidáció a tanító időszakon (4 hajtás × 3 mag, 
 PR-AUC-ra), a végső fa-szám `N_fix = max(50, medián)`, a végső modell pontosan ennyi
 fával tanul — a validációs ablak semmit nem befolyásol. → `pipeline/model_selection.py`
 
-**A címke is point-in-time (javaslat, jóváhagyásra vár).** A jellemzőkre már érvényes,
+**A címke is point-in-time (jóváhagyva okt. 9.).** A jellemzőkre már érvényes,
 hogy csak a leadáskor ismert információt látják. A tanító *címkékre* ugyanez igaz: egy
 február végén leadott rendelésről március 1-jén még nem tudjuk, késik-e. A valódi
 adatban a 2018-03-01-i vágásnál a tanító sorok 6,2%-ának a kimenete még ismeretlen volt,
@@ -135,8 +135,8 @@ magjából eredő szórást öt maggal, külön jelentjük. → `pipeline/bootst
 
 **Lezárt alapfutás.** A teszthalmazt eddig sokszor láttuk (döntési napló). A végleges
 mérés előtt minden döntés a `docs/v3_protokoll.json`-ban rögzül; a
-`python -m pipeline.v3_baseline` csak jóváhagyott, hiánytalan, a kóddal egyező
-protokollal indul, elmenti a protokoll ujjlenyomatát (SHA256), és csak egyszer fut.
+`python -m pipeline.v3_baseline` csak jóváhagyott, hiánytalan, a kóddal egyező és
+commitolt protokollal indul, elmenti a protokoll ujjlenyomatát (SHA256), és csak egyszer fut.
 → `docs/v3_protokoll.md`
 
 ---
@@ -270,7 +270,7 @@ python -m pipeline.cohort_report       # kohorsz-érzékenységi jelentés
 python -m pipeline.model_selection     # fa-szám bővülő ablakos CV-n (csak a tanító időszak)
 python -m pipeline.model_selection --purge    # ugyanez címke-tisztítással
 python -m pipeline.train --trees cv --purge   # betanítás a CV-s fa-számmal
-python -m pipeline.v3_baseline         # lezárt alapfutás — csak jóváhagyott protokollal
+python -m pipeline.v3_baseline         # lezárt alapfutás — csak jóváhagyott, commitolt protokollal
 ```
 
 **Abláció.** A `--drop` jellemzőket zár ki a betanításból: csoportnevet (`honap` =
@@ -329,7 +329,7 @@ glassbox-bi/
     ├── test_cohort.py       2 teszt (Wilson-intervallum, érzékenységi változat)
     ├── test_model_selection.py  8 teszt (hajtások, fa-szám szabály, címke-tisztítás, a validáció nem hat)
     ├── test_bootstrap.py    6 teszt (egész hetek, reprodukálhatóság, páros összevetés)
-    └── test_v3_baseline.py  11 teszt (a protokoll-kapu, ujjlenyomat, egyszeri futás)
+    └── test_v3_baseline.py  14 teszt (protokoll-kapu, ujjlenyomat, commit-ellenőrzés, egyszeri futás)
 ```
 
 ## A tároló közzététele
@@ -411,8 +411,8 @@ felső szélén van.
 
 A modellválasztás (csak a tanító időszakot olvassa) a valódi adaton:
 `python -m pipeline.model_selection` → medián 66,5 → **67 fa**;
-`--purge`-dzsal → medián 118,5 → **119 fa**. A lezárt v3 alapfutás a protokoll
-jóváhagyása után készül (`docs/v3_protokoll.md`); utána a demó is arra vált.
+`--purge`-dzsal → medián 118,5 → **119 fa**. A protokollt okt. 9-én jóváhagytuk
+(címke-tisztítással, `docs/v3_protokoll.md`); a lezárt futás után a demó is arra vált.
 
 A `--synthetic` futás (és a CI) összegzése: 38,857 rendelés, 22 jellemző, 28 fa,
 PR-AUC 0.203, ROC-AUC 0.722.

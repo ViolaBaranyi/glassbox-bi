@@ -8,8 +8,11 @@ minden módszertani döntés a futás ELŐTT, írásban rögzül a protokollban
   1. ellenőrzi, hogy a protokoll jóvá van-e hagyva, minden döntés ki van-e
      töltve, és pontosan azt írja-e le, amit a kód csinál (fa-szám szabály,
      magok, hajtások, ablakok, adatforrás) — ha nem, a modellhez sem nyúl;
-  2. kiszámolja a protokollfájl ujjlenyomatát (SHA256); az eredmény ezzel
-     együtt mentődik, így utólag ellenőrizhető, melyik protokoll szerint futott;
+  2. kiszámolja a protokollfájl ujjlenyomatát (SHA256, egységesített sorvégekkel,
+     hogy Windowson és Linuxon ugyanaz legyen); az eredmény ezzel együtt
+     mentődik, így utólag ellenőrizhető, melyik protokoll szerint futott;
+     és csak akkor indul, ha a protokoll és a kód COMMITOLVA van (a git
+     időbélyege bizonyítja, hogy a döntés megelőzte az eredményt);
   3. lefuttatja: bővülő ablakos CV → N_fix → végső modell → validáció és teszt
      → heti blokk-bootstrap intervallumok → páros összevetés a konstans
      előrejelzéssel → tanítási véletlen több maggal (külön jelentve);
@@ -18,7 +21,7 @@ minden módszertani döntés a futás ELŐTT, írásban rögzül a protokollban
   5. ha már van eredmény, megáll. Ismételt futás csak --ismetles kapcsolóval
      megy, és az eredményben ez látszik.
 
-Futtatás (csak jóváhagyott protokollal):
+Futtatás (csak jóváhagyott és commitolt protokollal):
     python -m pipeline.v3_baseline
 """
 
@@ -30,6 +33,7 @@ import hashlib
 import io
 import json
 import platform
+import subprocess
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -60,8 +64,39 @@ class LockedRunExists(RuntimeError):
 
 # ---------------------------------------------------------------- protokoll
 def load_protocol(path: Path = PROTOCOL) -> tuple[dict, str]:
-    raw = Path(path).read_bytes()
+    """
+    A protokoll és az ujjlenyomata. A sorvégeket egységesítjük (CRLF → LF):
+    a git Windowson CRLF-fel, Linuxon LF-fel teszi ki ugyanazt a fájlt, és az
+    ujjlenyomatnak mindkettőn egyeznie kell.
+    """
+    raw = Path(path).read_bytes().replace(b"\r\n", b"\n")
     return json.loads(raw.decode("utf-8")), hashlib.sha256(raw).hexdigest()
+
+
+def git_state(path: Path) -> dict:
+    """
+    Commitolva van-e a protokoll, és tiszta-e a munkapéldány (a követett fájlokban
+    nincs commitolatlan módosítás) — vagyis a futás pontosan egy commit állapotát méri-e.
+    """
+    path = Path(path).resolve()
+
+    def git(*args):
+        return subprocess.run(["git", *args], cwd=path.parent, capture_output=True, text=True)
+
+    nincs = {"git": False, "commit": None, "protokoll_commitolva": False,
+             "munkapeldany_tiszta": None}
+    try:
+        if git("rev-parse", "--show-toplevel").returncode != 0:
+            return nincs
+    except FileNotFoundError:            # nincs telepítve a git
+        return nincs
+    kovetett = git("ls-files", "--error-unmatch", str(path)).returncode == 0
+    valtozott = git("status", "--porcelain", "--", str(path)).stdout.strip() != ""
+    piszkos = git("status", "--porcelain", "--untracked-files=no").stdout.strip() != ""
+    return {"git": True,
+            "commit": git("rev-parse", "--short", "HEAD").stdout.strip() or None,
+            "protokoll_commitolva": kovetett and not valtozott,
+            "munkapeldany_tiszta": not piszkos}
 
 
 def check_protocol(p: dict, adatforras: str) -> None:
@@ -149,10 +184,20 @@ def _seed_sweep(db_path, seeds, n_trees, purge) -> dict:
 
 def run_locked(db_path: Path = DB_PATH, protocol_path: Path = PROTOCOL,
                out_json: Path = RESULT_JSON, out_md: Path = RESULT_MD,
-               ismetles: bool = False) -> dict:
+               ismetles: bool = False, require_committed: bool = True) -> dict:
     prot, sha = load_protocol(protocol_path)
     prov = _provenance(db_path)
     check_protocol(prot, prov["adatforras"])          # a modellhez csak ezután nyúlunk
+    gs = git_state(protocol_path)
+    if require_committed and not (gs["protokoll_commitolva"] and gs["munkapeldany_tiszta"]):
+        raise ProtocolError(
+            "A lezárt futás előtt a jóváhagyott protokollt és a kódot commitolni kell —\n"
+            "a commit időbélyege bizonyítja, hogy a döntés megelőzte az eredményt.\n"
+            + ("  (Itt nincs git-tároló.)\n" if not gs["git"] else
+               f"  protokoll commitolva: {'igen' if gs['protokoll_commitolva'] else 'NEM'} · "
+               f"commitolatlan módosítás: {'nincs' if gs['munkapeldany_tiszta'] else 'VAN'}\n")
+            + "Teendő:\n  git add -A\n  git commit -m \"v3 protokoll jóváhagyva\"\n  git push\n"
+            "majd újra: python -m pipeline.v3_baseline")
     if Path(out_json).exists() and not ismetles:
         raise LockedRunExists(
             f"Már van lezárt eredmény: {out_json}\n"
@@ -193,7 +238,9 @@ def run_locked(db_path: Path = DB_PATH, protocol_path: Path = PROTOCOL,
         "futas": {
             "idopont_utc": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S"),
             "ismetles": bool(ismetles),
-            "git": train.git_hash(),
+            "git": gs["commit"] or train.git_hash(),
+            "git_allapot": gs,
+            "commit_nelkul_engedve": not require_committed,
             "python": platform.python_version(),
             "os": platform.platform(),
             "artefaktumok": Path(res["artifacts"]).name,
@@ -252,7 +299,7 @@ def summary_markdown(r: dict) -> str:
 
 Protokoll: `docs/v3_protokoll.json`, SHA256 `{r['protokoll_sha256']}`
 Jóváhagyta: {r['protokoll']['jovahagyas']['ki']} ({r['protokoll']['jovahagyas']['mikor']}).
-Futás: {r['futas']['idopont_utc']} UTC · git `{r['futas']['git']}` · Python {r['futas']['python']}.
+Futás: {r['futas']['idopont_utc']} UTC · git `{r['futas']['git']}`{' (tiszta munkapéldány, commitolt protokoll)' if r['futas']['git_allapot'].get('munkapeldany_tiszta') and r['futas']['git_allapot'].get('protokoll_commitolva') else ' (NEM commitolt állapot)'} · Python {r['futas']['python']}.
 Adat: {r['adat']['adatforras']}, {r['adat']['rendelesek']:,} rendelés.
 
 ## Modellválasztás (csak a tanító időszak)
@@ -298,9 +345,12 @@ def main() -> None:
     ap.add_argument("--protokoll", type=Path, default=PROTOCOL)
     ap.add_argument("--ismetles", action="store_true",
                     help="ismételt futás egy meglévő eredmény mellett (az eredményben látszik)")
+    ap.add_argument("--commit-nelkul", action="store_true",
+                    help="git nélküli ellenőrző futtatás (pl. ZIP-ből); az eredményben látszik")
     a = ap.parse_args()
     try:
-        run_locked(a.db, a.protokoll, ismetles=a.ismetles)
+        run_locked(a.db, a.protokoll, ismetles=a.ismetles,
+                   require_committed=not a.commit_nelkul)
     except (ProtocolError, LockedRunExists, WarehouseUnavailable, LeakageError,
             ValueError, FileNotFoundError) as exc:
         print(f"\nA LEZÁRT FUTÁS NEM INDULT:\n{exc}", file=sys.stderr)

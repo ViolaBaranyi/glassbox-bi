@@ -27,20 +27,16 @@ szintetikus adaton futott a rendszer.
 | 2026-10-08 | **Bizonytalanság: heti blokk-bootstrap** (ISO-hét, B = 2000, percentilis 95%); tanítási véletlen külön, 5 maggal (`pipeline/bootstrap.py`) | nem | rendelésenkénti bootstrap; csak magok | a késések hetente együtt mozognak → rendelésenkénti újramintavétel hamisan szűk CI-t adna; témavezetői kérés: bootstrap a magok helyett |
 | 2026-10-08 | **Lezárt alapfutás protokoll-kapuval** (`docs/v3_protokoll.json`, SHA256, egyszeri futás; `pipeline/v3_baseline.py`) | nem | — | a tesztet eddig sokszor láttuk (fent); innentől a döntések a futás ELŐTT rögzülnek |
 | 2026-10-08 | **Új lelet — címke-szivárgás a vágásnál** (még NEM döntés, lásd lent) | nem (csak a tanító ablak) | — | a 2018-03-01-i vágásnál a tanító sorok 6,2%-ának a kimenete még ismeretlen volt (26,6%-uk késett). CV-n, azonos fa-számmal: a Black Friday-s hajtásban PR-AUC 0,246 tisztítás nélkül vs 0,17 tisztítással; a nyugodt hajtásokban nincs különbség |
+| 2026-10-09 | **Címke-tisztítás: IGEN** — csak a vágás előtt lejárt határidejű tanító sorok, a CV-hajtásokban és a végső modellnél is (döntött: Baranyi Viola) | nem (csak a tanító ablak) | tisztítás nélkül (a v2 eredeti vágása) | point-in-time elv a címkékre is; CV-n azonos fa-számmal a Black Friday-s hajtás PR-AUC-ja 0,246 → 0,17, a nyugodt hajtásokban nincs különbség; a határidő szerinti szűrés a kimenettől független. Ára: a tanító ablak 11,7%-a; a fa-szám 119 |
+| 2026-10-09 | A fa-szám alsó korlátja: 50 (változatlan) | nem | — | a valódi adaton nem ez dönt (medián 118,5) |
+| 2026-10-09 | **A lezárt v3 alapfutás protokollja jóváhagyva** (`docs/v3_protokoll.json`) | nem | — | a futás csak a protokoll és a kód commitja után indul (a git időbélyege bizonyítja a sorrendet); az ujjlenyomat sorvégfüggetlen |
 
 ## Következő, még nyitott döntések
 
-* **Címke-tisztítás a vágásnál** (a lezárt futás előtt el kell dönteni): csak azokon a
-  tanító sorokon tanuljunk, amelyeknek a vállalt határideje a vágás előtt lejárt
-  (`--purge`, `split.settled_before`). Javaslat: **igen** — a jellemzőknél már egyeztetett
-  point-in-time elv következetes alkalmazása; a határidő szerinti szűrés a kimenettől
-  független. Ára: a tanító ablak 11,7%-a (a legfrissebb hetek); a fa-szám 67 helyett 119.
-  Mivel a tanító halmazt érinti, témavezetői jóváhagyás javasolt. Részletek:
-  `docs/v3_protokoll.md`.
-* **A fa-szám alsó korlátja (50):** megerősítendő; a valódi adaton egyik változatban sem
-  ez dönt.
-* **Lezárt v3 alapfutás:** a fenti kettő után a protokoll jóváhagyása, majd egyetlen
-  futás (`python -m pipeline.v3_baseline`).
+* **Lezárt v3 alapfutás:** a protokoll jóváhagyva (okt. 9.) → commit + push, majd
+  `python -m pipeline.v3_baseline`, végül az eredményfájlok
+  (`docs/v3_lezart_eredmeny.json`, `.md`) commitja. Utána a demó alapbeállítása a
+  protokollra vált (`--trees cv --purge`).
 * **Kontrafaktuális magyarázat:** a dice-ml helyett saját rácskeresés a vállalt határidőre
   (egyetlen akcionálható jellemző) — témavezetői jóváhagyásra vár.
 * **Szakértői átnézés (3–5 fő):** a kutatási terv 5. hónapja miatt a minimum — témavezetői

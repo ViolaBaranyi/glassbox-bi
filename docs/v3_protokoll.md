@@ -1,7 +1,8 @@
 # Lezárt v3 alapfutás — protokoll
 
-**Állapot: TERVEZET** — két döntés hiányzik (lent). Amíg a `docs/v3_protokoll.json`
-nincs jóváhagyva, a `python -m pipeline.v3_baseline` nem indul el.
+**Állapot: JÓVÁHAGYVA** — Baranyi Viola, 2026. október 9. Címke-tisztítás: **igen**;
+a fa-szám alsó korlátja: **50**. A lezárt futás csak akkor indul, ha a jóváhagyott
+protokoll és a kód commitolva van (`python -m pipeline.v3_baseline`).
 
 ## Miért kell lezárt futás?
 
@@ -35,9 +36,9 @@ A futás ellenőrzi, hogy a protokoll pontosan azt írja-e le, amit a kód csin�
 magok, alsó korlát, korai leállítás, ablakok, adatforrás). Ha bármi eltér, a modellhez
 sem nyúl.
 
-## Nyitott döntések
+## A két döntés (2026. október 9.)
 
-### 1. Címke-tisztítás — javaslat: IGEN
+### 1. Címke-tisztítás — DÖNTÉS: IGEN
 
 **A probléma (okt. 8-án találtuk, a teszt nélkül).** A jellemzőkre már érvényes a
 point-in-time szabály: csak a leadáskor ismert információ. A tanító *címkékre* ez
@@ -78,7 +79,7 @@ ugyanannak a point-in-time elvnek a következetes alkalmazása, amit a jellemző
 témavezetővel már egyeztettünk — de mivel a tanító halmazt érinti, **témavezetői
 jóváhagyás javasolt**.
 
-### 2. A fa-szám alsó korlátja: 50 — megerősítendő
+### 2. A fa-szám alsó korlátja — DÖNTÉS: 50 marad
 
 A korlát az összeomló korai leállítás ellen véd (egy ablációs futásban egyszer 2 fánál
 állt meg; a tisztított CV 1. hajtásában 3–6 fánál). A valódi adaton egyik változatban
@@ -87,13 +88,10 @@ kell átírni: a futás utáni módosítás új „elágazás" lenne.
 
 ## Jóváhagyás és futtatás
 
-1. A `docs/v3_protokoll.json`-ban:
-   * `"allapot": "jovahagyva"`,
-   * `"jovahagyas": {"ki": "…", "mikor": "2026-…", "megjegyzes": "…"}`,
-   * `"cimke_tisztitas": true` (vagy `false`),
-   * ha kell, `"modellvalasztas"` → `"n_min"` — és a kódban az `N_MIN` is (a futás
-     ellenőrzi, hogy egyeznek).
-2. Commit („v3 protokoll jóváhagyva") — ez a futás ELŐTTI időbélyeg.
+1. ~~A `docs/v3_protokoll.json` kitöltése~~ — kész (okt. 9.): `"allapot": "jovahagyva"`,
+   jóváhagyó és dátum, `"cimke_tisztitas": true`, `"n_min": 50`.
+2. Commit + push („v3 protokoll jóváhagyva") — ez a futás ELŐTTI időbélyeg. A futás
+   ellenőrzi: ha a protokoll vagy a kód nincs commitolva, nem indul el.
 3. `python -m pipeline.v3_baseline` (néhány perc; a bootstrap a leghosszabb).
 4. Commit: `docs/v3_lezart_eredmeny.json` és `docs/v3_lezart_eredmeny.md`.
 5. Utána a demó alapbeállítása a protokollra vált (`--trees cv`, és a döntés szerinti

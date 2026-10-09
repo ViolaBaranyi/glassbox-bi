@@ -1,15 +1,18 @@
 """
 A lezárt v3 alapfutás kapujának tesztjei.
 
-A teszthalmazhoz csak jóváhagyott, hiánytalan, a kóddal egyező protokollal
-lehet nyúlni — és csak egyszer: a második futás csak kifejezett kérésre
-indul, és az eredményben ez látszik.
+A teszthalmazhoz csak jóváhagyott, hiánytalan, a kóddal egyező és COMMITOLT
+protokollal lehet nyúlni — és csak egyszer: a második futás csak kifejezett
+kérésre indul, és az eredményben ez látszik. Az ujjlenyomat nem függ attól,
+hogy a fájl Windowson (CRLF) vagy Linuxon (LF) van kicsekkolva.
 """
 
 from __future__ import annotations
 
 import hashlib
 import json
+import shutil
+import subprocess
 from pathlib import Path
 
 import pytest
@@ -32,17 +35,21 @@ def _jovahagyott(forras="szintetikus", B=100) -> dict:
     return p
 
 
-def test_a_tarolt_protokoll_tervezet_ezert_nem_fut():
+def test_tervezet_protokollal_nem_fut():
     p, _ = vb.load_protocol(PROTO)
+    p["allapot"] = "tervezet"
     with pytest.raises(vb.ProtocolError, match="jovahagyva"):
         vb.check_protocol(p, "valós")
 
 
-def test_a_tarolt_protokoll_minden_rogzitett_erteke_egyezik_a_koddal():
-    """Csak a döntések (jóváhagyás, címke-tisztítás) hiányoznak belőle."""
+def test_a_jovahagyott_protokoll_hianytalan_es_egyezik_a_koddal():
+    """
+    A tárolt protokoll jóvá van hagyva, minden döntése ki van töltve, és pontosan
+    azt írja le, amit a kód csinál. Ha valaki a kódban utólag átírja pl. az alsó
+    korlátot vagy a magokat, ez a teszt elbukik — a jóváhagyott protokoll védett.
+    """
     p, _ = vb.load_protocol(PROTO)
-    p.update(allapot="jovahagyva", cimke_tisztitas=True,
-             jovahagyas={"ki": "x", "mikor": "y"})
+    assert p["allapot"] == "jovahagyva" and p["cimke_tisztitas"] is True
     vb.check_protocol(p, "valós")
 
 
@@ -67,20 +74,61 @@ def test_mas_adatforrason_nem_fut():
         vb.check_protocol(_jovahagyott(forras="valós"), "szintetikus")
 
 
-def test_lezart_futas_egyszer_fut_es_ujjlenyomatot_ment(tmp_path, monkeypatch):
-    generate(n_orders=3000, seed=5, out_dir=tmp_path / "raw", verbose=False)
-    db = tmp_path / "w.duckdb"
-    build(tmp_path / "raw", db, verbose=False)
-    monkeypatch.setattr(train, "ARTIFACTS", tmp_path / "artifacts")
+def test_az_ujjlenyomat_nem_fugg_a_sorvegtol(tmp_path):
+    szoveg = json.dumps(_jovahagyott(), ensure_ascii=False, indent=2)
+    (tmp_path / "lf.json").write_bytes(szoveg.encode("utf-8"))
+    (tmp_path / "crlf.json").write_bytes(szoveg.replace("\n", "\r\n").encode("utf-8"))
+    p1, h1 = vb.load_protocol(tmp_path / "lf.json")
+    p2, h2 = vb.load_protocol(tmp_path / "crlf.json")
+    assert p1 == p2 and h1 == h2
 
+
+@pytest.mark.skipif(shutil.which("git") is None, reason="nincs git")
+def test_git_allapot(tmp_path):
+    def git(*args):
+        subprocess.run(["git", "-c", "user.name=t", "-c", "user.email=t@t", *args],
+                       cwd=tmp_path, check=True, capture_output=True)
+    f = tmp_path / "protokoll.json"
+    assert vb.git_state(f)["git"] is False                  # még nincs tároló
+    git("init", "-q")
+    f.write_text("{}", encoding="utf-8")
+    assert vb.git_state(f)["protokoll_commitolva"] is False  # követetlen
+    git("add", "protokoll.json")
+    git("commit", "-q", "-m", "jovahagyva")
+    s = vb.git_state(f)
+    assert s["protokoll_commitolva"] and s["munkapeldany_tiszta"] and s["commit"]
+    f.write_text('{"x": 1}', encoding="utf-8")
+    s = vb.git_state(f)
+    assert not s["protokoll_commitolva"] and not s["munkapeldany_tiszta"]
+
+
+@pytest.fixture(scope="module")
+def synth_db(tmp_path_factory):
+    d = tmp_path_factory.mktemp("v3")
+    generate(n_orders=3000, seed=5, out_dir=d / "raw", verbose=False)
+    build(d / "raw", d / "w.duckdb", verbose=False)
+    return d / "w.duckdb"
+
+
+def test_commitolatlan_protokollal_nem_fut(synth_db, tmp_path):
+    proto = tmp_path / "protokoll.json"            # a tmp_path nem git-tároló
+    proto.write_text(json.dumps(_jovahagyott(), ensure_ascii=False), encoding="utf-8")
+    with pytest.raises(vb.ProtocolError, match="commitolni"):
+        vb.run_locked(synth_db, proto, tmp_path / "e.json", tmp_path / "e.md")
+    assert not (tmp_path / "e.json").exists()
+
+
+def test_lezart_futas_egyszer_fut_es_ujjlenyomatot_ment(synth_db, tmp_path, monkeypatch):
+    monkeypatch.setattr(train, "ARTIFACTS", tmp_path / "artifacts")
     proto = tmp_path / "protokoll.json"
     proto.write_text(json.dumps(_jovahagyott(), ensure_ascii=False), encoding="utf-8")
     out, md = tmp_path / "eredmeny.json", tmp_path / "eredmeny.md"
 
-    r = vb.run_locked(db, proto, out, md)
+    r = vb.run_locked(synth_db, proto, out, md, require_committed=False)
     saved = json.loads(out.read_text(encoding="utf-8"))
     assert saved["protokoll_sha256"] == hashlib.sha256(proto.read_bytes()).hexdigest()
     assert saved["futas"]["ismetles"] is False
+    assert saved["futas"]["commit_nelkul_engedve"] is True
     assert saved["vegso_modell"]["fak_szama"] == saved["modellvalasztas"]["n_fix"] >= 50
     assert saved["cimke_tisztitas"]["be"] is True
     b = saved["teszt"]["bootstrap"]["pr_auc"]
@@ -89,7 +137,7 @@ def test_lezart_futas_egyszer_fut_es_ujjlenyomatot_ment(tmp_path, monkeypatch):
     assert "Lezárt v3 alapfutás" in md.read_text(encoding="utf-8")
 
     with pytest.raises(vb.LockedRunExists):
-        vb.run_locked(db, proto, out, md)
-    r2 = vb.run_locked(db, proto, out, md, ismetles=True)
+        vb.run_locked(synth_db, proto, out, md, require_committed=False)
+    r2 = vb.run_locked(synth_db, proto, out, md, ismetles=True, require_committed=False)
     assert r2["futas"]["ismetles"] is True
     assert r2["teszt"]["bootstrap"]["pr_auc"] == r["teszt"]["bootstrap"]["pr_auc"]
