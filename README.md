@@ -40,7 +40,7 @@ PyCharmban a zöld **Run** gombbal is indítható.
 | 1 | Környezet | a verziók rögzítve vannak a kimenetben |
 | 2 | Adat | a valódi Olist-adat; ha még nincs meg, letölti a Kaggle-ről |
 | 3 | Tárház | 9 CSV → csillagséma DuckDB-ben, **V-1 validációval** |
-| 4 | Tesztek | 66 teszt: szivárgásvédelem, V-1, adatmodell, abláció, betanítás, kohorsz, modellválasztás, bootstrap, lezárt futás; ha bármelyik bukik, **a demó megáll** |
+| 4 | Tesztek | 75 teszt: szivárgásvédelem, V-1, adatmodell, abláció, betanítás, kohorsz, modellválasztás, bootstrap, lezárt futás, referencia-modellek; ha bármelyik bukik, **a demó megáll** |
 | 5 | Betanítás | a **lezárt v3 protokoll** szerint: LightGBM súlyozás nélkül, a fák száma bővülő ablakos CV-vel, címke-tisztítással; érintetlen, legkésőbbi időszakon mérve; a kalibráció csak diagnosztika |
 | 6 | Összegzés | rangsorolás, kalibráció, kizárt rendelések, artefaktumok helye |
 
@@ -65,7 +65,8 @@ ilyenkor minden lépésben jelzi, hogy a számok csak a gépezet működését m
 | M2 — abláció (`--drop`), validációs mérőszámok a `metrics.json`-ban | **kész** |
 | M2 — modellválasztás bővülő ablakos CV-n, rögzített fa-szám, címke-tisztítás (`--trees cv`, `--purge`) | **kész** |
 | M2 — heti blokk-bootstrap, lezárt v3 alapfutás protokollal (`pipeline/v3_baseline.py`) | **kész — lefutott okt. 9.** (`docs/v3_lezart_eredmeny.md`) |
-| Tesztek — szivárgás (14), V-1 és adatmodell (10), abláció (6), betanítás (6), kohorsz (2), modellválasztás (8), bootstrap (6), lezárt futás (14) | **kész, 66/66** |
+| M2 — referencia-modellek: logisztikus regresszió, döntési fa, random forest (`pipeline/reference_models.py`), lezárt összevetés (`pipeline/v3_reference.py`) | **kész — a protokoll jóváhagyásra vár** |
+| Tesztek — szivárgás (14), V-1 és adatmodell (10), abláció (6), betanítás (6), kohorsz (2), modellválasztás (8), bootstrap (6), lezárt futás (14), referencia-modellek (9) | **kész, 75/75** |
 | Tároló — MIT licenc, CI (Ubuntu + Windows), `requirements.lock`, döntési napló | **kész** |
 | M2 — 40 futásos sweep, hiperparaméter-hangolás | következő |
 | M3 — SHAP, ellenpélda, stabilitás | következő |
@@ -151,6 +152,13 @@ a kimenet szerint, így nem torzít. A keresztvalidáció mutatja, hogy számít
 a PR-AUC 0,246, tisztítással 0,17 — azonos fa-számmal is. A nyugodt időszakok hajtásaiban
 nincs különbség: a még ismeretlen címkék épp a zavarok kezdetét árulták el.
 → `split.settled_before`
+
+**Referencia-modellek ugyanazon a mércén.** Logisztikus regresszió, döntési fa és random
+forest — ugyanazzal az adat-protokollal, mint a LightGBM, és mindegyik egyetlen, a
+bonyolultságát szabályozó hiperparaméterrel (C, mélység, levélméret), amelyet ugyanaz a
+bővülő ablakos CV választ. A tanító időszakon a logisztikus regresszió szinte eléri a
+LightGBM-et (PR-AUC 0,124 vs 0,126); hogy a teszten kimutatható-e a különbség, azt a
+lezárt, páros összevetés dönti el. → `pipeline/reference_models.py`, `docs/v3_referencia_protokoll.md`
 
 **Bizonytalanság heti blokk-bootstrappal, a tanítási véletlen külön.** A késések hétről
 hétre együtt mozognak, ezért egész heteket húzunk visszatevéssel (B = 2000, percentilis
@@ -295,6 +303,8 @@ python -m pipeline.model_selection     # fa-szám bővülő ablakos CV-n (csak a
 python -m pipeline.model_selection --purge    # ugyanez címke-tisztítással
 python -m pipeline.train --trees korai --no-purge   # a régi út, összehasonlításhoz
 python -m pipeline.v3_baseline         # lezárt alapfutás (okt. 9-én lefutott; újra csak --ismetles)
+python -m pipeline.reference_models    # a 4 modell összevetése CV-n (csak a tanító időszak)
+python -m pipeline.v3_reference        # a referencia-modellek lezárt összevetése a teszten
 ```
 
 **Abláció.** A `--drop` jellemzőket zár ki a betanításból: csoportnevet (`honap` =
@@ -332,13 +342,17 @@ glassbox-bi/
 │   ├── model_selection.py   fa-szám a tanító időszakon belül (bővülő ablakos CV)
 │   ├── bootstrap.py         heti blokk-bootstrap (egyes és páros)
 │   ├── v3_baseline.py       a lezárt v3 alapfutás (csak jóváhagyott protokollal)
+│   ├── reference_models.py  logisztikus regresszió, döntési fa, random forest + CV-választás
+│   ├── v3_reference.py      a referencia-modellek lezárt összevetése (páros bootstrap)
 │   └── cohort_report.py     kohorsz-érzékenységi jelentés (kizárt rendelések)
 ├── docs/
 │   ├── dontesi_naplo.md     minden módszertani döntés: mikor, miért, látta-e már a tesztet
 │   ├── v3_protokoll.json    a lezárt futás protokollja (gépi, ezt ellenőrzi a futás)
 │   ├── v3_protokoll.md      ugyanez magyarázattal és a döntésekkel
 │   ├── v3_lezart_eredmeny.json  a lezárt futás teljes eredménye (ujjlenyomattal)
-│   └── v3_lezart_eredmeny.md    ugyanez röviden, táblázattal
+│   ├── v3_lezart_eredmeny.md    ugyanez röviden, táblázattal
+│   ├── v3_referencia_protokoll.json  a referencia-összevetés protokollja
+│   └── v3_referencia_protokoll.md    ugyanez magyarázattal és a CV-eredménnyel
 ├── .github/workflows/       CI: minden push lefuttatja a teljes pipeline-t (szintetikus adaton)
 ├── LICENSE                  MIT (a kódra; az adat saját licenc alatt áll)
 ├── requirements.txt         közvetlen függőségek, alsó korláttal
@@ -355,7 +369,8 @@ glassbox-bi/
     ├── test_cohort.py       2 teszt (Wilson-intervallum, érzékenységi változat)
     ├── test_model_selection.py  8 teszt (hajtások, fa-szám szabály, címke-tisztítás, a validáció nem hat)
     ├── test_bootstrap.py    6 teszt (egész hetek, reprodukálhatóság, páros összevetés)
-    └── test_v3_baseline.py  14 teszt (protokoll-kapu, ujjlenyomat, commit-ellenőrzés, egyszeri futás)
+    ├── test_v3_baseline.py  14 teszt (protokoll-kapu, ujjlenyomat, commit-ellenőrzés, egyszeri futás)
+    └── test_reference_models.py  9 teszt (modellek, rácsok, a választás csak a tanító ablakot látja, lezárt összevetés)
 ```
 
 ## A tároló közzététele

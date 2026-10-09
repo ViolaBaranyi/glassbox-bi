@@ -1,0 +1,83 @@
+{
+  "nev": "Üvegdoboz BI — referencia-modellek lezárt összevetése",
+  "verzio": 1,
+  "allapot": "tervezet",
+  "jovahagyas": {
+    "ki": null,
+    "mikor": null,
+    "megjegyzes": null
+  },
+  "alap_protokoll": {
+    "fajl": "docs/v3_protokoll.json",
+    "sha256": "9407febe2a77b8945baa8500dc8f66831c615325b9bbe9ef4d326d743b7da134",
+    "megjegyzes": "ugyanaz az adat, ablakok, jellemzők és címke-tisztítás; a LightGBM a lezárt v3 modell, nem tanul újra mást"
+  },
+  "modellek": {
+    "logreg": {
+      "param": "C",
+      "racs": [
+        0.001,
+        0.01,
+        0.1,
+        1.0
+      ],
+      "max_iter": 5000,
+      "megjegyzes": "L2-regularizáció; standardizált számjellemzők"
+    },
+    "dontesi_fa": {
+      "param": "max_depth",
+      "racs": [
+        3,
+        4,
+        5,
+        6,
+        8,
+        10,
+        12,
+        15,
+        20
+      ],
+      "min_samples_leaf": 50
+    },
+    "random_forest": {
+      "param": "min_samples_leaf",
+      "racs": [
+        100,
+        30,
+        10,
+        5,
+        2
+      ],
+      "n_estimators": 300,
+      "max_features": "sqrt"
+    }
+  },
+  "elofeldolgozas": "hiányzó számérték: medián + hiány-jelző oszlop; kategória: one-hot, a 20-nál ritkább kategóriák összevonva; a logisztikus regressziónál standardizálás",
+  "valasztasi_szabaly": "a legnagyobb átlagos PR-AUC a 4 tisztított hajtáson (bővülő ablakos CV, a tanító ablakon); egyezésnél az egyszerűbb (a rács eleje)",
+  "cv_valasztas_elvart": {
+    "logreg": 0.1,
+    "dontesi_fa": 10,
+    "random_forest": 10
+  },
+  "cv_valasztas_megjegyzes": "a `python -m pipeline.reference_models` eredménye 2026-10-09-én (csak a tanító ablak); a döntési fa és a random forest rácsát kibővítettük, mert az első futásban a rács szélén volt a legjobb érték — a kibővített rácsban a legjobb belül van",
+  "mag": 42,
+  "tanitasi_veletlen": {
+    "modell": "random_forest",
+    "magok": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "megjegyzes": "a logisztikus regresszió determinisztikus; a döntési fa a rögzített maggal szintén"
+  },
+  "bizonytalansag": {
+    "modszer": "heti blokk-bootstrap (ISO-hét, a rendelés időpontja szerint)",
+    "B": 2000,
+    "mag": 20261008,
+    "intervallum": "percentilis, 95%"
+  },
+  "paros_osszevetes": "LightGBM (lezárt) − referencia, ugyanazokon a húzott heteken: PR-AUC, ROC-AUC, Brier",
+  "fo_mutato": "pr_auc"
+}
