@@ -65,7 +65,7 @@ ilyenkor minden lépésben jelzi, hogy a számok csak a gépezet működését m
 | M2 — abláció (`--drop`), validációs mérőszámok a `metrics.json`-ban | **kész** |
 | M2 — modellválasztás bővülő ablakos CV-n, rögzített fa-szám, címke-tisztítás (`--trees cv`, `--purge`) | **kész** |
 | M2 — heti blokk-bootstrap, lezárt v3 alapfutás protokollal (`pipeline/v3_baseline.py`) | **kész — lefutott okt. 9.** (`docs/v3_lezart_eredmeny.md`) |
-| M2 — referencia-modellek: logisztikus regresszió, döntési fa, random forest (`pipeline/reference_models.py`), lezárt összevetés (`pipeline/v3_reference.py`) | **kész — a protokoll jóváhagyva, a lezárt összevetés következik** |
+| M2 — referencia-modellek: logisztikus regresszió, döntési fa, random forest (`pipeline/reference_models.py`), lezárt összevetés (`pipeline/v3_reference.py`) | **kész — lefutott okt. 9.** (`docs/v3_referencia_eredmeny.md`) |
 | Tesztek — szivárgás (14), V-1 és adatmodell (10), abláció (6), betanítás (6), kohorsz (2), modellválasztás (8), bootstrap (6), lezárt futás (14), referencia-modellek (9) | **kész, 75/75** |
 | Tároló — MIT licenc, CI (Ubuntu + Windows), `requirements.lock`, döntési napló | **kész** |
 | M2 — 40 futásos sweep, hiperparaméter-hangolás | következő |
@@ -98,6 +98,31 @@ git `6f1b792`, tiszta munkapéldány. Részletek: `docs/v3_lezart_eredmeny.md`.
   (alapráta 10,1%), ROC-AUC 0,650, ECE 0,049 — az ablak eleji márciusi válságot (19% késés)
   a vágás előtti adatból nem lehetett előre látni.
 * Windowson és Linuxon bitre azonos.
+
+### Referencia-modellek — lezárt összevetés (2026. október 9.)
+
+Ugyanaz a teszt, ugyanaz az adat-protokoll; minden modell beállítását a tanító időszak
+keresztvalidációja választotta. Protokoll: `docs/v3_referencia_protokoll.json`
+(`6ea464ac…`), git `76934b1`, tiszta munkapéldány. Részletek: `docs/v3_referencia_eredmeny.md`.
+
+| modell | teszt PR-AUC [95% CI] | teszt ROC-AUC [95% CI] | LightGBM − referencia, PR-AUC [95% CI] |
+|---|---|---|---|
+| LightGBM (lezárt) | 0,098 [0,055; 0,127] | 0,764 [0,723; 0,788] | — |
+| logisztikus regresszió | 0,084 [0,060; 0,103] | 0,740 [0,692; 0,781] | +0,014 [−0,010; +0,029] — nem kimutatható |
+| random forest | 0,088 [0,050; 0,118] | 0,739 [0,696; 0,762] | +0,010 [+0,000; +0,018] — határeset |
+| döntési fa | 0,061 [0,037; 0,084] | 0,597 [0,573; 0,634] | +0,037 [+0,002; +0,053] |
+
+* A LightGBM minden mutatóban a legjobb pontbecslés, de **a logisztikus regressziótól a
+  különbség ezen a teszten nem kimutatható** (a PR-AUC, a ROC-AUC és a Brier különbségének
+  intervalluma is tartalmazza a nullát).
+* A random forest ellen a ROC-AUC-előny kimutatható (+0,026 [+0,013; +0,039]); a PR-AUC-előny
+  határeset — a random forest magok szerinti szórása (0,093 ± 0,004) ekkora különbséget elmos.
+* Egyetlen döntési fa minden mutatóban egyértelműen gyengébb.
+* Feltáró megfigyelés (nem előre tervezett összevetés): a validációs ablakon — a márciusi
+  válság idején — a logisztikus regresszió jóval jobb volt (PR-AUC 0,267 vs 0,179, ROC-AUC
+  0,755 vs 0,650): az eltolódott időszakban az egyszerűbb modell robusztusabbnak tűnik.
+* Három összevetés × három mutató: az intervallumok egyenként 95%-osak, a határeseteket
+  ezért óvatosan kell kezelni. Windowson és Linuxon bitre azonos.
 
 ## A legfontosabb módszertani döntések
 

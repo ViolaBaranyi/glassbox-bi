@@ -35,12 +35,11 @@ szintetikus adaton futott a rendszer.
 | 2026-10-09 | **Referencia-modellek:** logisztikus regresszió (C), döntési fa (max_depth; levél ≥ 50), random forest (min_samples_leaf; 300 fa) — közös előfeldolgozás (medián + hiány-jelző, one-hot), választás ugyanazon a bővülő ablakos CV-n (4 tisztított hajtás, legnagyobb átlagos PR-AUC, egyezésnél az egyszerűbb) | nem (csak a tanító ablak) | a validációs ablakon hangolni; több hiperparaméter | tisztességes összevetés: mindegyik modell egy bonyolultsági paramétert kap, mint a LightGBM (fák száma) |
 | 2026-10-09 | A döntési fa és a random forest rácsának kibővítése (fa: 12, 15, 20; erdő: 5, 2) | nem (csak a tanító ablak) | az eredeti rács | az első futásban a rács szélén volt a legjobb érték; a kibővítettben belül van, a választás nem változott |
 | 2026-10-09 | **A referencia-összevetés protokollja jóváhagyva** (`docs/v3_referencia_protokoll.json`; jóváhagyta: Baranyi Viola) | nem | — | a rácsok, a választási szabály és a CV-ből várt beállítások a futás előtt rögzülnek; a futás a teszt előtt megáll, ha a CV mást választana |
+| 2026-10-09 | **REFERENCIA-MODELLEK LEZÁRT ÖSSZEVETÉSE** — protokoll `6ea464ac…`, git `76934b1` (tiszta munkapéldány), Windows 11, Python 3.14.3; Linuxon bitre azonos | **igen — ez a lezárt mérés** | — | LightGBM − LR: PR-AUC +0,014 [−0,010; +0,029], ROC +0,024 [−0,018; +0,057], Brier −0,0002 [−0,0010; +0,0006] → nem kimutatható; − RF: PR-AUC +0,010 [+0,000; +0,018], ROC +0,026 [+0,013; +0,039]; − fa: PR-AUC +0,037 [+0,002; +0,053], ROC +0,167 [+0,105; +0,201]. Feltáró megfigyelés (nem előre tervezett): a validációs ablakon az LR jobb (PR-AUC 0,267 vs 0,179; ROC 0,755 vs 0,650) |
 | 2026-10-09 | CV-eredmény (tanító ablak): LightGBM PR-AUC 0,126 / ROC 0,639 · logisztikus regresszió (C = 0,1) 0,124 / 0,634 · random forest (levél 10) 0,113 / 0,624 · döntési fa (mélység 10) 0,093 / 0,571 | nem | — | a teszten a páros, lezárt összevetés dönti el, kimutatható-e a különbség (`docs/v3_referencia_protokoll.md`) |
 
 ## Következő, még nyitott döntések
 
-* **Referencia-összevetés:** a protokoll jóváhagyva (okt. 9.) → commit + push, majd
-  egyetlen futás: `python -m pipeline.v3_reference`, végül az eredmény commitja.
 
 * **Kontrafaktuális magyarázat:** a dice-ml helyett saját rácskeresés a vállalt határidőre
   (egyetlen akcionálható jellemző) — témavezetői jóváhagyásra vár.
