@@ -1,0 +1,662 @@
+{
+  "nev": "Üvegdoboz BI — lezárt v3 alapfutás",
+  "protokoll_sha256": "9407febe2a77b8945baa8500dc8f66831c615325b9bbe9ef4d326d743b7da134",
+  "protokoll": {
+    "nev": "Üvegdoboz BI — lezárt v3 alapfutás",
+    "verzio": 1,
+    "allapot": "jovahagyva",
+    "jovahagyas": {
+      "ki": "Baranyi Viola",
+      "mikor": "2026-10-09",
+      "megjegyzes": "Címke-tisztítás: igen. A fa-szám alsó korlátja: 50, változatlan (a valódi adaton nem ez dönt: medián 118,5)."
+    },
+    "dontesek": [
+      "cimke_tisztitas: true — csak a vágás előtt lejárt határidejű tanító sorok (2026-10-09)",
+      "modellvalasztas.n_min: 50 — változatlan (2026-10-09)"
+    ],
+    "adat": {
+      "forras": "valós",
+      "kohorsz": "A — csak a kézbesített rendelések (v2); a B változat csak érzékenységi jelentés",
+      "jellemzok": 22
+    },
+    "ablakok": {
+      "tanito_vege": "2018-03-01",
+      "validacio_vege": "2018-06-01",
+      "megjegyzes": "a rendszerterv vágásai (v2), a rendelés időpontja szerint; a végső modell csak a tanító ablakon tanul"
+    },
+    "cimke_tisztitas": true,
+    "modellvalasztas": {
+      "modszer": "bővülő ablakos keresztvalidáció a tanító időszakon belül (napra kerekített kvantilis-vágások)",
+      "hajtasok": 4,
+      "magok": [
+        1,
+        2,
+        3
+      ],
+      "korai_leallitas_kor": 150,
+      "metrika": "average_precision (PR-AUC)",
+      "n_min": 50,
+      "szabaly": "N_fix = max(n_min, a legjobb iterációk mediánja)"
+    },
+    "vegso_modell": {
+      "mag": 42,
+      "kiegyensulyozas": "none",
+      "utolagos_kalibrator": false,
+      "learning_rate": 0.05
+    },
+    "kiertekeles": {
+      "fo_mutato": "pr_auc",
+      "mutatok": [
+        "pr_auc",
+        "roc_auc",
+        "brier",
+        "ece",
+        "ece_egyenlo_elemszam"
+      ],
+      "ablakok": "validáció (időn kívüli ellenőrzés, semmit nem befolyásol) és teszt"
+    },
+    "bizonytalansag": {
+      "modszer": "heti blokk-bootstrap (ISO-hét, a rendelés időpontja szerint)",
+      "B": 2000,
+      "mag": 20261008,
+      "intervallum": "percentilis, 95%",
+      "paros_osszevetes": "a modell és a tanító időszak arányát mondó konstans előrejelzés (PR-AUC, Brier)"
+    },
+    "tanitasi_veletlen": {
+      "magok": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "jelentes": "átlag ± szórás, a bootstrap-intervallumtól külön"
+    }
+  },
+  "futas": {
+    "idopont_utc": "2026-10-09 10:29:24",
+    "ismetles": false,
+    "git": "6f1b792",
+    "git_allapot": {
+      "git": true,
+      "commit": "6f1b792",
+      "protokoll_commitolva": true,
+      "munkapeldany_tiszta": true
+    },
+    "commit_nelkul_engedve": false,
+    "python": "3.14.3",
+    "os": "Windows-11-10.0.26200-SP0",
+    "artefaktumok": "20261009_102827_lgbm_v3_lezart_none_cv_tisztitott_seed42"
+  },
+  "adat": {
+    "adatforras": "valós",
+    "tarhaz_epitve": "2026-10-08 12:18:19 UTC",
+    "rendelesek": 96470,
+    "megfigyelesi_zarnap": "2018-10-17 17:30:18",
+    "forrasfajlok": {
+      "olist_customers_dataset.csv": {
+        "sha256": "983a422239e1712ded753b3bf9ecf47dc73f144d306029dcfa99e70a226883d2",
+        "sorok": 99441
+      },
+      "olist_geolocation_dataset.csv": {
+        "sha256": "b514f6fc991b9566aeba02aa5d67e2c3630f034b60a0e05aa0d082a3b66d88d6",
+        "sorok": 1000163
+      },
+      "olist_order_items_dataset.csv": {
+        "sha256": "0bc4d068c4fe38cbb01bd90e8746e3c613fe7b4baef75fab7b0e329701c3e279",
+        "sorok": 112650
+      },
+      "olist_order_payments_dataset.csv": {
+        "sha256": "4f713964f2815dbbaa40b9488268c55aac3627bfce5aa96cf58d1f3616de3cc0",
+        "sorok": 103886
+      },
+      "olist_order_reviews_dataset.csv": {
+        "sha256": "012b61c7593e34f51fa614efdf802b9c7056ce6aae5307ddb93236e7cfc797d7",
+        "sorok": 99224
+      },
+      "olist_orders_dataset.csv": {
+        "sha256": "8df58ef3d2d7e9944010f7beecd9b75367f5588ec6e3c91cec19ae3345ef9ecf",
+        "sorok": 99441
+      },
+      "olist_products_dataset.csv": {
+        "sha256": "3e6569628a17fbc75fd206ee357b59e20364b9afa90f5b6cd5b4d624c58aa9cc",
+        "sorok": 32951
+      },
+      "olist_sellers_dataset.csv": {
+        "sha256": "1f643d2b950373b85735e7794b20986f528d7a000432e7c6f9bcbb44d0846a0e",
+        "sorok": 3095
+      },
+      "product_category_name_translation.csv": {
+        "sha256": "a81f0d1f27b27e7293f761bc79e3ce8f348ee39c4b3ed3e49bde38f478586278",
+        "sorok": 71
+      }
+    }
+  },
+  "modellvalasztas": {
+    "modszer": "bővülő ablakos keresztvalidáció a tanító időszakon belül",
+    "hajtasok_szama": 4,
+    "magok": [
+      1,
+      2,
+      3
+    ],
+    "korai_leallitas_kor": 150,
+    "kiegyensulyozas": "none",
+    "cimke_tisztitas": true,
+    "legjobb_iteraciok": [
+      4,
+      6,
+      3,
+      73,
+      113,
+      128,
+      191,
+      254,
+      322,
+      124,
+      129,
+      113
+    ],
+    "median": 118.5,
+    "n_min": 50,
+    "n_fix": 119,
+    "also_korlat_dontott": false,
+    "hajtasok": [
+      {
+        "hajtas": 1,
+        "tanitas_vege": "2017-06-04",
+        "ertekeles": [
+          "2017-06-04",
+          "2017-09-04"
+        ],
+        "tanito_sorok": 8608,
+        "tanito_sorok_tisztitas_elott": 11398,
+        "ertekelo_sorok": 11391,
+        "ertekelo_keses_arany": 0.0291,
+        "hasznalhato": true,
+        "legjobb_iteraciok": {
+          "1": 4,
+          "2": 6,
+          "3": 3
+        },
+        "rogzitett_fa_szammal": {
+          "pr_auc": 0.0419,
+          "roc_auc": 0.6062,
+          "brier": 0.0296,
+          "ece": 0.0124,
+          "ece_egyenlo_elemszam": 0.0184
+        }
+      },
+      {
+        "hajtas": 2,
+        "tanitas_vege": "2017-09-05",
+        "ertekeles": [
+          "2017-09-05",
+          "2017-11-21"
+        ],
+        "tanito_sorok": 19543,
+        "tanito_sorok_tisztitas_elott": 22789,
+        "ertekelo_sorok": 11577,
+        "ertekelo_keses_arany": 0.0522,
+        "hasznalhato": true,
+        "legjobb_iteraciok": {
+          "1": 73,
+          "2": 113,
+          "3": 128
+        },
+        "rogzitett_fa_szammal": {
+          "pr_auc": 0.1024,
+          "roc_auc": 0.6488,
+          "brier": 0.049,
+          "ece": 0.0218,
+          "ece_egyenlo_elemszam": 0.0202
+        }
+      },
+      {
+        "hajtas": 3,
+        "tanitas_vege": "2017-11-22",
+        "ertekeles": [
+          "2017-11-22",
+          "2018-01-10"
+        ],
+        "tanito_sorok": 30403,
+        "tanito_sorok_tisztitas_elott": 34366,
+        "ertekelo_sorok": 11472,
+        "ertekelo_keses_arany": 0.0997,
+        "hasznalhato": true,
+        "legjobb_iteraciok": {
+          "1": 191,
+          "2": 254,
+          "3": 322
+        },
+        "rogzitett_fa_szammal": {
+          "pr_auc": 0.1712,
+          "roc_auc": 0.6563,
+          "brier": 0.0924,
+          "ece": 0.0674,
+          "ece_egyenlo_elemszam": 0.0673
+        }
+      },
+      {
+        "hajtas": 4,
+        "tanitas_vege": "2018-01-11",
+        "ertekeles": [
+          "2018-01-11",
+          "2018-02-28"
+        ],
+        "tanito_sorok": 41056,
+        "tanito_sorok_tisztitas_elott": 45838,
+        "ertekelo_sorok": 11479,
+        "ertekelo_keses_arany": 0.1089,
+        "hasznalhato": true,
+        "legjobb_iteraciok": {
+          "1": 124,
+          "2": 129,
+          "3": 113
+        },
+        "rogzitett_fa_szammal": {
+          "pr_auc": 0.1983,
+          "roc_auc": 0.6678,
+          "brier": 0.0978,
+          "ece": 0.0617,
+          "ece_egyenlo_elemszam": 0.0613
+        }
+      }
+    ]
+  },
+  "cimke_tisztitas": {
+    "be": true,
+    "tanito_sorok": 50623,
+    "kizart_tanito_sorok": 6694
+  },
+  "vegso_modell": {
+    "mag": 42,
+    "fak_szama": 119,
+    "jellemzok": 22,
+    "tanito_bazisrata": 0.0562
+  },
+  "validacio": {
+    "bazisrata": 0.1011,
+    "bootstrap": {
+      "pr_auc": {
+        "ertek": 0.17912,
+        "ci95": [
+          0.1288,
+          0.24233
+        ],
+        "se": 0.0295,
+        "ervenyes_huzasok": 2000
+      },
+      "roc_auc": {
+        "ertek": 0.64974,
+        "ci95": [
+          0.61392,
+          0.69081
+        ],
+        "se": 0.01946,
+        "ervenyes_huzasok": 2000
+      },
+      "brier": {
+        "ertek": 0.0906,
+        "ci95": [
+          0.05925,
+          0.12694
+        ],
+        "se": 0.01767,
+        "ervenyes_huzasok": 2000
+      },
+      "ece": {
+        "ertek": 0.04897,
+        "ci95": [
+          0.01629,
+          0.0912
+        ],
+        "se": 0.01976,
+        "ervenyes_huzasok": 2000
+      },
+      "ece_egyenlo_elemszam": {
+        "ertek": 0.04824,
+        "ci95": [
+          0.01589,
+          0.09119
+        ],
+        "se": 0.01987,
+        "ervenyes_huzasok": 2000
+      },
+      "_beallitas": {
+        "B": 2000,
+        "mag": 20261008,
+        "blokkok": 14,
+        "intervallum": "percentilis, 95%"
+      }
+    }
+  },
+  "teszt": {
+    "bazisrata": 0.0361,
+    "bootstrap": {
+      "pr_auc": {
+        "ertek": 0.09782,
+        "ci95": [
+          0.05524,
+          0.12742
+        ],
+        "se": 0.01803,
+        "ervenyes_huzasok": 2000
+      },
+      "roc_auc": {
+        "ertek": 0.76397,
+        "ci95": [
+          0.72288,
+          0.78774
+        ],
+        "se": 0.01657,
+        "ervenyes_huzasok": 2000
+      },
+      "brier": {
+        "ertek": 0.03388,
+        "ci95": [
+          0.01883,
+          0.04948
+        ],
+        "se": 0.00793,
+        "ervenyes_huzasok": 2000
+      },
+      "ece": {
+        "ertek": 0.00777,
+        "ci95": [
+          0.00264,
+          0.01958
+        ],
+        "se": 0.00474,
+        "ervenyes_huzasok": 2000
+      },
+      "ece_egyenlo_elemszam": {
+        "ertek": 0.00993,
+        "ci95": [
+          0.00803,
+          0.0195
+        ],
+        "se": 0.00299,
+        "ervenyes_huzasok": 2000
+      },
+      "_beallitas": {
+        "B": 2000,
+        "mag": 20261008,
+        "blokkok": 14,
+        "intervallum": "percentilis, 95%"
+      }
+    },
+    "paros_a_konstans_elorejelzessel": {
+      "pr_auc": {
+        "a": 0.09782,
+        "b": 0.03612,
+        "kulonbseg": 0.06169,
+        "ci95": [
+          0.03486,
+          0.07819
+        ],
+        "se": 0.01079,
+        "ervenyes_huzasok": 2000
+      },
+      "brier": {
+        "a": 0.03388,
+        "b": 0.03522,
+        "kulonbseg": -0.00134,
+        "ci95": [
+          -0.00186,
+          -0.00072
+        ],
+        "se": 0.0003,
+        "ervenyes_huzasok": 2000
+      },
+      "_beallitas": {
+        "B": 2000,
+        "mag": 20261008,
+        "blokkok": 14,
+        "intervallum": "percentilis, 95%"
+      }
+    },
+    "diagnosztika": {
+      "corp": {
+        "brier": 0.03388,
+        "mcb": 0.000455,
+        "dsc": 0.001393,
+        "unc": 0.034818
+      },
+      "brier_keszseg": {
+        "tanito_bazisratahoz": 0.0381,
+        "teszt_bazisratahoz": 0.0269
+      },
+      "izotonikus_validacion_illesztve": {
+        "pr_auc": 0.0898,
+        "roc_auc": 0.7605,
+        "brier": 0.03685,
+        "ece": 0.05224,
+        "ece_egyenlo_elemszam": 0.05224
+      }
+    },
+    "megbizhatosag_tizedek": [
+      {
+        "bin": "0.004-0.014",
+        "n": 1861,
+        "atlag_becsles": 0.011,
+        "tenyleges_arany": 0.0054
+      },
+      {
+        "bin": "0.014-0.017",
+        "n": 1860,
+        "atlag_becsles": 0.0154,
+        "tenyleges_arany": 0.0097
+      },
+      {
+        "bin": "0.017-0.021",
+        "n": 1860,
+        "atlag_becsles": 0.019,
+        "tenyleges_arany": 0.0086
+      },
+      {
+        "bin": "0.021-0.025",
+        "n": 1860,
+        "atlag_becsles": 0.0226,
+        "tenyleges_arany": 0.0124
+      },
+      {
+        "bin": "0.025-0.029",
+        "n": 1860,
+        "atlag_becsles": 0.0269,
+        "tenyleges_arany": 0.0134
+      },
+      {
+        "bin": "0.029-0.036",
+        "n": 1861,
+        "atlag_becsles": 0.0322,
+        "tenyleges_arany": 0.0253
+      },
+      {
+        "bin": "0.036-0.046",
+        "n": 1860,
+        "atlag_becsles": 0.0404,
+        "tenyleges_arany": 0.028
+      },
+      {
+        "bin": "0.046-0.065",
+        "n": 1860,
+        "atlag_becsles": 0.0544,
+        "tenyleges_arany": 0.0602
+      },
+      {
+        "bin": "0.065-0.094",
+        "n": 1860,
+        "atlag_becsles": 0.0778,
+        "tenyleges_arany": 0.0828
+      },
+      {
+        "bin": "0.094-0.577",
+        "n": 1861,
+        "atlag_becsles": 0.1393,
+        "tenyleges_arany": 0.1155
+      }
+    ]
+  },
+  "tanitasi_veletlen": {
+    "magok": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "fak_szama": 119,
+    "futasok": [
+      {
+        "mag": 1,
+        "teszt": {
+          "pr_auc": 0.1052,
+          "roc_auc": 0.7709,
+          "brier": 0.03361,
+          "ece": 0.00798,
+          "ece_egyenlo_elemszam": 0.00937
+        },
+        "validacio": {
+          "pr_auc": 0.1826,
+          "roc_auc": 0.6565,
+          "brier": 0.09067,
+          "ece": 0.0507,
+          "ece_egyenlo_elemszam": 0.05042
+        }
+      },
+      {
+        "mag": 2,
+        "teszt": {
+          "pr_auc": 0.1009,
+          "roc_auc": 0.7715,
+          "brier": 0.03375,
+          "ece": 0.00982,
+          "ece_egyenlo_elemszam": 0.00982
+        },
+        "validacio": {
+          "pr_auc": 0.1777,
+          "roc_auc": 0.6515,
+          "brier": 0.09067,
+          "ece": 0.04867,
+          "ece_egyenlo_elemszam": 0.04844
+        }
+      },
+      {
+        "mag": 3,
+        "teszt": {
+          "pr_auc": 0.1016,
+          "roc_auc": 0.7633,
+          "brier": 0.03369,
+          "ece": 0.00566,
+          "ece_egyenlo_elemszam": 0.00799
+        },
+        "validacio": {
+          "pr_auc": 0.1795,
+          "roc_auc": 0.6488,
+          "brier": 0.09074,
+          "ece": 0.04985,
+          "ece_egyenlo_elemszam": 0.04971
+        }
+      },
+      {
+        "mag": 4,
+        "teszt": {
+          "pr_auc": 0.098,
+          "roc_auc": 0.7678,
+          "brier": 0.03381,
+          "ece": 0.00766,
+          "ece_egyenlo_elemszam": 0.00958
+        },
+        "validacio": {
+          "pr_auc": 0.1727,
+          "roc_auc": 0.6495,
+          "brier": 0.09087,
+          "ece": 0.04886,
+          "ece_egyenlo_elemszam": 0.04822
+        }
+      },
+      {
+        "mag": 5,
+        "teszt": {
+          "pr_auc": 0.0994,
+          "roc_auc": 0.7629,
+          "brier": 0.03378,
+          "ece": 0.00693,
+          "ece_egyenlo_elemszam": 0.00893
+        },
+        "validacio": {
+          "pr_auc": 0.1811,
+          "roc_auc": 0.657,
+          "brier": 0.09053,
+          "ece": 0.04888,
+          "ece_egyenlo_elemszam": 0.04881
+        }
+      }
+    ],
+    "teszt": {
+      "pr_auc": {
+        "atlag": 0.10102,
+        "szoras": 0.00272,
+        "min": 0.098,
+        "max": 0.1052
+      },
+      "roc_auc": {
+        "atlag": 0.76728,
+        "szoras": 0.00407,
+        "min": 0.7629,
+        "max": 0.7715
+      },
+      "brier": {
+        "atlag": 0.03373,
+        "szoras": 8e-05,
+        "min": 0.03361,
+        "max": 0.03381
+      },
+      "ece": {
+        "atlag": 0.00761,
+        "szoras": 0.00152,
+        "min": 0.00566,
+        "max": 0.00982
+      },
+      "ece_egyenlo_elemszam": {
+        "atlag": 0.00914,
+        "szoras": 0.00072,
+        "min": 0.00799,
+        "max": 0.00982
+      }
+    },
+    "validacio": {
+      "pr_auc": {
+        "atlag": 0.17872,
+        "szoras": 0.00383,
+        "min": 0.1727,
+        "max": 0.1826
+      },
+      "roc_auc": {
+        "atlag": 0.65266,
+        "szoras": 0.00387,
+        "min": 0.6488,
+        "max": 0.657
+      },
+      "brier": {
+        "atlag": 0.0907,
+        "szoras": 0.00012,
+        "min": 0.09053,
+        "max": 0.09087
+      },
+      "ece": {
+        "atlag": 0.04939,
+        "szoras": 0.00086,
+        "min": 0.04867,
+        "max": 0.0507
+      },
+      "ece_egyenlo_elemszam": {
+        "atlag": 0.04912,
+        "szoras": 0.00092,
+        "min": 0.04822,
+        "max": 0.05042
+      }
+    }
+  }
+}
