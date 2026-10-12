@@ -1,0 +1,11 @@
+# A BI-felület beállításai — `streamlit run ui/app.py` esetén ez érvényes;
+# a `python -m ui` ugyanezeket parancssorból is átadja (ui/__main__.py).
+
+[server]
+address = "localhost"       # csak ezen a gépen érhető el, a hálózatról nem
+
+[browser]
+gatherUsageStats = false    # nem küld használati statisztikát
+
+[client]
+toolbarMode = "minimal"     # a fejlesztői menü (Deploy stb.) rejtve

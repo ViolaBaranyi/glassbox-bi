@@ -6,8 +6,9 @@ data/*.duckdb
 artifacts/
 logs/
 
-# Titkok
+# Titkok (a nyelvi réteg kulcsai is ide kerülnek majd)
 .env
+.streamlit/secrets.toml
 
 # Python
 __pycache__/

@@ -1,2 +1,4 @@
 # Egységes sorvégek a tárolóban; a munkapéldányban mindenki a sajátját kapja.
 * text=auto
+# A Windows-parancsfájl mindig CRLF-fel (a cmd.exe LF-fel hibázhat).
+*.bat text eol=crlf

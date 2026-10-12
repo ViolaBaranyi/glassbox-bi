@@ -119,7 +119,7 @@ def main() -> None:
     done(t)
 
     # --------------------------------------------------------------- 4. tesztek
-    t = header(4, "Tesztek — szivárgásvédelem és V-1 validáció")
+    t = header(4, "Tesztek — szivárgásvédelem, V-1 validáció, magyarázatok, felület")
     import pytest
     code = pytest.main(["-q", "--no-header", "-p", "no:cacheprovider",
                         str(ROOT / "tests")])
@@ -162,6 +162,7 @@ def main() -> None:
           f"{m['ece_egyenlo_elemszam']:.3f})   Brier {m['brier']:.4f}, "
           f"készség {diag['brier_keszseg']['tanito_bazisratahoz']:.1%}")
     print(f"   Artefaktumok   {Path(res['artifacts']).relative_to(ROOT)}")
+    print("   Felület        python -m ui   (megnyílik a böngészőben: http://localhost:8501)")
     print(f"\n   Teljes futásidő: {time.perf_counter() - started:.0f} mp")
     print(LINE)
 

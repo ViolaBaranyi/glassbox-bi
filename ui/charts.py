@@ -1,0 +1,290 @@
+"""
+A felület grafikonjai (Altair / Vega-Lite) — Streamlit nélkül is építhetők és tesztelhetők.
+
+Közös szabályok: magyar tizedesvessző a tengelyeken, a hibasáv mindenhol 95%-os
+intervallum, a kockázatot NÖVELŐ hatás piros, a CSÖKKENTŐ kék (színtévesztőknek
+is megkülönböztethető pár; a felirat és az előjel is jelzi).
+
+Világos és sötét téma: a Streamlit témája a tengelyeket színezi, a szöveg- és
+vonaljeleket nem (azok alapból feketék, sötét háttéren láthatatlanok). Ezért a
+feliratok és a hibasávok színét az `ink` paraméter adja (ink_for(téma)); a
+hőtérképek cellafelirata a cella sötétségéhez igazodik, nem a témához.
+"""
+
+from __future__ import annotations
+
+from dataclasses import dataclass
+
+import altair as alt
+import pandas as pd
+
+from xai import narrative as nv
+
+UP, DOWN = "#c44e52", "#4c72b0"          # növeli / csökkenti
+WINDOW_COLORS = {"tanító": "#4c72b0", "validációs": "#dd8452", "teszt": "#55a868"}
+
+
+@dataclass(frozen=True)
+class Ink:
+    """A szöveg- és vonaljelek színei egy témához."""
+    text: str        # sáv végi és vonal melletti feliratok
+    rule: str        # hibasávok, nullvonal
+    muted: str       # referencia-vonalak (átló, véletlen szint)
+
+
+LIGHT = Ink(text="#31333f", rule="#31333f", muted="#808495")
+DARK = Ink(text="#e8e8ec", rule="#c9cbd3", muted="#9a9db0")
+
+
+def ink_for(theme_type: str | None) -> Ink:
+    """A Streamlit témájához (st.context.theme.type: 'light' | 'dark' | None) illő színek."""
+    return DARK if theme_type == "dark" else LIGHT
+
+
+# A hőtérképek cellafelirata: a sötét cellán fehér, a világoson sötét — bármely témában.
+# A küszöb a színskálán az a pont, ahol a fehér felirat kontrasztja már jobb a sötétnél
+# (redblue: a fél-tartomány kb. 60%-a, oranges: a tartomány kb. 75%-a).
+_ON_DARK, _ON_LIGHT = "#ffffff", "#1a1a1a"
+
+
+def _cell_text_color(field: str, threshold: float, absolute: bool) -> alt.condition:
+    value = f"abs(datum['{field}'])" if absolute else f"datum['{field}']"
+    return alt.condition(f"{value} > {threshold:.6g}", alt.value(_ON_DARK), alt.value(_ON_LIGHT))
+
+# A Vega-tengelyfelirat tizedespontját vesszőre cseréljük (egy tizedesjel van).
+_COMMA = "replace(datum.label, '.', ',')"
+
+
+def _pct_axis(title: str, fmt: str = ".0%") -> alt.Axis:
+    return alt.Axis(title=title, format=fmt, labelExpr=_COMMA)
+
+
+def _dt(t: pd.Timestamp) -> alt.DateTime:
+    return alt.DateTime(year=t.year, month=t.month, date=t.day)
+
+
+# ------------------------------------------------------------- áttekintés
+_Y_EXTENT = 64      # rögzített y-tengelyszélesség: a két egymás alatti grafikon így egy vonalba esik
+
+
+def monthly_chart(m: pd.DataFrame, win: pd.DataFrame) -> tuple[alt.LayerChart, alt.Chart]:
+    """
+    Két egymás alá teendő grafikon közös időtengellyel:
+      1. havi késési arány 95%-os sávval, háttérben a tanító / validációs / teszt ablak;
+      2. a havi rendelésszám.
+    (Egy vconcat-ábra nem követi a konténer szélességét, ezért két külön ábra.)
+    """
+    d = m[m["megbizhato"]].copy()
+    # Hiányzó (vagy kihagyott) hónapnál a vonal megszakad: nem húzunk vonalat ott, ahol
+    # nincs adat (2016 novemberében egy rendelés sincs, decemberben egy).
+    month_no = d["honap"].dt.year * 12 + d["honap"].dt.month
+    d["szakasz"] = (month_no.diff().fillna(1) > 1).cumsum().astype(int)
+    d["arany_szoveg"] = [nv.fmt_pct(v) for v in d["kesesi_arany"]]
+    d["ci_szoveg"] = [f"{nv.fmt_pct(a)} – {nv.fmt_pct(b)}" for a, b in zip(d["ci_also"], d["ci_felso"])]
+    d["db_szoveg"] = [nv.fmt_num(v, 0) for v in d["rendelesek"]]
+    lo = d["honap"].min() - pd.Timedelta(days=15)
+    hi = d["honap"].max() + pd.Timedelta(days=31)
+    xs = alt.Scale(domain=[_dt(lo), _dt(hi)])
+    x = alt.X("honap:T", title=None, scale=xs, axis=alt.Axis(format="%Y-%m", labelAngle=0))
+
+    w = win.copy()
+    w["kezdet"] = w["kezdet"].clip(lower=lo, upper=hi)
+    w["veg"] = w["veg"].clip(lower=lo, upper=hi)
+    w["kozep"] = w["kezdet"] + (w["veg"] - w["kezdet"]) / 2
+    w["felirat"] = w["ablak"] + " ablak"
+    wc = alt.Chart(w)
+    colors = alt.Scale(domain=list(WINDOW_COLORS), range=list(WINDOW_COLORS.values()))
+    bands = wc.mark_rect(opacity=0.12).encode(
+        x="kezdet:T", x2="veg:T", color=alt.Color("ablak:N", scale=colors, legend=None))
+    band_text = wc.mark_text(baseline="top", dy=4, fontSize=11).encode(
+        x="kozep:T", y=alt.value(0), text="felirat:N",
+        color=alt.Color("ablak:N", scale=colors, legend=None))
+
+    tip = [alt.Tooltip("honap:T", title="hónap", format="%Y-%m"),
+           alt.Tooltip("db_szoveg:N", title="rendelések"),
+           alt.Tooltip("kesett:Q", title="késett"),
+           alt.Tooltip("arany_szoveg:N", title="késési arány"),
+           alt.Tooltip("ci_szoveg:N", title="95% intervallum")]
+    base = alt.Chart(d)
+    ci = base.mark_area(opacity=0.25, color=UP).encode(
+        x=x, y="ci_also:Q", y2="ci_felso:Q", detail="szakasz:N")
+    line = base.mark_line(point=True, color=UP).encode(
+        x=x, tooltip=tip, detail="szakasz:N",
+        y=alt.Y("kesesi_arany:Q", axis=alt.Axis(title="késési arány", format=".0%", labelExpr=_COMMA,
+                                                 minExtent=_Y_EXTENT, maxExtent=_Y_EXTENT)))
+    top = alt.layer(bands, band_text, ci, line).properties(height=300)
+    volume = base.mark_bar(color="#8c8c8c").encode(
+        x=x, tooltip=tip,
+        y=alt.Y("rendelesek:Q", axis=alt.Axis(title="rendelések", tickCount=3, format="~s",
+                                               minExtent=_Y_EXTENT, maxExtent=_Y_EXTENT))
+    ).properties(height=140)
+    return top, volume
+
+
+def dimension_chart(df: pd.DataFrame, overall: float, label: str,
+                    ink: Ink = LIGHT) -> alt.LayerChart:
+    """Vízszintes oszlopok: késési arány dimenzióértékenként, Wilson-hibasávval, átlagvonallal."""
+    d = df.copy()
+    d["arany_szoveg"] = [nv.fmt_pct(v) for v in d["kesesi_arany"]]
+    d["ci_szoveg"] = [f"{nv.fmt_pct(a)} – {nv.fmt_pct(b)}" for a, b in zip(d["ci_also"], d["ci_felso"])]
+    order = list(d["ertek"])
+    y = alt.Y("ertek:N", sort=order, title=label, axis=alt.Axis(labelLimit=260))
+    tip = [alt.Tooltip("ertek:N", title=label), alt.Tooltip("rendelesek:Q", title="rendelések", format=","),
+           alt.Tooltip("kesett:Q", title="késett"), alt.Tooltip("arany_szoveg:N", title="késési arány"),
+           alt.Tooltip("ci_szoveg:N", title="95% intervallum")]
+    base = alt.Chart(d)
+    bars = base.mark_bar(color=UP, opacity=0.75).encode(
+        y=y, x=alt.X("kesesi_arany:Q", axis=_pct_axis("késési arány")), tooltip=tip)
+    err = base.mark_rule(color=ink.rule).encode(y=y, x="ci_also:Q", x2="ci_felso:Q")
+    avg = alt.Chart(pd.DataFrame({"x": [overall], "felirat": [f"összesen {nv.fmt_pct(overall)}"]}))
+    rule = avg.mark_rule(strokeDash=[4, 4], color=ink.rule).encode(x="x:Q")
+    text = avg.mark_text(align="left", dx=4, dy=-6, color=ink.text).encode(
+        x="x:Q", y=alt.value(0), text="felirat:N")
+    return alt.layer(bars, err, rule, text).properties(height=alt.Step(22))
+
+
+# ------------------------------------------------------- rendelés-magyarázat
+def reasons_chart(frame: pd.DataFrame, ink: Ink = LIGHT) -> alt.LayerChart:
+    """Egy rendelés tényezői: előjeles hatás százalékpontban (a frame sorrendjében)."""
+    d = frame.copy()
+    d["cimke"] = [f"{n} = {v}" for n, v in zip(d["nev"], d["ertek"])]
+    d["irany"] = ["növeli" if v >= 0 else "csökkenti" for v in d["hatas_pp"]]
+    d["hatas_szoveg"] = [nv.fmt_pp(v, 2) + " pp" for v in d["hatas_pp"]]
+    y = alt.Y("cimke:N", sort=list(d["cimke"]), title=None, axis=alt.Axis(labelLimit=320))
+    color = alt.Color("irany:N", title="a kockázatot",
+                      scale=alt.Scale(domain=["növeli", "csökkenti"], range=[UP, DOWN]),
+                      legend=alt.Legend(orient="top"))
+    base = alt.Chart(d)
+    bars = base.mark_bar().encode(
+        y=y, x=alt.X("hatas_pp:Q", title="hatás a becslésre (százalékpont)",
+                     axis=alt.Axis(labelExpr=_COMMA)),
+        color=color,
+        tooltip=[alt.Tooltip("nev:N", title="tényező"), alt.Tooltip("ertek:N", title="érték"),
+                 alt.Tooltip("hatas_szoveg:N", title="hatás")])
+    # a felirat a sáv végére: pozitívnál jobbra, negatívnál balra igazítva
+    pos = base.transform_filter("datum.hatas_pp >= 0").mark_text(align="left", dx=4, color=ink.text)
+    neg = base.transform_filter("datum.hatas_pp < 0").mark_text(align="right", dx=-4, color=ink.text)
+    labels = [t.encode(y=y, x="hatas_pp:Q", text="hatas_szoveg:N") for t in (pos, neg)]
+    zero = alt.Chart(pd.DataFrame({"x": [0.0]})).mark_rule(color=ink.rule).encode(x="x:Q")
+    bars = bars.encode(x=alt.X("hatas_pp:Q", title="hatás a becslésre (százalékpont)",
+                               scale=alt.Scale(domain=_signed_domain(d["hatas_pp"])),
+                               axis=alt.Axis(labelExpr=_COMMA, tickCount=8)))
+    return alt.layer(bars, zero, *labels).properties(height=alt.Step(28), padding={"left": 12})
+
+
+def _signed_domain(v: pd.Series, room: float = 0.22) -> list[float]:
+    """A 0-t tartalmazó tartomány, mindkét irányban helyet hagyva a sáv végi feliratnak."""
+    lo, hi = min(0.0, float(v.min())), max(0.0, float(v.max()))
+    span = (hi - lo) or 1.0
+    return [lo - room * span if lo < 0 else lo, hi + room * span if hi > 0 else hi]
+
+
+def comparison_heatmap(long: pd.DataFrame, model_order: list[str]) -> alt.LayerChart:
+    """Tényező × modell hőtérkép: ugyanannak a rendelésnek a magyarázata négy modellel."""
+    d = long.copy()
+    d["hatas_szoveg"] = [nv.fmt_pp(v, 1) for v in d["hatas_pp"]]
+    lim = max(0.5, float(d["hatas_pp"].abs().max()))
+    order = list(dict.fromkeys(d["nev"]))
+    base = alt.Chart(d).encode(
+        x=alt.X("modell:N", sort=model_order, title=None, axis=alt.Axis(labelAngle=0, labelLimit=220)),
+        y=alt.Y("nev:N", sort=order, title=None, axis=alt.Axis(labelLimit=260)))
+    rect = base.mark_rect().encode(
+        color=alt.Color("hatas_pp:Q", title="pp",
+                        scale=alt.Scale(scheme="redblue", reverse=True, domain=[-lim, lim])),
+        tooltip=[alt.Tooltip("modell:N"), alt.Tooltip("nev:N", title="tényező"),
+                 alt.Tooltip("hatas_szoveg:N", title="hatás (pp)")])
+    text = base.mark_text(fontSize=12).encode(
+        text="hatas_szoveg:N", color=_cell_text_color("hatas_pp", 0.6 * lim, absolute=True))
+    return alt.layer(rect, text).properties(height=alt.Step(30))
+
+
+# ----------------------------------------------------------------- modell
+def pr_auc_forest(res: pd.DataFrame, base_rate: float, ink: Ink = LIGHT) -> alt.LayerChart:
+    """PR-AUC pont + 95% CI modellenként; a szaggatott vonal a véletlen rangsor szintje."""
+    d = res.copy()
+    d["szoveg"] = [f"{nv.fmt_num(v, 3)} [{nv.fmt_num(a, 3)}; {nv.fmt_num(b, 3)}]"
+                   for v, a, b in zip(d["pr_auc"], d["pr_auc_also"], d["pr_auc_felso"])]
+    y = alt.Y("modell:N", sort=list(d["modell"]), title=None, axis=alt.Axis(labelLimit=260))
+    base = alt.Chart(d)
+    err = base.mark_rule(strokeWidth=2, color=ink.rule).encode(y=y, x="pr_auc_also:Q", x2="pr_auc_felso:Q")
+    pts = base.mark_point(filled=True, size=90, color=UP).encode(
+        y=y, x=alt.X("pr_auc:Q", title="PR-AUC a teszt-időszakon (95% CI)",
+                     scale=alt.Scale(zero=True), axis=alt.Axis(labelExpr=_COMMA)),
+        tooltip=[alt.Tooltip("modell:N"), alt.Tooltip("szoveg:N", title="PR-AUC [95% CI]")])
+    ref = alt.Chart(pd.DataFrame({"x": [base_rate],
+                                  "felirat": [f"véletlen rangsor = késési arány ({nv.fmt_pct(base_rate)})"]}))
+    rule = ref.mark_rule(strokeDash=[4, 4], color=ink.muted).encode(x="x:Q")
+    text = ref.mark_text(align="left", dx=4, dy=-6, color=ink.muted).encode(
+        x="x:Q", y=alt.value(0), text="felirat:N")
+    return alt.layer(err, pts, rule, text).properties(height=alt.Step(44))
+
+
+def reliability_chart(cal: pd.DataFrame, ink: Ink = LIGHT) -> alt.LayerChart:
+    """Megbízhatósági ábra: átlagos becslés vs tényleges arány tizedenként, Wilson-hibasávval."""
+    d = cal.copy()
+    d["becsles_szoveg"] = [nv.fmt_pct(v) for v in d["atlag_becsles"]]
+    d["arany_szoveg"] = [nv.fmt_pct(v) for v in d["tenyleges_arany"]]
+    hi = float(max(d["atlag_becsles"].max(), d["ci_felso"].max())) * 1.08
+    sc = alt.Scale(domain=[0, hi])
+    base = alt.Chart(d)
+    diag = alt.Chart(pd.DataFrame({"a": [0.0, hi], "b": [0.0, hi]})).mark_line(
+        strokeDash=[4, 4], color=ink.muted).encode(x=alt.X("a:Q", scale=sc), y=alt.Y("b:Q", scale=sc))
+    err = base.mark_rule(color=ink.rule).encode(
+        x=alt.X("atlag_becsles:Q", scale=sc), y=alt.Y("ci_also:Q", scale=sc), y2="ci_felso:Q")
+    pts = base.mark_point(filled=True, size=70, color=UP).encode(
+        x=alt.X("atlag_becsles:Q", scale=sc, axis=_pct_axis("a modell átlagos becslése a sávban", ".1%")),
+        y=alt.Y("tenyleges_arany:Q", scale=sc, axis=_pct_axis("tényleges késési arány", ".1%")),
+        tooltip=[alt.Tooltip("sav:N", title="sáv"), alt.Tooltip("rendelesek:Q", title="rendelések"),
+                 alt.Tooltip("becsles_szoveg:N", title="átlagos becslés"),
+                 alt.Tooltip("arany_szoveg:N", title="tényleges arány")])
+    return alt.layer(diag, err, pts).properties(height=340)
+
+
+def importance_heatmap(gi: pd.DataFrame, model_order: list[str], top: int = 12) -> alt.LayerChart:
+    """Átlagos |hatás| (pp) tényezőnként és modellenként; a sorrend az első modell rangsora."""
+    first = gi[gi["modell"] == model_order[0]].sort_values("rang")
+    keep = list(first["nev"].head(top))
+    d = gi[gi["nev"].isin(keep)].copy()
+    d["szoveg"] = [nv.fmt_num(v, 2) for v in d["atlag_abs_pp"]]
+    base = alt.Chart(d).encode(
+        x=alt.X("modell:N", sort=model_order, title=None, axis=alt.Axis(labelAngle=0, labelLimit=220)),
+        y=alt.Y("nev:N", sort=keep, title=None, axis=alt.Axis(labelLimit=260)))
+    rect = base.mark_rect().encode(
+        color=alt.Color("atlag_abs_pp:Q", title="átl. |pp|", scale=alt.Scale(scheme="oranges")),
+        tooltip=[alt.Tooltip("modell:N"), alt.Tooltip("nev:N", title="tényező"),
+                 alt.Tooltip("szoveg:N", title="átlagos |hatás| (pp)"),
+                 alt.Tooltip("rang:Q", title="rang"), alt.Tooltip("minta:Q", title="minta")])
+    lo, hi = float(d["atlag_abs_pp"].min()), float(d["atlag_abs_pp"].max())
+    text = base.mark_text(fontSize=12).encode(
+        text="szoveg:N", color=_cell_text_color("atlag_abs_pp", lo + 0.75 * (hi - lo), absolute=False))
+    return alt.layer(rect, text).properties(height=alt.Step(28))
+
+
+def dependence_chart(dep: pd.DataFrame, name: str, categorical: bool, top_n: int = 15,
+                     order: list[str] | None = None, ink: Ink = LIGHT) -> alt.Chart:
+    """Függőségi ábra: a tényező értéke és a hatása (pp) a mintán.
+
+    Kategóriánál dobozábra a `top_n` leggyakoribb értékre; a sorrend a megadott
+    (pl. naptári) vagy a medián hatás szerint csökkenő.
+    """
+    d = dep.dropna(subset=["ertek"]).copy()
+    y = alt.Y("hatas_pp:Q", title="hatás a becslésre (pp)", axis=alt.Axis(labelExpr=_COMMA))
+    if categorical:
+        d["ertek"] = d["ertek"].astype(str)
+        keep = d["ertek"].value_counts().head(top_n).index
+        d = d[d["ertek"].isin(keep)]
+        if order is None:
+            order = list(d.groupby("ertek")["hatas_pp"].median().sort_values(ascending=False).index)
+        else:
+            order = [o for o in order if o in set(d["ertek"])]
+        zero = alt.Chart(pd.DataFrame({"y": [0.0]})).mark_rule(color=ink.muted).encode(y="y:Q")
+        box = alt.Chart(d).mark_boxplot(color=UP, outliers={"size": 6}).encode(
+            x=alt.X("ertek:N", sort=order, title=name, axis=alt.Axis(labelAngle=-40)), y=y)
+        return alt.layer(zero, box).properties(height=320)
+    base = alt.Chart(d)
+    pts = base.mark_circle(size=18, opacity=0.35, color=UP).encode(
+        x=alt.X("ertek:Q", title=name, axis=alt.Axis(labelExpr=_COMMA)), y=y,
+        tooltip=[alt.Tooltip("ertek:Q", title=name), alt.Tooltip("hatas_pp:Q", title="hatás (pp)",
+                                                                  format=".2f")])
+    zero = alt.Chart(pd.DataFrame({"y": [0.0]})).mark_rule(color=ink.muted).encode(y="y:Q")
+    return alt.layer(zero, pts).properties(height=320)

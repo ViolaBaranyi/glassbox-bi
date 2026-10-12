@@ -22,6 +22,7 @@ py -3.14 -m venv .venv               # Windows; Linuxon: python3.14 -m venv .ven
 .venv\Scripts\activate               # PowerShellben: .venv\Scripts\Activate.ps1
 pip install -r requirements.lock     # pontosan a kipróbált változatok
 python demo.py
+python -m ui                         # a BI-felület a böngészőben (Windowson: indit_felulet.bat)
 ```
 
 A `requirements.lock` minden csomagot pontos verzióval rögzít (Windowsra és Linuxra
@@ -40,7 +41,7 @@ PyCharmban a zöld **Run** gombbal is indítható.
 | 1 | Környezet | a verziók rögzítve vannak a kimenetben |
 | 2 | Adat | a valódi Olist-adat; ha még nincs meg, letölti a Kaggle-ről |
 | 3 | Tárház | 9 CSV → csillagséma DuckDB-ben, **V-1 validációval** |
-| 4 | Tesztek | 75 teszt: szivárgásvédelem, V-1, adatmodell, abláció, betanítás, kohorsz, modellválasztás, bootstrap, lezárt futás, referencia-modellek; ha bármelyik bukik, **a demó megáll** |
+| 4 | Tesztek | 133 teszt: szivárgásvédelem, V-1, adatmodell, abláció, betanítás, kohorsz, modellválasztás, bootstrap, lezárt futás, referencia-modellek, magyarázatok, felület; ha bármelyik bukik, **a demó megáll** |
 | 5 | Betanítás | a **lezárt v3 protokoll** szerint: LightGBM súlyozás nélkül, a fák száma bővülő ablakos CV-vel, címke-tisztítással; érintetlen, legkésőbbi időszakon mérve; a kalibráció csak diagnosztika |
 | 6 | Összegzés | rangsorolás, kalibráció, kizárt rendelések, artefaktumok helye |
 
@@ -48,6 +49,31 @@ PyCharmban a zöld **Run** gombbal is indítható.
 adaton futtatja végig a gépezetet. Erre a CI-nek és a teszteknek van szüksége, mert
 a valódi adat nem kerülhet a tárolóba. A szintetikus adat nem a valóság: a kimenet
 ilyenkor minden lépésben jelzi, hogy a számok csak a gépezet működését mutatják.
+
+## A BI-felület
+
+```bash
+python -m ui                 # Windowson dupla kattintással is: indit_felulet.bat
+```
+
+A böngészőben nyílik meg: **http://localhost:8501**. Csak ezen a gépen érhető el (a
+hálózatról nem), használati statisztikát nem küld; leállítás: Ctrl+C a terminálban. Az
+első indításkor a négy modellt a lezárt beállításokkal betanítja (kb. egy perc), és az
+`artifacts\v3_modellek.joblib`-ba menti; utána pár másodperc alatt indul. Ha a tárházat
+újraépíted, a felület magától frissül.
+
+| Oldal | Mit mutat | Honnan jön a szám |
+|---|---|---|
+| Áttekintés | a késési arány havonta (a tanító / validációs / teszt ablakkal) és a vevő állama, az eladó állama, ill. a kategória szerint, 95%-os Wilson-intervallummal | SQL a tárházból — a lekérdezés szövege is megnézhető |
+| Rendelés kockázata | egy rendelés becsült kockázata, relatív kockázata, és hogy a hasonló becslésű rendelések közül ténylegesen hány késett („100-ból N” — a becslés hitelessége); *miért* (SHAP-tényezők és sablonból írt szöveg); ugyanez a négy modellel | a lezárt modellek + `xai/` |
+| A modell | a lezárt teszt-kiértékelés (PR-AUC, ROC-AUC, Brier, ECE, páros összevetés), kalibráció tizedekben és rögzített becslési sávokban (teszt és validáció), mi számít a modelleknek, hogyan hat egy tényező | `docs/*.json` + a modellek |
+| Kérdezz | a nyelvi réteg helye — még nem működik | — |
+
+*A modell* oldal ellenőrzi, hogy a felület modelljei pontosan a lezárt futások modelljei:
+ugyanaz a 9 forrásfájl-ujjlenyomat, és mind a négy modell teszt PR-AUC-je egyezik a lezárt
+értékkel (zöld jelzés). Egy rendelés magyarázata linkkel megosztható (`?rendeles=<order_key>`).
+Az oldalsávon kikapcsolható a valós kimenet („késett / időben”): így a felület úgy
+viselkedik, mint élesben, amikor a kimenet még nem ismert.
 
 ---
 
@@ -66,13 +92,15 @@ ilyenkor minden lépésben jelzi, hogy a számok csak a gépezet működését m
 | M2 — modellválasztás bővülő ablakos CV-n, rögzített fa-szám, címke-tisztítás (`--trees cv`, `--purge`) | **kész** |
 | M2 — heti blokk-bootstrap, lezárt v3 alapfutás protokollal (`pipeline/v3_baseline.py`) | **kész — lefutott okt. 9.** (`docs/v3_lezart_eredmeny.md`) |
 | M2 — referencia-modellek: logisztikus regresszió, döntési fa, random forest (`pipeline/reference_models.py`), lezárt összevetés (`pipeline/v3_reference.py`) | **kész — lefutott okt. 9.** (`docs/v3_referencia_eredmeny.md`) |
-| Tesztek — szivárgás (14), V-1 és adatmodell (10), abláció (6), betanítás (6), kohorsz (2), modellválasztás (8), bootstrap (6), lezárt futás (14), referencia-modellek (9) | **kész, 75/75** |
+| M3 — SHAP-magyarázatok a négy modellre (pontos TreeSHAP, ill. lineáris SHAP, a 22 jellemzőre összevonva), additivitás-ellenőrzés, sablonos magyarázó szöveg (`xai/`) | **kész (v1)** |
+| M5 — Streamlit BI-felület: áttekintés (SQL), rendelés-magyarázat négy modellel, modell-oldal, egyezés-ellenőrzés a lezárt futással (`ui/`, `python -m ui`) | **kész (v1)** |
+| Tesztek — szivárgás (14), V-1 és adatmodell (10), abláció (6), betanítás (6), kohorsz (2), modellválasztás (8), bootstrap (6), lezárt futás (14), referencia-modellek (9), magyarázatok (12), szöveg és megjelenítés (22), felület (15), egyezési mértékek (5), kontrollkar (4) | **kész, 133/133** |
 | Tároló — MIT licenc, CI (Ubuntu + Windows), `requirements.lock`, döntési napló | **kész** |
 | M2 — 40 futásos sweep, hiperparaméter-hangolás | következő |
-| M3 — SHAP, ellenpélda, stabilitás | következő |
+| M3 — KernelSHAP-kontrollkar: mind a négy modell ugyanazzal a magyarázóval (valószínűség-tér, közös háttér, 200 rögzített teszt-rendelés), a kar saját zajával (`xai/kernel_arm.py`, `xai/agreement.py`) | **kész** (`docs/kernel_kar_eredmeny.md`) |
+| M3 — modellhűség (beültetett jellemző, törlési görbe), stabilitás (bootstrap, RBO, súlyozott Kendall-tau), ellenpélda | következő |
 | M1 — szemantikus réteg (KAPU ①) | tervezett |
-| M4 — nyelvi réteg és ellenőrző (KAPU ②) | tervezett |
-| M5 — Streamlit felület | tervezett |
+| M4 — nyelvi réteg és ellenőrző (KAPU ②), bekötés a *Kérdezz* oldalba | tervezett |
 
 ---
 
@@ -147,10 +175,14 @@ mellett az alapértelmezett logloss azonnal romlik a validáción, és pár fa u
 megállítaná a tanítást. → `pipeline/train.py`, `PARAMS`
 
 **Súlyozás nélkül, utólagos kalibrátor nélkül.** A felületen valószínűséget mutatunk,
-tehát a „7%" jelentsen 7%-ot. A súlyozás nélküli modell nyers kimenete magától is jól
-kalibrált; egy validáción illesztett izotonikus kalibrátor viszont az időbeli
-alapráta-eltolódás miatt (validáció 10,1%, teszt 3,6%) rontana rajta. Ezért nincs
-kalibrátor, és a SHAP pontosan a megjelenített számot bontja fel. A kalibráció csak
+tehát a „7%" jelentsen 7%-ot. A súlyozás nélküli modell nyers kimenete *átlagosan* jól
+kalibrált (teszt ECE 0,008); egy validáción illesztett izotonikus kalibrátor viszont az
+időbeli alapráta-eltolódás miatt (validáció 10,1%, teszt 3,6%) rontana rajta. Ezért nincs
+kalibrátor, és a SHAP pontosan a megjelenített számot bontja fel. **A farokban viszont nem
+kalibrált:** a teszt-időszakban a 20% feletti becslésű 201 rendelés átlagos becslése 26%,
+ténylegesen 12%-uk késett (a 30% felettiek közül 40-ből 4). A tizedekre bontott ábra ezt
+elrejti, mert a legfelső tized 9%-tól 58%-ig tart. Ezért a felület a becslés mellé a
+hasonló becslésű rendelések tényleges kimenetét is kiírja (döntési napló, okt. 12.). A kalibráció csak
 **diagnosztika**: ECE egyenlő szélességű és egyenlő elemszámú sávokkal, a Brier-pontszám
 CORP-felbontása (Dimitriadis, Gneiting és Jordan, 2021: MCB − DSC + UNC), Brier-készség
 a tanító időszak arányához, és a megbízhatósági táblázat tizedekben.
@@ -189,6 +221,49 @@ lezárt, páros összevetés dönti el. → `pipeline/reference_models.py`, `doc
 hétre együtt mozognak, ezért egész heteket húzunk visszatevéssel (B = 2000, percentilis
 95%); a rendelésenkénti újramintavétel hamisan szűk intervallumot adna. A modell
 magjából eredő szórást öt maggal, külön jelentjük. → `pipeline/bootstrap.py`
+
+**A magyarázat a lezárt modellt bontja — pontosan.** A LightGBM-et a saját, pontos
+TreeSHAP-ja bontja (`pred_contrib`, log-odds térben; egyezik a `shap.TreeExplainer`-rel), a
+logisztikus regressziót a pontos lineáris SHAP (háttér: 500 rendelés a tisztított tanító
+ablakból), a döntési fát és a random forestet a `shap.TreeExplainer` (valószínűség-térben);
+a one-hot és a hiány-jelző oszlopok hatása az eredeti jellemzőhöz adódik. A korábban
+tervezett „B” beállítás (one-hot + interventional + valószínűség-tér) egy one-hot
+jellemzőkön újratanított modellt magyarázna, nem a lezárt, kiértékelt modellt — ezért a
+lezárt modellnél az „A” beállítás marad (témavezetői megerősítésre vár). A felület
+százalékpontban mutat: a log-odds hozzájárulásokat arányosan osztjuk szét,
+Δp_i = φ_i·(p − p₀)/(logit p − logit p₀). Ez additív (a tényezők összege p − p₀),
+előjel- és sorrendtartó, de nem a valószínűség-tér pontos Shapley-értéke — az eltérést a
+KernelSHAP-kontrollkar méri. Minden modellnél teszt őrzi az additivitást (1e-6 alatt).
+→ `xai/explain.py`
+
+**KernelSHAP-kontrollkar: a négy modell ugyanazzal a mércével.** A felület modellenként a
+saját, pontos magyarázót használja, más-más térben — a modellek magyarázatának
+összevetésébe így a magyarázó típusa is belekeveredhet. A kontrollkar mind a négy modellt
+ugyanazzal bontja: KernelSHAP, interventional értékfüggvény, valószínűség-tér, közös
+háttér (100 tisztított tanító rendelés), 21 játékos (a hónap egy játékos), 200 rögzített
+teszt-rendelés; `l1_reg=False`, mert a shap 0.53 alapból csendben 10 tényezőre szűkít.
+Eredmény (`docs/kernel_kar_eredmeny.md`, rangsor-egyezés RBO-val, p = 0,9):
+(1) **a felület magyarázata ugyanazt mondja, mint a kar** — a kar 3 legfontosabb
+tényezőjének iránya minden rendelésnél egyezik, a rangsor-egyezés 0,88–0,93, akkora, mint
+a kar saját háttér-zaja (0,87–0,94); a nagyságok 19–35%-kal térnek el;
+(2) **a modellek közti eltérés valódi** — a modellpárok egyezése a karon 0,62–0,77, a saját
+magyarázókkal 0,61–0,74: a magyarázó típusa alig számít, és az eltérés jóval nagyobb a mérés
+zajánál; a döntési fa magyarázata tér el a legjobban (0,62–0,65), a LightGBM és a random
+forest egyezik a legjobban (0,77);
+(3) **a kar zaja** — más mintavételi maggal 0,96–0,99 (2090 koalíció elég), más háttérrel
+0,87–0,94: a háttér a fő zajforrás. → `xai/kernel_arm.py`, `xai/agreement.py`
+
+**A felület nem számol fejben.** Minden szám SQL-lekérdezésből vagy a lezárt modellekből
+jön, a magyarázó szöveg sablonból készül ugyanezekből a mezőkből (ez lesz a nyelvi réteg
+viszonyítási alapja és tartaléka). A kockázatot valószínűségként és relatív kockázatként
+(a teszt-időszak átlagos becsléséhez) mutatja, a természetes gyakoriság („100-ból N”)
+pedig nem a modell állítását ismétli, hanem azt mondja meg, hogy a **hasonló becslésű
+rendelések közül ténylegesen hány késett** (a rendelés saját kimenete nélkül, 95%-os
+Wilson-intervallummal). Ha a modell átlagos becslése a sávban ezen az intervallumon kívül
+esik, a felület figyelmeztet („ebben a sávban a modell túlbecsült”). Rejtett kimenetnél
+ugyanezt a validációs időszakból mutatja — azt egy éles bevezetéskor már ismerni lehetett
+volna. A magyarázat a modell döntését bontja tényezőkre — a felület kiírja, hogy ez nem
+ok-okozati állítás. → `ui/`, `xai/narrative.py`
 
 **Lezárt alapfutás.** A teszthalmazt eddig sokszor láttuk (döntési napló). A végleges
 mérés előtt minden döntés a `docs/v3_protokoll.json`-ban rögzül; a
@@ -330,6 +405,11 @@ python -m pipeline.train --trees korai --no-purge   # a régi út, összehasonl�
 python -m pipeline.v3_baseline         # lezárt alapfutás (okt. 9-én lefutott; újra csak --ismetles)
 python -m pipeline.reference_models    # a 4 modell összevetése CV-n (csak a tanító időszak)
 python -m pipeline.v3_reference        # a referencia-modellek lezárt összevetése a teszten
+python -m xai.explain                  # SHAP-összegzés a négy modellre (300 teszt-rendelés)
+python -m xai.explain --rendeles <order_key>   # egy rendelés magyarázata négy modellel
+python -m xai.kernel_arm               # KernelSHAP-kontrollkar (200 rendelés, kb. 20–40 perc)
+python -m xai.kernel_arm --rendelesek 20 --zaj 10 --nsamples 512   # gyors próba
+python -m ui                           # a BI-felület (http://localhost:8501)
 ```
 
 **Abláció.** A `--drop` jellemzőket zár ki a betanításból: csoportnevet (`honap` =
@@ -354,6 +434,7 @@ A legutóbbi futás artefaktumainak mappanevét az `artifacts\LATEST.txt` tartal
 ```
 glassbox-bi/
 ├── demo.py                  teljes pipeline egy paranccsal
+├── indit_felulet.bat        a BI-felület indítása Windowson (dupla kattintással)
 ├── data/
 │   ├── fetch_olist.py       a valódi Olist-adat letöltése (kagglehub)
 │   ├── make_synthetic.py    szintetikus adat a CI-hez és a tesztekhez
@@ -370,6 +451,19 @@ glassbox-bi/
 │   ├── reference_models.py  logisztikus regresszió, döntési fa, random forest + CV-választás
 │   ├── v3_reference.py      a referencia-modellek lezárt összevetése (páros bootstrap)
 │   └── cohort_report.py     kohorsz-érzékenységi jelentés (kizárt rendelések)
+├── xai/
+│   ├── models.py            a négy végső modell a lezárt beállításokkal (gyorsítótárazva)
+│   ├── explain.py           SHAP a négy modellre, a 22 jellemzőre összevonva; százalékpont
+│   ├── kernel_arm.py        KernelSHAP-kontrollkar: a négy modell ugyanazzal a magyarázóval
+│   ├── agreement.py         két magyarázat egyezése: top-k, RBO, súlyozott Kendall-tau
+│   └── narrative.py         rövid nevek, magyar számalak, sablonos magyarázó szöveg
+├── ui/
+│   ├── app.py               a felület belépési pontja (oldalsáv, navigáció)
+│   ├── __main__.py          python -m ui: indítás localhoston, statisztika nélkül
+│   ├── oldalak/             Áttekintés, Rendelés kockázata, A modell, Kérdezz
+│   ├── backend.py           adatréteg: SQL + modellek (Streamlit nélkül is tesztelhető)
+│   ├── charts.py            grafikonok (Altair)
+│   └── common.py            gyorsítótárazott betöltők, oldalsáv
 ├── docs/
 │   ├── dontesi_naplo.md     minden módszertani döntés: mikor, miért, látta-e már a tesztet
 │   ├── v3_protokoll.json    a lezárt futás protokollja (gépi, ezt ellenőrzi a futás)
@@ -377,7 +471,11 @@ glassbox-bi/
 │   ├── v3_lezart_eredmeny.json  a lezárt futás teljes eredménye (ujjlenyomattal)
 │   ├── v3_lezart_eredmeny.md    ugyanez röviden, táblázattal
 │   ├── v3_referencia_protokoll.json  a referencia-összevetés protokollja
-│   └── v3_referencia_protokoll.md    ugyanez magyarázattal és a CV-eredménnyel
+│   ├── v3_referencia_protokoll.md    ugyanez magyarázattal és a CV-eredménnyel
+│   ├── v3_referencia_eredmeny.json   a referencia-összevetés teljes eredménye
+│   ├── v3_referencia_eredmeny.md     ugyanez röviden, táblázattal
+│   ├── kernel_kar_eredmeny.json      a KernelSHAP-kontrollkar eredménye (a 200 rendelés kulcsával)
+│   └── kernel_kar_eredmeny.md        ugyanez táblázatokkal
 ├── .github/workflows/       CI: minden push lefuttatja a teljes pipeline-t (szintetikus adaton)
 ├── LICENSE                  MIT (a kódra; az adat saját licenc alatt áll)
 ├── requirements.txt         közvetlen függőségek, alsó korláttal
@@ -385,6 +483,7 @@ glassbox-bi/
 ├── .python-version          3.14
 ├── CITATION.cff             hogyan hivatkozzanak a munkára
 ├── .env.example             minta a későbbi LLM-kulcsokhoz (a .env sosem kerül be)
+├── .streamlit/config.toml   a felület beállításai (csak localhost, statisztika nélkül)
 ├── pyproject.toml           pytest-beállítások
 └── tests/
     ├── test_no_leakage.py   14 teszt (szivárgás, point-in-time, jellemzőtáblázat)
@@ -395,7 +494,13 @@ glassbox-bi/
     ├── test_model_selection.py  8 teszt (hajtások, fa-szám szabály, címke-tisztítás, a validáció nem hat)
     ├── test_bootstrap.py    6 teszt (egész hetek, reprodukálhatóság, páros összevetés)
     ├── test_v3_baseline.py  14 teszt (protokoll-kapu, ujjlenyomat, commit-ellenőrzés, egyszeri futás)
-    └── test_reference_models.py  9 teszt (modellek, rácsok, a választás csak a tanító ablakot látja, lezárt összevetés)
+    ├── test_reference_models.py  9 teszt (modellek, rácsok, a választás csak a tanító ablakot látja, lezárt összevetés)
+    ├── test_explain.py      12 teszt (additivitás, egyezés a shap könyvtárral, oszlopcsoportok, gyorsítótár)
+    ├── test_narrative.py    22 teszt (magyar számalak, hónap-visszafejtés, összevonás, sablonos szöveg, a becslés hitelessége)
+    ├── test_ui.py           15 teszt (adatréteg, becslési sávok, grafikonok világos/sötét témában, minden oldal lefut — Streamlit AppTest)
+    ├── test_agreement.py    5 teszt (RBO a definíció szerint, top-k, előjel, súlyozott tau, bootstrap)
+    ├── test_kernel_arm.py   4 teszt (a 21 játékos tere bitre visszaalakítható, additív modellre pontos, additivitás, nincs csendes szűkítés)
+    └── conftest.py          közös szintetikus tárház és modellek a fenti tesztekhez
 ```
 
 ## A tároló közzététele
@@ -422,7 +527,7 @@ A GitHubon **Private** tárolóként kezdd, üres inicializálással (ne kérj R
 Az első push után a `.github/workflows/tests.yml` minden feltöltésnél lefuttatja a
 teljes pipeline-t Python 3.14-en, Ubuntun és Windowson, **szintetikus adaton**
 (`python demo.py --synthetic`), mert a valódi adat nem kerülhet a tárolóba:
-adatgenerálás, tárházépítés V-1 validációval, 37 teszt, betanítás, kohorsz-jelentés.
+adatgenerálás, tárházépítés V-1 validációval, 133 teszt, betanítás, kohorsz-jelentés.
 A csomagokat a `requirements.lock` rögzíti. Ha egy teszt
 elbukik, a futás pirosra vált, és a GitHub e-mailt küld. Ez a szivárgásvédelem
 hálója: egy elrontott jellemző nem maradhat észrevétlen.
@@ -479,6 +584,10 @@ olvassa): `python -m pipeline.model_selection --purge` → medián 118,5 → **1
 A `--synthetic` futás (és a CI) összegzése: 38,857 rendelés, 22 jellemző, 50 fa (itt az
 alsó korlát dönt), PR-AUC 0.202, ROC-AUC 0.726.
 
+A felületen (`python -m ui`) *A modell* oldal tetején zöld jelzésnek kell lennie: a
+felület modelljei a lezárt futásokéi (LightGBM teszt PR-AUC 0,09782, logisztikus
+regresszió 0,08363, döntési fa 0,06088, random forest 0,08796).
+
 Ha egyeznek, az átvitel hibátlan. Ha nem, a demó 1. lépése kiírja a Python- és
 csomagverziókat — azzal kezdd a keresést.
 
@@ -502,6 +611,12 @@ vagy a PyCharm adatbázis-paneljén.
 **„A projekt a Python 3.14-re van rögzítve"** — a demó más Python-verzióval is fut, de
 figyelmeztet: a bitre azonos számok csak a rögzített környezetben garantáltak
 (`py -3.14 -m venv .venv`, `pip install -r requirements.lock`).
+
+**A felület nem indul („No module named streamlit")** — a rögzített csomagok még a
+régiek: `pip install -r requirements.lock` (a virtuális környezetben).
+
+**„Port 8501 is already in use"** — már fut egy felület (egy másik ablakban), vagy más
+program foglalja a portot: `python -m ui --server.port 8502`.
 
 **„Az Olist adathalmaz letöltése nem sikerült"** — nincs internet, vagy a hálózat
 (pl. egyetemi proxy) nem engedi a Kaggle-t. A hibaüzenet leírja a kézi letöltést;

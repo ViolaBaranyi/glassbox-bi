@@ -11,8 +11,8 @@
 #   A lock újragenerálása (ha egy függőség változik):
 #     uv pip compile requirements.txt --universal --python-version 3.14 -o requirements.lock
 #
-# Kipróbálva (2026. okt. 8.): Python 3.14.8, duckdb 1.5.6, lightgbm 4.7.0,
-# scikit-learn 1.9.1, pandas 3.0.6, numpy 2.5.3.
+# Kipróbálva (2026. okt. 8–9.): Python 3.14.8, duckdb 1.5.6, lightgbm 4.7.0,
+# scikit-learn 1.9.1, pandas 3.0.6, numpy 2.5.3; okt. 9-től shap és streamlit is.
 
 duckdb>=1.5
 lightgbm>=4.7
@@ -23,8 +23,5 @@ pyarrow>=25.0
 joblib>=1.5
 pytest>=9.0
 kagglehub>=0.3            # a valódi Olist-adat letöltése (data/fetch_olist.py)
-
-# A következő lépésekhez (M3 magyarázó réteg, M5 felület) — még nem használjuk:
-# shap>=0.52      (a háttérhez shap.maskers.Independent(..., max_samples=500) kell)
-# streamlit>=1.65
-# matplotlib>=3.10
+shap>=0.52                # magyarázó réteg (xai/)
+streamlit>=1.65           # BI-felület (ui/)
