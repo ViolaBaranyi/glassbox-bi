@@ -27,6 +27,7 @@ import numpy as np
 import pandas as pd
 
 from pipeline.features import BOOLEAN_FEATURES, CATEGORICAL_FEATURES, FEATURE_INFO, FEATURES
+from xai import labels
 
 # ------------------------------------------------------------------ nevek
 SHORT = {
@@ -92,18 +93,58 @@ def display_name(key: str) -> str:
     return DISPLAY_SHORT.get(key) or SHORT[key]
 
 
+def is_percent(key: str) -> bool:
+    """Arány-jellemző (0–1 között tárolva, százalékban mutatjuk)."""
+    return key in _PERCENT
+
+
+def axis_title(key: str) -> str:
+    """A tényező neve mértékegységgel, tengelyfelirathoz: „vállalt szállítási idő (nap)"."""
+    name = display_name(key)
+    if key in _PERCENT:
+        return f"{name} (%)"
+    unit = _NUMBER.get(key, (0, ""))[1].strip()
+    return f"{name} ({unit})" if unit else name
+
+
 def display_info(key: str) -> str:
+    """A tényező hétköznapi nyelvű leírása (a felülethez); a szakmai leírás: technical_info."""
+    return labels.PLAIN_INFO.get(key) or DISPLAY_INFO.get(key) or FEATURE_INFO[key][1]
+
+
+def technical_info(key: str) -> str:
+    """A jellemzőtáblázat (pipeline.features.FEATURE_INFO) szakmai leírása."""
     return DISPLAY_INFO.get(key) or FEATURE_INFO[key][1]
 
 
 # ----------------------------------------------------------- számformátum
 def fmt_num(x: float, digits: int = 1) -> str:
-    """Magyar számalak: tizedesvessző, ezres tagolás nem törő szóközzel."""
-    return f"{x:,.{digits}f}".replace(",", " ").replace(".", ",")
+    """Magyar számalak: tizedesvessző, ezres tagolás nem törő szóközzel, valódi mínuszjel
+    (a nullára kerekedő negatív számnál előjel nélkül: „0,00", nem „−0,00")."""
+    s = f"{x:,.{digits}f}".replace(",", " ").replace(".", ",")
+    if s.startswith("-"):
+        s = s[1:] if not any(ch in "123456789" for ch in s) else "−" + s[1:]
+    return s
 
 
 def fmt_pct(p: float, digits: int = 1) -> str:
     return fmt_num(100.0 * p, digits) + "%"
+
+
+MONTHS_SHORT = ["jan.", "febr.", "márc.", "ápr.", "máj.", "jún.", "júl.", "aug.", "szept.",
+                "okt.", "nov.", "dec."]
+
+
+def fmt_date(ts) -> str:
+    """Magyar dátum: „2018. aug. 9."."""
+    t = pd.Timestamp(ts)
+    return f"{t.year}. {MONTHS_SHORT[t.month - 1]} {t.day}."
+
+
+def fmt_datetime(ts) -> str:
+    """Magyar dátum és idő: „2018. aug. 9. 18:27"."""
+    t = pd.Timestamp(ts)
+    return f"{fmt_date(t)} {t:%H:%M}"
 
 
 def fmt_pp(pp: float, digits: int = 1) -> str:
@@ -133,6 +174,10 @@ def format_value(feature: str, value, row: pd.Series | None = None) -> str:
         return MONTHS[month_number(row["honap_sin"], row["honap_cos"]) - 1]
     if _missing(value):
         return "ismeretlen" if feature in CATEGORICAL_FEATURES else _EMPTY.get(feature, "nincs adat")
+    if feature in ("vevo_allam", "elado_allam"):
+        return labels.state_label(value)              # „Alagoas (AL)"
+    if feature == "kategoria":
+        return labels.category_name(value)            # „egészség és szépségápolás"
     if feature in BOOLEAN_FEATURES:
         return "igen" if bool(value) else "nem"
     if feature == "het_napja":
@@ -186,8 +231,16 @@ def _join(items: list[str]) -> str:
     return ", ".join(items[:-1]) + " és " + items[-1]
 
 
+def _inline(value: str) -> str:
+    """„Alagoas (AL)" → „Alagoas, AL" — zárójelen belül ne legyen még egy zárójel."""
+    if value.endswith(")") and " (" in value:
+        head, tail = value.rsplit(" (", 1)
+        return f"{head}, {tail[:-1]}"
+    return value
+
+
 def _factor(r) -> str:
-    return f"{_with_article(r.nev)} ({r.ertek}; {fmt_pp(r.hatas_pp)} százalékpont)"
+    return f"{_with_article(r.nev)} ({_inline(str(r.ertek))}; {fmt_pp(r.hatas_pp)} százalékpont)"
 
 
 def natural_frequency(rate: float) -> tuple[int, int]:
@@ -213,7 +266,7 @@ def frequency_phrase(p: float) -> str:
 
 RECORD_WHERE = {
     "test": "A teszt-időszakban",
-    "valid": "A validációs időszakban (a teszt előtti három hónapban)",
+    "valid": "Az ellenőrző időszakban (a teszt előtti három hónapban)",
 }
 
 
@@ -253,8 +306,8 @@ def credibility_note(rec: dict) -> tuple[str, str]:
         return "megjegyzes", f"{where} nem volt más, hasonló ({rec['sav_szoveg']}) becslésű rendelés."
     other = "másik " if rec.get("onmaga_kihagyva") else ""
     facts = (f"A hasonló ({rec['sav_szoveg']}) becslésű {fmt_num(n, 0)} {other}rendelésből "
-             f"{fmt_num(rec['kesett'], 0)} késett ({fmt_pct(rec['tenyleges_arany'])}; 95%-os "
-             f"intervallum: {fmt_pct(rec['ci_also'])} – {fmt_pct(rec['ci_felso'])})")
+             f"{fmt_num(rec['kesett'], 0)} késett ({fmt_pct(rec['tenyleges_arany'])}; valószínű "
+             f"tartomány: {fmt_pct(rec['ci_also'])} – {fmt_pct(rec['ci_felso'])})")
     mean, base, rel = rec["atlag_becsles"], rec["idoszak_arany"], rec["relativ_tenyleges"]
     if v == "túlbecsült":
         text = (f"**{where} ebben a sávban a modell túlbecsült.** {facts}, miközben a modell "
@@ -282,12 +335,14 @@ def relative_phrase(p: float, avg: float) -> str:
     rel = p / avg if avg > 0 else float("nan")
     if not np.isfinite(rel):
         return ""
-    # egy tizedesjeggyel a szám „…tized”-re végződik, így a -szerese rag mindig helyes
+    # egy tizedesjeggyel a szám „…tized”-re végződik, így a -szer rag mindig helyes
     if rel >= 1.1:
-        return f"ez az időszak átlagos becslésének ({fmt_pct(avg)}) {fmt_num(rel, 1)}-szerese"
+        return (f"ez {fmt_num(rel, 1)}-szer annyi, mint egy átlagos rendelésé ebben az "
+                f"időszakban ({fmt_pct(avg)})")
     if rel <= 0.9:
-        return f"ez az időszak átlagos becslésének ({fmt_pct(avg)}) csak {fmt_num(100 * rel, 0)}%-a"
-    return f"ez nagyjából az időszak átlagos becslése ({fmt_pct(avg)})"
+        return (f"ez csak {fmt_num(100 * rel, 0)}%-a egy átlagos rendelés becsült kockázatának "
+                f"ebben az időszakban ({fmt_pct(avg)})")
+    return f"ez nagyjából annyi, mint egy átlagos rendelésé ebben az időszakban ({fmt_pct(avg)})"
 
 
 def narrative(p: float, p0: float, avg: float, frame: pd.DataFrame,
@@ -299,17 +354,17 @@ def narrative(p: float, p0: float, avg: float, frame: pd.DataFrame,
     kimenete), az; ha nincs, a becslés feltételes természetes gyakorisága.
     """
     rel = relative_phrase(p, avg)
-    parts = [f"A modell szerint ez a rendelés {fmt_pct(p)} eséllyel késik"
+    parts = [f"A modell szerint ez a rendelés {fmt_pct(p)} eséllyel érkezik késve"
              + (f" — {rel}." if rel else ".")]
     up = [_factor(r) for r in frame[frame["hatas_pp"] >= min_pp].head(k).itertuples()]
     down = [_factor(r) for r in frame[frame["hatas_pp"] <= -min_pp].head(k).itertuples()]
-    s = f"A modell kiindulópontja {fmt_pct(p0)}"
+    s = f"A modell egy átlagos rendelésnél {fmt_pct(p0)}-ból indul ki"
     if up and down:
-        s += f"; a becslést leginkább {_join(up)} növeli, leginkább {_join(down)} csökkenti."
+        s += f"; ezt leginkább {_join(up)} növeli, {_join(down)} pedig csökkenti."
     elif up:
-        s += f"; a becslést leginkább {_join(up)} növeli."
+        s += f"; ezt leginkább {_join(up)} növeli."
     elif down:
-        s += f"; a becslést leginkább {_join(down)} csökkenti."
+        s += f"; ezt leginkább {_join(down)} csökkenti."
     else:
         s += "; egyik tényező sem mozdítja el számottevően."
     parts.append(s)

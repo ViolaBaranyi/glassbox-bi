@@ -52,6 +52,9 @@ def test_bontas_dimenzio_szerint(synth_db):
         assert df["kesesi_arany"].is_monotonic_decreasing
         assert ((df["ci_also"] <= df["kesesi_arany"]) & (df["kesesi_arany"] <= df["ci_felso"])).all()
         assert np.allclose(df["kesett"] / df["rendelesek"], df["kesesi_arany"])
+        assert (df["megnevezes"] == [be.value_label(dim, v) for v in df["ertek"]]).all()
+        if dim != "kategoria":
+            assert "regio" in df and df["megnevezes"].str.endswith(")").all()  # „São Paulo (SP)"
         full = be.by_dimension(dim, 1, synth_db)                      # küszöb nélkül mind
         assert full["rendelesek"].sum() == ov["rendelesek"], dim
     with pytest.raises(ValueError):
@@ -65,7 +68,17 @@ def test_kockazati_lista(synth_bundle):
     assert rt["valoszinuseg"].is_monotonic_decreasing
     assert list(rt["rang"]) == list(range(1, len(rt) + 1))
     assert rt["relativ"].mean() == pytest.approx(1.0)
+    assert (rt["relativ_szoveg"] == [f"{nv.fmt_num(v, 1)}×" for v in rt["relativ"]]).all()
+    assert not rt["relativ_szoveg"].str.contains(r"\.").any()          # „13,1×", nem „13.1×"
     assert be.period_average(synth_bundle) == pytest.approx(rt["valoszinuseg"].mean())
+    assert not rt["kategoria_nev"].str.contains("_").any()          # magyar kategórianév
+    assert rt["vevo_nev"].str.endswith(")").all()
+    cap = be.capture(synth_bundle, 0.10)
+    assert cap["felso_rendelesek"] == round(0.10 * len(rt))
+    top = rt.head(cap["felso_rendelesek"])
+    assert cap["kesett_felso"] == int(top["kesett"].sum())             # ugyanaz a sorrend
+    assert cap["kesett_osszes"] == int(rt["kesett"].sum())
+    assert 0 <= cap["kesesek_aranya_a_felsoben"] <= 1
 
 
 def test_rendeles_magyarazata_negy_modellel(synth_bundle):
@@ -162,6 +175,32 @@ def test_becslesi_savok_es_multbeli_pontossag(synth_bundle):
     assert det_none["hasonlok"] is None and "Ha a modell ebben a tartományban" in det_none["narrativa"]
 
 
+def test_becslesi_savcsoportok(synth_bundle):
+    bt = be.band_table(synth_bundle, "lightgbm", "test")
+    g = be.band_groups(bt).set_index("csoport")
+    assert list(g.index) == ["alacsony", "közepes", "magas"]
+    assert g["rendelesek"].sum() == bt["rendelesek"].sum() and g["kesett"].sum() == bt["kesett"].sum()
+    for name, lo, hi in be.BAND_GROUPS:
+        part = bt[(bt["also"] >= lo) & (bt["felso"] <= hi)]
+        assert g.loc[name, "rendelesek"] == part["rendelesek"].sum(), name
+        if g.loc[name, "rendelesek"]:
+            w = (part["atlag_becsles"].fillna(0) * part["rendelesek"]).sum() / part["rendelesek"].sum()
+            assert g.loc[name, "atlag_becsles"] == pytest.approx(w)
+            assert g.loc[name, "itelet"] == be.verdict(g.loc[name, "atlag_becsles"],
+                                                       (g.loc[name, "ci_also"], g.loc[name, "ci_felso"]),
+                                                       int(g.loc[name, "rendelesek"]))
+    # kézzel összerakott sávtábla: a csoport ítélete a súlyozott átlagból és a Wilson-sávból jön
+    toy = pd.DataFrame({"also": [0.0, 0.02, 0.05, 0.10, 0.15, 0.20, 0.30],
+                        "felso": [0.02, 0.05, 0.10, 0.15, 0.20, 0.30, 1.0],
+                        "rendelesek": [100, 100, 100, 0, 0, 30, 10], "kesett": [1, 3, 7, 0, 0, 3, 1],
+                        "atlag_becsles": [0.01, 0.03, 0.07, np.nan, np.nan, 0.25, 0.40]})
+    tg = be.band_groups(toy).set_index("csoport")
+    assert tg.loc["magas", "rendelesek"] == 40 and tg.loc["magas", "kesett"] == 4
+    assert tg.loc["magas", "atlag_becsles"] == pytest.approx((30 * 0.25 + 10 * 0.40) / 40)
+    assert tg.loc["magas", "itelet"] == "túlbecsült"                  # 28,75% vs 10% [4,0; 23,1]
+    assert tg.loc["közepes", "rendelesek"] == 100 and tg.loc["közepes", "itelet"] == "összhangban"
+
+
 def test_ellenorzes_szintetikus_adaton(synth_bundle, synth_db):
     chk = be.integrity(synth_bundle, be.locked_results(), synth_db)
     assert chk["statusz"] == "szintetikus" and chk["modellek"] is None
@@ -214,6 +253,10 @@ def test_grafikonok_ervenyes_specifikaciot_adnak(synth_db, synth_bundle):
         charts.dependence_chart(be.dependence(sample, expl["lightgbm"], "kategoria"), "kategória", True),
         charts.dependence_chart(be.dependence(sample, expl["lightgbm"], nv.MONTH).assign(
             ertek=lambda d: [nv.MONTHS[int(v) - 1] for v in d["ertek"]]), "hónap", True, order=nv.MONTHS),
+        charts.dependence_chart(be.dependence(sample, expl["lightgbm"], "dij_arany"),
+                                nv.axis_title("dij_arany"), False, percent=True),
+        charts.state_tile_map(be.by_dimension("vevo_allam", 50, synth_db), ov["kesesi_arany"]),
+        charts.state_tile_map(),
     ]
     for ch in specs:
         spec = ch.to_dict()           # az Altair itt validál a Vega-Lite sémával szemben
@@ -226,6 +269,40 @@ def test_grafikonok_ervenyes_specifikaciot_adnak(synth_db, synth_bundle):
                charts.pr_auc_forest(be.results_table(res), 0.0361, ink=charts.DARK),
                charts.reliability_chart(be.calibration(synth_bundle), ink=charts.DARK)):
         assert "$schema" in ch.to_dict()
+
+
+def test_negyzetracsos_terkep(synth_db):
+    from xai import labels
+    ov = be.overview(synth_db)
+    df = be.by_dimension("vevo_allam", 50, synth_db)
+    spec = charts.state_tile_map(df, ov["kesesi_arany"], count_title="ide ment").to_dict()
+    rows = next(r for r in spec["datasets"].values() if r and "kod" in r[0])
+    assert sorted(r["kod"] for r in rows) == sorted(labels.STATES)             # mind a 27, egyszer
+    shown = {r["kod"] for r in rows if r["kesesi_arany"] is not None}
+    assert shown == set(df["ertek"]) & set(labels.STATES)                     # a küszöb alattiak szürkék
+    by_code = {r["kod"]: r for r in rows}
+    for _, r in df.iterrows():
+        if r["ertek"] in by_code:
+            assert by_code[r["ertek"]]["arany_szoveg"] == nv.fmt_pct(r["kesesi_arany"])
+    # a szürke alapréteg minden államot mutat, a színezett csak az adattal rendelkezőket
+    assert spec["layer"][0]["mark"]["color"] == charts.NO_DATA
+    assert spec["layer"][1]["transform"][0]["filter"] == "isValid(datum.kesesi_arany)"
+    assert spec["layer"][1]["encoding"]["color"]["scale"]["domainMid"] == pytest.approx(ov["kesesi_arany"])
+    assert "ide ment" in str(spec["layer"][0]["encoding"]["tooltip"])
+    # régió-mód (Súgó): öt régió a jelmagyarázatban
+    reg = charts.state_tile_map().to_dict()
+    assert reg["layer"][0]["encoding"]["color"]["scale"]["domain"] == list(charts.REGION_COLORS)
+    assert set(charts.REGION_COLORS) == set(labels.REGIONS.values())
+
+
+def test_tengelyek_magyar_szamalakkal(synth_db):
+    _, vol = charts.monthly_chart(be.monthly(synth_db), be.windows(synth_db))
+    axis = vol.to_dict()["encoding"]["y"]["axis"]
+    assert axis["format"] == ",d" and axis["labelExpr"] == charts._THOUSANDS     # „8 000", nem „8k"
+    gi = pd.DataFrame({"modell": ["M"] * 2, "tenyezo": ["a", "b"], "nev": ["A", "B"],
+                       "atlag_abs_pp": [2.5, 0.5], "rang": [1, 2], "minta": [10, 10]})
+    legend = charts.importance_heatmap(gi, ["M"]).to_dict()["layer"][0]["encoding"]["color"]["legend"]
+    assert legend["labelExpr"] == charts._COMMA
 
 
 def test_tema_es_hoterkep_feliratszine():
@@ -281,6 +358,10 @@ def test_a_felulet_minden_oldala_lefut(app_env, synth_bundle):
     _ok(at)
     assert at.title[0].value == "Áttekintés"
     assert len(at.metric) == 4
+    for dim in ("elado_allam", "kategoria", "vevo_allam"):
+        at.segmented_control(key="dimenzio").set_value(dim).run()
+        _ok(at)
+    assert any("Hol vannak ezek az államok" in m.value for m in at.markdown)
 
     at.switch_page("oldalak/rendeles.py").run()
     _ok(at)
@@ -289,7 +370,7 @@ def test_a_felulet_minden_oldala_lefut(app_env, synth_bundle):
     other = be.risk_table(synth_bundle)["order_key"].iloc[5]
     at.text_input(key="kulcs_be").input(other).run()
     _ok(at)
-    assert other in at.markdown[0].value or any(other in m.value for m in at.markdown)
+    assert any(other in m.value for m in at.markdown) or any(other in c.value for c in at.caption)
     at.button[0].click().run()                                   # véletlen rendelés
     _ok(at)
     at.text_input(key="kulcs_be").input("nincs-ilyen").run()
@@ -306,6 +387,11 @@ def test_a_felulet_minden_oldala_lefut(app_env, synth_bundle):
 
     at.switch_page("oldalak/kerdezz.py").run()
     _ok(at)
+
+    at.switch_page("oldalak/sugo.py").run()
+    _ok(at)
+    assert len(at.tabs) == 6
+    assert any("Alagoas" in str(df.value.to_dict()) for df in at.dataframe)  # az államtábla
 
 
 @pytest.mark.filterwarnings("ignore::DeprecationWarning")

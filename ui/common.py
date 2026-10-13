@@ -74,6 +74,11 @@ def _bands(path: str, stamp: str, cache: str, kind: str, window: str):
 
 
 @st.cache_data(show_spinner=False, max_entries=4)
+def _capture(path: str, stamp: str, cache: str, share: float):
+    return d.capture(_bundle(path, stamp, cache), share)
+
+
+@st.cache_data(show_spinner=False, max_entries=4)
 def _sample(path: str, stamp: str, cache: str, kinds: tuple):
     return d.sample_explanations(_bundle(path, stamp, cache), kinds)
 
@@ -97,6 +102,21 @@ def windows():
 
 def by_dimension(dim: str, min_n: int):
     return _by_dimension(*_key()[:2], dim, int(min_n))
+
+
+def window_period(name: str) -> str:
+    """Egy időszak hónapokban, közérthetően: „2018. június–augusztus"."""
+    import pandas as pd
+    w = windows().set_index("ablak")
+    if name not in w.index:
+        return ""
+    start = pd.Timestamp(w.loc[name, "kezdet"])
+    end = pd.Timestamp(w.loc[name, "veg"]) - pd.Timedelta(seconds=1)   # a vég kizáró határ
+    if start.year == end.year:
+        if start.month == end.month:
+            return f"{start.year}. {nv.MONTHS[start.month - 1]}"
+        return f"{start.year}. {nv.MONTHS[start.month - 1]}–{nv.MONTHS[end.month - 1]}"
+    return f"{start.year}. {nv.MONTHS[start.month - 1]} – {end.year}. {nv.MONTHS[end.month - 1]}"
 
 
 def bundle():
@@ -131,6 +151,11 @@ def bands(kind: str, window: str):
     return _bands(*_key(), kind, window)
 
 
+def capture(share: float = 0.10) -> dict:
+    bundle()
+    return _capture(*_key(), float(share))
+
+
 def sample_explanations(kinds) -> tuple:
     bundle()
     slow = "random_forest" in kinds
@@ -155,8 +180,10 @@ def require_warehouse() -> dict:
     try:
         return overview()
     except WarehouseUnavailable as exc:
-        st.error("**A tárház nem érhető el.**\n\n" + str(exc).split("\n")[0])
-        st.markdown("Építsd fel (vagy futtasd a teljes demót), majd frissítsd ezt az oldalt:")
+        st.error("**Az adatbázis (tárház) még nincs felépítve, ezért nincs mit megmutatni.**\n\n"
+                 + str(exc).split("\n")[0])
+        st.markdown("Futtasd le egyszer a teljes demót (letölti az adatot és felépíti az "
+                    "adatbázist), majd frissítsd ezt az oldalt:")
         st.code("python demo.py\n# vagy lépésenként:\npython -m data.fetch_olist\npython -m data.build_warehouse",
                 language="bash")
         st.stop()
@@ -165,6 +192,19 @@ def require_warehouse() -> dict:
 def page_header(title: str, subtitle: str) -> None:
     st.title(title)
     st.caption(subtitle)
+
+
+def intro(text: str, expanded_help: str | None = None) -> None:
+    """Az oldal tetején: mit látsz itt, hétköznapi nyelven (+ opcionális részletes súgó)."""
+    st.info(text, icon=":material/lightbulb:")
+    if expanded_help:
+        with st.expander("Részletesebben: hogyan olvasd ezt az oldalt?"):
+            st.markdown(expanded_help)
+
+
+def details(label: str = "Szakmai részletek"):
+    """Lenyitható rész a szakembereknek (a dolgozathoz), alapból csukva."""
+    return st.expander(f":material/science: {label}")
 
 
 def show_outcome() -> bool:
@@ -184,28 +224,33 @@ def ink():
 def sidebar() -> None:
     with st.sidebar:
         st.markdown("**Üvegdoboz BI**")
-        st.caption("Magyarázható késés-előrejelzés egy self-service BI-felületen · EKÖP-26-I-1")
+        st.caption("Késések előrejelzése, érthető magyarázattal · EKÖP-26-I-1")
         try:
             ov = overview()
         except WarehouseUnavailable:
-            st.warning("Nincs tárház — lásd a főoldalt.")
+            st.warning("Még nincs adatbázis — lásd a főoldalt.")
             return
-        st.markdown(f"**Adat:** {ov['adatforras']} Olist-rendelések  \n"
+        source = ("valódi rendelések egy brazil webáruház-platformról (Olist)"
+                  if ov["adatforras"] == "valós" else "szintetikus (kitalált) próbaadat")
+        st.markdown(f"**Adat:** {source}  \n"
                     f"{nv.fmt_num(ov['rendelesek'], 0)} kézbesített rendelés  \n"
-                    f"{ov['elso'][:7]} – {ov['utolso'][:7]}")
-        st.caption(f"tárház építve: {ov['epitve']}")
+                    f"{nv.fmt_date(ov['elso'])} – {nv.fmt_date(ov['utolso'])}")
+        st.caption(f"adatbázis frissítve: {ov['epitve'][:16]} (UTC)")
         base = (locked().get("alapfutas") or {})
         n_trees = (base.get("vegso_modell") or {}).get("fak_szama")
         if ov["adatforras"] == "valós" and n_trees:
-            st.markdown(f"**Modell:** LightGBM, {n_trees} fa — a lezárt v3 protokoll szerint")
+            st.markdown(f"**Modell:** LightGBM ({n_trees} döntési fából álló modell), pontosan az, "
+                        "amelyet a lezárt mérésben kiértékeltünk")
         else:
-            st.markdown("**Modell:** LightGBM — a fák számát a keresztvalidáció adja")
-        st.toggle("Valós kimenet mutatása", value=True, key=SHOW_OUTCOME,
-                  help="Történeti adat: utólag tudjuk, késett-e a rendelés. Döntési helyzetben ez "
-                       "még nem ismert — kikapcsolva a felület úgy viselkedik, mint élesben.")
+            st.markdown("**Modell:** LightGBM (a próbaadaton betanítva)")
+        st.toggle("Mutassa, mi történt valójában", value=True, key=SHOW_OUTCOME,
+                  help="Bekapcsolva a felület azt is megmutatja, hogy egy rendelés ténylegesen "
+                       "késett-e — ezt ma már tudjuk. Kikapcsolva úgy működik, mintha a csomag még "
+                       "úton lenne, ahogy egy valódi döntési helyzetben.")
         st.divider()
-        st.caption("Minden szám a tárházból (SQL) vagy a lezárt modellekből jön; a felület "
-                   "nem számol fejben. Csak ezen a gépen fut (localhost).")
+        st.page_link("oldalak/sugo.py", label="Súgó: fogalmak, rövidítések", icon=":material/help:")
+        st.caption("Minden szám közvetlenül az adatokból vagy a modellből jön; a felület semmit nem "
+                   "„saccol”. Csak ezen a gépen fut (localhost), az adat nem megy ki az internetre.")
 
 
 MODEL_ORDER = list(KINDS)

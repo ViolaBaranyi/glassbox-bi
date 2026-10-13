@@ -40,6 +40,12 @@ def test_szamformatum():
     assert nv.fmt_pp(3.14159, 2) == "+3,14"
     assert nv.fmt_pp(-1.75, 1) == "−1,8"          # valódi mínuszjel (U+2212)
     assert nv.fmt_pp(0.0) == "+0,0"
+    assert nv.fmt_num(-0.0101, 4) == "−0,0101"          # valódi mínuszjel a fmt_num-ban is
+    assert nv.fmt_num(-1234.5, 1) == f"−1{NBSP}234,5"
+    assert nv.fmt_num(-0.0004, 3) == "0,000"                # nullára kerekedik: nincs előjel
+    assert nv.axis_title("vallalt_ido_nap") == "vállalt szállítási idő (nap)"
+    assert nv.axis_title("dij_arany") == "szállítási díj aránya (%)" and nv.is_percent("dij_arany")
+    assert nv.axis_title("elado_szam") == "eladók száma" and not nv.is_percent("tavolsag_km")
 
 
 @pytest.mark.parametrize("month", range(1, 13))
@@ -68,7 +74,8 @@ def test_ertekek_emberi_alakban():
     assert nv.format_value("elado_atlagos_feladas_nap", None) == "nincs előzmény"
     assert nv.format_value("tavolsag_km", np.nan) == "nincs koordináta"
     assert nv.format_value("kategoria", np.nan) == "ismeretlen"
-    assert nv.format_value("kategoria", "toys") == "toys"
+    assert nv.format_value("kategoria", "toys") == "játékok"                    # magyar név
+    assert nv.format_value("vevo_allam", "RJ") == "Rio de Janeiro (RJ)"         # teljes név
     assert nv.format_value("het_napja", 5) == "szombat"
     assert nv.format_value("azonos_allam", True) == "igen"
     assert nv.format_value("unnep_kozeli", False) == "nem"
@@ -103,15 +110,15 @@ def test_szoveg_a_magyarazat_szamait_irja():
              het_napja=-1.5, kategoria=0.01)
     fr = nv.display_frame(pp, _row(vallalt_ido_nap=8, tavolsag_km=1969.0, het_napja=5))
     text = nv.narrative(0.225, 0.04, 0.044, fr, k=3)
-    assert "22,5% eséllyel késik" in text
-    assert "időszak átlagos becslésének (4,4%) 5,1-szerese" in text
+    assert "22,5% eséllyel érkezik késve" in text
+    assert "5,1-szer annyi, mint egy átlagos rendelésé ebben az időszakban (4,4%)" in text
     # múltbeli adat nélkül a gyakoriság csak feltételesen igaz
     assert text.endswith("Ha a modell ebben a tartományban jól kalibrált, 100 ilyen becsült "
                          "kockázatú rendelésből kb. 22 késik.")
-    assert "kiindulópontja 4,0%" in text
-    assert ("a vevő állama (RJ; +12,0 százalékpont), a vállalt szállítási idő (8 nap; +5,0 százalékpont) "
-            "és a távolság (1 969 km; +2,0 százalékpont) növeli") in text
-    assert "a hét napja (szombat; −1,5 százalékpont) csökkenti" in text
+    assert "egy átlagos rendelésnél 4,0%-ból indul ki" in text
+    assert ("a vevő állama (Rio de Janeiro, RJ; +12,0 százalékpont), a vállalt szállítási idő "
+            "(8 nap; +5,0 százalékpont) és a távolság (1 969 km; +2,0 százalékpont) növeli") in text
+    assert "a hét napja (szombat; −1,5 százalékpont) pedig csökkenti" in text
     assert "eladók száma" not in text           # csak a legerősebb k
     assert "termékkategória" not in text        # a küszöb alatti tényező nem kerül a szövegbe
 
@@ -124,7 +131,7 @@ def test_szoveg_kis_kockazatnal_es_iranyok_hianyaban():
     assert "növeli" not in text and "csökkenti" in text
     flat = nv.display_frame(_pp(), _row())
     t2 = nv.narrative(0.044, 0.044, 0.044, flat)
-    assert "nagyjából az időszak átlagos becslése" in t2
+    assert "nagyjából annyi, mint egy átlagos rendelésé" in t2
     assert "egyik tényező sem mozdítja el számottevően" in t2
 
 
@@ -159,7 +166,7 @@ def test_multbeli_pontossag_mondata():
     assert ok.endswith("— ez összhangban van a modell becslésével.")
 
     low = nv.record_phrase(_rec(ablak="valid", itelet="alábecsült", atlag_becsles=0.029))
-    assert low.startswith("A validációs időszakban (a teszt előtti három hónapban)")
+    assert low.startswith("Az ellenőrző időszakban (a teszt előtti három hónapban)")
     assert "a modell alábecsült (átlagosan 2,9%-ot mondott)" in low
     assert "nem lehet ítélni" in nv.record_phrase(_rec(rendelesek=12, kesett=1, itelet="kevés adat"))
     assert "nem volt más" in nv.record_phrase(_rec(rendelesek=0, kesett=0))
@@ -177,7 +184,7 @@ def test_hitelessegi_megjegyzes():
     kind, text = nv.credibility_note(_rec())
     assert kind == "figyelmeztetes"
     assert text.startswith("**A teszt-időszakban ebben a sávban a modell túlbecsült.**")
-    assert "39 másik rendelésből 4 késett (10,3%; 95%-os intervallum: 4,1% – 23,6%)" in text
+    assert "39 másik rendelésből 4 késett (10,3%; valószínű tartomány: 4,1% – 23,6%)" in text
     assert "átlagosan 36,8%-ot mondott" in text
     assert "kb. 2,8-szer olyan gyakran késtek, mint az időszak átlaga (3,6%)" in text
 

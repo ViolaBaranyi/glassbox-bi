@@ -24,6 +24,7 @@ pages = [
     st.Page("oldalak/rendeles.py", title="Rendelés kockázata", icon=":material/local_shipping:"),
     st.Page("oldalak/modell.py", title="A modell", icon=":material/fact_check:"),
     st.Page("oldalak/kerdezz.py", title="Kérdezz", icon=":material/forum:"),
+    st.Page("oldalak/sugo.py", title="Súgó és fogalmak", icon=":material/help:"),
 ]
 page = st.navigation(pages)
 common.sidebar()

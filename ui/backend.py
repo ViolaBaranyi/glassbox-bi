@@ -27,6 +27,7 @@ from data.db import DB_PATH, connect
 from pipeline.cohort_report import wilson
 from pipeline.split import temporal_split
 from pipeline.train import _bins  # ugyanaz a sávolás, mint a lezárt megbízhatósági táblában
+from xai import labels
 from xai import narrative as nv
 from xai.explain import explain, percentage_points
 from xai.models import CACHE, KINDS, NAMES, Bundle, load_bundle
@@ -143,13 +144,26 @@ def windows(path: Path | None = None) -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
+def value_label(dim: str, value) -> str:
+    """Egy dimenzióérték emberi neve: „Alagoas (AL)", „egészség és szépségápolás"."""
+    if dim in ("vevo_allam", "elado_allam"):
+        return labels.state_label(None if value == "(ismeretlen)" else value)
+    if dim == "kategoria":
+        return labels.category_name(value)
+    return str(value)
+
+
 def by_dimension(dim: str, min_n: int = 300, path: Path | None = None) -> pd.DataFrame:
-    """Késési arány egy dimenzió szerint, 95%-os Wilson-intervallummal (legalább min_n rendelés)."""
+    """Késési arány egy dimenzió szerint, 95%-os Wilson-intervallummal (legalább min_n rendelés).
+    A `megnevezes` oszlop az érték emberi neve (állam teljes neve, magyar kategória)."""
     sql = sql_by_dimension(dim)
     con = connect(path or db_path(), read_only=True)
     df = con.execute(sql, [int(min_n)]).df()
     con.close()
     df["kesett"] = df["kesett"].astype(int)
+    df.insert(1, "megnevezes", [value_label(dim, v) for v in df["ertek"]])
+    if dim in ("vevo_allam", "elado_allam"):
+        df.insert(2, "regio", [labels.state_region(v) for v in df["ertek"]])
     return _with_ci(df).reset_index(drop=True)
 
 
@@ -177,9 +191,32 @@ def risk_table(b: Bundle) -> pd.DataFrame:
         "kesett": b.y.loc[idx].astype(bool).to_numpy(),
     })
     df["relativ"] = df["valoszinuseg"] / float(np.mean(p))
+    df["relativ_szoveg"] = [f"{nv.fmt_num(v, 1)}×" for v in df["relativ"]]   # „13,1×" (nem „13.1×")
+    # emberi nevek a felülethez (a kódok maradnak a szűréshez és a tesztekhez)
+    df["kategoria_nev"] = [labels.category_name(v) for v in df["kategoria"]]
+    df["vevo_nev"] = [labels.state_label(v) for v in df["vevo_allam"]]
+    df["elado_nev"] = [labels.state_label(v) for v in df["elado_allam"]]
     df = df.sort_values(["valoszinuseg", "order_key"], ascending=[False, True])
     df.insert(0, "rang", np.arange(1, len(df) + 1))
     return df.reset_index(drop=True)
+
+
+def capture(b: Bundle, share: float = 0.10, kind: str = "lightgbm") -> dict:
+    """
+    Közérthető mérőszám a teszt-időszakon: a modell szerint legkockázatosabb `share`
+    hányadban (pl. 10%) a késések hány százaléka van. Véletlen kiválasztásnál ez épp
+    `share` lenne. (A lezárt kiértékelés modelljein, diagnosztika.)
+    """
+    if kind != "lightgbm":
+        raise ValueError("A közérthető összefoglaló a fő modellre (LightGBM) szól.")
+    rt = risk_table(b)                         # ugyanaz a sorrend, mint a kockázati listán
+    n = len(rt)
+    n_top = max(1, int(round(share * n)))
+    late_all, late_top = int(rt["kesett"].sum()), int(rt["kesett"].head(n_top).sum())
+    return {"hanyad": share, "rendelesek": int(n), "felso_rendelesek": n_top,
+            "kesett_osszes": late_all, "kesett_felso": late_top,
+            "kesesek_aranya_a_felsoben": late_top / late_all if late_all else float("nan"),
+            "kesesi_arany_felso": late_top / n_top, "kesesi_arany": late_all / n}
 
 
 def period_average(b: Bundle) -> float:
@@ -367,6 +404,25 @@ def band_table(b: Bundle, kind: str = "lightgbm", window: str = "test") -> pd.Da
         rows.append({"sav": band_name(k), "also": BANDS[k], "felso": BANDS[k + 1],
                      "rendelesek": n, "kesett": late, "atlag_becsles": mean_p,
                      "tenyleges_arany": late / n if n else float("nan"),
+                     "ci_also": ci[0], "ci_felso": ci[1], "itelet": verdict(mean_p, ci, n)})
+    return pd.DataFrame(rows)
+
+
+# A közérthető összefoglalóhoz a sávok három csoportban: alacsony · közepes · magas becslés.
+BAND_GROUPS = (("alacsony", 0.0, 0.05), ("közepes", 0.05, 0.20), ("magas", 0.20, 1.0))
+
+
+def band_groups(bt: pd.DataFrame) -> pd.DataFrame:
+    """A band_table sávjai három csoportba összevonva (5% alatt · 5–20% · 20% fölött):
+    rendelések, átlagos becslés, tényleges arány (Wilson-intervallum), ítélet."""
+    rows = []
+    for name, lo, hi in BAND_GROUPS:
+        g = bt[(bt["also"] >= lo - 1e-12) & (bt["felso"] <= hi + 1e-12) & (bt["rendelesek"] > 0)]
+        n, late = int(g["rendelesek"].sum()), int(g["kesett"].sum())
+        mean_p = float((g["atlag_becsles"] * g["rendelesek"]).sum() / n) if n else float("nan")
+        ci = wilson(late, n)
+        rows.append({"csoport": name, "also": lo, "felso": hi, "rendelesek": n, "kesett": late,
+                     "atlag_becsles": mean_p, "tenyleges_arany": late / n if n else float("nan"),
                      "ci_also": ci[0], "ci_felso": ci[1], "itelet": verdict(mean_p, ci, n)})
     return pd.DataFrame(rows)
 

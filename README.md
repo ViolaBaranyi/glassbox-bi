@@ -41,7 +41,7 @@ PyCharmban a zöld **Run** gombbal is indítható.
 | 1 | Környezet | a verziók rögzítve vannak a kimenetben |
 | 2 | Adat | a valódi Olist-adat; ha még nincs meg, letölti a Kaggle-ről |
 | 3 | Tárház | 9 CSV → csillagséma DuckDB-ben, **V-1 validációval** |
-| 4 | Tesztek | 133 teszt: szivárgásvédelem, V-1, adatmodell, abláció, betanítás, kohorsz, modellválasztás, bootstrap, lezárt futás, referencia-modellek, magyarázatok, felület; ha bármelyik bukik, **a demó megáll** |
+| 4 | Tesztek | 141 teszt: szivárgásvédelem, V-1, adatmodell, abláció, betanítás, kohorsz, modellválasztás, bootstrap, lezárt futás, referencia-modellek, magyarázatok, felület; ha bármelyik bukik, **a demó megáll** |
 | 5 | Betanítás | a **lezárt v3 protokoll** szerint: LightGBM súlyozás nélkül, a fák száma bővülő ablakos CV-vel, címke-tisztítással; érintetlen, legkésőbbi időszakon mérve; a kalibráció csak diagnosztika |
 | 6 | Összegzés | rangsorolás, kalibráció, kizárt rendelések, artefaktumok helye |
 
@@ -64,14 +64,21 @@ első indításkor a négy modellt a lezárt beállításokkal betanítja (kb. e
 
 | Oldal | Mit mutat | Honnan jön a szám |
 |---|---|---|
-| Áttekintés | a késési arány havonta (a tanító / validációs / teszt ablakkal) és a vevő állama, az eladó állama, ill. a kategória szerint, 95%-os Wilson-intervallummal | SQL a tárházból — a lekérdezés szövege is megnézhető |
+| Áttekintés | a késési arány havonta (a tanító / validációs / teszt ablakkal) és a vevő állama, az eladó állama, ill. a kategória szerint, 95%-os Wilson-intervallummal; az államoknál egyszerűsített (négyzetrácsos) Brazília-térképpel | SQL a tárházból — a lekérdezés szövege is megnézhető |
 | Rendelés kockázata | egy rendelés becsült kockázata, relatív kockázata, és hogy a hasonló becslésű rendelések közül ténylegesen hány késett („100-ból N” — a becslés hitelessége); *miért* (SHAP-tényezők és sablonból írt szöveg); ugyanez a négy modellel | a lezárt modellek + `xai/` |
 | A modell | a lezárt teszt-kiértékelés (PR-AUC, ROC-AUC, Brier, ECE, páros összevetés), kalibráció tizedekben és rögzített becslési sávokban (teszt és validáció), mi számít a modelleknek, hogyan hat egy tényező | `docs/*.json` + a modellek |
 | Kérdezz | a nyelvi réteg helye — még nem működik | — |
+| Súgó és fogalmak | használati útmutató, fogalomtár hétköznapi nyelven, a 21 tényező, a 27 brazil állam (kód, teljes név, régió, térképen is), a termékkategóriák magyarul, mire nem alkalmas a felület | `xai/labels.py` + SQL |
 
 *A modell* oldal ellenőrzi, hogy a felület modelljei pontosan a lezárt futások modelljei:
 ugyanaz a 9 forrásfájl-ujjlenyomat, és mind a négy modell teszt PR-AUC-je egyezik a lezárt
 értékkel (zöld jelzés). Egy rendelés magyarázata linkkel megosztható (`?rendeles=<order_key>`).
+A felület **informatikai előismeretek nélkül is érthető**: minden oldal tetején „Mit látsz ezen az
+oldalon?” leírás, minden ábra alatt „Hogyan olvasd?”, a számok mellett súgó; az államkódok teljes
+névvel (pl. AL = Alagoas, Északkelet) és egyszerűsített térképen, a termékkategóriák magyarul
+jelennek meg; a számok magyar alakban (tizedesvessző, ezres tagolás szóközzel); *A modell* oldal
+„Röviden” összefoglalóval kezd (pl. a 10% legkockázatosabbnak ítélt rendelés között a késések kb.
+harmada van), a szakmai részletek pedig lenyitható dobozokban vannak.
 Az oldalsávon kikapcsolható a valós kimenet („késett / időben”): így a felület úgy
 viselkedik, mint élesben, amikor a kimenet még nem ismert.
 
@@ -94,7 +101,7 @@ viselkedik, mint élesben, amikor a kimenet még nem ismert.
 | M2 — referencia-modellek: logisztikus regresszió, döntési fa, random forest (`pipeline/reference_models.py`), lezárt összevetés (`pipeline/v3_reference.py`) | **kész — lefutott okt. 9.** (`docs/v3_referencia_eredmeny.md`) |
 | M3 — SHAP-magyarázatok a négy modellre (pontos TreeSHAP, ill. lineáris SHAP, a 22 jellemzőre összevonva), additivitás-ellenőrzés, sablonos magyarázó szöveg (`xai/`) | **kész (v1)** |
 | M5 — Streamlit BI-felület: áttekintés (SQL), rendelés-magyarázat négy modellel, modell-oldal, egyezés-ellenőrzés a lezárt futással (`ui/`, `python -m ui`) | **kész (v1)** |
-| Tesztek — szivárgás (14), V-1 és adatmodell (10), abláció (6), betanítás (6), kohorsz (2), modellválasztás (8), bootstrap (6), lezárt futás (14), referencia-modellek (9), magyarázatok (12), szöveg és megjelenítés (22), felület (15), egyezési mértékek (5), kontrollkar (4) | **kész, 133/133** |
+| Tesztek — szivárgás (14), V-1 és adatmodell (10), abláció (6), betanítás (6), kohorsz (2), modellválasztás (8), bootstrap (6), lezárt futás (14), referencia-modellek (9), magyarázatok (12), szöveg és megjelenítés (22), felület (18), egyezési mértékek (5), kontrollkar (4), nevek és feliratok (5) | **kész, 141/141** |
 | Tároló — MIT licenc, CI (Ubuntu + Windows), `requirements.lock`, döntési napló | **kész** |
 | M2 — 40 futásos sweep, hiperparaméter-hangolás | következő |
 | M3 — KernelSHAP-kontrollkar: mind a négy modell ugyanazzal a magyarázóval (valószínűség-tér, közös háttér, 200 rögzített teszt-rendelés), a kar saját zajával (`xai/kernel_arm.py`, `xai/agreement.py`) | **kész** (`docs/kernel_kar_eredmeny.md`) |
@@ -456,11 +463,12 @@ glassbox-bi/
 │   ├── explain.py           SHAP a négy modellre, a 22 jellemzőre összevonva; százalékpont
 │   ├── kernel_arm.py        KernelSHAP-kontrollkar: a négy modell ugyanazzal a magyarázóval
 │   ├── agreement.py         két magyarázat egyezése: top-k, RBO, súlyozott Kendall-tau
+│   ├── labels.py            brazil államok (+ térképrács), magyar kategórianevek, a tényezők és modellek hétköznapi leírása
 │   └── narrative.py         rövid nevek, magyar számalak, sablonos magyarázó szöveg
 ├── ui/
 │   ├── app.py               a felület belépési pontja (oldalsáv, navigáció)
 │   ├── __main__.py          python -m ui: indítás localhoston, statisztika nélkül
-│   ├── oldalak/             Áttekintés, Rendelés kockázata, A modell, Kérdezz
+│   ├── oldalak/             Áttekintés, Rendelés kockázata, A modell, Kérdezz, Súgó és fogalmak
 │   ├── backend.py           adatréteg: SQL + modellek (Streamlit nélkül is tesztelhető)
 │   ├── charts.py            grafikonok (Altair)
 │   └── common.py            gyorsítótárazott betöltők, oldalsáv
@@ -474,7 +482,7 @@ glassbox-bi/
 │   ├── v3_referencia_protokoll.md    ugyanez magyarázattal és a CV-eredménnyel
 │   ├── v3_referencia_eredmeny.json   a referencia-összevetés teljes eredménye
 │   ├── v3_referencia_eredmeny.md     ugyanez röviden, táblázattal
-│   ├── kernel_kar_eredmeny.json      a KernelSHAP-kontrollkar eredménye (a 200 rendelés kulcsával)
+│   ├── kernel_kar_eredmeny.json      a KernelSHAP-kontrollkar eredménye (a 200 rendelés helyett a részhalmaz ujjlenyomatával)
 │   └── kernel_kar_eredmeny.md        ugyanez táblázatokkal
 ├── .github/workflows/       CI: minden push lefuttatja a teljes pipeline-t (szintetikus adaton)
 ├── LICENSE                  MIT (a kódra; az adat saját licenc alatt áll)
@@ -497,8 +505,9 @@ glassbox-bi/
     ├── test_reference_models.py  9 teszt (modellek, rácsok, a választás csak a tanító ablakot látja, lezárt összevetés)
     ├── test_explain.py      12 teszt (additivitás, egyezés a shap könyvtárral, oszlopcsoportok, gyorsítótár)
     ├── test_narrative.py    22 teszt (magyar számalak, hónap-visszafejtés, összevonás, sablonos szöveg, a becslés hitelessége)
-    ├── test_ui.py           15 teszt (adatréteg, becslési sávok, grafikonok világos/sötét témában, minden oldal lefut — Streamlit AppTest)
+    ├── test_ui.py           18 teszt (adatréteg, becslési sávok és csoportjaik, grafikonok világos/sötét témában, térkép, magyar számalak a tengelyeken, minden oldal lefut — Streamlit AppTest)
     ├── test_agreement.py    5 teszt (RBO a definíció szerint, top-k, előjel, súlyozott tau, bootstrap)
+    ├── test_labels.py       5 teszt (mind a 27 állam, minden valódi kategóriának van magyar neve, leírások, térképrács)
     ├── test_kernel_arm.py   4 teszt (a 21 játékos tere bitre visszaalakítható, additív modellre pontos, additivitás, nincs csendes szűkítés)
     └── conftest.py          közös szintetikus tárház és modellek a fenti tesztekhez
 ```
@@ -527,7 +536,7 @@ A GitHubon **Private** tárolóként kezdd, üres inicializálással (ne kérj R
 Az első push után a `.github/workflows/tests.yml` minden feltöltésnél lefuttatja a
 teljes pipeline-t Python 3.14-en, Ubuntun és Windowson, **szintetikus adaton**
 (`python demo.py --synthetic`), mert a valódi adat nem kerülhet a tárolóba:
-adatgenerálás, tárházépítés V-1 validációval, 133 teszt, betanítás, kohorsz-jelentés.
+adatgenerálás, tárházépítés V-1 validációval, 137 teszt, betanítás, kohorsz-jelentés.
 A csomagokat a `requirements.lock` rögzíti. Ha egy teszt
 elbukik, a futás pirosra vált, és a GitHub e-mailt küld. Ez a szivárgásvédelem
 hálója: egy elrontott jellemző nem maradhat észrevétlen.
