@@ -276,6 +276,121 @@ st.caption(
     + " A 0 fölött növeli a kockázatot, alatta csökkenti. Ugyanannál az értéknél is lehet szórás, "
       "mert a hatás a többi adattól is függ.")
 
+# ------------------------------------------------ a magyarázatok hűsége (K2)
+st.subheader("Mennyire hűek a magyarázatok a modellhez?")
+fres = d.faithfulness_results()
+if fres is None:
+    st.info("A hűségmérés eredménye még nincs meg. Futtatás: `python -m xai.faithfulness` "
+            "(kb. fél–egy óra; a random forest a lassú).", icon=":material/science:")
+else:
+    tb, pl = fres["torles_beszuras"], fres["beultetett"]
+    st.caption(
+        "A magyarázat akkor hű, ha tényleg azt mutatja, amire a modell figyel. Ezt két próbával "
+        "ellenőriztük. Mindkettő a modell működését vizsgálja, nem azt, hogy mi történt a "
+        "valóságban — a rendelések tényleges kimenetét egyik sem használja.")
+    st.markdown("##### 1. próba: ha kivesszük a legfontosabb tényezőket, sokat változik-e a becslés?")
+    st.caption(
+        f"{nv.fmt_num(tb['rendelesek'], 0)} teszt-rendelésnél „kivettük” a felület szerint "
+        "legjobban növelő 3 tényezőt — az értéküket a tanulási időszak átlagos rendeléseiből vettük —, "
+        "és megnéztük, mennyit esik a becslés. Ha a magyarázat hű, sokkal többet esik, mint 3 "
+        "véletlenszerűen választott tényezőnél. A harmadik sáv a legjobb elérhető érték: egy olyan "
+        "magyarázaté (KernelSHAP), amelyet pontosan erre a próbára számoltunk ki.")
+    st.altair_chart(charts.faith_drop_chart(d.faith_drop_table(fres), [NAMES[k] for k in KINDS],
+                                            ink=common.ink()), width="stretch")
+    lg = tb["modellek"].get("lightgbm")
+    if lg:
+        m = lg["mertekek"]
+        best = (f"; a legjobb elérhető {nv.fmt_num(m['kernel']['top3_eses']['atlag'], 1)} százalékpont"
+                if "kernel" in m else "")
+        rnd = m["veletlen"]["top3_eses"]["atlag"]
+        rnd_text = ("3 véletlen tényező kivétele viszont gyakorlatilag nem változtatott rajta"
+                    if abs(rnd) < 0.05 else
+                    f"3 véletlen tényezőé {nv.fmt_num(rnd, 1)} százalékpontot")
+        st.caption(
+            f"**Hogyan olvasd?** A fő modellnél (LightGBM) a felület szerinti 3 tényező kivétele "
+            f"átlagosan {nv.fmt_num(m['felulet']['top3_eses']['atlag'], 1)} százalékponttal "
+            f"csökkentette a becslést, {rnd_text}{best}. A rendelések "
+            f"{nv.fmt_pct(lg['jobb_mint_veletlen'], 0)}-ában a felület sorrendje jobb volt a véletlennél. "
+            "A vékony vonal a bizonytalanság (95%-os tartomány). A véletlen sáv néha negatív: egy "
+            "átlagos tényező „kivétele” a tanulási időszak (kicsit magasabb) átlagához húzza a becslést.")
+    st.markdown("##### 2. próba: megtalálja-e a magyarázat a beültetett jelet?")
+    st.caption(
+        "Az adatba két kitalált jellemzőt tettünk. A **jel** a rendelések 20%-ánál bekapcsol, és "
+        f"növeli a késés esélyét (a tanulási időszakban {nv.fmt_pct(pl['tanito_keses_jel0'])} helyett "
+        f"{nv.fmt_pct(pl['tanito_keses_jel1'])} késett); a **zaj** semmire nem hat. Utána a négy "
+        f"módszert újratanítottuk, és megnéztük a magyarázatukat {nv.fmt_num(pl['rendelesek'], 0)} "
+        "teszt-rendelésen. A jó magyarázat a jelet a legfontosabbak közé sorolja, a zajt pedig "
+        "nullának mutatja.")
+    planted_tab = d.faith_planted_table(fres)
+    st.dataframe(planted_tab[["modell", "megfelelt", "jel_top3", "jel_irany", "zaj_top3", "zaj_arany",
+                              "zaj_valodi", "nem_teljesult"]], hide_index=True, column_config={
+        "modell": "módszer",
+        "megfelelt": "megfelelt?",
+        "jel_top3": st.column_config.TextColumn(
+            "jel a top-3-ban",
+            help="A jel a 3 legfontosabb tényező között — azoknál a rendeléseknél, ahol a jel "
+                 "bekapcsolt. Elvárás: legalább 90%."),
+        "jel_irany": st.column_config.TextColumn(
+            "jel iránya jó", help="A jel növeli a kockázatot ugyanezeknél a rendeléseknél. "
+                                  "Elvárás: legalább 95%."),
+        "zaj_top3": st.column_config.TextColumn(
+            "zaj a top-3-ban", help="A zaj a 3 legfontosabb tényező között, az összes rendelésen. "
+                                    "Elvárás: legfeljebb 1%."),
+        "zaj_arany": st.column_config.TextColumn(
+            "zaj ereje / jelé",
+            help="A zaj és a jel átlagos hatásának aránya (előjel nélkül). Elvárás: legfeljebb 5%."),
+        "zaj_valodi": st.column_config.TextColumn(
+            "a zaj hatása a modellre",
+            help="Ha CSAK a zajt változtatjuk, a modell becslése átlagosan ennyit mozdul — vagyis "
+                 "mennyire épít maga a modell a zajra (utólagos ellenőrzés, nem előre rögzített)."),
+        "nem_teljesult": st.column_config.TextColumn("ami nem teljesült", width="medium"),
+    })
+    notes = ["Az elvárásokat a mérés előtt rögzítettük (döntési napló), hogy az eredmény ismeretében "
+             "ne lehessen őket utólag igazítani."]
+    planted_models = pl["modellek"].values()
+    real = {r["nev"]: r.get("zaj_valodi_hatas_pp") for r in planted_models}
+    for r in planted_models:
+        rv = r.get("zaj_valodi_hatas_pp")
+        if r["megfelelt"] or rv is None:
+            continue
+        most = " — a négy módszer közül a legtöbbet" if rv >= max(v for v in real.values() if v is not None) else ""
+        verdict = ("A magyarázat tehát nem eltúlozza a zaj szerepét, hanem jelzi, hogy a modell a "
+                   "véletlen ingadozást is megtanulta." if rv >= r["zaj_atlag_abs_pp"] else
+                   "Itt a magyarázat a valódinál erősebbnek mutatja a zajt.")
+        notes.append(f"**{r['nev'].capitalize()}:** a zaj ereje a jelhez képest {nv.fmt_pct(r['zaj_arany'], 1)}, "
+                     f"kicsit több a megengedett {nv.fmt_pct(fres['beallitas']['kuszobok']['zaj_arany'], 0)}-nál. "
+                     f"Ha csak a zajt változtatjuk, a becslése átlagosan {nv.fmt_num(rv, 2)} százalékponttal "
+                     f"mozdul{most}; a magyarázat {nv.fmt_num(r['zaj_atlag_abs_pp'], 2)} százalékpontot "
+                     f"tulajdonít neki. {verdict}")
+    st.caption(" ".join(notes))
+    with common.details("Szakmai részletek: törlési és beszúrási görbe, AOPC"):
+        kinds_f = [k for k in KINDS if k in tb["modellek"]]
+        kf = st.selectbox("Melyik módszer görbéje?", kinds_f, format_func=NAMES.get, key="huseg_modell")
+        st.altair_chart(charts.faith_curve_chart(d.faith_curve_table(fres, kf), ink=common.ink()),
+                        width="stretch")
+        st.caption("A törlési görbe: a tényezőket a sorrend szerint egyenként „kivesszük” (a közös "
+                   "háttér értékeire cseréljük), és a becslés esését átlagoljuk a rendeléseken. "
+                   "Ahol a görbe a csúcson van, ott a növelő tényezők már kint vannak, a csökkentők "
+                   "még bent; a végén minden tényező a háttérből jön.")
+        st.dataframe(d.faith_details_table(fres), hide_index=True, column_config={
+            "modell": "modell", "sorrend": "sorrend",
+            "torles_aopc": "törlési AOPC (pp) [95% CI]",
+            "beszuras_aopc": "beszúrási AOPC (pp) [95% CI]",
+            "top3_eses": "top-3 esés (pp) [95% CI]"})
+        s_ = fres["beallitas"]
+        st.markdown(
+            f"Interventional maszkolás a {len(s_['jatekosok'])} tényezőn (a hónap egyben), közös háttér: "
+            f"{s_['hatter']} tisztított tanító rendelés (mag {s_['hatter_mag']}), valószínűség-tér, a "
+            f"KernelSHAP-kontrollkar {s_['rendelesek']} teszt-rendelése. Sorrend: a magyarázat szerint "
+            "a legjobban növelő tényező előre (előjelesen). **AOPC** — a törlésnél a becslés esésének, "
+            "a beszúrásnál (üres rendelésből visszatéve) az emelkedésének átlaga a 22 lépésen. "
+            f"Véletlen: {s_['veletlen_sorrendek']} sorrend átlaga rendelésenként. A KernelSHAP pontosan "
+            "erre az értékfüggvényre illeszt, ezért ezen a próbán előnyben van: ez a felső viszonyítás. "
+            f"Beültetett jellemző: a jel a „{nv.display_name(s_['beultetett']['jel_helye'])}”, a zaj a "
+            f"„{nv.display_name(s_['beultetett']['zaj_helye'])}” helyére került (a két leggyengébb valódi "
+            "jellemző), a négy modell a lezárt beállításokkal tanult újra. Részletek: "
+            "`docs/huseg_eredmeny.md`.")
+
 # -------------------------------------------- kontrollkar (szakmai rész)
 with common.details("Szakmai részletek: a magyarázatok ellenőrzése (KernelSHAP-kontrollkar)"):
     if kres is None:

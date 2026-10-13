@@ -504,3 +504,56 @@ def dependence_chart(dep: pd.DataFrame, name: str, categorical: bool, top_n: int
         tooltip=[alt.Tooltip("ertek_szoveg:N", title=name),
                  alt.Tooltip("hatas_szoveg:N", title="hatás (százalékpont)")])
     return alt.layer(zero, pts).properties(height=320)
+
+
+# ------------------------------------------------- a magyarázatok hűsége (K2)
+# Módszer-színek: semleges paletta (a piros/kék itt nem „növeli/csökkenti", a kék/narancs/zöld
+# pedig az időszakoké — ezért egyik sem). A szín a sorrend KULCSÁHOZ tartozik, a felirat a táblából jön.
+FAITH_KEY_COLORS = {"veletlen": "#9a9a9a", "felulet": "#4a4e69", "kernel": "#2a9d8f"}
+
+
+def _faith_color(d: pd.DataFrame, title: str) -> alt.Color:
+    pairs = d[["kulcs", "sorrend"]].drop_duplicates().set_index("kulcs")["sorrend"]
+    keys = [k for k in FAITH_KEY_COLORS if k in pairs.index]
+    return alt.Color("sorrend:N", title=title,
+                     scale=alt.Scale(domain=[pairs[k] for k in keys],
+                                     range=[FAITH_KEY_COLORS[k] for k in keys]),
+                     legend=alt.Legend(orient="top", columns=1, labelLimit=0))
+
+
+def faith_drop_chart(df: pd.DataFrame, model_order: list[str], ink: Ink = LIGHT) -> alt.LayerChart:
+    """Modellenként: mennyit esik a becslés, ha az első 3 tényezőt „kivesszük" — három sorrendben."""
+    d = df.copy()
+    d["eses_szoveg"] = [f"{nv.fmt_num(v, 2)} pp" for v in d["eses_pp"]]
+    d["ci_szoveg"] = [f"{nv.fmt_num(a, 2)} – {nv.fmt_num(b, 2)} pp" for a, b in zip(d["also"], d["felso"])]
+    keys = [k for k in FAITH_KEY_COLORS if k in set(d["kulcs"])]
+    label_of = d.drop_duplicates("kulcs").set_index("kulcs")["sorrend"]
+    tip = [alt.Tooltip("modell:N", title="módszer"), alt.Tooltip("sorrend:N", title="melyik 3 tényezőt vettük ki"),
+           alt.Tooltip("eses_szoveg:N", title="a becslés átlagos esése"),
+           alt.Tooltip("ci_szoveg:N", title="valószínű tartomány (95%)")]
+    y = alt.Y("modell:N", sort=model_order, title=None, axis=alt.Axis(labelLimit=220))
+    yo = alt.YOffset("sorrend:N", sort=[label_of[k] for k in keys])
+    base = alt.Chart(d)
+    bars = base.mark_bar().encode(
+        y=y, yOffset=yo, color=_faith_color(d, "melyik 3 tényezőt vettük ki"), tooltip=tip,
+        x=alt.X("eses_pp:Q", title="a becslés átlagos esése (százalékpont)", axis=alt.Axis(labelExpr=_COMMA)))
+    err = base.mark_rule(color=ink.rule).encode(y=y, yOffset=yo, x="also:Q", x2="felso:Q", tooltip=tip)
+    text = base.mark_text(align="left", dx=4, color=ink.text, fontSize=11).encode(
+        y=y, yOffset=yo, x="felso:Q", text="eses_szoveg:N", tooltip=tip)
+    return alt.layer(bars, err, text).properties(height=alt.Step(16))
+
+
+def faith_curve_chart(df: pd.DataFrame, ink: Ink = LIGHT) -> alt.LayerChart:
+    """Átlagos törlési görbe: hány tényezőt vettünk ki (0–21) → mennyit esett a becslés."""
+    d = df.copy()
+    d["eses_szoveg"] = [f"{nv.fmt_num(v, 2)} pp" for v in d["eses_pp"]]
+    d["k_szoveg"] = [f"{k} tényező" for k in d["k"]]
+    tip = [alt.Tooltip("sorrend:N", title="sorrend"), alt.Tooltip("k_szoveg:N", title="kivéve"),
+           alt.Tooltip("eses_szoveg:N", title="a becslés átlagos esése")]
+    zero = alt.Chart(pd.DataFrame({"y": [0.0]})).mark_rule(color=ink.muted, tooltip=False).encode(y="y:Q")
+    lines = alt.Chart(d).mark_line(point=True).encode(
+        x=alt.X("k:Q", title="ennyi tényezőt vettünk ki (a sorrend szerint)",
+                axis=alt.Axis(tickMinStep=1, labelExpr=_COMMA)),
+        y=alt.Y("eses_pp:Q", title="a becslés átlagos esése (százalékpont)", axis=alt.Axis(labelExpr=_COMMA)),
+        color=_faith_color(d, "sorrend"), tooltip=tip)
+    return alt.layer(zero, lines).properties(height=300)

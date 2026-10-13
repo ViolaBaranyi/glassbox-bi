@@ -41,7 +41,7 @@ PyCharmban a zöld **Run** gombbal is indítható.
 | 1 | Környezet | a verziók rögzítve vannak a kimenetben |
 | 2 | Adat | a valódi Olist-adat; ha még nincs meg, letölti a Kaggle-ről |
 | 3 | Tárház | 9 CSV → csillagséma DuckDB-ben, **V-1 validációval** |
-| 4 | Tesztek | 143 teszt: szivárgásvédelem, V-1, adatmodell, abláció, betanítás, kohorsz, modellválasztás, bootstrap, lezárt futás, referencia-modellek, magyarázatok, felület; ha bármelyik bukik, **a demó megáll** |
+| 4 | Tesztek | 150 teszt: szivárgásvédelem, V-1, adatmodell, abláció, betanítás, kohorsz, modellválasztás, bootstrap, lezárt futás, referencia-modellek, magyarázatok, felület; ha bármelyik bukik, **a demó megáll** |
 | 5 | Betanítás | a **lezárt v3 protokoll** szerint: LightGBM súlyozás nélkül, a fák száma bővülő ablakos CV-vel, címke-tisztítással; érintetlen, legkésőbbi időszakon mérve; a kalibráció csak diagnosztika |
 | 6 | Összegzés | rangsorolás, kalibráció, kizárt rendelések, artefaktumok helye |
 
@@ -66,7 +66,7 @@ első indításkor a négy modellt a lezárt beállításokkal betanítja (kb. e
 |---|---|---|
 | Áttekintés | a késési arány havonta (a tanító / validációs / teszt ablakkal) és a vevő állama, az eladó állama, ill. a kategória szerint, 95%-os Wilson-intervallummal; az államoknál egyszerűsített (négyzetrácsos) Brazília-térképpel; a 2016 végi adathiány (november: 0, december: 1 rendelés) szürke „kevés adat” sávval jelölve | SQL a tárházból — a lekérdezés szövege is megnézhető |
 | Rendelés kockázata | egy rendelés becsült kockázata, relatív kockázata, és hogy a hasonló becslésű rendelések közül ténylegesen hány késett („100-ból N” — a becslés hitelessége); *miért* (SHAP-tényezők és sablonból írt szöveg); ugyanez a négy modellel | a lezárt modellek + `xai/` |
-| A modell | a lezárt teszt-kiértékelés (PR-AUC, ROC-AUC, Brier, ECE, páros összevetés), kalibráció tizedekben és rögzített becslési sávokban (teszt és validáció), mi számít a modelleknek, hogyan hat egy tényező | `docs/*.json` + a modellek |
+| A modell | a lezárt teszt-kiértékelés (PR-AUC, ROC-AUC, Brier, ECE, páros összevetés), kalibráció tizedekben és rögzített becslési sávokban (teszt és validáció), mi számít a modelleknek, hogyan hat egy tényező, mennyire hűek a magyarázatok (két próba) | `docs/*.json` + a modellek |
 | Kérdezz | a nyelvi réteg helye — még nem működik | — |
 | Súgó és fogalmak | használati útmutató, fogalomtár hétköznapi nyelven, a 21 tényező, a 27 brazil állam (kód, teljes név, régió, térképen is), a termékkategóriák magyarul, mire nem alkalmas a felület | `xai/labels.py` + SQL |
 
@@ -101,11 +101,12 @@ viselkedik, mint élesben, amikor a kimenet még nem ismert.
 | M2 — referencia-modellek: logisztikus regresszió, döntési fa, random forest (`pipeline/reference_models.py`), lezárt összevetés (`pipeline/v3_reference.py`) | **kész — lefutott okt. 9.** (`docs/v3_referencia_eredmeny.md`) |
 | M3 — SHAP-magyarázatok a négy modellre (pontos TreeSHAP, ill. lineáris SHAP, a 22 jellemzőre összevonva), additivitás-ellenőrzés, sablonos magyarázó szöveg (`xai/`) | **kész (v1)** |
 | M5 — Streamlit BI-felület: áttekintés (SQL), rendelés-magyarázat négy modellel, modell-oldal, egyezés-ellenőrzés a lezárt futással (`ui/`, `python -m ui`) | **kész (v1)** |
-| Tesztek — szivárgás (14), V-1 és adatmodell (10), abláció (6), betanítás (6), kohorsz (2), modellválasztás (8), bootstrap (6), lezárt futás (14), referencia-modellek (9), magyarázatok (12), szöveg és megjelenítés (22), felület (20), egyezési mértékek (5), kontrollkar (4), nevek és feliratok (5) | **kész, 143/143** |
+| Tesztek — szivárgás (14), V-1 és adatmodell (10), abláció (6), betanítás (6), kohorsz (2), modellválasztás (8), bootstrap (6), lezárt futás (14), referencia-modellek (9), magyarázatok (12), szöveg és megjelenítés (22), felület (20), egyezési mértékek (5), kontrollkar (4), nevek és feliratok (5), a magyarázatok hűsége (7) | **kész, 150/150** |
 | Tároló — MIT licenc, CI (Ubuntu + Windows), `requirements.lock`, döntési napló | **kész** |
 | M2 — 40 futásos sweep, hiperparaméter-hangolás | következő |
 | M3 — KernelSHAP-kontrollkar: mind a négy modell ugyanazzal a magyarázóval (valószínűség-tér, közös háttér, 200 rögzített teszt-rendelés), a kar saját zajával (`xai/kernel_arm.py`, `xai/agreement.py`) | **kész** (`docs/kernel_kar_eredmeny.md`) |
-| M3 — modellhűség (beültetett jellemző, törlési görbe), stabilitás (bootstrap, RBO, súlyozott Kendall-tau), ellenpélda | következő |
+| M3 — a magyarázatok hűsége (K2): törlési és beszúrási görbe (interventional maszkolás, a KernelSHAP-karral és véletlen sorrenddel összevetve), beültetett jel- és zaj-jellemző, előre rögzített küszöbökkel (`xai/faithfulness.py`) | **kész** (`docs/huseg_eredmeny.md`) |
+| M3 — stabilitás (bootstrap-újratanítás, RBO, súlyozott Kendall-tau), ellenpélda | következő |
 | M1 — szemantikus réteg (KAPU ①) | tervezett |
 | M4 — nyelvi réteg és ellenőrző (KAPU ②), bekötés a *Kérdezz* oldalba | tervezett |
 
@@ -259,6 +260,25 @@ zajánál; a döntési fa magyarázata tér el a legjobban (0,62–0,65), a Ligh
 forest egyezik a legjobban (0,77);
 (3) **a kar zaja** — más mintavételi maggal 0,96–0,99 (2090 koalíció elég), más háttérrel
 0,87–0,94: a háttér a fő zajforrás. → `xai/kernel_arm.py`, `xai/agreement.py`
+
+**A magyarázatok hűsége a modellhez (K2).** Két, előre rögzített próba (küszöbökkel, a döntési
+naplóban); egyik sem használja a valódi teszt-címkéket. (1) **Törlési és beszúrási görbe** — a
+kontrollkar 200 teszt-rendelésén a tényezőket a magyarázat sorrendjében egyenként „kivesszük”
+(az értéküket a közös háttérből vesszük, interventional maszkolás). A felület szerinti 3
+legerősebb növelő tényező kivétele átlagosan 2,8 (LightGBM) · 2,4 (LR) · 2,0 (fa) · 2,5 (RF)
+százalékponttal csökkenti a becslést, 3 véletlen tényezőé −0,5…0,0-val; a felület sorrendje
+mind a négy modellnél a rendelések 100%-ában jobb a véletlennél, és gyakorlatilag eléri a
+KernelSHAP-ot, amely pontosan erre a maszkolásra illeszt (a törlési AOPC-k eltérése ≤ 0,03 pp;
+a beszúrásinál a LightGBM-nél 5,0 vs 5,3 pp). (2) **Beültetett jellemző** — a két leggyengébb
+valódi jellemző helyére egy ismert hatású „jel” (20%-ban bekapcsol; a tanító ablakban 5,7%
+helyett 15,1% késés) és egy hatás nélküli „zaj” került, a négy modellt újratanítottuk. A jel
+mind a négy modellnél a jel = 1 rendelések 100%-ában a 3 legfontosabb között van, iránya 100%-ban
+helyes; a zaj a rendelések 0–0,6%-ában kerül a top-3-ba. A zaj és a jel átlagos hatásának
+aránya 1,1–3,1% (LightGBM, LR, fa), a random forestnél 5,4% — ez az előre rögzített 5%-os
+küszöböt kissé átlépi. Feltáró ellenőrzés: maga az erdő épít a zajra (ha csak a zajt cseréljük,
+a becslése átlagosan 0,19 pp-tal mozdul, a négy közül a legtöbbet; a magyarázat 0,12 pp-t
+tulajdonít neki) → a K4-hez: a kis levélméretű erdő a véletlen ingadozást is megtanulja, és a
+magyarázat ezt jelzi. → `xai/faithfulness.py`, `docs/huseg_eredmeny.md`
 
 **A felület nem számol fejben.** Minden szám SQL-lekérdezésből vagy a lezárt modellekből
 jön, a magyarázó szöveg sablonból készül ugyanezekből a mezőkből (ez lesz a nyelvi réteg
@@ -416,6 +436,7 @@ python -m xai.explain                  # SHAP-összegzés a négy modellre (300 
 python -m xai.explain --rendeles <order_key>   # egy rendelés magyarázata négy modellel
 python -m xai.kernel_arm               # KernelSHAP-kontrollkar (200 rendelés, kb. 20–40 perc)
 python -m xai.kernel_arm --rendelesek 20 --zaj 10 --nsamples 512   # gyors próba
+python -m xai.faithfulness            # a magyarázatok hűsége: törlési görbe + beültetett jellemző (kb. fél óra)
 python -m ui                           # a BI-felület (http://localhost:8501)
 ```
 
@@ -463,6 +484,7 @@ glassbox-bi/
 │   ├── explain.py           SHAP a négy modellre, a 22 jellemzőre összevonva; százalékpont
 │   ├── kernel_arm.py        KernelSHAP-kontrollkar: a négy modell ugyanazzal a magyarázóval
 │   ├── agreement.py         két magyarázat egyezése: top-k, RBO, súlyozott Kendall-tau
+│   ├── faithfulness.py      a magyarázatok hűsége: törlési/beszúrási görbe, beültetett jel és zaj
 │   ├── labels.py            brazil államok (+ térképrács), magyar kategórianevek, a tényezők és modellek hétköznapi leírása
 │   └── narrative.py         rövid nevek, magyar számalak, sablonos magyarázó szöveg
 ├── ui/
@@ -483,7 +505,9 @@ glassbox-bi/
 │   ├── v3_referencia_eredmeny.json   a referencia-összevetés teljes eredménye
 │   ├── v3_referencia_eredmeny.md     ugyanez röviden, táblázattal
 │   ├── kernel_kar_eredmeny.json      a KernelSHAP-kontrollkar eredménye (a 200 rendelés helyett a részhalmaz ujjlenyomatával)
-│   └── kernel_kar_eredmeny.md        ugyanez táblázatokkal
+│   ├── kernel_kar_eredmeny.md        ugyanez táblázatokkal
+│   ├── huseg_eredmeny.json           a hűségmérés eredménye (rendelés-azonosítók nélkül)
+│   └── huseg_eredmeny.md             ugyanez táblázatokkal
 ├── .github/workflows/       CI: minden push lefuttatja a teljes pipeline-t (szintetikus adaton)
 ├── LICENSE                  MIT (a kódra; az adat saját licenc alatt áll)
 ├── requirements.txt         közvetlen függőségek, alsó korláttal
@@ -509,6 +533,7 @@ glassbox-bi/
     ├── test_agreement.py    5 teszt (RBO a definíció szerint, top-k, előjel, súlyozott tau, bootstrap)
     ├── test_labels.py       5 teszt (mind a 27 állam, minden valódi kategóriának van magyar neve, leírások, térképrács)
     ├── test_kernel_arm.py   4 teszt (a 21 játékos tere bitre visszaalakítható, additív modellre pontos, additivitás, nincs csendes szűkítés)
+    ├── test_faithfulness.py 7 teszt (maszkok, additív modellen pontos görbe és a Shapley-sorrend a legjobb, beültetés, erős jel megtalálása, kis futás, felületi táblák)
     └── conftest.py          közös szintetikus tárház és modellek a fenti tesztekhez
 ```
 

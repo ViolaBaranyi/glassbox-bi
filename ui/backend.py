@@ -622,6 +622,84 @@ def kernel_checks_table(res: dict) -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
+# ------------------------------------------------ a magyarázatok hűsége (K2)
+FAITH_ORDERS = {"veletlen": "3 véletlen tényező", "felulet": "a felület szerinti 3 legerősebb",
+                "kernel": "a legjobb elérhető (KernelSHAP)"}
+FAITH_CURVE_LABELS = {"veletlen": "véletlen sorrend", "felulet": "a felület magyarázata szerinti sorrend",
+                      "kernel": "a KernelSHAP szerinti sorrend (a legjobb elérhető)"}
+FAITH_CRITERIA = {"jel_top3": "a jel nincs elég gyakran a top-3-ban",
+                  "jel_irany": "a jel iránya nem mindig helyes",
+                  "zaj_top3": "a zaj túl gyakran a top-3-ban",
+                  "zaj_arany": "a zaj túl erős"}
+
+
+def faithfulness_results(path: Path | None = None) -> dict | None:
+    """A hűségmérés mentett eredménye (python -m xai.faithfulness), ha van."""
+    p = Path(path or DOCS / "huseg_eredmeny.json")
+    return json.loads(p.read_text(encoding="utf-8")) if p.exists() else None
+
+
+def faith_drop_table(res: dict) -> pd.DataFrame:
+    """Modellenként és sorrendenként: mennyit esik a becslés, ha az első 3 tényezőt „kivesszük"."""
+    rows = []
+    for kind, d in res["torles_beszuras"]["modellek"].items():
+        for key, label in FAITH_ORDERS.items():
+            m = (d["mertekek"].get(key) or {}).get("top3_eses")
+            if m:
+                rows.append({"modell": d["nev"], "sorrend": label, "kulcs": key,
+                             "eses_pp": m["atlag"], "also": m["ci95"][0], "felso": m["ci95"][1]})
+    return pd.DataFrame(rows)
+
+
+def faith_curve_table(res: dict, kind: str) -> pd.DataFrame:
+    """Egy modell átlagos törlési görbéje sorrendenként (k = 0 … 21 kivett tényező)."""
+    d = res["torles_beszuras"]["modellek"][kind]
+    rows = []
+    for key, label in FAITH_CURVE_LABELS.items():
+        g = d["gorbek"].get(key)
+        if g:
+            rows += [{"k": k, "eses_pp": v, "sorrend": label, "kulcs": key}
+                     for k, v in enumerate(g["torles"])]
+    return pd.DataFrame(rows)
+
+
+def faith_planted_table(res: dict) -> pd.DataFrame:
+    """A beültetett jel és zaj modellenként, közérthető oszlopokkal."""
+    rows = []
+    for kind, d in res["beultetett"]["modellek"].items():
+        rows.append({"modell": d["nev"],
+                     "jel_top3": nv.fmt_pct(d["jel_top3"], 0),
+                     "jel_irany": nv.fmt_pct(d["jel_irany"], 0),
+                     "zaj_top3": nv.fmt_pct(d["zaj_top3"], 1),
+                     "zaj_arany": nv.fmt_pct(d["zaj_arany"], 1),
+                     "zaj_valodi": (f"{nv.fmt_num(d['zaj_valodi_hatas_pp'], 2)} pp"
+                                    if d.get("zaj_valodi_hatas_pp") is not None else "—"),
+                     "megfelelt": "igen" if d["megfelelt"] else "nem",
+                     "nem_teljesult": ", ".join(FAITH_CRITERIA.get(k, k)
+                                                for k, ok in d["itelet"].items() if not ok) or "—"})
+    return pd.DataFrame(rows)
+
+
+def faith_details_table(res: dict) -> pd.DataFrame:
+    """Szakmai tábla: AOPC (törlés, beszúrás) és a top-3 esés CI-vel; a páros különbség a véletlentől."""
+    rows = []
+    for kind, d in res["torles_beszuras"]["modellek"].items():
+        for key, label in FAITH_ORDERS.items():
+            m = d["mertekek"].get(key)
+            if not m:
+                continue
+            rows.append({"modell": d["nev"], "sorrend": label,
+                         "torles_aopc": _ci_text(m["torles_aopc"]),
+                         "beszuras_aopc": _ci_text(m["beszuras_aopc"]),
+                         "top3_eses": _ci_text(m["top3_eses"])})
+        pv = d["paros"]["felulet_minusz_veletlen"]
+        rows.append({"modell": d["nev"], "sorrend": "különbség: felület − véletlen",
+                     "torles_aopc": _ci_text(pv["torles_aopc"]),
+                     "beszuras_aopc": _ci_text(pv["beszuras_aopc"]),
+                     "top3_eses": _ci_text(pv["top3_eses"])})
+    return pd.DataFrame(rows)
+
+
 def provenance(res: dict) -> list[dict]:
     """A lezárt futások eredete (protokoll-ujjlenyomat, commit, idő, gép)."""
     out = []
