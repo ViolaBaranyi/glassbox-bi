@@ -333,6 +333,68 @@ def test_havi_vonal_megszakad_a_hianyzo_honapnal():
     assert [r["szakasz"] for r in data] == [0, 1, 1, 1]     # 2016-10 külön: nov.–dec. hiányzik
 
 
+def test_keves_adat_sav_a_havi_grafikonon():
+    m = pd.DataFrame({"honap": pd.to_datetime(["2016-09-01", "2016-10-01", "2016-12-01", "2017-01-01",
+                                               "2017-02-01"]),
+                      "rendelesek": [1, 265, 1, 750, 1700], "kesett": [1, 2, 0, 22, 40]})
+    m["megbizhato"] = m["rendelesek"] >= be.MIN_MONTH_ORDERS
+    g = charts.gap_runs(m)
+    assert len(g) == 1                                   # a szeptember az első megbízható hónap előtt van
+    assert g.loc[0, "honapok"] == "2016. november – 2016. december"
+    assert g.loc[0, "rendelesek_szoveg"] == "november: 0 · december: 1"      # a 0 rendeléses hónap is
+    assert g.loc[0, "kezdet"] == pd.Timestamp("2016-10-17") and g.loc[0, "veg"] == pd.Timestamp("2016-12-16")
+    full = m.assign(megbizhato=True)
+    assert charts.gap_runs(full).loc[0, "honapok"] == "2016. november"      # csak a valóban üres hónap
+    m["kesesi_arany"] = m["kesett"] / m["rendelesek"]
+    m["ci_also"], m["ci_felso"] = m["kesesi_arany"] * 0.8, m["kesesi_arany"] * 1.2
+    win = pd.DataFrame({"ablak": ["tanító"], "kezdet": [pd.Timestamp("2016-09-15")],
+                        "veg": [pd.Timestamp("2017-03-01")], "rendelesek": [2700]})
+    spec = charts.monthly_chart(m, win)[0].to_dict()
+    gap_rows = next(r for r in spec["datasets"].values() if r and "rendelesek_szoveg" in r[0])
+    assert gap_rows[0]["felirat"] == "kevés\nadat"
+    band_rows = next(r for r in spec["datasets"].values() if r and "idoszak_szoveg" in r[0])
+    assert band_rows[0]["idoszak_szoveg"] == "2016. szept. 15. – 2017. febr. 28."   # a vég kizáró határ
+
+
+def _marks(spec: dict):
+    if "layer" in spec:
+        for layer in spec["layer"]:
+            yield from _marks(layer)
+    elif "mark" in spec:
+        yield spec
+
+
+def test_minden_jelnek_magyar_sugoja_van(synth_db, synth_bundle):
+    """A Streamlit témája minden jelnek alapból a nyers mezőneveit mutatja súgóként (pl. „kezdet,
+    veg, ablak", angol dátummal) — ezért minden rétegnek saját súgója van, vagy kifejezetten nincs."""
+    ov = be.overview(synth_db)
+    top, vol = charts.monthly_chart(be.monthly(synth_db), be.windows(synth_db))
+    det = be.order_detail(synth_bundle, be.risk_table(synth_bundle)["order_key"].iloc[0])
+    sample, expl = be.sample_explanations(synth_bundle, kinds=("lightgbm", "logreg"), n=80)
+    res = be.locked_results()
+    dims = be.by_dimension("vevo_allam", 50, synth_db)
+    all_charts = [
+        top, vol,
+        charts.dimension_chart(dims, ov["kesesi_arany"], "állam"),
+        charts.state_tile_map(dims, ov["kesesi_arany"]), charts.state_tile_map(),
+        charts.reasons_chart(det["tenyezok"].head(8)),
+        charts.comparison_heatmap(be.model_comparison(det), [NAMES[k] for k in KINDS]),
+        charts.pr_auc_forest(be.results_table(res), 0.0361),
+        charts.reliability_chart(be.calibration(synth_bundle)),
+        charts.importance_heatmap(be.global_importance_table(expl), [NAMES["lightgbm"], NAMES["logreg"]]),
+        charts.dependence_chart(be.dependence(sample, expl["lightgbm"], "vallalt_ido_nap"), "idő", False),
+        charts.dependence_chart(be.dependence(sample, expl["lightgbm"], "kategoria"), "kategória", True),
+    ]
+    for ch in all_charts:
+        for layer in _marks(ch.to_dict()):
+            mark = layer["mark"] if isinstance(layer["mark"], dict) else {"type": layer["mark"]}
+            enc = layer.get("encoding", {})
+            assert "tooltip" in enc or mark.get("tooltip") is False, (mark.get("type"), sorted(enc))
+    # a dobozábra saját rajzolás: nincs angol nyelvű „Q1 of …" súgó
+    box = charts.dependence_chart(be.dependence(sample, expl["lightgbm"], "kategoria"), "kategória", True)
+    assert "boxplot" not in str(box.to_dict())
+
+
 def test_elojeles_tartomany():
     assert charts._signed_domain(pd.Series([1.0, 3.0])) == [0.0, pytest.approx(3.66)]
     lo, hi = charts._signed_domain(pd.Series([-2.0, 2.0]))

@@ -1,5 +1,6 @@
 """Áttekintés — a késések alakulása, tisztán az adatokból (SQL), a modelltől függetlenül."""
 
+import pandas as pd
 import streamlit as st
 
 from ui import backend as d
@@ -47,16 +48,26 @@ c[3].metric("Kihagyott rendelések", nv.fmt_num(ov["kizart"], 0), border=True,
 # ----------------------------------------------------------------- havi trend
 st.subheader("Hogyan alakult a késés hónapról hónapra?")
 m, win = common.monthly(), common.windows()
-rate_chart, volume_chart = charts.monthly_chart(m, win)
+rate_chart, volume_chart = charts.monthly_chart(m, win, ink=common.ink())
 st.altair_chart(rate_chart, width="stretch")
 st.altair_chart(volume_chart, width="stretch")
-dropped = m[~m["megbizhato"]]
+# A kevés rendeléses hónapok — azok is, amelyekből egyetlen rendelés sincs (azok a lekérdezés
+# eredményében meg sem jelennek, ezért a teljes hónapsorral vetjük össze).
+counts = {pd.Timestamp(t): int(n) for t, n in zip(m["honap"], m["rendelesek"])}
+all_months = pd.date_range(m["honap"].min(), m["honap"].max(), freq="MS")
+thin = [(t, counts.get(t, 0)) for t in all_months if counts.get(t, 0) < d.MIN_MONTH_ORDERS]
 note = ""
-if len(dropped):
-    months = ", ".join(f"{t.year}. {nv.MONTHS[t.month - 1]} ({n} rendelés)"
-                       for t, n in zip(dropped["honap"], dropped["rendelesek"]))
-    note = (f" Azokat a hónapokat, amelyekben {d.MIN_MONTH_ORDERS}-nál kevesebb rendelés volt, "
-            f"kihagytuk, mert ott az arány a véletlenen múlik: {months}.")
+if thin:
+    listed = ", ".join(f"{t.year}. {nv.MONTHS[t.month - 1]}: {nv.fmt_num(n, 0)}" for t, n in thin)
+    note = (f" **Miért szakad meg a vonal?** Ezekben a hónapokban {d.MIN_MONTH_ORDERS}-nál kevesebb "
+            f"kézbesített rendelés van az adatban ({listed}). Itt nem számolunk késési arányt, mert "
+            "egy-két rendelésből az arány a véletlenen múlna (egyetlen rendelésnél 0% vagy 100% "
+            "lenne) — a grafikonon ezt a szürke „kevés adat” sáv jelzi.")
+    later = [t for t in all_months if t > max(t for t, _ in thin)]
+    if ov["adatforras"] == "valós" and later:
+        note += (" Ez az eredeti Olist-adat sajátossága, nem a mi szűrésünké: a 2016-os hónapokból "
+                 "alig van benne rendelés (novemberből egy sem), a rendszeres adat "
+                 f"{later[0].year}. {nv.MONTHS[later[0].month - 1]} óta van.")
 def _window(key: str) -> str:
     text = labels.WINDOW_PLAIN[key].rstrip(".")
     return f"{labels.WINDOW_LABELS[key]} ({text[0].lower() + text[1:]})"
@@ -67,7 +78,7 @@ st.caption(
     "bizonytalansága. Alatta a szürke oszlopok a havi rendelésszámot mutatják. A háttérszínek azt "
     f"jelzik, melyik időszak mire szolgált: **kék** — {_window('tanító')}; **narancs** — "
     f"{_window('validációs')}; **zöld** — {_window('teszt')}. Vidd az egeret egy pont fölé a "
-    "pontos számokért." + note)
+    "pontos számokért, a háttér fölé pedig az időszak dátumaiért." + note)
 with st.expander("Hogyan számoltuk? (az adatbázis-lekérdezés)"):
     st.code(d.SQL_MONTHLY, language="sql")
 

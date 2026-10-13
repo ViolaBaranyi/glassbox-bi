@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import shutil
 import subprocess
 from pathlib import Path
@@ -23,6 +24,19 @@ from pipeline import train
 from pipeline import v3_baseline as vb
 
 PROTO = Path(__file__).resolve().parent.parent / "docs" / "v3_protokoll.json"
+
+
+@pytest.fixture(autouse=True)
+def _git_ne_keressen_felfele(tmp_path_factory, monkeypatch):
+    """
+    A tesztek ideiglenes mappái „nem git-tárolók" — akkor is, ha egy felsőbb mappa az
+    (pl. a felhasználói mappában is van egy .git: Windowson a Temp a felhasználói mappa
+    alatt van, így a git azt a tárolót találná meg). A git a pytest ideiglenes gyökerénél
+    feljebb nem keres (GIT_CEILING_DIRECTORIES; a git-hívások öröklik a környezetet).
+    """
+    base = tmp_path_factory.getbasetemp()
+    # Windowson mindkét írásmóddal (C:/… és C:\…), az elválasztó ott „;" — Linuxon a kettő ugyanaz
+    monkeypatch.setenv("GIT_CEILING_DIRECTORIES", os.pathsep.join(dict.fromkeys([base.as_posix(), str(base)])))
 
 
 def _jovahagyott(forras="szintetikus", B=100) -> dict:
@@ -111,7 +125,7 @@ def synth_db(tmp_path_factory):
 
 
 def test_commitolatlan_protokollal_nem_fut(synth_db, tmp_path):
-    proto = tmp_path / "protokoll.json"            # a tmp_path nem git-tároló
+    proto = tmp_path / "protokoll.json"            # a tmp_path nem git-tároló (lásd fent)
     proto.write_text(json.dumps(_jovahagyott(), ensure_ascii=False), encoding="utf-8")
     with pytest.raises(vb.ProtocolError, match="commitolni"):
         vb.run_locked(synth_db, proto, tmp_path / "e.json", tmp_path / "e.md")
