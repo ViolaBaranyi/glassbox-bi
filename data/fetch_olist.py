@@ -53,9 +53,9 @@ def _manual_help(reason: str, raw_dir: Path = RAW) -> str:
         "Kézi letöltés:\n"
         f"  1. {DATASET_URL} -> Download (kb. 45 MB-os ZIP)\n"
         f"  2. A ZIP-ből mind a 9 CSV-t másold ide: {raw_dir}\n"
-        "  3. Futtasd újra: python demo.py\n\n"
+        "  3. Futtasd újra: uv run demo.py\n\n"
         "Ha csak a gépezetet akarod kipróbálni valódi adat nélkül:\n"
-        "  python demo.py --synthetic"
+        "  uv run demo.py --synthetic"
     )
 
 
@@ -73,7 +73,8 @@ def fetch(raw_dir: Path = RAW, force: bool = False, verbose: bool = True) -> Pat
         import kagglehub
     except ImportError as exc:
         raise FetchError(_manual_help(
-            "a kagglehub csomag nincs telepítve (pip install -r requirements.txt)",
+            "a kagglehub csomag nincs telepítve — indítsd uv run-nal (pl. uv run demo.py), az előkészíti "
+            "a rögzített környezetet",
             raw_dir)) from exc
 
     if verbose:

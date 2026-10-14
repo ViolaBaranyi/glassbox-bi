@@ -32,9 +32,14 @@ A kar saját zaja
     különböző háttér. Ha a modellek közti eltérés nem nagyobb ennél, nem a modellek
     különböznek, hanem a mérés zajos.
 
-Futtatás (valódi adaton kb. 15–25 perc; a random forest a lassú):
+Futtatás (valódi adaton kb. fél óra; a random forest a lassú):
     python -m xai.kernel_arm                     # 200 teszt-rendelés, mind a négy modell
     python -m xai.kernel_arm --rendelesek 20 --zaj 10 --nsamples 512   # gyors próba
+
+Hova kerül az eredmény? A teljes, rögzített beállítású futás a docs/kernel_kar_eredmeny.*
+fájlokba (ezt mutatja a felület), minden más — pl. a gyors próba — az
+artifacts/kernel_kar_proba.* fájlokba, hogy a lezárt eredményt véletlenül se írja felül
+(`--kimenet`-tel máshova is kérhető).
 """
 
 from __future__ import annotations
@@ -60,6 +65,7 @@ from xai.models import KINDS, NAMES, Bundle, load_bundle
 
 ROOT = Path(__file__).resolve().parent.parent
 DOCS = ROOT / "docs"
+ARTIFACTS = ROOT / "artifacts"
 
 PLAYERS = list(nv.DISPLAY_FEATURES)        # 21 játékos, a hónap egyben
 N_ORDERS = 200                             # rögzített rendelés-részhalmaz a teszt-időszakból
@@ -329,30 +335,55 @@ def report(res: dict) -> str:
     return "\n".join(L) + "\n"
 
 
-def main() -> None:
-    use_utf8_console()
+def parser() -> argparse.ArgumentParser:
     ap = argparse.ArgumentParser(description="KernelSHAP-kontrollkar a négy modellre")
     ap.add_argument("--rendelesek", type=int, default=N_ORDERS)
     ap.add_argument("--zaj", type=int, default=N_NOISE, help="ennyi rendelésen mérjük a kar zaját")
     ap.add_argument("--hatter", type=int, default=N_BACKGROUND)
     ap.add_argument("--nsamples", type=int, default=NSAMPLES)
     ap.add_argument("--modellek", type=str, default=",".join(KINDS))
-    ap.add_argument("--kimenet", type=str, default=str(DOCS / "kernel_kar_eredmeny"),
-                    help="a .json és a .md fájl útvonala kiterjesztés nélkül")
-    a = ap.parse_args()
+    ap.add_argument("--kimenet", type=str, default=None,
+                    help="a .json és a .md fájl útvonala kiterjesztés nélkül (alapból: a teljes "
+                         "futásé docs/kernel_kar_eredmeny, minden másé artifacts/kernel_kar_proba)")
+    return ap
+
+
+def _kinds(a) -> tuple[str, ...]:
+    return tuple(k.strip() for k in a.modellek.split(",") if k.strip())
+
+
+def output_path(a) -> Path:
+    """
+    Hova írjuk az eredményt. A felület a docs/kernel_kar_eredmeny.* fájlt mutatja, ezért oda
+    csak a teljes, rögzített beállítású futás írhat; minden más (pl. a gyors próba) az
+    artifacts/ mappába kerül — így egy próba nem írhatja felül csendben a lezárt eredményt.
+    """
+    if a.kimenet:
+        return Path(a.kimenet)
+    full = ((a.rendelesek, a.zaj, a.hatter, a.nsamples) == (N_ORDERS, N_NOISE, N_BACKGROUND, NSAMPLES)
+            and _kinds(a) == tuple(KINDS))
+    return DOCS / "kernel_kar_eredmeny" if full else ARTIFACTS / "kernel_kar_proba"
+
+
+def main() -> None:
+    use_utf8_console()
+    a = parser().parse_args()
+    out = output_path(a)
     try:
         b = load_bundle(DB_PATH, verbose=True)
-        kinds = tuple(k.strip() for k in a.modellek.split(",") if k.strip())
+        kinds = _kinds(a)
         unknown = set(kinds) - set(KINDS)
         if unknown:
             raise ValueError(f"Ismeretlen modell: {sorted(unknown)}")
         print(f"KernelSHAP-kontrollkar: {a.rendelesek} rendelés, háttér {a.hatter}, "
               f"{a.nsamples} koalíció, zajmérés {a.zaj} rendelésen.")
+        if out.parent == ARTIFACTS and not a.kimenet:
+            print("Ez nem a teljes, rögzített futás → az eredmény az artifacts/ mappába kerül; "
+                  "a docs/-ban lévő lezárt eredmény (a felületé) nem változik.")
         res = run(b, kinds, a.rendelesek, a.zaj, a.hatter, a.nsamples)
     except (WarehouseUnavailable, ValueError) as exc:
         print(f"\nHIBA:\n{exc}", file=sys.stderr)
         sys.exit(1)
-    out = Path(a.kimenet)
     out.parent.mkdir(parents=True, exist_ok=True)
     out.with_suffix(".json").write_text(json.dumps(res, ensure_ascii=False, indent=1), encoding="utf-8")
     text = report(res)

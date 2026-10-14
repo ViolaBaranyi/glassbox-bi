@@ -34,9 +34,14 @@ A magyarázatok hűsége a modellhez (K2 — témavezetői kérés): két méré
 
 Egyik mérés sem használja a valódi teszt-címkéket.
 
-Futtatás (valódi adaton kb. 30–40 perc; a KernelSHAP és a random forest a lassú):
+Futtatás (valódi adaton kb. fél óra; a KernelSHAP és a random forest a lassú):
     python -m xai.faithfulness
     python -m xai.faithfulness --rendelesek 20 --veletlen 2 --beultetett 100 --nsamples 512   # gyors próba
+
+Hova kerül az eredmény? A teljes, rögzített beállítású futás a docs/huseg_eredmeny.*
+fájlokba (ezt mutatja a felület), minden más — pl. a gyors próba — az
+artifacts/huseg_proba.* fájlokba, hogy a lezárt eredményt véletlenül se írja felül
+(`--kimenet`-tel máshova is kérhető).
 """
 
 from __future__ import annotations
@@ -64,6 +69,7 @@ from xai.models import KINDS, NAMES, Bundle, load_bundle
 
 ROOT = Path(__file__).resolve().parent.parent
 DOCS = ROOT / "docs"
+ARTIFACTS = ROOT / "artifacts"
 
 PLAYERS = ka.PLAYERS                     # 21 megjelenítési tényező
 N_RANDOM = 5                             # véletlen sorrend rendelésenként
@@ -270,7 +276,7 @@ def planted_feature(b: Bundle, kinds=KINDS, n_rows: int = N_PLANT, flip: float =
     out = {}
     t0 = time.time()
     models = planted_models(b, X2, y2, kinds)
-    log(f"a négy modell újratanítva a beültetett adaton: {time.time() - t0:.0f} mp")
+    log(f"a modellek újratanítva a beültetett adaton: {time.time() - t0:.0f} mp")
     noise_values = bg[NOISE_SLOT].sample(min(50, len(bg)), random_state=1).to_numpy()
     for kind in kinds:
         t1 = time.time()
@@ -410,8 +416,7 @@ def report(res: dict) -> str:
     return "\n".join(L) + "\n"
 
 
-def main() -> None:
-    use_utf8_console()
+def parser() -> argparse.ArgumentParser:
     ap = argparse.ArgumentParser(description="A magyarázatok hűsége: törlési/beszúrási görbe és beültetett jellemző")
     ap.add_argument("--rendelesek", type=int, default=ka.N_ORDERS)
     ap.add_argument("--veletlen", type=int, default=N_RANDOM)
@@ -419,22 +424,48 @@ def main() -> None:
     ap.add_argument("--nsamples", type=int, default=ka.NSAMPLES)
     ap.add_argument("--kernel-nelkul", action="store_true", help="a KernelSHAP-viszonyítás kihagyása (gyorsabb)")
     ap.add_argument("--modellek", type=str, default=",".join(KINDS))
-    ap.add_argument("--kimenet", type=str, default=str(DOCS / "huseg_eredmeny"),
-                    help="a .json és a .md fájl útvonala kiterjesztés nélkül")
-    a = ap.parse_args()
+    ap.add_argument("--kimenet", type=str, default=None,
+                    help="a .json és a .md fájl útvonala kiterjesztés nélkül (alapból: a teljes "
+                         "futásé docs/huseg_eredmeny, minden másé artifacts/huseg_proba)")
+    return ap
+
+
+def _kinds(a) -> tuple[str, ...]:
+    return tuple(k.strip() for k in a.modellek.split(",") if k.strip())
+
+
+def output_path(a) -> Path:
+    """
+    Hova írjuk az eredményt. A felület a docs/huseg_eredmeny.* fájlt mutatja, ezért oda csak
+    a teljes, rögzített beállítású futás írhat; minden más (pl. a gyors próba) az artifacts/
+    mappába kerül — így egy próba nem írhatja felül csendben a lezárt eredményt.
+    """
+    if a.kimenet:
+        return Path(a.kimenet)
+    full = ((a.rendelesek, a.veletlen, a.beultetett, a.nsamples, a.kernel_nelkul)
+            == (ka.N_ORDERS, N_RANDOM, N_PLANT, ka.NSAMPLES, False) and _kinds(a) == tuple(KINDS))
+    return DOCS / "huseg_eredmeny" if full else ARTIFACTS / "huseg_proba"
+
+
+def main() -> None:
+    use_utf8_console()
+    a = parser().parse_args()
+    out = output_path(a)
     try:
         b = load_bundle(DB_PATH, verbose=True)
-        kinds = tuple(k.strip() for k in a.modellek.split(",") if k.strip())
+        kinds = _kinds(a)
         unknown = set(kinds) - set(KINDS)
         if unknown:
             raise ValueError(f"Ismeretlen modell: {sorted(unknown)}")
         print(f"Hűségmérés: {a.rendelesek} rendelés, {a.veletlen} véletlen sorrend, "
               f"beültetett jellemző {a.beultetett} rendelésen.")
+        if out.parent == ARTIFACTS and not a.kimenet:
+            print("Ez nem a teljes, rögzített futás → az eredmény az artifacts/ mappába kerül; "
+                  "a docs/-ban lévő lezárt eredmény (a felületé) nem változik.")
         res = run(b, kinds, a.rendelesek, a.veletlen, a.beultetett, a.nsamples, not a.kernel_nelkul)
     except (WarehouseUnavailable, ValueError) as exc:
         print(f"\nHIBA:\n{exc}", file=sys.stderr)
         sys.exit(1)
-    out = Path(a.kimenet)
     out.parent.mkdir(parents=True, exist_ok=True)
     out.with_suffix(".json").write_text(json.dumps(res, ensure_ascii=False, indent=1), encoding="utf-8")
     text = report(res)

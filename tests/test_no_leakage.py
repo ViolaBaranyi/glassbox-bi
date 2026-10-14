@@ -37,9 +37,9 @@ from pipeline.split import temporal_split
 def data():
     if not DB_PATH.exists():
         pytest.skip(
-            "Nincs tárház. Futtasd előbb (vagy: python demo.py):\n"
-            "  python -m data.fetch_olist\n"
-            "  python -m data.build_warehouse"
+            "Nincs tárház. Futtasd előbb (vagy: uv run demo.py):\n"
+            "  uv run python -m data.fetch_olist\n"
+            "  uv run python -m data.build_warehouse"
         )
     con = connect()
     X, y, meta = build_features(con)

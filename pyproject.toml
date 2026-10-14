@@ -7,8 +7,32 @@ license = "MIT"
 # Rögzítve a 3.14-re. A 3.15-re akkor váltunk, ha a duckdb és a pyarrow is
 # kiadja hozzá a telepítőcsomagot (2026. okt. 8-án még egyik sem).
 requires-python = ">=3.14,<3.15"
+# A közvetlen függőségek, alsó korláttal. A pontos változatokat a uv.lock rögzíti (Windowsra
+# és Linuxra); a requirements.lock ugyanezeket sorolja fel pip-nek (CI) — uv export-tal készül.
+dependencies = [
+    "duckdb>=1.5",
+    "lightgbm>=4.7",
+    "scikit-learn>=1.9",
+    "pandas>=3.0",
+    "numpy>=2.5",
+    "pyarrow>=25.0",
+    "joblib>=1.5",
+    "pytest>=9.0",
+    "kagglehub>=0.3",      # a valódi Olist-adat letöltése (data/fetch_olist.py)
+    "shap>=0.52",          # magyarázó réteg (xai/)
+    "streamlit>=1.65",     # BI-felület (ui/)
+]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-q"
 filterwarnings = ["error::FutureWarning"]
+
+[tool.uv]
+# Alkalmazás, nem telepítendő csomag: a modulok a projekt gyökeréből futnak (python -m …).
+package = false
+# A lock csak akkor érvényes, ha mindkét gépfajtára kész kerékből települ (fordítás nélkül).
+required-environments = [
+    "sys_platform == 'win32' and platform_machine == 'AMD64'",
+    "sys_platform == 'linux' and platform_machine == 'x86_64'",
+]

@@ -18,7 +18,12 @@ ROOT = Path(__file__).resolve().parent.parent
 
 def main() -> None:
     os.chdir(ROOT)                      # a relatív útvonalak (data/, docs/) innen értendők
-    from streamlit.web import cli as stcli
+    try:
+        from streamlit.web import cli as stcli
+    except ModuleNotFoundError:
+        sys.exit("A streamlit ebben a Python-környezetben nincs telepítve. Indítsd így:\n"
+                 "    uv run python -m ui\n"
+                 "(a uv a rögzített csomagokkal magától előkészíti a környezetet — README, Gyorsindítás)")
     sys.argv = ["streamlit", "run", str(ROOT / "ui" / "app.py"),
                 "--server.address=localhost",
                 "--browser.gatherUsageStats=false",

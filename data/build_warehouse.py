@@ -174,7 +174,8 @@ def read_raw(raw_dir: Path) -> dict[str, pd.DataFrame]:
             f"Hiányzó forrásfájlok itt: {raw_dir}\n  "
             + "\n  ".join(missing)
             + "\n\nHa még nincs meg a valódi adat, futtasd ezt:\n"
-              "  python -m data.make_synthetic"
+              "  uv run python -m data.fetch_olist\n"
+              "(valódi adat nélkül, csak a gépezet kipróbálásához: uv run demo.py --synthetic)"
         )
     return {k: pd.read_csv(raw_dir / v) for k, v in SOURCES.items()}
 

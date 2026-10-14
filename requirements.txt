@@ -1,18 +1,18 @@
-# Üvegdoboz BI — futtatókörnyezet
+# Üvegdoboz BI — a közvetlen függőségek (pip-nek, uv nélküli gépre)
 #
 # Python: 3.14 (rögzítve: pyproject.toml, .python-version). A 3.15-re akkor
 #         váltunk, ha a duckdb és a pyarrow is kiadja hozzá a telepítőcsomagot.
 #
-# Két fájl:
-#   requirements.txt   — a közvetlen függőségek alsó korláttal: MIT használunk
-#   requirements.lock  — minden csomag pontos verzióval, Windowsra és Linuxra:
-#                        PONTOSAN mivel. A CI és a bitre azonos reprodukálás ezt
-#                        telepíti:   pip install -r requirements.lock
-#   A lock újragenerálása (ha egy függőség változik):
-#     uv pip compile requirements.txt --universal --python-version 3.14 -o requirements.lock
+# A forrás a pyproject.toml ([project] dependencies); ez a lista ugyanaz (teszt őrzi).
+# A pontos változatok:
+#   uv.lock            — ebből építi a uv a környezetet:      uv sync
+#   requirements.lock  — ugyanezek pip-nek (CI):              pip install -r requirements.lock
+# Ha egy függőség változik: a pyproject.toml-ban és itt is átírni, majd
+#   uv lock
+#   uv export --format requirements-txt --no-hashes --no-emit-project --no-annotate --frozen -o requirements.lock
 #
-# Kipróbálva (2026. okt. 8–9.): Python 3.14.8, duckdb 1.5.6, lightgbm 4.7.0,
-# scikit-learn 1.9.1, pandas 3.0.6, numpy 2.5.3; okt. 9-től shap és streamlit is.
+# Kipróbálva (2026. okt. 8–14.): Python 3.14.3–3.14.8, duckdb 1.5.6, lightgbm 4.7.0,
+# scikit-learn 1.9.1, pandas 3.0.6, numpy 2.5.3, shap 0.53.0, streamlit 1.65.0.
 
 duckdb>=1.5
 lightgbm>=4.7

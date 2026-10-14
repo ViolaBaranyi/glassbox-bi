@@ -7,10 +7,13 @@ A KernelSHAP-kontrollkar tesztjei — szintetikus tárházon, kis beállítások
     (g_j(x_j) − átlag g_j(háttér)) — a hónap és a kategória is helyesen maszkolódik;
   * mind a négy modellnél additív (alapérték + Σ = kimenet), determinisztikus a
     maggal, és nem szűkít csendben 10 tényezőre (`l1_reg=False`);
-  * a teljes futás szerkezete és a jelentés.
+  * a teljes futás szerkezete és a jelentés;
+  * egy próbafutás nem írhatja felül a docs/-beli lezárt eredményt (a felületét).
 """
 
 from __future__ import annotations
+
+from pathlib import Path
 
 import numpy as np
 import pytest
@@ -115,3 +118,14 @@ def test_teljes_futas_kis_beallitassal(synth_bundle):
     assert ka.subset_fingerprint(synth_bundle, again.index) == res["rendeles_ujjlenyomat"]
     assert ka.subset_fingerprint(synth_bundle, ka.order_subset(synth_bundle, 5).index) != \
         res["rendeles_ujjlenyomat"]
+
+
+def test_a_probafutas_nem_irja_felul_a_lezart_eredmenyt():
+    """A felület a docs/-beli eredményt mutatja: oda csak a teljes, rögzített futás írhat."""
+    p = ka.parser()
+    assert ka.output_path(p.parse_args([])) == ka.DOCS / "kernel_kar_eredmeny"
+    assert ka.output_path(p.parse_args(["--modellek", ",".join(KINDS)])) == ka.DOCS / "kernel_kar_eredmeny"
+    for args in (["--rendelesek", "20", "--zaj", "10", "--nsamples", "512"],     # a README gyors próbája
+                 ["--hatter", "50"], ["--modellek", "lightgbm"]):
+        assert ka.output_path(p.parse_args(args)) == ka.ARTIFACTS / "kernel_kar_proba", args
+    assert ka.output_path(p.parse_args(["--kimenet", "valahol/mas"])) == Path("valahol/mas")

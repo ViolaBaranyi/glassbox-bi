@@ -280,7 +280,7 @@ st.caption(
 st.subheader("Mennyire hűek a magyarázatok a modellhez?")
 fres = d.faithfulness_results()
 if fres is None:
-    st.info("A hűségmérés eredménye még nincs meg. Futtatás: `python -m xai.faithfulness` "
+    st.info("A hűségmérés eredménye még nincs meg. Futtatás: `uv run python -m xai.faithfulness` "
             "(kb. fél–egy óra; a random forest a lassú).", icon=":material/science:")
 else:
     tb, pl = fres["torles_beszuras"], fres["beultetett"]
@@ -394,7 +394,7 @@ else:
 # -------------------------------------------- kontrollkar (szakmai rész)
 with common.details("Szakmai részletek: a magyarázatok ellenőrzése (KernelSHAP-kontrollkar)"):
     if kres is None:
-        st.info("A kontrollkar eredménye még nincs meg. Futtatás: `python -m xai.kernel_arm` "
+        st.info("A kontrollkar eredménye még nincs meg. Futtatás: `uv run python -m xai.kernel_arm` "
                 "(200 rendelés, kb. 20–40 perc; a random forest a lassú).", icon=":material/science:")
     else:
         ks = kres["beallitas"]

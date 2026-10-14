@@ -7,12 +7,14 @@ A magyarázatok hűségének mérése (xai/faithfulness.py) — szintetikus adat
     a Shapley-sorrend AOPC-je minden más sorrendénél nagyobb vagy egyenlő;
   * a beültetett jellemző: csak a két kijelölt oszlop és a jel = 1 sorok címkéje változik,
     erős jelnél a magyarázat megtalálja a jelet;
-  * a teljes futás (kicsiben) jelentést ad, és nem ment rendelés-azonosítót.
+  * a teljes futás (kicsiben) jelentést ad, és nem ment rendelés-azonosítót;
+  * egy próbafutás nem írhatja felül a docs/-beli lezárt eredményt (a felületét).
 """
 
 from __future__ import annotations
 
 import json
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
@@ -20,6 +22,7 @@ import pytest
 
 from xai import faithfulness as fa
 from xai import kernel_arm as ka
+from xai.models import KINDS
 
 
 def test_maszkok_es_sorrend():
@@ -163,3 +166,14 @@ def test_feluleti_tablak_es_abrak(kis_eredmeny):
         for layer in layers:                                          # magyar súgó minden rétegen
             mark = layer["mark"] if isinstance(layer["mark"], dict) else {"type": layer["mark"]}
             assert "tooltip" in layer.get("encoding", {}) or mark.get("tooltip") is False
+
+
+def test_a_probafutas_nem_irja_felul_a_lezart_eredmenyt():
+    """A felület a docs/-beli eredményt mutatja: oda csak a teljes, rögzített futás írhat."""
+    p = fa.parser()
+    assert fa.output_path(p.parse_args([])) == fa.DOCS / "huseg_eredmeny"
+    assert fa.output_path(p.parse_args(["--modellek", ",".join(KINDS)])) == fa.DOCS / "huseg_eredmeny"
+    for args in (["--rendelesek", "20", "--veletlen", "2", "--beultetett", "100", "--nsamples", "512"],
+                 ["--kernel-nelkul"], ["--modellek", "lightgbm,logreg"]):
+        assert fa.output_path(p.parse_args(args)) == fa.ARTIFACTS / "huseg_proba", args
+    assert fa.output_path(p.parse_args(["--kimenet", "valahol/mas"])) == Path("valahol/mas")

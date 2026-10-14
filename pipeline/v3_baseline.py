@@ -197,7 +197,7 @@ def run_locked(db_path: Path = DB_PATH, protocol_path: Path = PROTOCOL,
                f"  protokoll commitolva: {'igen' if gs['protokoll_commitolva'] else 'NEM'} · "
                f"commitolatlan módosítás: {'nincs' if gs['munkapeldany_tiszta'] else 'VAN'}\n")
             + "Teendő:\n  git add -A\n  git commit -m \"v3 protokoll jóváhagyva\"\n  git push\n"
-            "majd újra: python -m pipeline.v3_baseline")
+            "majd újra: uv run python -m pipeline.v3_baseline")
     if Path(out_json).exists() and not ismetles:
         raise LockedRunExists(
             f"Már van lezárt eredmény: {out_json}\n"

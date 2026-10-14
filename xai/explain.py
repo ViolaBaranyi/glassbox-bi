@@ -24,7 +24,7 @@ pontos Shapley-értéke — azt a KernelSHAP-kontrollkar méri (következő lép
 
 Futtatás:
     python -m xai.explain                    # összegzés a teszt-időszak rendeléseire
-    python -m xai.explain --rendeles <order_key>
+    python -m xai.explain --rendeles RENDELES_KULCS   # a kulcs a felület Rendelés oldalán: „azonosító”
 """
 
 from __future__ import annotations

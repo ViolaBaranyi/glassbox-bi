@@ -1,8 +1,8 @@
 """
 Üvegdoboz BI — a teljes pipeline egyetlen paranccsal, bemutatáshoz.
 
-    python demo.py              # a valódi Olist-adaton fut; ha még nincs meg, letölti
-    python demo.py --synthetic  # szintetikus adaton (CI, gépezet-próba valódi adat nélkül)
+    uv run demo.py              # a valódi Olist-adaton fut; ha még nincs meg, letölti
+    uv run demo.py --synthetic  # szintetikus adaton (CI, gépezet-próba valódi adat nélkül)
 
 Lépések:
   1. környezet ellenőrzése
@@ -32,7 +32,7 @@ if str(ROOT) not in sys.path:
 from data.db import use_utf8_console  # noqa: E402
 
 LINE = "=" * 72
-TARGET_PYTHON = (3, 14)   # a rögzített környezet (pyproject.toml, requirements.lock)
+TARGET_PYTHON = (3, 14)   # a rögzített környezet (pyproject.toml, .python-version, uv.lock)
 
 
 def header(n: int, title: str) -> float:
@@ -76,8 +76,8 @@ def main() -> None:
           f"scikit-learn {sklearn.__version__} · pandas {pandas.__version__}")
     if sys.version_info[:2] != TARGET_PYTHON:
         print(f"   ! A projekt a Python {TARGET_PYTHON[0]}.{TARGET_PYTHON[1]}-re van rögzítve "
-              "(README, requirements.lock). Más verzióval futhat,")
-        print("     de a számok bitre azonossága csak a rögzített környezetben garantált.")
+              "(pyproject.toml, uv.lock). Más verzióval futhat,")
+        print("     de a számok bitre azonossága csak a rögzített környezetben garantált: uv run demo.py")
     done(t)
 
     # ------------------------------------------------------------------ 2. adat
@@ -150,7 +150,7 @@ def main() -> None:
     kar = ", ".join(f"{ok}: {n:,}" for ok, n in wh["karanten"]) or "üres"
     print(f"   V-1 validáció  rendben, karantén: {kar}")
     print(f"   Kizárva        {wh['kizart']:,} nem kézbesített rendelés "
-          f"(zárónap {wh['zarnap'][:10]}; érzékenység: python -m pipeline.cohort_report)")
+          f"(zárónap {wh['zarnap'][:10]}; érzékenység: uv run python -m pipeline.cohort_report)")
     print("   Tesztek        mind átment")
     print(f"   Modell         LightGBM, {res['jellemzok']} jellemző, {res['fak_szama']} fa "
           f"(bővülő ablakos CV{', címke-tisztítással' if res['cimke_tisztitas']['be'] else ''}), "
@@ -162,7 +162,7 @@ def main() -> None:
           f"{m['ece_egyenlo_elemszam']:.3f})   Brier {m['brier']:.4f}, "
           f"készség {diag['brier_keszseg']['tanito_bazisratahoz']:.1%}")
     print(f"   Artefaktumok   {Path(res['artifacts']).relative_to(ROOT)}")
-    print("   Felület        python -m ui   (megnyílik a böngészőben: http://localhost:8501)")
+    print("   Felület        uv run python -m ui   (megnyílik a böngészőben: http://localhost:8501)")
     print(f"\n   Teljes futásidő: {time.perf_counter() - started:.0f} mp")
     print(LINE)
 

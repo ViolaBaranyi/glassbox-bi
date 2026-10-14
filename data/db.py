@@ -29,9 +29,9 @@ def connect(db_path: Path = DB_PATH, read_only: bool = True):
     if read_only and not db_path.exists():
         raise WarehouseUnavailable(
             f"Nincs tárház itt: {db_path}\n"
-            "Építsd fel előbb (vagy futtasd: python demo.py):\n"
-            "  python -m data.fetch_olist\n"
-            "  python -m data.build_warehouse"
+            "Építsd fel előbb (vagy futtasd: uv run demo.py):\n"
+            "  uv run python -m data.fetch_olist\n"
+            "  uv run python -m data.build_warehouse"
         )
     try:
         return duckdb.connect(str(db_path), read_only=read_only)

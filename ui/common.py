@@ -184,7 +184,7 @@ def require_warehouse() -> dict:
                  + str(exc).split("\n")[0])
         st.markdown("Futtasd le egyszer a teljes demót (letölti az adatot és felépíti az "
                     "adatbázist), majd frissítsd ezt az oldalt:")
-        st.code("python demo.py\n# vagy lépésenként:\npython -m data.fetch_olist\npython -m data.build_warehouse",
+        st.code("uv run demo.py\n# vagy lépésenként:\nuv run python -m data.fetch_olist\nuv run python -m data.build_warehouse",
                 language="bash")
         st.stop()
 

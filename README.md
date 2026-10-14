@@ -15,24 +15,36 @@ Ez a tároló a megvalósítás; a teljes rendszerterv külön dokumentum.
 
 ## Gyorsindítás
 
-**Python 3.14** (rögzítve: `pyproject.toml`, `.python-version`).
+A környezetet a **[uv](https://docs.astral.sh/uv/)** kezeli. A rögzített változatokból
+(`uv.lock`) maga állítja elő a Python 3.14-et és a csomagokat, és minden `uv run` előtt
+ellenőrzi, hogy a környezet egyezik-e a rögzítettel — ha nem (hiányzik, elavult, más
+Pythonnal készült), helyrehozza. Aktiválni nem kell semmit.
 
 ```bash
-py -3.14 -m venv .venv               # Windows; Linuxon: python3.14 -m venv .venv
-.venv\Scripts\activate               # PowerShellben: .venv\Scripts\Activate.ps1
-pip install -r requirements.lock     # pontosan a kipróbált változatok
-python demo.py
-python -m ui                         # a BI-felület a böngészőben (Windowson: indit_felulet.bat)
+powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"   # egyszer, gépenként; utána új ablak
+uv sync                              # Python 3.14 + a rögzített csomagok
+uv run demo.py
+uv run python -m ui                  # a BI-felület a böngészőben (Windowson: indit_felulet.bat)
 ```
 
-A `requirements.lock` minden csomagot pontos verzióval rögzít (Windowsra és Linuxra
-is) — ezzel jönnek ki bitre ugyanazok a számok. A `requirements.txt` csak a közvetlen
-függőségeket sorolja fel, alsó korláttal.
+(Linuxon a uv telepítése: `curl -LsSf https://astral.sh/uv/install.sh | sh`.)
+
+A környezet a `.venv` mappába kerül. **Ne szerkeszd, ne másold, ne commitold** (a
+`.gitignore` kizárja): gépenként épül, és mint minden Python-környezet, az adott gép
+abszolút útvonalaira mutat (hol van a Python, hol a projekt). Ha bármi gond van vele,
+töröld — a következő `uv run` újraépíti. A projekt saját fájljaiban nincs gépfüggő
+útvonal; ezt teszt őrzi.
+
+A `uv.lock` minden csomagot pontos verzióval rögzít Windowsra és Linuxra — ezzel
+jönnek ki bitre ugyanazok a számok. A közvetlen függőségek a `pyproject.toml`-ban
+vannak; a `requirements.txt` és a `requirements.lock` ugyanezek pip-nek (CI, uv nélküli
+gép — lásd [Másik gépre](#másik-gépre)).
 
 Első indításkor a `demo.py` letölti a valódi Olist-adatot a Kaggle-ről (kb. 45 MB,
 Kaggle-fiók nem kell), utána egy-két perc alatt végigfuttatja a teljes pipeline-t,
 és a végén összegzést ír ki. A további indítások a már letöltött adatot használják.
-PyCharmban a zöld **Run** gombbal is indítható.
+Fejlesztőkörnyezetben (PyCharm, VS Code) interpreternek a projekt `.venv` mappáját
+válaszd — a `uv sync` után ott van, és mindkettő magától felismeri.
 
 ## Mit csinál a demó
 
@@ -41,11 +53,11 @@ PyCharmban a zöld **Run** gombbal is indítható.
 | 1 | Környezet | a verziók rögzítve vannak a kimenetben |
 | 2 | Adat | a valódi Olist-adat; ha még nincs meg, letölti a Kaggle-ről |
 | 3 | Tárház | 9 CSV → csillagséma DuckDB-ben, **V-1 validációval** |
-| 4 | Tesztek | 150 teszt: szivárgásvédelem, V-1, adatmodell, abláció, betanítás, kohorsz, modellválasztás, bootstrap, lezárt futás, referencia-modellek, magyarázatok, felület; ha bármelyik bukik, **a demó megáll** |
+| 4 | Tesztek | 160 teszt: szivárgásvédelem, V-1, adatmodell, abláció, betanítás, kohorsz, modellválasztás, bootstrap, lezárt futás, referencia-modellek, magyarázatok, felület; ha bármelyik bukik, **a demó megáll** |
 | 5 | Betanítás | a **lezárt v3 protokoll** szerint: LightGBM súlyozás nélkül, a fák száma bővülő ablakos CV-vel, címke-tisztítással; érintetlen, legkésőbbi időszakon mérve; a kalibráció csak diagnosztika |
 | 6 | Összegzés | rangsorolás, kalibráció, kizárt rendelések, artefaktumok helye |
 
-**Valódi adat nélkül:** `python demo.py --synthetic` azonos szerkezetű, generált
+**Valódi adat nélkül:** `uv run demo.py --synthetic` azonos szerkezetű, generált
 adaton futtatja végig a gépezetet. Erre a CI-nek és a teszteknek van szüksége, mert
 a valódi adat nem kerülhet a tárolóba. A szintetikus adat nem a valóság: a kimenet
 ilyenkor minden lépésben jelzi, hogy a számok csak a gépezet működését mutatják.
@@ -53,7 +65,7 @@ ilyenkor minden lépésben jelzi, hogy a számok csak a gépezet működését m
 ## A BI-felület
 
 ```bash
-python -m ui                 # Windowson dupla kattintással is: indit_felulet.bat
+uv run python -m ui                 # Windowson dupla kattintással is: indit_felulet.bat
 ```
 
 A böngészőben nyílik meg: **http://localhost:8501**. Csak ezen a gépen érhető el (a
@@ -101,8 +113,8 @@ viselkedik, mint élesben, amikor a kimenet még nem ismert.
 | M2 — referencia-modellek: logisztikus regresszió, döntési fa, random forest (`pipeline/reference_models.py`), lezárt összevetés (`pipeline/v3_reference.py`) | **kész — lefutott okt. 9.** (`docs/v3_referencia_eredmeny.md`) |
 | M3 — SHAP-magyarázatok a négy modellre (pontos TreeSHAP, ill. lineáris SHAP, a 22 jellemzőre összevonva), additivitás-ellenőrzés, sablonos magyarázó szöveg (`xai/`) | **kész (v1)** |
 | M5 — Streamlit BI-felület: áttekintés (SQL), rendelés-magyarázat négy modellel, modell-oldal, egyezés-ellenőrzés a lezárt futással (`ui/`, `python -m ui`) | **kész (v1)** |
-| Tesztek — szivárgás (14), V-1 és adatmodell (10), abláció (6), betanítás (6), kohorsz (2), modellválasztás (8), bootstrap (6), lezárt futás (14), referencia-modellek (9), magyarázatok (12), szöveg és megjelenítés (22), felület (20), egyezési mértékek (5), kontrollkar (4), nevek és feliratok (5), a magyarázatok hűsége (7) | **kész, 150/150** |
-| Tároló — MIT licenc, CI (Ubuntu + Windows), `requirements.lock`, döntési napló | **kész** |
+| Tesztek — szivárgás (14), V-1 és adatmodell (10), abláció (6), betanítás (6), kohorsz (2), modellválasztás (8), bootstrap (6), lezárt futás (14), referencia-modellek (9), magyarázatok (12), szöveg és megjelenítés (22), felület (20), egyezési mértékek (5), kontrollkar (5), nevek és feliratok (5), a magyarázatok hűsége (8), README-parancsok (2), környezet (6) | **kész, 160/160** |
+| Tároló — MIT licenc, CI (Ubuntu + Windows), uv-környezet (`uv.lock`; pip-nek `requirements.lock`), döntési napló | **kész** |
 | M2 — 40 futásos sweep, hiperparaméter-hangolás | következő |
 | M3 — KernelSHAP-kontrollkar: mind a négy modell ugyanazzal a magyarázóval (valószínűség-tér, közös háttér, 200 rögzített teszt-rendelés), a kar saját zajával (`xai/kernel_arm.py`, `xai/agreement.py`) | **kész** (`docs/kernel_kar_eredmeny.md`) |
 | M3 — a magyarázatok hűsége (K2): törlési és beszúrási görbe (interventional maszkolás, a KernelSHAP-karral és véletlen sorrenddel összevetve), beültetett jel- és zaj-jellemző, előre rögzített küszöbökkel (`xai/faithfulness.py`) | **kész** (`docs/huseg_eredmeny.md`) |
@@ -330,19 +342,19 @@ Kb. 99 ezer rendelés 2016 és 2018 között, 9 CSV-fájlban.
 **Licenc:** CC BY-NC-SA 4.0 — nem kereskedelmi felhasználás, forrásmegjelöléssel;
 a dolgozatban hivatkozni kell rá.
 
-**Letöltés:** automatikus. A `python demo.py` első indításkor letölti a `kagglehub`
+**Letöltés:** automatikus. A `uv run demo.py` első indításkor letölti a `kagglehub`
 csomaggal, és a 9 CSV-t a `data\raw\` mappába másolja. Külön is futtatható:
 
 ```bash
-python -m data.fetch_olist            # letölti, ha még nincs meg
-python -m data.fetch_olist --force    # akkor is újra letölti, ha megvan
+uv run python -m data.fetch_olist            # letölti, ha még nincs meg
+uv run python -m data.fetch_olist --force    # akkor is újra letölti, ha megvan
 ```
 
 A `kagglehub` a saját gyorsítótárába tölt (`%USERPROFILE%\.cache\kagglehub`), ezért
 egy új klónban már nem kell újra letölteni.
 
 **Kézi letöltés** (ha a gépről nem érhető el a Kaggle): a fenti oldalon
-**Download**, a ZIP-ből mind a 9 CSV-t a `data\raw\` mappába, majd `python demo.py`.
+**Download**, a ZIP-ből mind a 9 CSV-t a `data\raw\` mappába, majd `uv run demo.py`.
 
 **Védelmek.** A valódi adat soha nem kerül a tárolóba (`.gitignore`). A szintetikus
 generátor nem írja felül a valódi adatot. Ha a `data\raw\` mappában valódi és
@@ -371,7 +383,7 @@ generált fájlok keverednek, a tárház **vegyes forrású adatot** jelez, és 
   ha a lejárt határidejű, még úton lévő rendeléseket (1 729 db) késésnek tekintenénk:
 
 ```bash
-python -m pipeline.cohort_report      # ablakonként és havonta, 95%-os Wilson-intervallummal
+uv run python -m pipeline.cohort_report      # ablakonként és havonta, 95%-os Wilson-intervallummal
 ```
 
 | Ablak | A: csak kézbesített | B: + lejárt, még úton lévő = késett |
@@ -417,27 +429,38 @@ Mind a rendelés **leadásakor** ismert. A táblázat a `pipeline/features.py`
 
 ## Egyenként futtatható lépések
 
+Ez egy lista, nem kell mindet lefuttatni: a mindennapokhoz az első két sor elég. A
+parancsokat a projekt gyökeréből futtasd; a `uv run` előbb ellenőrzi (és ha kell,
+helyrehozza) a környezetet, aktiválni nem kell. A lezárt futások csak egyszer
+indulnak; a hosszú kutatási futások a `docs\` eredményfájljait írják felül — ezek a
+felület forrásai.
+
 ```bash
-python -m data.fetch_olist             # valódi adat letöltése (ha még nincs meg)
-python -m data.build_warehouse         # tárház + V-1
-python -m data.describe_warehouse      # mi van a tárházban (eredet, séma, minta)
-python -m pytest tests/ -v             # tesztek
-python -m pipeline.train               # betanítás a lezárt protokoll szerint
-python -m pipeline.train --balance balanced   # súlyozott ág, csak összehasonlításhoz
-python -m pipeline.train --drop honap  # abláció: hónap-jellemzők nélkül
-python -m pipeline.cohort_report       # kohorsz-érzékenységi jelentés
-python -m pipeline.model_selection     # fa-szám bővülő ablakos CV-n (csak a tanító időszak)
-python -m pipeline.model_selection --purge    # ugyanez címke-tisztítással
-python -m pipeline.train --trees korai --no-purge   # a régi út, összehasonlításhoz
-python -m pipeline.v3_baseline         # lezárt alapfutás (okt. 9-én lefutott; újra csak --ismetles)
-python -m pipeline.reference_models    # a 4 modell összevetése CV-n (csak a tanító időszak)
-python -m pipeline.v3_reference        # a referencia-modellek lezárt összevetése a teszten
-python -m xai.explain                  # SHAP-összegzés a négy modellre (300 teszt-rendelés)
-python -m xai.explain --rendeles <order_key>   # egy rendelés magyarázata négy modellel
-python -m xai.kernel_arm               # KernelSHAP-kontrollkar (200 rendelés, kb. 20–40 perc)
-python -m xai.kernel_arm --rendelesek 20 --zaj 10 --nsamples 512   # gyors próba
-python -m xai.faithfulness            # a magyarázatok hűsége: törlési görbe + beültetett jellemző (kb. fél óra)
-python -m ui                           # a BI-felület (http://localhost:8501)
+uv run python -m pytest -q                    # tesztek (néhány perc)
+uv run python -m ui                           # a BI-felület (http://localhost:8501; Windowson: indit_felulet.bat)
+
+uv run python -m data.fetch_olist             # valódi adat letöltése (ha még nincs meg)
+uv run python -m data.build_warehouse         # tárház + V-1
+uv run python -m data.describe_warehouse      # mi van a tárházban (eredet, séma, minta)
+uv run python -m pipeline.train               # betanítás a lezárt protokoll szerint
+uv run python -m pipeline.train --balance balanced   # súlyozott ág, csak összehasonlításhoz
+uv run python -m pipeline.train --drop honap  # abláció: hónap-jellemzők nélkül
+uv run python -m pipeline.train --trees korai --no-purge   # a régi út, összehasonlításhoz
+uv run python -m pipeline.cohort_report       # kohorsz-érzékenységi jelentés
+uv run python -m pipeline.model_selection     # fa-szám bővülő ablakos CV-n (csak a tanító időszak)
+uv run python -m pipeline.model_selection --purge    # ugyanez címke-tisztítással
+uv run python -m pipeline.reference_models    # a 4 modell összevetése CV-n (csak a tanító időszak)
+uv run python -m xai.explain                  # SHAP-összegzés a négy modellre (300 teszt-rendelés)
+uv run python -m xai.explain --rendeles RENDELES_KULCS   # egy rendelés a négy modellel (a kulcs a felület Rendelés oldalán: „azonosító”)
+
+# lezárt futások — okt. 9-én lefutottak; újra csak --ismetles kapcsolóval indulnak
+uv run python -m pipeline.v3_baseline         # lezárt alapfutás
+uv run python -m pipeline.v3_reference        # a referencia-modellek lezárt összevetése a teszten
+
+# hosszú kutatási futások (gépenként kb. fél–egy óra) — a docs\ eredményfájljait írják felül
+uv run python -m xai.kernel_arm               # KernelSHAP-kontrollkar (200 rendelés)
+uv run python -m xai.faithfulness             # a magyarázatok hűsége: törlési görbe + beültetett jellemző
+uv run python -m xai.kernel_arm --rendelesek 20 --zaj 10 --nsamples 512   # gyors próba (pár perc) → artifacts\, a docs\-ot nem írja felül
 ```
 
 **Abláció.** A `--drop` jellemzőket zár ki a betanításból: csoportnevet (`honap` =
@@ -448,7 +471,7 @@ kizárt jellemzők a `metrics.json`-ban, a model cardban és a mappanévben
 (`..._minus-honap_seed1`) is látszanak. Több seedes összevetés PowerShellben:
 
 ```powershell
-foreach ($d in "", "honap") { foreach ($s in 1..5) { python -m pipeline.train --seed $s --tag ablacio --drop "$d" | Out-Null } }
+foreach ($d in "", "honap") { foreach ($s in 1..5) { uv run python -m pipeline.train --seed $s --tag ablacio --drop "$d" | Out-Null } }
 ```
 
 A `metrics.json` a teszt mellett a validáció mérőszámait is rögzíti (`validacio`), a
@@ -510,13 +533,14 @@ glassbox-bi/
 │   └── huseg_eredmeny.md             ugyanez táblázatokkal
 ├── .github/workflows/       CI: minden push lefuttatja a teljes pipeline-t (szintetikus adaton)
 ├── LICENSE                  MIT (a kódra; az adat saját licenc alatt áll)
-├── requirements.txt         közvetlen függőségek, alsó korláttal
-├── requirements.lock        minden csomag pontos verzióval (Python 3.14, Windows + Linux)
+├── pyproject.toml           a projekt: Python 3.14, közvetlen függőségek, uv- és pytest-beállítások
+├── uv.lock                  minden csomag pontos verzióval (Windows + Linux) — ebből épít a uv
+├── requirements.txt         a közvetlen függőségek pip-nek (= a pyproject.toml listája)
+├── requirements.lock        a pontos változatok pip-nek (a uv.lock-ból exportálva; a CI ezt telepíti)
 ├── .python-version          3.14
 ├── CITATION.cff             hogyan hivatkozzanak a munkára
 ├── .env.example             minta a későbbi LLM-kulcsokhoz (a .env sosem kerül be)
 ├── .streamlit/config.toml   a felület beállításai (csak localhost, statisztika nélkül)
-├── pyproject.toml           pytest-beállítások
 └── tests/
     ├── test_no_leakage.py   14 teszt (szivárgás, point-in-time, jellemzőtáblázat)
     ├── test_warehouse.py    10 teszt (V-1, két ténytábla, fő tétel, geolokáció, zárónap)
@@ -532,8 +556,10 @@ glassbox-bi/
     ├── test_ui.py           20 teszt (adatréteg, becslési sávok és csoportjaik, grafikonok világos/sötét témában, térkép, magyar számalak a tengelyeken, magyar súgó minden ábrarétegen, „kevés adat” sáv, minden oldal lefut — Streamlit AppTest)
     ├── test_agreement.py    5 teszt (RBO a definíció szerint, top-k, előjel, súlyozott tau, bootstrap)
     ├── test_labels.py       5 teszt (mind a 27 állam, minden valódi kategóriának van magyar neve, leírások, térképrács)
-    ├── test_kernel_arm.py   4 teszt (a 21 játékos tere bitre visszaalakítható, additív modellre pontos, additivitás, nincs csendes szűkítés)
-    ├── test_faithfulness.py 7 teszt (maszkok, additív modellen pontos görbe és a Shapley-sorrend a legjobb, beültetés, erős jel megtalálása, kis futás, felületi táblák)
+    ├── test_kernel_arm.py   5 teszt (a 21 játékos tere bitre visszaalakítható, additív modellre pontos, additivitás, nincs csendes szűkítés, a próbafutás nem írja felül a lezárt eredményt)
+    ├── test_faithfulness.py 8 teszt (maszkok, additív modellen pontos görbe és a Shapley-sorrend a legjobb, beültetés, erős jel megtalálása, kis futás, felületi táblák, a próbafutás nem írja felül a lezárt eredményt)
+    ├── test_readme.py       2 teszt (a README parancsai PowerShellben is bemásolhatók: nincs <…> helyőrző)
+    ├── test_kornyezet.py    6 teszt (a uv.lock és a requirements.lock ugyanazt rögzíti, Python 3.14 mindenhol, nincs gépfüggő útvonal a tárolóban, az indító nem hivatkozik virtuális környezetre)
     └── conftest.py          közös szintetikus tárház és modellek a fenti tesztekhez
 ```
 
@@ -548,7 +574,7 @@ git add .
 git status          # csak forrásfájlok jelenhetnek meg — adat és artefaktum nem
 git commit -m "Glassbox BI - adattarhaz, jellemzok, baseline, tesztek"
 git branch -M main
-git remote add origin https://github.com/<felhasznalonev>/glassbox-bi.git
+git remote add origin https://github.com/ViolaBaranyi/glassbox-bi.git
 git push -u origin main
 ```
 
@@ -561,43 +587,51 @@ A GitHubon **Private** tárolóként kezdd, üres inicializálással (ne kérj R
 Az első push után a `.github/workflows/tests.yml` minden feltöltésnél lefuttatja a
 teljes pipeline-t Python 3.14-en, Ubuntun és Windowson, **szintetikus adaton**
 (`python demo.py --synthetic`), mert a valódi adat nem kerülhet a tárolóba:
-adatgenerálás, tárházépítés V-1 validációval, 137 teszt, betanítás, kohorsz-jelentés.
-A csomagokat a `requirements.lock` rögzíti. Ha egy teszt
+adatgenerálás, tárházépítés V-1 validációval, 160 teszt, betanítás, kohorsz-jelentés.
+A csomagokat a `requirements.lock` rögzíti (a `uv.lock` pip-nek exportált párja,
+ugyanazokkal a változatokkal). Ha egy teszt
 elbukik, a futás pirosra vált, és a GitHub e-mailt küld. Ez a szivárgásvédelem
 hálója: egy elrontott jellemző nem maradhat észrevétlen.
 
 ## Másik gépre
 
-**Csak a forrást kell átvinni.** Az adat, a tárház, az artefaktumok és a virtuális
-környezet mind újraépülnek; a `.gitignore` pontosan ezeket zárja ki.
+**Csak a forrást kell átvinni** (gittel). Az adat, a tárház, az artefaktumok és a
+virtuális környezet mind újraépülnek; a `.gitignore` pontosan ezeket zárja ki.
 
 | Átvinni | NEM átvinni | Miért |
 |---|---|---|
-| minden, ami a tárolóban van | `.venv\` | gépfüggő, abszolút útvonalakkal |
+| minden, ami a tárolóban van | `.venv\` | gépfüggő (az adott gép Pythonjára és mappájára mutat) — a uv gépenként újraépíti |
 | | `data\raw\`, `data\*.duckdb` | a demó első indításkor újra letölti az adatot, a tárházat minden futás újraépíti |
 | | `artifacts\` | a betanítás újra előállítja |
 
-Az új gépen:
-
-1. **Python 3.14** a python.org-ról — telepítéskor pipáld be az
-   *„Add python.exe to PATH"* dobozt.
-2. Ezután:
+Az új gépen (Windowson, PowerShellben):
 
 ```bash
-git clone https://github.com/<felhasznalonev>/glassbox-bi.git
+powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"   # egyszer; utána új ablak
+git clone https://github.com/ViolaBaranyi/glassbox-bi.git
 cd glassbox-bi
-py -3.14 -m venv .venv
-.venv\Scripts\activate
-pip install -r requirements.lock
+uv sync
+uv run demo.py
+```
+
+Pythont külön telepíteni nem kell: ha a gépen nincs 3.14-es, a uv letölti a saját
+mappájába (a rendszer Pythonjához nem nyúl).
+
+**uv nélkül, pip-pel** (a CI így fut): Python 3.14 kell a python.org-ról („Add
+python.exe to PATH”), utána:
+
+```powershell
+py -3.14 -m venv --clear .venv       # a --clear egy régi .venv-et előbb kiürít
+.venv\Scripts\Activate.ps1
+pip install -r requirements.lock     # ugyanazok a változatok, mint a uv.lock-ban
 python demo.py
 ```
 
-PyCharmban: File → Project from Version Control → beilleszted a linket; a PyCharm
-felajánlja a virtuális környezet létrehozását a `requirements.txt` alapján.
+Ilyenkor a parancsok `uv run` nélkül, a bekapcsolt környezetben futnak.
 
 ### Ellenőrzés: egyeznek-e a számok?
 
-A pipeline determinisztikus, tehát az új gépen a `python demo.py` összegzésében
+A pipeline determinisztikus, tehát az új gépen a `uv run demo.py` összegzésében
 **ugyanezeket** kell látnod (Windowson és Linuxon is így jött ki):
 
 ```
@@ -612,13 +646,13 @@ Kalibráció     ECE 0.008 (egyenlő elemszámú sávokkal 0.010)   Brier 0.0339
 
 Ez a lezárt v3 alapfutás elsődleges modellje (mag 42) — a számok egyeznek a
 `docs/v3_lezart_eredmeny.md`-vel. A modellválasztás önmagában (csak a tanító időszakot
-olvassa): `python -m pipeline.model_selection --purge` → medián 118,5 → **119 fa**
+olvassa): `uv run python -m pipeline.model_selection --purge` → medián 118,5 → **119 fa**
 (címke-tisztítás nélkül: 66,5 → 67 fa).
 
 A `--synthetic` futás (és a CI) összegzése: 38,857 rendelés, 22 jellemző, 50 fa (itt az
 alsó korlát dönt), PR-AUC 0.202, ROC-AUC 0.726.
 
-A felületen (`python -m ui`) *A modell* oldal tetején zöld jelzésnek kell lennie: a
+A felületen (`uv run python -m ui`) *A modell* oldal tetején zöld jelzésnek kell lennie: a
 felület modelljei a lezárt futásokéi (LightGBM teszt PR-AUC 0,09782, logisztikus
 regresszió 0,08363, döntési fa 0,06088, random forest 0,08796).
 
@@ -636,6 +670,21 @@ A munkára való hivatkozás adatait a `CITATION.cff` tartalmazza; a GitHub ebb�
 
 ## Hibaelhárítás (Windows)
 
+**„Importing the numpy C-extensions failed” (az üzenetben `cp313`), „No module named
+'_duckdb'”, „No module named streamlit”** — a parancs nem a rögzített környezetben fut,
+hanem egy régi, kézzel készült `.venv`-ben (egy korábbi Python csomagjaival) vagy a gép
+saját Pythonjában. Megoldás a projekt gyökeréből:
+
+```powershell
+deactivate                           # ha a sor elején (.venv) vagy (.venv-1) látszik
+Remove-Item -Recurse -Force .venv    # a régi környezet; a uv újat épít
+uv sync
+uv run python -m pytest -q
+```
+
+**„uv: The term 'uv' is not recognized”** — az ablak a uv telepítése előtt nyílt meg:
+nyiss újat (a telepítő a PATH-hoz adja a uv-t).
+
 **„No module named data"** — a parancsokat a projekt gyökeréből futtasd
 (a `demo.py`-ra ez nem vonatkozik).
 
@@ -644,13 +693,10 @@ vagy a PyCharm adatbázis-paneljén.
 
 **„A projekt a Python 3.14-re van rögzítve"** — a demó más Python-verzióval is fut, de
 figyelmeztet: a bitre azonos számok csak a rögzített környezetben garantáltak
-(`py -3.14 -m venv .venv`, `pip install -r requirements.lock`).
-
-**A felület nem indul („No module named streamlit")** — a rögzített csomagok még a
-régiek: `pip install -r requirements.lock` (a virtuális környezetben).
+(`uv run demo.py`).
 
 **„Port 8501 is already in use"** — már fut egy felület (egy másik ablakban), vagy más
-program foglalja a portot: `python -m ui --server.port 8502`.
+program foglalja a portot: `uv run python -m ui --server.port 8502`.
 
 **„Az Olist adathalmaz letöltése nem sikerült"** — nincs internet, vagy a hálózat
 (pl. egyetemi proxy) nem engedi a Kaggle-t. A hibaüzenet leírja a kézi letöltést;

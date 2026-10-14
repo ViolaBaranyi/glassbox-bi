@@ -106,7 +106,7 @@ def run_reference(db_path: Path = DB_PATH, protocol_path: Path = PROTOCOL,
         raise vb.ProtocolError(
             "A lezárt összevetés előtt a jóváhagyott protokollt és a kódot commitolni kell.\n"
             "Teendő:\n  git add -A\n  git commit -m \"referencia-protokoll jóváhagyva\"\n"
-            "  git push\nmajd újra: python -m pipeline.v3_reference")
+            "  git push\nmajd újra: uv run python -m pipeline.v3_reference")
     if Path(out_json).exists() and not ismetles:
         raise vb.LockedRunExists(f"Már van lezárt összevetés: {out_json} "
                                  "(ismételt futás: --ismetles)")
