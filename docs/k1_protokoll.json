@@ -1,8 +1,11 @@
 {
   "nev": "Üvegdoboz BI — K1 mérés: a nyelvi réteg a lezárt kérdéssoron",
   "verzio": 1,
-  "allapot": "tervezet",
-  "jovahagyas": null,
+  "allapot": "jovahagyva",
+  "jovahagyas": {
+    "ki": "Baranyi Viola",
+    "mikor": "2026-10-16"
+  },
   "kerdessor": {
     "fajl": "eval/meresi_kerdessor.toml",
     "sha256": "ce87d85fd44038c96f107f6474b4c6cdf1a5978afb88b3bfa6629784a69bc01f",
