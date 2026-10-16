@@ -88,8 +88,104 @@ def _integrity(path: str, stamp: str, cache: str):
     return d.integrity(_bundle(path, stamp, cache), d.locked_results(), Path(path))
 
 
+@st.cache_resource(show_spinner=False, max_entries=2)
+def _semantic_catalog(version: int):
+    return d.semantic_catalog()
+
+
+def _catalog_version() -> int:
+    """A katalógusfájl módosítási ideje: ha átírják, a felület újratölti (újraindítás nélkül)."""
+    from semantic.catalog import KATALOGUS
+    return KATALOGUS.stat().st_mtime_ns
+
+
+@st.cache_data(show_spinner=False, max_entries=4)
+def _semantic_whitelist(path: str, stamp: str, version: int):
+    return d.semantic_whitelist(Path(path))
+
+
+@st.cache_data(show_spinner=False, max_entries=128)
+def _ask(path: str, stamp: str, version: int, spec_json: str):
+    import json
+    return d.ask(json.loads(spec_json), Path(path), _semantic_catalog(version),
+                 _semantic_whitelist(path, stamp, version))
+
+
+@st.cache_data(show_spinner=False, ttl=20)
+def llm_status() -> tuple[bool, str]:
+    """Elérhető-e a nyelvi modell — 20 másodpercig gyorsítótárazva (ne kérdezze minden kattintásnál)."""
+    return d.llm_status()
+
+
+@st.cache_data(show_spinner=False, max_entries=64)
+def _ask_free(path: str, stamp: str, version: int, llm: str, question: str):
+    return d.ask_free(question, Path(path), _semantic_catalog(version), _semantic_whitelist(path, stamp, version))
+
+
+def _llm_key() -> str:
+    """A nyelvi beállítás ujjlenyomata a gyorsítótárhoz: modell + a promptok változata és ideje
+    (ha a prompt változik, a régi válasz ne jöjjön vissza a gyorsítótárból)."""
+    from narrative.client import ROOT, load_config
+    cfg = load_config()
+    parts = [cfg.szolgaltato, cfg.modell]
+    for call in sorted(cfg.hivasok.values(), key=lambda c: c.prompt):
+        f = ROOT / call.prompt
+        parts.append(f"{call.version}@{f.stat().st_mtime_ns if f.exists() else 0}")
+    return "|".join(parts)
+
+
+def ask_free(question: str):
+    """Szabad szöveges kérdés (nyelvi modell + két kapu); ugyanarra a kérdésre ugyanaz a válasz,
+    amíg az adat, a katalógus, a modell és a promptok nem változnak."""
+    answer = _ask_free(*_key()[:2], _catalog_version(), _llm_key(), question.strip())
+    if answer.modell_hiba:          # a modell nem volt elérhető: ezt ne jegyezze meg
+        _ask_free.clear()
+    return answer
+
+
+_WARMED: dict[str, float] = {}
+
+
+def warm_llm(every_s: float = 600.0) -> bool:
+    """A helyi modell betöltése a háttérben (legfeljebb tízpercenként), amíg a felhasználó a
+    kérdést gépeli — így az első kérdésnek nem kell a betöltésre várnia. Vissza: indult-e."""
+    import threading
+    import time
+    client = d.llm_client()
+    if client.cfg.szolgaltato != "ollama":
+        return False
+    key = f"{client.cfg.url}|{client.cfg.modell}"
+    now = time.monotonic()
+    if now - _WARMED.get(key, -1e12) < every_s:
+        return False
+    _WARMED[key] = now
+    threading.Thread(target=client.preload, name="nyelvi-modell-betoltes", daemon=True).start()
+    return True
+
+
 def overview() -> dict:
     return _overview(*_key()[:2])
+
+
+def semantic_catalog():
+    return _semantic_catalog(_catalog_version())
+
+
+def semantic_whitelist():
+    return _semantic_whitelist(*_key()[:2], _catalog_version())
+
+
+def ask_gate(text: str):
+    """Csak a KAPU ① (a „Próbáld ki az 1. kaput” doboznak): nem fut le semmi az adatbázison."""
+    from semantic import spec as sp
+    return sp.check(text, semantic_catalog(), semantic_whitelist())
+
+
+def ask(raw: dict):
+    """KAPU ① → SQL → eredmény → sablonos válasz (gyorsítótárazva a kérdés szövegére)."""
+    import json
+    return _ask(*_key()[:2], _catalog_version(),
+                json.dumps(raw, ensure_ascii=False, sort_keys=True, default=str))
 
 
 def monthly():

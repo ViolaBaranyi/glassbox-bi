@@ -119,7 +119,7 @@ def main() -> None:
     done(t)
 
     # --------------------------------------------------------------- 4. tesztek
-    t = header(4, "Tesztek — szivárgásvédelem, V-1 validáció, magyarázatok, felület")
+    t = header(4, "Tesztek — szivárgásvédelem, V-1 validáció, magyarázatok, szemantikus réteg, felület")
     import pytest
     code = pytest.main(["-q", "--no-header", "-p", "no:cacheprovider",
                         str(ROOT / "tests")])

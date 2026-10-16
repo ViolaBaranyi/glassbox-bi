@@ -1,0 +1,44 @@
+# A nyelvi réteg beállításai (rendszerterv 14.). A felület és a parancssor ezt olvassa.
+# Felülírható környezeti változóval (a .env-ben is): LLM_PROVIDER, LLM_MODEL, LLM_BASE_URL;
+# az API-kulcs (LLM_API_KEY) csak a .env-ben lehet, sosem ebben a fájlban.
+#
+# szolgaltato: "ollama" = helyi modell — offline is megy, és semmi nem hagyja el a gépet
+#              "api"    = OpenAI-kompatibilis chat-completions végpont (felhős szolgáltató)
+# M-2: a modell rögzített változat legyen; a ténylegesen futott modell ujjlenyomata
+# (Ollamánál a digest) minden hívásnál a naplóba kerül (logs/llm_calls.jsonl).
+
+szolgaltato = "ollama"
+timeout_s = 180          # helyi gépen, videókártya nélkül egy hívás fél–egy perc is lehet
+max_retries = 2          # hálózati hiba vagy időtúllépés után ennyi újrapróbálás
+seed = 20261015
+
+[ollama]
+url = "http://localhost:11434"
+modell = "qwen3.5:4b"    # javaslat: kicsi (3,4 GB), többnyelvű; a végleges választás mérés alapján
+gondolkodas = false      # a „gondolkodó” modellek ne írjanak gondolatmenetet a válasz elé
+tartas = "30m"           # keep_alive: ennyi ideig marad a memóriában (újratöltés nélkül) az utolsó hívás után
+kontextus = 4096         # num_ctx: a prompt + a válasz ennyi tokenbe férjen (rögzítve a mérés ismételhetőségéhez)
+
+[api]
+url = ""                 # pl. https://…/v1 — OpenAI-kompatibilis végpont
+modell = ""              # dátumozott pillanatkép, soha nem „latest”
+
+# A két hívás (rendszerterv 14.): ① kérdés → QuerySpec, ② eredmény → mondat; és a ② kontrollága
+# a méréshez (a modell maga írja a számokat). A prompt fájlja a változatot is jelöli; a régi
+# változatok a prompts/ mappában maradnak, és ide visszaírva ugyanúgy futnak (összevető mérés).
+# v1 → v2 (2026-10-15): rövidebb ① prompt, tömör szűrő-alak; a ②-ben a hatókört és a
+# korlátot a kód írja, a modell csak a válasz magját (docs/dontesi_naplo.md).
+[hivas.to_spec]
+prompt = "prompts/to_spec.v2.md"
+temperature = 0.0
+max_tokens = 250
+
+[hivas.to_text]
+prompt = "prompts/to_text.v2.md"
+temperature = 0.2
+max_tokens = 250
+
+[hivas.to_text_szabad]
+prompt = "prompts/to_text_szabad.v2.md"
+temperature = 0.2
+max_tokens = 250

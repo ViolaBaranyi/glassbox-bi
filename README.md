@@ -29,6 +29,10 @@ uv run python -m ui                  # a BI-felület a böngészőben (Windowson
 
 (Linuxon a uv telepítése: `curl -LsSf https://astral.sh/uv/install.sh | sh`.)
 
+Windowson egy dupla kattintás is elég: a **`frissit.bat`** telepíti a uv-t, ha még nincs,
+lefuttatja a `uv sync`-et és a teljes tesztsort, a kimenetet pedig a `logs\frissites.log`-ba
+írja. Egy `git pull` után is ezt érdemes futtatni; utána a felület: `indit_felulet.bat`.
+
 A környezet a `.venv` mappába kerül. **Ne szerkeszd, ne másold, ne commitold** (a
 `.gitignore` kizárja): gépenként épül, és mint minden Python-környezet, az adott gép
 abszolút útvonalaira mutat (hol van a Python, hol a projekt). Ha bármi gond van vele,
@@ -53,7 +57,7 @@ válaszd — a `uv sync` után ott van, és mindkettő magától felismeri.
 | 1 | Környezet | a verziók rögzítve vannak a kimenetben |
 | 2 | Adat | a valódi Olist-adat; ha még nincs meg, letölti a Kaggle-ről |
 | 3 | Tárház | 9 CSV → csillagséma DuckDB-ben, **V-1 validációval** |
-| 4 | Tesztek | 160 teszt: szivárgásvédelem, V-1, adatmodell, abláció, betanítás, kohorsz, modellválasztás, bootstrap, lezárt futás, referencia-modellek, magyarázatok, felület; ha bármelyik bukik, **a demó megáll** |
+| 4 | Tesztek | 312 teszt: szivárgásvédelem, V-1, adatmodell, abláció, betanítás, kohorsz, modellválasztás, bootstrap, lezárt futás, referencia-modellek, magyarázatok, szemantikus réteg, nyelvi réteg, felület; ha bármelyik bukik, **a demó megáll** |
 | 5 | Betanítás | a **lezárt v3 protokoll** szerint: LightGBM súlyozás nélkül, a fák száma bővülő ablakos CV-vel, címke-tisztítással; érintetlen, legkésőbbi időszakon mérve; a kalibráció csak diagnosztika |
 | 6 | Összegzés | rangsorolás, kalibráció, kizárt rendelések, artefaktumok helye |
 
@@ -79,7 +83,7 @@ első indításkor a négy modellt a lezárt beállításokkal betanítja (kb. e
 | Áttekintés | a késési arány havonta (a tanító / validációs / teszt ablakkal) és a vevő állama, az eladó állama, ill. a kategória szerint, 95%-os Wilson-intervallummal; az államoknál egyszerűsített (négyzetrácsos) Brazília-térképpel; a 2016 végi adathiány (november: 0, december: 1 rendelés) szürke „kevés adat” sávval jelölve | SQL a tárházból — a lekérdezés szövege is megnézhető |
 | Rendelés kockázata | egy rendelés becsült kockázata, relatív kockázata, és hogy a hasonló becslésű rendelések közül ténylegesen hány késett („100-ból N” — a becslés hitelessége); *miért* (SHAP-tényezők és sablonból írt szöveg); ugyanez a négy modellel | a lezárt modellek + `xai/` |
 | A modell | a lezárt teszt-kiértékelés (PR-AUC, ROC-AUC, Brier, ECE, páros összevetés), kalibráció tizedekben és rögzített becslési sávokban (teszt és validáció), mi számít a modelleknek, hogyan hat egy tényező, mennyire hűek a magyarázatok (két próba) | `docs/*.json` + a modellek |
-| Kérdezz | a nyelvi réteg helye — még nem működik | — |
+| Kérdezz | kérdés a rendelésekről két fülön: **szabad szöveggel** (helyi nyelvi modell, két kapu) vagy **kérdésépítővel** — mit mérjünk (11 mérőszám), milyen bontásban (8), milyen szűréssel, melyik időszakra → szöveges válasz, ábra, táblázat; ha a kérdésre nincs adat (pl. haszonkulcs), indokolt elutasítás, szám nélkül; a lefuttatott SQL és a PostgreSQL-változata is megnézhető | SQL a tárházból, a metrikakatalógus alapján (`semantic/`) — a válasz minden száma a lekérdezés eredményéből |
 | Súgó és fogalmak | használati útmutató, fogalomtár hétköznapi nyelven, a 21 tényező, a 27 brazil állam (kód, teljes név, régió, térképen is), a termékkategóriák magyarul, mire nem alkalmas a felület | `xai/labels.py` + SQL |
 
 *A modell* oldal ellenőrzi, hogy a felület modelljei pontosan a lezárt futások modelljei:
@@ -93,6 +97,92 @@ jelennek meg; a számok magyar alakban (tizedesvessző, ezres tagolás szóközz
 harmada van), a szakmai részletek pedig lenyitható dobozokban vannak.
 Az oldalsávon kikapcsolható a valós kimenet („késett / időben”): így a felület úgy
 viselkedik, mint élesben, amikor a kimenet még nem ismert.
+
+### A Kérdezz oldal és a szemantikus réteg
+
+A *Kérdezz* oldalon a kérdést most egy kérdésépítő állítja össze (mit mérjünk, milyen
+bontásban, milyen szűréssel, melyik időszakra); később ugyanezt a gépi alakot egy helyi
+nyelvi modell állítja elő a szabad szöveges kérdésből. Az út mindkét esetben ugyanaz:
+
+1. **Metrikakatalógus** (`semantic/katalogus.toml`): mit lehet egyáltalán kiszámolni —
+   11 mérőszám SQL-definícióval, mértékegységgel és a „kevés adat” küszöbével; 8 bontás
+   (állam, régió, kategória, hónap, év, a hét napja …); és amit az adat nem tud (haszon,
+   értékelés, fizetés, készlet, lemondás, előrejelzés), indokkal és javaslattal.
+2. **KAPU ①** (`semantic/spec.py`): a kérdés gépi alakját a katalógushoz és az adatból
+   generált fehérlistához méri. Az írásmódokat a kanonikus kódra fordítja („Sao Paulo”,
+   „sp” → SP; „délkelet” → SE); ami nem felel meg, arra indokolt elutasítást ad (kód,
+   magyar üzenet, javaslat) — **szám nélkül**.
+3. **SQL-építő** (`semantic/builder.py`): az SQL a katalógus töredékeiből és a fehérlistás
+   értékekből áll össze, szintaxisfán (sqlglot), nem szövegösszefűzéssel; ugyanabból a
+   fából PostgreSQL-változat is készül. Lefutás előtt egy őr újra elemzi: egyetlen SELECT
+   lehet, csak a katalógus tábláival, adatmódosítás és allekérdezés nélkül.
+4. **Eredmény** (`semantic/engine.py`): a számok a lefuttatott SQL-lel együtt; aránynál
+   95%-os Wilson-tartomány, a kevés rendelésből számolt csoportok megjelölve. Ugyanarra a
+   kérdésre bitre azonos.
+5. **Válasz**: a kérdésépítőnél sablon írja (`semantic/answer.py`), a szabad szöveges
+   kérdésnél a nyelvi modell fogalmazza (`narrative/`) — de a számokat egyik sem írja le: a
+   gép illeszti be őket, és minden szám mellé feljegyzi, az eredmény melyik mezőjéből jön.
+   A KAPU ② megnézi, maradt-e a szövegben vissza nem vezethető szám.
+
+Ellenőrzés: a katalógus minden mérőszáma minden bontással egyezik egy független
+pandas-számolással (teszt), és a PostgreSQL-változat a valódi adaton 354 lekérdezésben,
+8195 cellában ugyanazt adja, mint a DuckDB (`docs/pg_ellenorzes.md`).
+
+### Szabad szöveges kérdés (helyi nyelvi modell)
+
+A *Kérdezz* oldal **Szabad szöveggel** fülén magyarul lehet kérdezni („Melyik régióban
+késnek a legtöbbet 2018-ban?”). Ehhez egy helyi nyelvi modell kell — így az adat nem
+hagyja el a gépet, és internet nélkül is működik:
+
+1. Telepítsd az **Ollamát**: https://ollama.com/download (Windowson telepítő; utána a
+   háttérben fut).
+2. Töltsd le a modellt (egyszer, kb. 3,4 GB):
+
+   ```powershell
+   ollama pull qwen3.5:4b
+   ```
+
+3. Indítsd újra a felületet. Ha a modell nem érhető el, a fül megmondja, mi hiányzik — a
+   **Kérdésépítővel** fül addig is működik.
+
+Mi történik egy kérdéssel (rendszerterv 14.):
+
+1. **① hívás** (`narrative/to_spec.py`): a modell a kérdésből kitölti a kérdés gépi
+   alakját — JSON-sémához kötve, és csak a metrikakatalógus kivonatát látja, adatot nem.
+   Ha a kérdés olyat kér, ami nincs a katalógusban, ezt jelzi, és nem választ helyette mást.
+   Az államot kóddal, a többi szűrőt a kérdés szavával írja; a ragozott alakot („São
+   Paulóban”, „Északkeleten”, „hétfőn”) a kód oldja fel — ha egy szó több értékre is illik
+   („bútor”), nem talál, hanem a javító kör kapja meg a jelölteket.
+2. **KAPU ①** — ugyanaz, mint a kérdésépítőnél. Formai hibára (pl. elírt állam) egy javító
+   kör jár a kapu üzenetével; ha az sem jó: elutasítás, szám nélkül.
+3. **SQL és eredmény** — a determinisztikus réteg, nyelvi modell nélkül.
+4. **② hívás** (`narrative/to_text.py`): a válasz első mondatát (hány rendelés, melyik
+   időszak, milyen szűrés) és a korlátokat a kód írja; a modell a közbülső részt
+   fogalmazza — legfeljebb három mondatot, ami közvetlenül felel a kérdésre. A számok
+   helyére jelölőt ír (`{O}`, `{S1}` …); a behelyettesítést a gép végzi.
+5. **KAPU ②** (`narrative/verifier.py`): a szöveg minden száma visszavezethető-e az
+   eredményre, minden érték a saját csoportja mellett áll-e (a felcserélt érték a
+   hallucináció egyik tipikus alakja: a szám maga létezik, csak rossz helyen), a
+   „legmagasabb / legalacsonyabb” tényleg az-e, és nincs-e benne oksági állítás. Ha nem
+   megy át, a sablonos válasz látszik.
+
+Minden hívás egy sor a `logs/llm_calls.jsonl`-ban (modell és ujjlenyomata, idő, tokenek, a
+kapuk ítélete) — ez a mérőpad nyersanyaga. Helyi modellnél az idő részekre bontva is: a
+modell betöltése, a prompt beolvasása, a válasz generálása. Az első valódi futásban
+(okt. 15., `qwen3.5:4b`, laptop, videókártya nélkül) egy kérdés 93 mp volt, ebből ~40 mp
+csak a v1 prompt beolvasása (2050 token) — ezért készült a rövidebb v2 (a prompt kb. fele
+akkora). A modell a hívás után 30 percig a memóriában marad (`tartas`), és a *Kérdezz*
+oldal megnyitásakor a háttérben betöltődik, amíg a kérdést gépeled.
+
+**Fejlesztői próbasor.** A `uv run python -m narrative.proba` 19 kérdést futtat végig
+(`eval/fejlesztoi_kerdessor.toml`, köztük 6 csapdát, amelyre elutasítás a helyes válasz),
+és kérdésenként megmondja, jól értette-e a modell, átment-e a válasz a 2. kapun, és mennyi
+ideig tartott; a jelentés a `logs/` mappába kerül. Ez hangolásra való — a dolgozat mérése a
+későbbi, lezárt kérdéssoron megy, amelyben ezek a kérdések nem szerepelhetnek. A beállítás a `configs/llm.toml`-ban van; más
+modellt vagy OpenAI-kompatibilis API-t a `.env`-ben lehet megadni (`LLM_MODEL`,
+`LLM_PROVIDER=api`, `LLM_BASE_URL`, `LLM_API_KEY`). A modellválasztás még mérés előtt áll:
+a `qwen3.5:4b` javaslat (kicsi, többnyelvű); a végleges a 120 kérdéses készleten dől el,
+egy kisebb és egy erősebb modell összevetésével (rendszerterv M-4).
 
 ---
 
@@ -113,14 +203,17 @@ viselkedik, mint élesben, amikor a kimenet még nem ismert.
 | M2 — referencia-modellek: logisztikus regresszió, döntési fa, random forest (`pipeline/reference_models.py`), lezárt összevetés (`pipeline/v3_reference.py`) | **kész — lefutott okt. 9.** (`docs/v3_referencia_eredmeny.md`) |
 | M3 — SHAP-magyarázatok a négy modellre (pontos TreeSHAP, ill. lineáris SHAP, a 22 jellemzőre összevonva), additivitás-ellenőrzés, sablonos magyarázó szöveg (`xai/`) | **kész (v1)** |
 | M5 — Streamlit BI-felület: áttekintés (SQL), rendelés-magyarázat négy modellel, modell-oldal, egyezés-ellenőrzés a lezárt futással (`ui/`, `python -m ui`) | **kész (v1)** |
-| Tesztek — szivárgás (14), V-1 és adatmodell (10), abláció (6), betanítás (6), kohorsz (2), modellválasztás (8), bootstrap (6), lezárt futás (14), referencia-modellek (9), magyarázatok (12), szöveg és megjelenítés (22), felület (20), egyezési mértékek (5), kontrollkar (5), nevek és feliratok (5), a magyarázatok hűsége (8), README-parancsok (2), környezet (6) | **kész, 160/160** |
+| Tesztek — szivárgás (14), V-1 és adatmodell (10), abláció (6), betanítás (6), kohorsz (2), modellválasztás (8), bootstrap (6), lezárt futás (14), referencia-modellek (9), magyarázatok (12), szöveg és megjelenítés (22), felület (20), egyezési mértékek (5), kontrollkar (5), nevek és feliratok (5), a magyarázatok hűsége (8), README-parancsok (2), környezet (7), szemantikus réteg (99), nyelvi réteg (52) | **kész, 312/312** (egy csak Node.js-szel fut, nélküle kihagyja) |
 | Tároló — MIT licenc, CI (Ubuntu + Windows), uv-környezet (`uv.lock`; pip-nek `requirements.lock`), döntési napló | **kész** |
 | M2 — 40 futásos sweep, hiperparaméter-hangolás | következő |
 | M3 — KernelSHAP-kontrollkar: mind a négy modell ugyanazzal a magyarázóval (valószínűség-tér, közös háttér, 200 rögzített teszt-rendelés), a kar saját zajával (`xai/kernel_arm.py`, `xai/agreement.py`) | **kész** (`docs/kernel_kar_eredmeny.md`) |
 | M3 — a magyarázatok hűsége (K2): törlési és beszúrási görbe (interventional maszkolás, a KernelSHAP-karral és véletlen sorrenddel összevetve), beültetett jel- és zaj-jellemző, előre rögzített küszöbökkel (`xai/faithfulness.py`) | **kész** (`docs/huseg_eredmeny.md`) |
 | M3 — stabilitás (bootstrap-újratanítás, RBO, súlyozott Kendall-tau), ellenpélda | következő |
-| M1 — szemantikus réteg (KAPU ①) | tervezett |
-| M4 — nyelvi réteg és ellenőrző (KAPU ②), bekötés a *Kérdezz* oldalba | tervezett |
+| M1 — szemantikus réteg: metrikakatalógus (11 mérőszám, 8 bontás), az adatból generált fehérlista, KAPU ① indokolt elutasítással, SQL-építő szintaxisfából (sqlglot) utólagos SQL-őrrel, MetricResult a lefuttatott SQL-lel, sablonos válasz számhivatkozásokkal (`semantic/`) | **kész (v1)** |
+| M1 — a PostgreSQL-változat ellenőrzése: a valódi adaton 354 lekérdezés DuckDB-ben és PostgreSQL 17-ben, cellánként összevetve (`semantic/pg_ellenorzes.py`) | **kész — 0 eltérés** (`docs/pg_ellenorzes.md`) |
+| M5 — *Kérdezz* oldal: kérdésépítő, példakérdések, válasz + ábra + táblázat, „Próbáld ki az 1. kaput” | **kész (v1)** |
+| M4 — nyelvi réteg: szabad szöveges kérdés → ugyanaz a gépi alak (helyi Ollama vagy OpenAI-kompatibilis API, JSON-sémához kötött kimenet, egy javító kör, ragozott szűrőértékek feloldása), a modell fogalmazta válaszmag hely-kitöltéssel, a hatókör és a korlát a kódtól, KAPU ② (számok, csoport–érték kötés, „legmagasabb”, oksági állítás), sablon tartaléknak, napló időbontással; kontrollág a K1-hez; fejlesztői próbasor (`narrative/`, `eval/`) | **kész (v2)** — első valódi futás okt. 15. (v1: helyes, de 93 mp/kérdés) |
+| M6 — mérőpad: 120 kérdéses lezárt készlet (csapdakérdésekkel), K1 a fő ágon és a kontrollágon, két modellel | következő |
 
 ---
 
@@ -453,6 +546,21 @@ uv run python -m pipeline.reference_models    # a 4 modell összevetése CV-n (c
 uv run python -m xai.explain                  # SHAP-összegzés a négy modellre (300 teszt-rendelés)
 uv run python -m xai.explain --rendeles RENDELES_KULCS   # egy rendelés a négy modellel (a kulcs a felület Rendelés oldalán: „azonosító”)
 
+# szemantikus réteg (ugyanaz, mint a Kérdezz oldal, felület nélkül)
+uv run python -m semantic --katalogus         # a mérőszámok és a bontások listája
+uv run python -m semantic --metrika kesesi_arany --bontas vevo_allam --limit 5
+uv run python -m semantic --metrika atlagos_szallitasi_ido --bontas honap --szuro vevo_allam=SP --tol 2018-01-01 --ig 2018-06-30 --sql
+uv run python -m semantic --metrika haszonkulcs   # a KAPU ① indokolt elutasítása
+uv run python -m semantic.pg_ellenorzes       # DuckDB és PostgreSQL eredménye cellánként (Node.js kell; kb. 1 perc)
+
+# nyelvi réteg (helyi nyelvi modellel — lásd: Szabad szöveges kérdés)
+uv run python -m narrative --allapot          # elérhető-e a nyelvi modell
+uv run python -m narrative "Melyik régióban késnek a legtöbbet?"
+uv run python -m narrative "Mekkora volt a forgalom tavaly?" --reszletek   # a modell nyers válaszai és a nézet is
+uv run python -m narrative "Mekkora volt a forgalom tavaly?" --modell gemma3:4b   # másik helyi modellel
+uv run python -m narrative.proba              # fejlesztői próbasor: 19 kérdés, ítélet és idő kérdésenként (laptopon ~15 perc)
+uv run python -m narrative.proba --csak-ertelmezes   # csak az ① hívás (gyorsabb)
+
 # lezárt futások — okt. 9-én lefutottak; újra csak --ismetles kapcsolóval indulnak
 uv run python -m pipeline.v3_baseline         # lezárt alapfutás
 uv run python -m pipeline.v3_reference        # a referencia-modellek lezárt összevetése a teszten
@@ -486,6 +594,7 @@ A legutóbbi futás artefaktumainak mappanevét az `artifacts\LATEST.txt` tartal
 glassbox-bi/
 ├── demo.py                  teljes pipeline egy paranccsal
 ├── indit_felulet.bat        a BI-felület indítása Windowson (dupla kattintással)
+├── frissit.bat              uv (ha kell) + uv sync + tesztek Windowson; napló: logs\frissites.log
 ├── data/
 │   ├── fetch_olist.py       a valódi Olist-adat letöltése (kagglehub)
 │   ├── make_synthetic.py    szintetikus adat a CI-hez és a tesztekhez
@@ -510,6 +619,20 @@ glassbox-bi/
 │   ├── faithfulness.py      a magyarázatok hűsége: törlési/beszúrási görbe, beültetett jel és zaj
 │   ├── labels.py            brazil államok (+ térképrács), magyar kategórianevek, a tényezők és modellek hétköznapi leírása
 │   └── narrative.py         rövid nevek, magyar számalak, sablonos magyarázó szöveg
+├── semantic/
+│   ├── katalogus.toml       a metrikakatalógus: mérőszámok, bontások, kapcsolatok, amit az adat nem tud
+│   ├── catalog.py           a katalógus betöltése és ellenőrzése, fehérlista az adatból, értékek nevei
+│   ├── spec.py              a kérdés gépi alakja (QuerySpec) és a KAPU ①
+│   ├── builder.py           SQL a szintaxisfából (DuckDB + PostgreSQL), utólagos SQL-őr
+│   ├── engine.py            futtatás, MetricResult (a lefuttatott SQL-lel, Wilson-tartománnyal)
+│   ├── answer.py            sablonos válasz: minden szám hivatkozással a payloadra
+│   ├── pg_ellenorzes.py     a PostgreSQL-változat ellenőrzése (tools/pg futtatja)
+│   └── __main__.py          python -m semantic: ugyanez parancssorból
+├── tools/pg/                a PostgreSQL-ellenőrzés futtatója (Node.js + PGlite, rögzített verzió)
+├── narrative/               nyelvi réteg (M4): kliens, ① kérdés → gépi alak, ② eredmény → mondat, KAPU ②, próba (proba.py)
+├── prompts/                 a hívások promptja, verziózva (v1 és v2; a ② kontrollágának külön prompt: to_text_szabad)
+├── eval/                    fejlesztői próbasor a nyelvi réteghez (hangolásra; a mérés kérdéssora külön lesz)
+├── configs/llm.toml         a nyelvi modell beállítása (helyi Ollama vagy API; a kulcs a .env-ben)
 ├── ui/
 │   ├── app.py               a felület belépési pontja (oldalsáv, navigáció)
 │   ├── __main__.py          python -m ui: indítás localhoston, statisztika nélkül
@@ -530,7 +653,9 @@ glassbox-bi/
 │   ├── kernel_kar_eredmeny.json      a KernelSHAP-kontrollkar eredménye (a 200 rendelés helyett a részhalmaz ujjlenyomatával)
 │   ├── kernel_kar_eredmeny.md        ugyanez táblázatokkal
 │   ├── huseg_eredmeny.json           a hűségmérés eredménye (rendelés-azonosítók nélkül)
-│   └── huseg_eredmeny.md             ugyanez táblázatokkal
+│   ├── huseg_eredmeny.md             ugyanez táblázatokkal
+│   ├── pg_ellenorzes.json            DuckDB és PostgreSQL összevetése (a katalógus ujjlenyomatával)
+│   └── pg_ellenorzes.md              ugyanez röviden
 ├── .github/workflows/       CI: minden push lefuttatja a teljes pipeline-t (szintetikus adaton)
 ├── LICENSE                  MIT (a kódra; az adat saját licenc alatt áll)
 ├── pyproject.toml           a projekt: Python 3.14, közvetlen függőségek, uv- és pytest-beállítások
@@ -559,7 +684,9 @@ glassbox-bi/
     ├── test_kernel_arm.py   5 teszt (a 21 játékos tere bitre visszaalakítható, additív modellre pontos, additivitás, nincs csendes szűkítés, a próbafutás nem írja felül a lezárt eredményt)
     ├── test_faithfulness.py 8 teszt (maszkok, additív modellen pontos görbe és a Shapley-sorrend a legjobb, beültetés, erős jel megtalálása, kis futás, felületi táblák, a próbafutás nem írja felül a lezárt eredményt)
     ├── test_readme.py       2 teszt (a README parancsai PowerShellben is bemásolhatók: nincs <…> helyőrző)
-    ├── test_kornyezet.py    6 teszt (a uv.lock és a requirements.lock ugyanazt rögzíti, Python 3.14 mindenhol, nincs gépfüggő útvonal a tárolóban, az indító nem hivatkozik virtuális környezetre)
+    ├── test_kornyezet.py    7 teszt (a uv.lock és a requirements.lock ugyanazt rögzíti, Python 3.14 mindenhol, nincs gépfüggő útvonal a tárolóban, a két Windows-parancsfájl CRLF-es és nem hivatkozik virtuális környezetre)
+    ├── test_semantic.py     99 teszt (a katalógus és a hibás katalógusok, fehérlista és írásmódok, a KAPU ① minden elutasítási kódja, SQL-őr, idézés, minden szám egyezik egy független pandas-számolással, Wilson-tartomány, kevés adat, determinizmus, a válasz minden száma visszavezethető, ábrák magyar súgóval, a Kérdezz oldal végigkattintva, PostgreSQL-összevetés)
+    ├── test_nyelvi_reteg.py 52 teszt (a kliens kérése az Ollamának és az API-nak, tartás, kontextusméret, időbontás, előtöltés, újrapróbálás, állapot, napló; ① séma és prompt a katalógusból mindkét változatban, a v2 rövidebb és nem nő az adattal, a régi prompt is fut, a példák érvényesek, ragozott értékek feloldása, kétértelmű szónál nincs találgatás, a hosszú lista csak a javító körbe kerül, javító kör csak formai hibára, elutasítás akkor is, ha a modell „közeli” mérőszámot választana, a kérdés adat, nem utasítás; ② keret a kódtól, jelölők, a KAPU ② elkapja a kitalált számot, jelölőt, a felcserélt csoportértéket, a hamis „legmagasabb”-at akkor is, ha a név előtte áll, az oksági állítást; ragozott nevek; kontrollág saját prompttal; a fejlesztői próbasor és parancsa; a teljes út; a szabad szöveges fül — Streamlit AppTest)
     └── conftest.py          közös szintetikus tárház és modellek a fenti tesztekhez
 ```
 

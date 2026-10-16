@@ -22,3 +22,6 @@ venv*/
 # IDE
 .idea/
 .vscode/
+
+# Node.js (a PostgreSQL-ellenőrzés futtatója: tools/pg)
+node_modules/

@@ -1,0 +1,21 @@
+{
+ "futtatva": "2026-10-15 09:39 UTC",
+ "adat": "valós",
+ "tarhaz_epitve": "2026-10-13 07:29:29 UTC",
+ "katalogus_sha256": "ca72d27aff5a6182159edcec619a861450f8e427d24c9e11c390e803ac5bc23b",
+ "duckdb": "DuckDB 1.5.6",
+ "postgresql": "PostgreSQL 17.5 (PGlite 0.3.7, WebAssembly)",
+ "pg_collation": "C",
+ "sqlglot": "30.22.0",
+ "tolerancia": {
+  "relativ": 1e-09,
+  "abszolut": 1e-12
+ },
+ "esetek": 197,
+ "lekerdezesek": 354,
+ "sorok": 2575,
+ "cellak": 8195,
+ "elteres": 0,
+ "legnagyobb_relativ_kulonbseg": 8.601814158060444e-15,
+ "eltero_esetek": []
+}

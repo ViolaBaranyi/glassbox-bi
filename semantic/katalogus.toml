@@ -1,0 +1,266 @@
+# Üvegdoboz BI — metrikakatalógus (szemantikus réteg, M1)
+#
+# A KAPU ① ehhez méri a beérkező kérdés-specifikációt (QuerySpec): csak az itt
+# felsorolt mérőszám, bontás és szűrő mehet át, és a szűrők értékeit is az adatból
+# generált fehérlista ellenőrzi. Ami nincs a katalógusban, arra a rendszer indokolt
+# elutasítással válaszol, és nem mond számot.
+#
+# Számlálási szabály: minden mérőszám RENDELÉST számol (egy kézbesített rendelés egy
+# sor a fact_orders táblában; a rendelés kategóriája és eladója a fő tételé — a
+# legdrágább tételé).
+#
+# SQL: a kanonikus dialektus a DuckDB-é; PostgreSQL-re a sqlglot fordítja. A kerekítés
+# NEM itt történik, hanem a megjelenítéskor („tizedes” = a kimondott pontosság).
+# Egység: darab | arany (0–1, százalékban kimondva) | nap | brl | km
+
+[beallitasok]
+tenytabla = "fact_orders"
+alias = "f"
+datum = "f.date_key"              # az időablak a rendelés leadásának napjára vonatkozik
+szimulalt_ma = "2018-09-01"       # a relatív időkifejezésekhez (pl. „az elmúlt 3 hónap”) — a nyelvi modellnek
+alap_limit = 10                   # bontásnál ennyi sor, ha a kérdés nem mond mást
+max_limit = 100
+max_szuroertek = 30               # egy szűrőben legfeljebb ennyi érték
+max_bontas = 1                    # egyszerre ennyi bontás (a sablonos válasz és az ábra egyre készült)
+
+# ----------------------------------------------------------------- kapcsolódó táblák
+[kapcsolat.dim_customer]
+alias = "c"
+on = "f.customer_key = c.customer_key"
+
+[kapcsolat.dim_seller]
+alias = "s"
+on = "f.seller_key = s.seller_key"
+
+[kapcsolat.dim_product]
+alias = "p"
+on = "f.product_key = p.product_key"
+
+# ---------------------------------------------------------------------- mérőszámok
+[[metrika]]
+id = "rendelesek_szama"
+nev = "rendelések száma"
+leiras = "A kézbesített rendelések száma (a lemondott és a nem kézbesített rendeléseket a tárház kizárja)."
+sql = "count(*)"
+egyseg = "darab"
+tizedes = 0
+min_csoport = 0
+osszeadhato = true                # csoportjai az egészre összeadódnak → részesedés
+
+[[metrika]]
+id = "kesett_rendelesek"
+nev = "késett rendelések száma"
+leiras = "Azoknak a rendeléseknek a száma, amelyek a vállalt határidő napja után érkeztek meg."
+sql = "sum(CASE WHEN f.kesett THEN 1 ELSE 0 END)"
+egyseg = "darab"
+tizedes = 0
+min_csoport = 0
+osszeadhato = true                # csoportjai az egészre összeadódnak → részesedés
+tiltott_dimenzio = ["kesett"]     # a késésből számolódik: aszerint bontani vagy szűrni értelmetlen
+
+[[metrika]]
+id = "kesesi_arany"
+nev = "késési arány"
+leiras = "A késett rendelések aránya: a vállalt határidő napja után kézbesített rendelések az összes kézbesített rendelésen belül."
+sql = "avg(CASE WHEN f.kesett THEN 1.0 ELSE 0.0 END)"
+szamlalo = "sum(CASE WHEN f.kesett THEN 1 ELSE 0 END)"   # a 95%-os (Wilson-) tartományhoz
+egyseg = "arany"
+tizedes = 1
+min_csoport = 100
+tiltott_dimenzio = ["kesett"]
+
+[[metrika]]
+id = "atlagos_szallitasi_ido"
+nev = "átlagos szállítási idő"
+leiras = "A rendelés leadásától a kézbesítésig eltelt idő átlaga napban, tört nappal (36 óra = 1,5 nap)."
+sql = "avg(date_diff('second', f.rendeles_idopont, f.kezbesites_datuma) / 86400.0)"
+egyseg = "nap"
+tizedes = 1
+min_csoport = 30
+
+[[metrika]]
+id = "median_szallitasi_ido"
+nev = "szállítási idő mediánja"
+leiras = "A rendelés leadásától a kézbesítésig eltelt idő középső értéke napban: a rendelések fele ennél gyorsabban, fele lassabban érkezett meg. A néhány nagyon lassú szállítás kevésbé torzítja, mint az átlagot."
+sql = "median(date_diff('second', f.rendeles_idopont, f.kezbesites_datuma) / 86400.0)"
+egyseg = "nap"
+tizedes = 1
+min_csoport = 30
+
+[[metrika]]
+id = "atlagos_vallalt_ido"
+nev = "átlagos vállalt szállítási idő"
+leiras = "A platform (Olist) által a rendeléskor vállalt határidő átlaga: a leadás napjától a határidő napjáig eltelt napok."
+sql = "avg(date_diff('day', f.date_key, f.vallalt_hatarido))"
+egyseg = "nap"
+tizedes = 1
+min_csoport = 30
+
+[[metrika]]
+id = "atlagos_keses"
+nev = "átlagos késés"
+leiras = "A késett rendelések átlagos csúszása: a vállalt határidő napjától a kézbesítés napjáig eltelt napok. Csak a késett rendelésekből számolódik."
+sql = "avg(date_diff('day', f.vallalt_hatarido, CAST(f.kezbesites_datuma AS DATE))) FILTER (WHERE f.kesett)"
+alap = "sum(CASE WHEN f.kesett THEN 1 ELSE 0 END)"
+alap_nev = "késett rendelés"
+egyseg = "nap"
+tizedes = 1
+min_csoport = 30
+tiltott_dimenzio = ["kesett"]
+
+[[metrika]]
+id = "atlagos_kosarertek"
+nev = "átlagos kosárérték"
+leiras = "A rendelésben szereplő termékek árának átlagos összege, brazil reálban (BRL), szállítási díj nélkül."
+sql = "avg(f.kosar_ertek)"
+egyseg = "brl"
+tizedes = 2
+min_csoport = 30
+
+[[metrika]]
+id = "forgalom"
+nev = "forgalom"
+leiras = "A rendelések kosárértékének összege (brazil reál, BRL), szállítási díj nélkül."
+sql = "sum(f.kosar_ertek)"
+egyseg = "brl"
+tizedes = 0
+min_csoport = 0
+osszeadhato = true                # csoportjai az egészre összeadódnak → részesedés
+
+[[metrika]]
+id = "atlagos_szallitasi_dij"
+nev = "átlagos szállítási díj"
+leiras = "A rendelésért felszámított szállítási díj átlaga, brazil reálban (BRL)."
+sql = "avg(f.szallitasi_dij)"
+egyseg = "brl"
+tizedes = 2
+min_csoport = 30
+
+[[metrika]]
+id = "atlagos_tavolsag"
+nev = "átlagos eladó–vevő távolság"
+leiras = "Az eladó és a vevő irányítószámának középpontja közti légvonalbeli távolság átlaga, km-ben (közelítő érték; ahol a koordináta hiányzik, az a rendelés kimarad)."
+sql = "avg(f.tavolsag_km)"
+alap = "count(f.tavolsag_km)"
+alap_nev = "rendelés ismert távolsággal"
+egyseg = "km"
+tizedes = 0
+min_csoport = 30
+
+# ------------------------------------------------------------------------ bontások
+# ertekek: "adat" = a fehérlista az adatból készül (SELECT DISTINCT); "ido" = időbeli
+# bontás, szűrni az időablakkal lehet; vagy rögzített lista.
+# szerint: így kezdődik a válasz bontásról szóló mondata („A vevő állama szerint …”).
+# termeszetes_sorrend = false: a „bontas” rendezés nem kérhető (a kapu elutasítja).
+[[dimenzio]]
+id = "vevo_allam"
+nev = "a vevő állama"
+rovid = "vevő állama"
+szerint = "a vevő állama szerint"
+sql = "c.allam"
+kapcsolat = "dim_customer"
+ertekek = "adat"
+szurheto = true
+
+[[dimenzio]]
+id = "elado_allam"
+nev = "az eladó állama"
+rovid = "eladó állama"
+szerint = "az eladó állama szerint"
+sql = "s.allam"
+kapcsolat = "dim_seller"
+ertekek = "adat"
+szurheto = true
+
+[[dimenzio]]
+id = "vevo_regio"
+nev = "a vevő régiója"
+rovid = "vevő régiója"
+szerint = "a vevő régiója szerint"
+sql = "CASE WHEN c.allam IN ('AC', 'AM', 'AP', 'PA', 'RO', 'RR', 'TO') THEN 'N' WHEN c.allam IN ('AL', 'BA', 'CE', 'MA', 'PB', 'PE', 'PI', 'RN', 'SE') THEN 'NE' WHEN c.allam IN ('DF', 'GO', 'MS', 'MT') THEN 'CO' WHEN c.allam IN ('ES', 'MG', 'RJ', 'SP') THEN 'SE' WHEN c.allam IN ('PR', 'RS', 'SC') THEN 'S' END"
+kapcsolat = "dim_customer"
+ertekek = ["N", "NE", "CO", "SE", "S"]
+szurheto = true
+
+[[dimenzio]]
+id = "kategoria"
+nev = "a fő termék kategóriája"
+rovid = "termékkategória"
+szerint = "termékkategóriánként"
+sql = "p.kategoria"
+kapcsolat = "dim_product"
+ertekek = "adat"
+szurheto = true
+termeszetes_sorrend = false   # a kulcsok portugál nevek: „a bontás sorrendje” itt értelmetlen
+
+[[dimenzio]]
+id = "kesett"
+nev = "a kézbesítés ideje"
+rovid = "késett-e"
+szerint = "a határidő betartása szerint"
+sql = "CASE WHEN f.kesett THEN 'kesett' ELSE 'idoben' END"
+ertekek = ["kesett", "idoben"]
+szurheto = true
+
+[[dimenzio]]
+id = "honap"
+nev = "hónap"
+rovid = "hónap"
+szerint = "havi bontásban"
+sql = "date_trunc('month', f.date_key)"
+ertekek = "ido"
+szurheto = false
+tipus = "datum"
+
+[[dimenzio]]
+id = "ev"
+nev = "év"
+rovid = "év"
+szerint = "éves bontásban"
+sql = "extract(year FROM f.date_key)"
+ertekek = "ido"
+szurheto = false
+tipus = "egesz"
+
+[[dimenzio]]
+id = "het_napja"
+nev = "a hét napja"
+rovid = "a hét napja"
+szerint = "a hét napjai közül"
+sql = "extract(isodow FROM f.date_key)"
+ertekek = ["1", "2", "3", "4", "5", "6", "7"]
+szurheto = true
+tipus = "egesz"
+
+# --------------------------------------------------- amit az adat nem tud (UC-2, F-2)
+# Ha a kérdés ilyen mérőszámot kér, a KAPU ① ezzel az indokkal utasítja el, és a
+# „helyette” mérőszámokat ajánlja.
+[[nem_elerheto]]
+kulcsszavak = ["haszonkulcs", "haszon", "profit", "nyereség", "árrés", "fedezet", "margin"]
+indok = "az adathalmaz nem tartalmaz beszerzési árat, ezért haszon vagy árrés nem számolható"
+helyette = ["atlagos_kosarertek", "atlagos_szallitasi_dij"]
+
+[[nem_elerheto]]
+kulcsszavak = ["értékelés", "elégedettség", "csillag", "vélemény", "review"]
+indok = "a vásárlói értékelések nincsenek a tárházban (csak a gazdasági fejezet külön elemzése használja őket)"
+helyette = ["kesesi_arany", "atlagos_keses"]
+
+[[nem_elerheto]]
+kulcsszavak = ["fizetés", "fizetési", "részlet", "kártya", "boleto", "voucher"]
+indok = "a fizetési adatok nincsenek a tárházban"
+helyette = ["atlagos_kosarertek", "forgalom"]
+
+[[nem_elerheto]]
+kulcsszavak = ["készlet", "raktár", "beszállító"]
+indok = "az adathalmazban nincs készlet-, raktár- vagy beszállítói adat"
+helyette = ["rendelesek_szama"]
+
+[[nem_elerheto]]
+kulcsszavak = ["lemondás", "lemondott", "törölt", "visszaküldés", "visszáru", "elmaradt"]
+indok = "a tárház csak a kézbesített rendeléseket tartalmazza; a lemondott és a nem kézbesített rendeléseket a betöltés kizárja"
+helyette = ["rendelesek_szama", "kesesi_arany"]
+
+[[nem_elerheto]]
+kulcsszavak = ["jövő", "jövőbeli", "előrejelzés", "előre jelez", "prognózis", "következő hónap"]   # a „várható” nem: a „várható szállítási idő” a vállalt határidő
+indok = "a metrikakatalógus a múltról szól; egy rendelés késési kockázatát a „Rendelés kockázata” oldal becsli, havi előrejelzést a rendszer nem ad"
+helyette = ["kesesi_arany"]

@@ -557,3 +557,85 @@ def faith_curve_chart(df: pd.DataFrame, ink: Ink = LIGHT) -> alt.LayerChart:
         y=alt.Y("eses_pp:Q", title="a becslés átlagos esése (százalékpont)", axis=alt.Axis(labelExpr=_COMMA)),
         color=_faith_color(d, "sorrend"), tooltip=tip)
     return alt.layer(zero, lines).properties(height=300)
+
+
+# -------------------------------------------------- Kérdezz: a válasz ábrája
+_NUM_LABEL = "replace(replace(datum.label, regexp(',', 'g'), ' '), '.', ',')"   # 13,000.5 → 13 000,5
+TIME_DIMS = ("honap", "ev")
+
+
+def _answer_frame(result) -> pd.DataFrame:
+    from semantic import answer as ans
+    m = result.metrika
+    time_like = result.bontas["id"] in TIME_DIMS or result.spec.rendezes == "bontas"
+    rows = ([r for r in result.sorok if not r["keves_adat"] and r["ertek"] is not None]
+            if time_like else result.shown_rows())
+    d = pd.DataFrame(rows)
+    if d.empty:
+        return d
+    d["ertek_szoveg"] = [ans.fmt_value(m, v) for v in d["ertek"]]
+    d["db_szoveg"] = [nv.fmt_num(v, 0) for v in d["rendelesek"]]
+    if "alap" in d:
+        d["alap_szoveg"] = [nv.fmt_num(v, 0) for v in d["alap"]]
+    if "ci" in d:
+        d["ci_also"] = [c[0] for c in d["ci"]]
+        d["ci_felso"] = [c[1] for c in d["ci"]]
+        d["ci_szoveg"] = [f"{nv.fmt_pct(a, m['tizedes'])} – {nv.fmt_pct(b, m['tizedes'])}"
+                          for a, b in zip(d["ci_also"], d["ci_felso"])]
+        d = d.drop(columns=["ci"])
+    if result.bontas["id"] == "honap":
+        d["datum"] = pd.to_datetime(d["kulcs"])
+    return d
+
+
+def answer_chart(result, ink: Ink = LIGHT) -> alt.LayerChart | None:
+    """A Kérdezz-válasz ábrája: kategóriáknál vízszintes oszlopok (a válasz szerinti sorrendben),
+    hónapoknál vonal; aránynál 95%-os tartománnyal. Ugyanazok a sorok, amelyekről a szöveg szól."""
+    if not result.bontas:
+        return None
+    d = _answer_frame(result)
+    if d.empty:
+        return None
+    m, dim = result.metrika, result.bontas
+    rate = m["egyseg"] == "arany"
+    unit = {"nap": " (nap)", "brl": " (BRL)", "km": " (km)"}.get(m["egyseg"], "")
+    # „~”: a fölösleges nullák nélkül (0,5% és 1%, nem 1% és 1%; 2 és 2,5, nem 2,0) — sűrű
+    # osztásnál sem lesz két egyforma felirat
+    x_axis = (alt.Axis(title=m["nev"], format=".1~%", labelExpr=_COMMA, tickCount=10) if rate else
+              alt.Axis(title=f"{m['nev']}{unit}", format=",~f", labelExpr=_NUM_LABEL, tickCount=10))
+    tip = [alt.Tooltip("megnevezes:N", title=dim["rovid"]),
+           alt.Tooltip("ertek_szoveg:N", title=m["nev"]),
+           alt.Tooltip("db_szoveg:N", title="rendelések")]
+    if "alap_szoveg" in d:
+        tip.append(alt.Tooltip("alap_szoveg:N", title=f"ebből {m['alap_nev']}"))
+    if rate:
+        tip.append(alt.Tooltip("ci_szoveg:N", title="valószínű tartomány (95%)"))
+    base = alt.Chart(d)
+    layers = []
+    if dim["id"] == "honap":
+        x = alt.X("datum:T", title=None, axis=alt.Axis(format="%Y. %m.", labelAngle=0))
+        y = alt.Y("ertek:Q", axis=x_axis, scale=alt.Scale(zero=not rate))
+        if rate:
+            layers.append(base.mark_area(opacity=0.18, color=UP).encode(
+                x=x, y="ci_also:Q", y2="ci_felso:Q", tooltip=tip))
+        layers.append(base.mark_line(color=UP).encode(x=x, y=y, tooltip=tip))
+        layers.append(base.mark_point(color=UP, filled=True, size=40).encode(x=x, y=y, tooltip=tip))
+        return alt.layer(*layers).properties(height=280)
+    order = list(d["megnevezes"])
+    y = alt.Y("megnevezes:N", sort=order, title=None, axis=alt.Axis(labelLimit=320))
+    layers.append(base.mark_bar(color=UP, opacity=0.75).encode(
+        y=y, x=alt.X("ertek:Q", axis=x_axis), tooltip=tip))
+    if rate:
+        layers.append(base.mark_rule(color=ink.rule).encode(y=y, x="ci_also:Q", x2="ci_felso:Q",
+                                                            tooltip=tip))
+    total = result.osszesen["ertek"]
+    if not m.get("osszeadhato") and total is not None:
+        from semantic import answer as ans
+        shown = ans.fmt_value(m, total)
+        avg = alt.Chart(pd.DataFrame({"x": [total], "felirat": [f"összesen {shown}"],
+                                      "magyarazat": [f"{m['nev']} az egész szűrt körben: {shown}"]}))
+        avg_tip = [alt.Tooltip("magyarazat:N", title="szaggatott vonal")]
+        layers.append(avg.mark_rule(strokeDash=[4, 4], color=ink.rule).encode(x="x:Q", tooltip=avg_tip))
+        layers.append(avg.mark_text(align="left", dx=4, dy=-6, color=ink.text).encode(
+            x="x:Q", y=alt.value(0), text="felirat:N", tooltip=avg_tip))
+    return alt.layer(*layers).properties(height=alt.Step(24))

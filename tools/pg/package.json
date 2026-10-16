@@ -1,0 +1,9 @@
+{
+  "name": "glassbox-bi-pg-ellenorzes",
+  "private": true,
+  "description": "A PostgreSQL-változat ellenőrzése PGlite-tal (lásd semantic/pg_ellenorzes.py)",
+  "type": "module",
+  "dependencies": {
+    "@electric-sql/pglite": "0.3.7"
+  }
+}

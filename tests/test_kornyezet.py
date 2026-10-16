@@ -18,6 +18,8 @@ a parancsok `uv run`-nal indulnak.
 
 from __future__ import annotations
 
+import pytest
+
 import re
 import tomllib
 from pathlib import Path
@@ -72,9 +74,9 @@ def test_python_314_mindenhol():
 
 
 SKIP_DIRS = {".git", "artifacts", "logs", "__pycache__", ".pytest_cache", ".ipynb_checkpoints",
-             ".idea", ".vscode"}
+             ".idea", ".vscode", "node_modules"}
 TEXT_SUFFIXES = {".py", ".md", ".toml", ".txt", ".bat", ".yml", ".yaml", ".cff", ".json", ".lock",
-                 ".cfg", ".ini", ".gitignore", ".gitattributes", ".example"}
+                 ".cfg", ".ini", ".gitignore", ".gitattributes", ".example", ".mjs"}
 # gépfüggő abszolút útvonal: bármely Windows-meghajtó (C:\…, E:/…) vagy Linux/macOS
 # felhasználói, rendszergazdai, ideiglenes mappa (az URL-ek „https://” része nem számít)
 MACHINE_PATH = re.compile(r"(?<![\w/])[A-Za-z]:[\\/]+(?=[\w.%$-])|/(?:home|Users|root|tmp)/\w")
@@ -103,12 +105,15 @@ def test_nincs_gepfuggo_utvonal_a_taroloban():
     assert not found, "gépfüggő útvonal a tárolóban:\n" + "\n".join(found)
 
 
-def test_az_indito_nem_hivatkozik_virtualis_kornyezetre():
-    bat = (ROOT / "indit_felulet.bat").read_bytes()
+@pytest.mark.parametrize("name,command", [("indit_felulet.bat", "uv run python -m ui"),
+                                          ("frissit.bat", "uv run python -m pytest")])
+def test_az_indito_nem_hivatkozik_virtualis_kornyezetre(name, command):
+    bat = (ROOT / name).read_bytes()
     assert b"\r\n" in bat and b"\n" not in bat.replace(b"\r\n", b"")   # cmd-nek CRLF kell
-    text = bat.decode("ascii")
-    assert "uv run python -m ui" in text
-    assert ".venv" not in text and "Scripts\\python" not in text
+    text = bat.decode("ascii")                                     # ékezet nélkül: a cmd kódlapja nem UTF-8
+    assert command in text
+    assert "Scripts\\python" not in text and "activate" not in text.lower()
+    assert ".venv" not in text or name == "frissit.bat" and "projekt sajat .venv" in text
 
 
 def test_a_kereso_eszreveszi_a_gepfuggo_utvonalat():

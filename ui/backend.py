@@ -715,3 +715,92 @@ def provenance(res: dict) -> list[dict]:
                     "gep": f"{f['os']} · Python {f['python']}",
                     "tiszta_munkapeldany": bool(f["git_allapot"]["munkapeldany_tiszta"])})
     return out
+
+
+# ------------------------------------------- Kérdezz: a szemantikus réteg (KAPU ①)
+def semantic_catalog():
+    from semantic import catalog
+    return catalog.load()
+
+
+def semantic_whitelist(path: Path | None = None):
+    """Az adatból generált fehérlista (a szűrők megengedett értékei, az adat időtartománya)."""
+    from semantic import catalog
+    con = connect(path or db_path(), read_only=True)
+    try:
+        return catalog.whitelist(semantic_catalog(), con)
+    finally:
+        con.close()
+
+
+def ask(raw, path: Path | None = None, cat=None, wl=None):
+    """Egy kérdés-specifikáció végig: KAPU ① → SQL → eredmény → sablonos válasz.
+    Visszaad: (GateResult, MetricResult | None, Answer | None) — elutasításnál szám nélkül."""
+    from semantic import answer as ans
+    from semantic import engine
+    from semantic import spec as sp
+    cat = cat or semantic_catalog()
+    wl = wl or semantic_whitelist(path)
+    gate = sp.check(raw, cat, wl)
+    if not gate.ok:
+        return gate, None, None
+    con = connect(path or db_path(), read_only=True)
+    try:
+        result = engine.run(gate.spec, cat, wl, con, gate.megjegyzesek)
+    finally:
+        con.close()
+    return gate, result, ans.answer(result)
+
+
+def llm_client():
+    """A nyelvi modell kliense a configs/llm.toml szerint (a tesztek ezt cserélik le)."""
+    from narrative.client import LlmClient
+    return LlmClient()
+
+
+def llm_status() -> tuple[bool, str]:
+    """Elérhető-e a nyelvi modell (gyors ellenőrzés, hívás nélkül)?"""
+    try:
+        return llm_client().status()
+    except (ValueError, OSError) as exc:         # hibás beállítás
+        return False, f"A nyelvi modell beállítása hibás: {exc}"
+
+
+def ask_free(question: str, path: Path | None = None, cat=None, wl=None):
+    """Szabad szöveges kérdés végig (narrative.pipeline): ① → KAPU ① → SQL → ② → KAPU ②."""
+    from narrative.pipeline import ask as ask_llm
+    cat = cat or semantic_catalog()
+    wl = wl or semantic_whitelist(path)
+    con = connect(path or db_path(), read_only=True)
+    try:
+        return ask_llm(question, cat, wl, con, llm_client())
+    finally:
+        con.close()
+
+
+def pg_check(path: Path | None = None) -> dict | None:
+    """A PostgreSQL-változat ellenőrzésének mentett eredménye (python -m semantic.pg_ellenorzes)."""
+    p = Path(path or DOCS / "pg_ellenorzes.json")
+    return json.loads(p.read_text(encoding="utf-8")) if p.exists() else None
+
+
+def answer_table(result) -> pd.DataFrame:
+    """A válasz táblázata a felülethez: minden csoport, a kevés adatúak megjelölve."""
+    from semantic import answer as ans
+    rows = []
+    m = result.metrika
+    for r in result.sorok:
+        row = {"megnevezes": r["megnevezes"],
+               "ertek": "—" if r["ertek"] is None else ans.fmt_value(m, r["ertek"]),
+               "rendelesek": int(r["rendelesek"])}
+        if "alap" in r:
+            row["alap"] = int(r["alap"])
+        if "ci" in r and r["ci"][0] is not None:
+            row["tartomany"] = f"{nv.fmt_pct(r['ci'][0], m['tizedes'])} – {nv.fmt_pct(r['ci'][1], m['tizedes'])}"
+        if "reszesedes" in r:
+            row["viszony"] = nv.fmt_pct(r["reszesedes"], 1)
+        elif "relativ" in r:
+            row["viszony"] = f"{nv.fmt_num(r['relativ'], 1)}×"      # mint a szövegben: „3,2-szerese”
+        row["keves_adat"] = bool(r["keves_adat"])
+        rows.append(row)
+    return pd.DataFrame(rows)

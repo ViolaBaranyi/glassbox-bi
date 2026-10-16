@@ -21,6 +21,7 @@ dependencies = [
     "kagglehub>=0.3",      # a valódi Olist-adat letöltése (data/fetch_olist.py)
     "shap>=0.52",          # magyarázó réteg (xai/)
     "streamlit>=1.65",     # BI-felület (ui/)
+    "sqlglot>=30",         # szemantikus réteg: SQL-építés és -ellenőrzés, DuckDB ↔ PostgreSQL (semantic/)
 ]
 
 [tool.pytest.ini_options]

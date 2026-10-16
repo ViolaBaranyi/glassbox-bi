@@ -50,7 +50,11 @@ with tabs[0]:
         "mennyire hihető ez a szám, és hogy melyik adat mennyivel növelte vagy csökkentette.\n"
         "3. **A modell** — itt derül ki, mennyire lehet megbízni a modellben. Kezdd a "
         "„Röviden” résszel.\n"
-        "4. **Kérdezz** — hamarosan: kérdés hétköznapi nyelven, szöveges válasszal.\n"
+        "4. **Kérdezz** — tegyél fel kérdést a rendelésekről: írd le magyarul (ehhez helyi nyelvi "
+        "modell kell), vagy állítsd össze a kérdésépítővel — mit mérjünk (pl. késési arány), milyen "
+        "bontásban (pl. államonként) és milyen szűréssel. A válasz szövegben, ábrán és táblázatban "
+        "jön; ha a kérdésre nincs adat (pl. haszon), a rendszer megmondja, miért nem — és nem mond "
+        "számot.\n"
         "5. **Súgó** — ez az oldal: fogalmak, rövidítések, korlátok.\n\n"
         "#### Hasznos tudnivalók\n"
         "- Ha egy szám vagy cím mellett **kis kérdőjelet** látsz, vidd fölé az egeret: rövid "
@@ -158,14 +162,39 @@ with tabs[1]:
                 "(1 = azonos sorrend)."),
         ("Top-3 egyezés", "a három legfontosabb tényezőből hány közös két magyarázatban."),
     ])
+    section("A Kérdezz oldal", [
+        ("Mérőszám", "amit a kérdés mér: pl. késési arány, átlagos szállítási idő, forgalom. A "
+                     "rendszer csak a *metrikakatalógusban* felsorolt mérőszámokat számolja — "
+                     "mindegyiknek rögzített, ellenőrizhető definíciója van."),
+        ("Bontás", "milyen csoportokra bontsuk az eredményt: államonként, régiónként, "
+                   "kategóriánként, havonta, a hét napjai szerint …"),
+        ("Szűrés, időszak", "melyik rendelésekre vonatkozzon a kérdés (pl. csak São Paulo, csak "
+                            "2018 első fele). Az időszak a rendelés leadásának napja szerint szűr."),
+        ("1. kapu", "ellenőrző lépés a lekérdezés előtt: a mérőszám, a bontás és a szűrő benne "
+         "van-e a katalógusban, és a szűrő értékei (államok, kategóriák, napok) tényleg "
+         "előfordulnak-e az adatban. Ha nem, a kérdésre indokolt elutasítás jön, szám nélkül."),
+        ("Kevés adat", "ha egy csoportban kevés a rendelés (aránynál 100-nál, átlagnál 30-nál "
+                       "kevesebb), az értéke a véletlentől erősen ingadozik. A szöveg és az ábra "
+                       "ezekre nem épít, a táblázat megjelöli őket."),
+        ("Nyelvi modell", "szöveget értő és író program (itt a saját gépeden fut). A Kérdezz "
+                          "oldalon két dolgot csinál: a kérdésedből kitölti a kérdés gépi alakját, "
+                          "és megfogalmazza a válasz közepét. Számot nem számol és nem ír le."),
+        ("Jelölő", "a nyelvi modell a számok helyére jelölőt ír (pl. {O}), a valódi értéket a "
+                   "rendszer illeszti be a lekérdezés eredményéből — így a modell nem tud "
+                   "számot kitalálni."),
+        ("2. kapu", "ellenőrző lépés a nyelvi modell szövegén: minden szám visszavezethető-e az "
+                    "eredményre, minden érték a saját csoportja mellett áll-e, a „legmagasabb” "
+                    "tényleg az-e, és nincs-e benne ok-okozati állítás. Ha nem megy át, a "
+                    "rögzített sablon szövege látszik."),
+    ])
     section("Egyéb", [
         ("Olist", "brazil online piactér, amelyen keresztül sok kisebb bolt árul; a rendelési "
                   "adatait névtelenítve, nyilvánosan közzétette (licenc: CC BY-NC-SA 4.0 — nem "
                   "kereskedelmi felhasználás, forrásmegjelöléssel)."),
         ("Adatbázis (tárház)", "az a rendezett adatgyűjtemény a gépeden, amelyből a felület "
                                "minden számot kiszámol."),
-        ("SQL", "adatbázis-lekérdező nyelv. Az *Áttekintés* oldalon minden szám mellett ott a "
-                "pontos lekérdezés, így bárki ellenőrizheti."),
+        ("SQL", "adatbázis-lekérdező nyelv. Az *Áttekintés* és a *Kérdezz* oldalon minden szám "
+                "mellett ott a pontos lekérdezés, így bárki ellenőrizheti."),
         ("Localhost", "a felület csak a saját gépeden fut, az internetről nem érhető el."),
     ])
 
@@ -262,4 +291,11 @@ with tabs[5]:
         "címekből.\n"
         "- **Egyetlen rendelésből nem lehet ítélni.** Ha egy 50%-os kockázatú rendelés időben "
         "megjött, attól a modell még lehet jó — a megbízhatóság csak sok rendelésen mérhető.\n"
-        "- **A szöveges válaszok (Kérdezz oldal) még fejlesztés alatt állnak.**")
+        "- **A nyelvi modell félreértheti a kérdést.** Ezért a válasz első mondata mindig "
+        "megmondja, mire vonatkozik (hány rendelés, melyik időszak, milyen szűrés), és a „Hogyan "
+        "értette a nyelvi modell a kérdést?” részben látszik az értelmezése; a kérdésépítőbe át is "
+        "veheted, és ott javíthatod. A számokat sosem a modell adja, hanem a lekérdezés.\n"
+        "- **A szabad szöveges kérdés lassú lehet.** A modell a saját gépeden fut; videókártya "
+        "nélkül egy kérdés fél–egy perc is lehet. A kérdésépítő azonnal válaszol.\n"
+        "- **Csak az kérdezhető, ami az adatban van.** Haszon, vásárlói értékelés, fizetés, "
+        "készlet vagy előrejelzés nincs benne — ezekre a Kérdezz oldal indokolt elutasítást ad.")
