@@ -63,10 +63,28 @@ def core_ok(q: dict, gate: sp.GateResult) -> bool | None:
         return None
     if not gate.ok:
         return False
-    return gate.spec.metrika in _as_list(q.get("metrika")) and list(gate.spec.bontas) == list(q.get("bontas", []))
+    return any(gate.spec.metrika in _as_list(c.get("metrika")) and list(gate.spec.bontas) == list(c.get("bontas", []))
+               for c in variants(q))
+
+
+ALT_FIELDS = ("metrika", "bontas", "szuro", "tol", "ig", "rendezes", "limit", "teljes")
+
+
+def variants(q: dict) -> list[dict]:
+    """Az elvárt értelmezés és az elfogadható alternatívái („alternativak”: a felsorolt mezők
+    felülírják a fő elvárást — pl. „bútor” = a fő bútorkategória VAGY az összes bútorkategória)."""
+    base = {k: v for k, v in q.items() if k != "alternativak"}
+    return [base] + [{**base, **{k: v for k, v in alt.items() if k in ALT_FIELDS}} for alt in q.get("alternativak", [])]
 
 
 def judge(q: dict, gate: sp.GateResult, cat, wl, groups=None) -> tuple[str, list[str]]:
+    """Az ítélet a fő elvárásra és az alternatívákra: ha bármelyik pontosan egyezik, „helyes”;
+    különben a fő elváráshoz mért eltérések."""
+    results = [_judge_one(c, gate, cat, wl, groups) for c in variants(q)]
+    return next((r for r in results if r[0] == "helyes"), results[0])
+
+
+def _judge_one(q: dict, gate: sp.GateResult, cat, wl, groups=None) -> tuple[str, list[str]]:
     """(ítélet, eltérések). Ítélet: helyes | hibás értelmezés | helyes elutasítás |
     téves elutasítás | hiányzó elutasítás | más elutasítás.
 
@@ -94,7 +112,9 @@ def judge(q: dict, gate: sp.GateResult, cat, wl, groups=None) -> tuple[str, list
         want = {d: sorted(v) for d, v in q["szuro"].items()}
         if got != want:
             diffs.append(f"szűrő: {got} (elvárt: {want})")
-    if "tol" in q or "ig" in q:
+    if q.get("idoablak") == "barmely":
+        pass                                         # „mostanában”: bármilyen időablak elfogadható
+    elif "tol" in q or "ig" in q:
         tol, ig = _window(q, s.metrika, cat, wl)
         got_tol, got_ig = (s.tol.isoformat() if s.tol else None), (s.ig.isoformat() if s.ig else None)
         if "tol" in q and got_tol != tol:

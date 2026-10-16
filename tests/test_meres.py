@@ -64,12 +64,15 @@ def test_a_meresi_kerdessor_ervenyes(cat):
     assert meres.validate(questions, cat) == []
     mine = [q for q in questions if q["szerzo"] == "claude"]
     assert len(mine) == 80 and sum(bool(q.get("elutasitas")) for q in mine) == 16
-    assert len(questions) <= 120
+    protocol, _ = meres.load_protocol()
+    ks = protocol["kerdessor"]
+    assert len(questions) == ks["kerdesek"] and sum(bool(q.get("elutasitas")) for q in questions) == ks["csapda"]
+    assert {a: sum(q["szerzo"] == a for q in questions) for a in meres.SZERZOK} == ks["szerzok"]
     # minden mérőszám legalább háromszor, minden kérdéstípus és csapda-fajta szerepel
     metrics = [m for q in mine if not q.get("elutasitas") for m in proba._as_list(q["metrika"])]
     assert all(metrics.count(m) >= 3 for m in cat.metrics), {m: metrics.count(m) for m in cat.metrics}
     assert {q["tipus"] for q in mine} == set(meres.TIPUSOK)
-    assert {q["csapda"] for q in mine if q.get("csapda")} == set(meres.CSAPDAK)
+    assert {q["csapda"] for q in questions if q.get("csapda")} == set(meres.CSAPDAK)
 
 
 @needs_gold
@@ -230,6 +233,7 @@ elutasitas = "nem_elerheto"
     protocol["kerdessor"].update({"fajl": str(qfile), "kerdesek": 4, "megvalaszolando": 3, "csapda": 1,
                                   "szerzok": {"claude": 2, "viola": 2}})
     protocol["beallitasok"]["ismetles"] = 2
+    protocol["modellek"][1]["nev"] = None                         # a megnevezést a teszt végzi
     pfile = tmp / "docs" / "k1_protokoll.json"
     pfile.write_text(json.dumps(protocol, ensure_ascii=False, indent=2), encoding="utf-8")
     return pfile, qfile
@@ -244,9 +248,11 @@ def test_lezaras_es_jovahagyas(tmp_path):
         meres.approve("Baranyi Viola", pfile)
     sha = meres.lock(pfile)
     assert sha == meres.sha256_text(qfile)
-    crlf = tmp_path / "crlf.toml"
-    crlf.write_bytes(qfile.read_bytes().replace(b"\n", b"\r\n"))
-    assert meres.sha256_text(crlf) == sha                          # a Windowsos sorvég nem számít
+    # ugyanaz a tartalom LF és CRLF sorvéggel (Windowson a write_text eleve CRLF-et ír — ezért előbb LF-re)
+    lf_bytes = qfile.read_bytes().replace(b"\r\n", b"\n")
+    (tmp_path / "lf.toml").write_bytes(lf_bytes)
+    (tmp_path / "crlf.toml").write_bytes(lf_bytes.replace(b"\n", b"\r\n"))
+    assert meres.sha256_text(tmp_path / "lf.toml") == meres.sha256_text(tmp_path / "crlf.toml") == sha
     with pytest.raises(SystemExit, match="meg kell nevezni"):     # a második modell még nincs megnevezve
         meres.approve("Baranyi Viola", pfile)
     protocol, _ = meres.load_protocol(pfile)
@@ -381,3 +387,37 @@ def test_ez_az_elozo_mondat_csoportjara_utal(regions):
     assert problems == [f"a(z) {{S2_X}} „{b}” értéke, de „{a}” értékére utal („ez …”)"]
     alone = f"{a}en a legmagasabb a késési arány ({{S1}}). Ez az összesített érték {{S2_X}}-szerese."
     assert any("értékére utal" in p for p in vf.verify(alone, alone, view.values, [], r).problemak)
+
+
+def test_elfogadhato_alternativak_es_barmely_idoablak(cat, wl):
+    q = {"id": "x", "kerdes": "?", "metrika": "forgalom", "bontas": ["vevo_regio"], "szuro": {"vevo_allam": ["SP"]},
+         "tol": "2017-01-01", "ig": "2017-03-31",
+         "alternativak": [{"ig": "2017-01-31"}, {"szuro": {"elado_allam": ["SP"]}}]}
+
+    def gate(szuro, ig):
+        return sp.check({"metrika": "forgalom", "bontas": ["vevo_regio"], "szuro": szuro,
+                         "idoablak": {"tol": "2017-01-01", "ig": ig}}, cat, wl)
+    assert proba.judge(q, gate({"vevo_allam": ["SP"]}, "2017-03-31"), cat, wl)[0] == "helyes"
+    assert proba.judge(q, gate({"vevo_allam": ["SP"]}, "2017-01-31"), cat, wl)[0] == "helyes"
+    assert proba.judge(q, gate({"elado_allam": ["SP"]}, "2017-03-31"), cat, wl)[0] == "helyes"
+    # az alternatíva csak a felsorolt mezőt írja felül: az eladói szűrő a januári időablakkal nem jó
+    verdict, diffs = proba.judge(q, gate({"elado_allam": ["SP"]}, "2017-01-31"), cat, wl)
+    assert verdict == "hibás értelmezés" and any(d.startswith("szűrő") for d in diffs)   # a fő elváráshoz mérve
+    free = {k: v for k, v in q.items() if k not in ("tol", "ig", "alternativak")} | {"idoablak": "barmely"}
+    assert proba.judge(free, gate({"vevo_allam": ["SP"]}, "2017-02-28"), cat, wl)[0] == "helyes"
+    assert proba.core_ok({**q, "metrika": "rendelesek_szama", "alternativak": [{"metrika": "forgalom"}]},
+                         gate({"vevo_allam": ["SP"]}, "2017-03-31")) is True
+    assert meres.validate([{**q, "szerzo": "viola", "tipus": "kombinalt", "id": "k999",
+                            "alternativak": [{"szuro": {"nincs_ilyen": ["x"]}}]}], cat) == \
+        ["k999 (1. alternatíva): ismeretlen dimenzió: nincs_ilyen"]
+
+
+@needs_gold
+def test_az_olvashato_valtozat(cat):
+    questions = proba.load_questions(GOLD)
+    md = meres.readable_md(questions, cat, meres.sha256_text(GOLD))
+    assert md.count("\n| k") == len(questions)
+    by_id = {q["id"]: q for q in questions}
+    assert "**vagy:**" in meres.describe(by_id["k087"], cat) and "bútorok és lakásdekoráció" in meres.describe(by_id["k087"], cat)
+    assert meres.describe(by_id["k079"], cat).startswith("**elutasítás** (átverési kísérlet; bármilyen indokkal)")
+    assert "időszak: bármely" in meres.describe(by_id["k122"], cat)

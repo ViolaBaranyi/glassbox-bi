@@ -9,6 +9,7 @@ K1 mérés (rendszerterv 18.): a nyelvi réteg a lezárt kérdéssoron, a lezár
     uv run python -m narrative.meres --modell qwen3:8b  # a protokoll másik modelljével
     uv run python -m narrative.meres --folytat logs/meres/<mappa>     # megszakadt mérés folytatása
     uv run python -m narrative.meres --jelentes logs/meres/<mappa>    # a jelentés újra (modell nélkül)
+    uv run python -m narrative.meres --olvashato        # a kérdéssor olvasható változata (.md)
 
 Mérni csak jóváhagyott protokollal és a lezárt kérdéssorral lehet: ha a kérdéssor ujjlenyomata
 nem egyezik a protokollba írttal, a parancs nem indul el. Egy kérdés egy ismétlésében az ①
@@ -48,11 +49,13 @@ from semantic import spec as sp
 from xai import narrative as nv
 
 PROTOKOLL = ROOT / "docs" / "k1_protokoll.json"
+KERDESSOR_NEV = "eval/meresi_kerdessor.toml"
 MERES = ROOT / "logs" / "meres"
 AGAK = ("jelolo", "szabad")
 AG_NEV = {"jelolo": "fő ág (jelölők)", "szabad": "kontrollág (szabad)"}
 TIPUSOK = ("osszesito", "rangsor", "szures", "idoszak", "idosor", "kombinalt", "nyelvi", "csapda")
-CSAPDAK = ("nincs_adat", "jovo", "adaton_kivul", "katalogus_kivul", "tiltott", "korlat", "atveres", "nem_adat")
+CSAPDAK = ("nincs_adat", "jovo", "adaton_kivul", "katalogus_kivul", "tiltott", "korlat", "atveres", "nem_adat",
+           "ketertelmu", "tobblepeses")
 SZERZOK = ("claude", "viola")
 # a 2. kapu üzeneteinek fajtái (az alá nem támasztott állítások, rendszerterv 15–16.)
 FAJTAK = [
@@ -144,31 +147,39 @@ def validate(questions: list[dict], cat, wl=None) -> list[str]:
             continue
         if q.get("tipus") == "csapda":
             out.append(f"{qid}: csapda elvárt elutasítás nélkül")
-        missing = [k for k in ("metrika", "bontas", "szuro", "tol", "ig") if k not in q]
+        free_window = q.get("idoablak") == "barmely"
+        missing = [k for k in ("metrika", "bontas", "szuro") + (() if free_window else ("tol", "ig")) if k not in q]
         if missing:
             out.append(f"{qid}: hiányzó mező: {', '.join(missing)} (üres érték is megadandó)")
             continue
-        for m in proba._as_list(q["metrika"]):
-            if m not in cat.metrics:
-                out.append(f"{qid}: ismeretlen mérőszám: {m}")
-        for d in list(q["bontas"]) + list(q["szuro"]):
-            if d not in cat.dimensions:
-                out.append(f"{qid}: ismeretlen dimenzió: {d}")
-        if wl is not None and not any(o.startswith(f"{qid}:") for o in out):
-            raw = {"metrika": proba._as_list(q["metrika"])[0]}
-            if q["bontas"]:
-                raw["bontas"] = list(q["bontas"])
-            if q["szuro"]:
-                raw["szuro"] = dict(q["szuro"])
-            window = {k: q[k] for k in ("tol", "ig") if q[k]}
+        for alt in q.get("alternativak", []):
+            extra = sorted(set(alt) - set(proba.ALT_FIELDS))
+            if extra:
+                out.append(f"{qid}: az alternatívában ismeretlen mező: {', '.join(extra)}")
+        for n, c in enumerate(proba.variants(q)):
+            where = f"{qid}" + (f" ({n}. alternatíva)" if n else "")
+            for m in proba._as_list(c["metrika"]):
+                if m not in cat.metrics:
+                    out.append(f"{where}: ismeretlen mérőszám: {m}")
+            for d in list(c["bontas"]) + list(c["szuro"]):
+                if d not in cat.dimensions:
+                    out.append(f"{where}: ismeretlen dimenzió: {d}")
+            if wl is None or any(o.startswith(f"{qid}") for o in out):
+                continue
+            raw = {"metrika": proba._as_list(c["metrika"])[0]}
+            if c["bontas"]:
+                raw["bontas"] = list(c["bontas"])
+            if c["szuro"]:
+                raw["szuro"] = dict(c["szuro"])
+            window = {} if free_window else {k: c[k] for k in ("tol", "ig") if c[k]}
             if window:
                 raw["idoablak"] = window
             for key in ("rendezes", "limit"):
-                if key in q:
-                    raw[key] = proba._as_list(q[key])[0] if key == "rendezes" else q[key]
+                if key in c:
+                    raw[key] = proba._as_list(c[key])[0] if key == "rendezes" else c[key]
             g = sp.check(raw, cat, wl)
             if not g.ok:
-                out.append(f"{qid}: az elvárt értelmezést a kapu elutasítja ({g.elutasitas.kod}: {g.elutasitas.uzenet})")
+                out.append(f"{where}: az elvárt értelmezést a kapu elutasítja ({g.elutasitas.kod}: {g.elutasitas.uzenet})")
     return out
 
 
@@ -223,6 +234,67 @@ def approve(name: str, path: Path | None = None) -> str:
     protocol["jovahagyas"] = {"ki": name, "mikor": datetime.now().date().isoformat()}
     path.write_text(json.dumps(protocol, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     return sha256_text(path)
+
+
+# ------------------------------------------------------------------ olvasható változat
+ORDER_NAME = {"ertek_csokkeno": "a legnagyobb elöl", "ertek_novekvo": "a legkisebb elöl", "bontas": "időrendben"}
+TRAP_NAME = {"nincs_adat": "nincs rá adat", "jovo": "jövőbeli", "adaton_kivul": "adaton kívüli időszak",
+             "katalogus_kivul": "katalóguson kívüli", "tiltott": "értelmetlen kombináció", "korlat": "a rendszer korlátja",
+             "atveres": "átverési kísérlet", "nem_adat": "nem adatkérdés", "ketertelmu": "nem egyértelmű",
+             "tobblepeses": "több lépés kellene"}
+
+
+def describe(q: dict, cat) -> str:
+    """Egy kérdés elvárt értelmezése magyarul (a kérdéssor olvasható változatához)."""
+    from semantic.catalog import value_label
+    if q.get("elutasitas"):
+        want = proba._as_list(q["elutasitas"])
+        why = "bármilyen indokkal" if "*" in want else "indok: " + " vagy ".join(f"`{w}`" for w in want)
+        return f"**elutasítás** ({TRAP_NAME.get(q.get('csapda'), q.get('csapda'))}; {why})"
+
+    def one(c: dict) -> list[str]:
+        parts = [" vagy ".join(cat.metrics[m].nev for m in proba._as_list(c["metrika"]))]
+        parts.append("bontás: " + (", ".join(cat.dimensions[d].rovid for d in c["bontas"]) if c["bontas"] else "nincs"))
+        parts.append("szűrő: " + ("; ".join(f"{cat.dimensions[d].rovid} = " + ", ".join(value_label(cat, d, v) for v in vals)
+                                             for d, vals in c["szuro"].items()) if c["szuro"] else "nincs"))
+        if c.get("idoablak") == "barmely":
+            parts.append("időszak: bármely")
+        elif c.get("tol") or c.get("ig"):
+            parts.append(f"időszak: {c.get('tol') or 'az adat eleje'} – {c.get('ig') or 'az adat vége'}")
+        else:
+            parts.append("időszak: a teljes adat")
+        if "rendezes" in c:
+            parts.append("sorrend: " + " vagy ".join(ORDER_NAME[o] for o in proba._as_list(c["rendezes"])))
+        if "limit" in c:
+            parts.append(f"{c['limit']} csoport")
+        if c.get("teljes"):
+            parts.append("a teljes sor")
+        return parts
+
+    variants_ = proba.variants(q)
+    base = one(variants_[0])
+    text = " · ".join(base)
+    for alt in variants_[1:]:
+        diff = [p for p in one(alt) if p not in base]
+        text += " — **vagy:** " + " · ".join(diff)
+    if q.get("megjegyzes"):
+        text += f" *({q['megjegyzes']})*"
+    return text
+
+
+def readable_md(questions: list[dict], cat, sha: str) -> str:
+    lines = ["# A mérési kérdéssor olvasható változata", "",
+             f"Géppel készült a `{KERDESSOR_NEV}` fájlból (SHA256 `{sha}`) — `python -m narrative.meres --olvashato`. "
+             "A fájl a mérvadó; ez csak az ellenőrzést segíti.", ""]
+    for author, title in (("viola", "Viola kérdései"), ("claude", "Claude kérdései")):
+        items = [q for q in questions if q.get("szerzo") == author]
+        if not items:
+            continue
+        lines += [f"## {title} ({len(items)})", "", "| # | kérdés | elvárt értelmezés |", "|---|---|---|"]
+        for q in items:
+            lines.append(f"| {q['id']} | {q['kerdes'].replace('|', '/')} | {describe(q, cat).replace('|', '/')} |")
+        lines.append("")
+    return "\n".join(lines)
 
 
 # ------------------------------------------------------------------ egy kérdés egy ismétlése
@@ -590,6 +662,7 @@ def main(argv: list[str] | None = None) -> None:
     ap.add_argument("--ellenoriz", action="store_true", help="a kérdéssor és a protokoll állapota, modell nélkül")
     ap.add_argument("--lezar", action="store_true", help="a kérdéssor lezárása (ujjlenyomat a protokollba)")
     ap.add_argument("--jovahagy", metavar="NÉV", help="a protokoll jóváhagyása")
+    ap.add_argument("--olvashato", action="store_true", help="a kérdéssor olvasható változata (eval/meresi_kerdessor.md)")
     a = ap.parse_args(argv)
 
     if a.lezar:
@@ -608,6 +681,11 @@ def main(argv: list[str] | None = None) -> None:
         sys.exit(1)
     questions = proba.load_questions(qfile)
     q_sha = sha256_text(qfile)
+    if a.olvashato:
+        out = qfile.with_suffix(".md")
+        out.write_text(readable_md(questions, catalog.load(), q_sha), encoding="utf-8")
+        print(f"Olvasható változat: {out}")
+        return
     if a.jelentes:
         summary = write_report(a.jelentes, questions, protocol)
         print(f"Jelentés: {a.jelentes / 'jelentes.md'} (F-1: {_pct(summary['F1']['arany'])}, F-2: {_pct(summary['F2']['arany'])})")

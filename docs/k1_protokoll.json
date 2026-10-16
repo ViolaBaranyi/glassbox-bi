@@ -5,23 +5,39 @@
   "jovahagyas": null,
   "kerdessor": {
     "fajl": "eval/meresi_kerdessor.toml",
-    "sha256": null,
-    "lezarva": null,
-    "kerdesek": 120,
-    "megvalaszolando": 96,
-    "csapda": 24,
-    "szerzok": {"claude": 80, "viola": 40},
-    "szabaly": "Lezárás előtt egyetlen kérdés sem fut valódi nyelvi modellen. A Viola-féle kérdések elvárt értelmezését Claude írja, Viola ellenőrzi. A lezárás után a fájl nem változik; az ujjlenyomat egységesített (LF) sorvégekkel számolódik."
+    "sha256": "ce87d85fd44038c96f107f6474b4c6cdf1a5978afb88b3bfa6629784a69bc01f",
+    "lezarva": "2026-10-16T14:25:52",
+    "kerdesek": 130,
+    "megvalaszolando": 102,
+    "csapda": 28,
+    "szerzok": {
+      "claude": 80,
+      "viola": 50
+    },
+    "szabaly": "Lezárás előtt egyetlen kérdés sem fut valódi nyelvi modellen. Viola a saját kérdéseit Claude kérdéseinek ismerete nélkül írta (51 kérdés, egy a prompt mintapéldájának közeli átfogalmazása volt, ezért kimaradt); az elvárt értelmezést Claude írta, Viola ellenőrizte. Viola kérdéseinek elolvasása óta a nyelvi réteg kódja és promptja nem változott (csak a pontozás: elfogadható alternatívák). A lezárás után a fájl nem változik; az ujjlenyomat egységesített (LF) sorvégekkel számolódik."
   },
   "modellek": [
-    {"nev": "qwen3.5:4b", "szerep": "kicsi, helyi (Ollama, CPU)"},
-    {"nev": null, "szerep": "erősebb — a jóváhagyás előtt kell megnevezni (rendszerterv M-4: egy erős és egy kicsi modell)"}
+    {
+      "nev": "qwen3.5:4b",
+      "szerep": "nagyobb — 4 milliárd paraméter, helyi (Ollama, CPU)"
+    },
+    {
+      "nev": "qwen3.5:2b",
+      "szerep": "kisebb — ugyanabból a családból, 2 milliárd paraméter, helyi"
+    }
   ],
   "beallitasok": {
     "ismetles": 3,
-    "promptok": {"to_spec": "to_spec.v3", "to_text": "to_text.v3", "to_text_szabad": "to_text_szabad.v3"},
+    "promptok": {
+      "to_spec": "to_spec.v3",
+      "to_text": "to_text.v3",
+      "to_text_szabad": "to_text_szabad.v3"
+    },
     "kontextus": 4096,
-    "homerseklet": {"to_spec": 0.0, "to_text": 0.2},
+    "homerseklet": {
+      "to_spec": 0.0,
+      "to_text": 0.2
+    },
     "kod": "A mérés előtt rögzül: a jelentés a git commitot és a promptfájlok ujjlenyomatát is közli. Ha a nyelvi réteg kódja vagy promptja a mérés után változik, az új változat a teljes készleten újra fut, és mindkét eredmény a dolgozatba kerül."
   },
   "agak": {
@@ -44,7 +60,10 @@
   "statisztika": {
     "intervallum": "Wilson, 95% — az összes ismétlés együtt, és ismétlésenként átlag ± szórás",
     "paros_osszevetes": "K1_fo: kérdésenként a három ismétlés átlaga ágonként; a két ág különbségének átlaga a kérdéseken, 95%-os bootstrap-intervallummal (a kérdések újramintavételével).",
-    "bootstrap": {"B": 2000, "mag": 20261016}
+    "bootstrap": {
+      "B": 2000,
+      "mag": 20261016
+    }
   },
   "kezi_ellenorzes": {
     "cel": "A 2. kapu tévesztéseinek becslése: a K1 csak az alsó becslés, mert a kapu nem lát mindent (rendszerterv 02. D).",
@@ -53,7 +72,8 @@
     "mag": 20261017
   },
   "elteresek_a_rendszertervtol": [
-    "120 kérdés 80 helyett, 24 csapda 15 helyett: szűkebb intervallum, és a csapdák minden fajtából legalább kétszer szerepelnek.",
+    "130 kérdés 80 helyett, 28 csapda 15 helyett: szűkebb intervallum; Viola 51 kérdést írt, és nem Claude válogatott közülük.",
+    "M-4: „egy erős és egy kicsi modell” helyett ugyanannak a családnak két mérete (4B és 2B), mindkettő helyi — Viola döntése (2026-10-16): nincs API-kulcs. A kísérleti változó így tisztán a méret (azonos tokenizáló és prompt); a tézis előrejelzése a kisebb modellre szól: a nem alátámasztott állítások aránya a fő ágon nem romolhat érdemben.",
     "A rossz csoporthoz kötött érték a számjeggyel leírt számnál is hibának számít (a kontrollágon minden szám ilyen), hogy a két ág ugyanazzal a mércével mérődjön.",
     "A K1 egysége a szöveg (van-e benne alá nem támasztott állítás); a számonkénti arány másodlagos."
   ]
