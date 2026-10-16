@@ -60,6 +60,9 @@ def main() -> None:
     print("  " + json.dumps(s.urlap, ensure_ascii=False) if s.urlap else "  (nincs érvényes űrlap)")
     for n in s.feloldasok:
         print(f"  feloldva: „{n.beirt}” → " + (n.kulcs or "nem egyértelmű (" + ", ".join(n.jeloltek) + ")"))
+    for f in s.javitasok:
+        print(f"  a kód javította ({f.mezo}): {json.dumps(f.regi, ensure_ascii=False)} → "
+              f"{json.dumps(f.uj, ensure_ascii=False)} — {f.ok}")
     print(f"KAPU ①: {s.gate.status}")
     if not s.gate.ok:
         print(s.gate.elutasitas.uzenet)

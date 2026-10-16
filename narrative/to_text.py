@@ -29,7 +29,7 @@ from datetime import date
 
 from narrative.client import LlmClient, LLMUnavailable
 from narrative.to_spec import load_template, parse_json
-from narrative.verifier import PLACEHOLDER, Verdict, verify
+from narrative.verifier import PLACEHOLDER, Verdict, distinctive, norm, verify
 from semantic import answer as ans
 from semantic.answer import _NUMBER
 from semantic.catalog import fmt_long_date
@@ -60,7 +60,11 @@ def _rows_for_view(r: MetricResult) -> list[int]:
     return shown
 
 
-def build_view(r: MetricResult, placeholders: bool = True) -> View:
+def build_view(r: MetricResult, placeholders: bool = True, minimal: bool = False) -> View:
+    """minimal (v3, keretes válasznál): a hatókör (rendelésszám, időszak), a megjegyzés, a
+    „kevés adat” és a korlát sora kimarad — ezeket a kód írja a válasz keretébe, a modellnek
+    nem kell (és ne is ismételje). Ami marad: a szűrés neve, a mérőszám, az összesített érték
+    és a bontás. A fejlesztői próbán a modell épp ezeket a sorokat írta vissza, számjeggyel."""
     view = View(text="")
     m = r.metrika
 
@@ -68,17 +72,19 @@ def build_view(r: MetricResult, placeholders: bool = True) -> View:
         view.values[key] = (shown, path)
         return f"{{{key}}} = {shown}" if placeholders else shown
 
-    lines = [f"Hatókör: {put('N', ans.fmt_count(r.osszesen['rendelesek']), 'osszesen.rendelesek')} "
-             "kézbesített rendelés."]
-    tol, ig = date.fromisoformat(r.idoablak["tol"]), date.fromisoformat(r.idoablak["ig"])
-    lines.append(f"Időszak (a rendelés leadása): {put('TOL', fmt_long_date(tol), 'idoablak.tol')} – "
-                 f"{put('IG', fmt_long_date(ig), 'idoablak.ig')}"
-                 + (" — a teljes adat." if r.idoablak["teljes"] else "."))
+    lines = []
+    if not minimal:
+        lines.append(f"Hatókör: {put('N', ans.fmt_count(r.osszesen['rendelesek']), 'osszesen.rendelesek')} "
+                     "kézbesített rendelés.")
+        tol, ig = date.fromisoformat(r.idoablak["tol"]), date.fromisoformat(r.idoablak["ig"])
+        lines.append(f"Időszak (a rendelés leadása): {put('TOL', fmt_long_date(tol), 'idoablak.tol')} – "
+                     f"{put('IG', fmt_long_date(ig), 'idoablak.ig')}"
+                     + (" — a teljes adat." if r.idoablak["teljes"] else "."))
     if r.szurok:
         lines.append("Szűrés: " + "; ".join(f"{f['rovid']}: " + " vagy ".join(f["cimkek"]) for f in r.szurok) + ".")
     else:
         lines.append("Szűrés: nincs.")
-    if "idoablak_szukitve" in r.megjegyzesek:
+    if "idoablak_szukitve" in r.megjegyzesek and not minimal:
         lines.append(f"Megjegyzés: a kérdés időszaka túlnyúlt az adaton; az adat "
                      f"{put('ADAT_TOL', fmt_long_date(date.fromisoformat(r.adat['tol'])), 'adat.tol')} és "
                      f"{put('ADAT_IG', fmt_long_date(date.fromisoformat(r.adat['ig'])), 'adat.ig')} közötti.")
@@ -117,11 +123,11 @@ def build_view(r: MetricResult, placeholders: bool = True) -> View:
                 parts.append(f"az összesített érték {put(f'S{k}_X', nv.fmt_num(row['relativ'], 1), f'sorok[{i}].relativ')}-szerese")
             lines.append("; ".join(parts))
         small = [row for row in r.sorok if row["keves_adat"]]
-        if small:
+        if small and not minimal:
             lines.append(f"Kevés adat: {put('K', str(len(small)), 'sorok (kevés adat)')} csoport (kevesebb mint "
                          f"{put('MIN', ans.fmt_count(m['min_csoport']), 'metrika.min_csoport')} rendelés) — "
                          "ezekre ne építs állítást.")
-    if m["egyseg"] == "arany" and r.bontas:
+    if m["egyseg"] == "arany" and r.bontas and not minimal:
         lines.append("Korlát: a csoportok közti különbség együttjárás, nem ok.")
     view.text = "\n".join(lines)
     return view
@@ -146,6 +152,33 @@ def fill(model_text: str, view: View) -> tuple[str, list[tuple[str, str]], list[
     for unit in ("nap", "BRL", "km"):
         out = re.sub(rf"\b{unit}\s+{unit}\b", unit, out)
     return out, refs, unknown
+
+
+def dedupe(text: str, view: View) -> str:
+    """Ugyanaz az érték kétszer egymás mellett — „15,3 nap (15,3 nap)”, „(20,10 BRL) 20,10 BRL”,
+    „12,6 nap = 12,6 nap” — egyszer. A modell a jelölő mellé gyakran maga is leírja a számot
+    (a fejlesztői próbán 13-ból 8 szövegben); ez csak a megjelenítést javítja: szám nem tűnik
+    el és nem keletkezik, a 2. kapu a modell eredeti szövegét ítéli meg."""
+    out = text
+    for shown in sorted({shown for shown, _ in view.values.values() if distinctive(shown)}, key=len, reverse=True):
+        v = re.escape(norm(shown)).replace("\\ ", "[ \u00a0\u202f]")
+        out = re.sub(rf"({v})\s*\(\s*{v}\s*\)", r"\1", out)
+        out = re.sub(rf"\(\s*({v})\s*\)\s*{v}", r"\1", out)
+        out = re.sub(rf"({v})\s*=\s*{v}", r"\1", out)
+    # zárójel, amelyben csak a mondatban már leírt értékek állnak: „5,8% és 6,7% között (5,8% – 6,7%)”
+    values = [norm(shown) for shown, _ in view.values.values() if distinctive(shown)]
+    sentences = re.split(r"(?<=[.!?])\s+", out)
+    for n, sentence in enumerate(sentences):
+        for m in reversed(list(re.finditer(r"\s*\(([^()]*)\)", sentence))):
+            inside, before = norm(m.group(1)), norm(sentence[:m.start()])
+            rest = inside
+            for val in sorted(values, key=len, reverse=True):
+                if val in rest and val in before:
+                    rest = rest.replace(val, " ")
+            if rest != inside and not re.sub(r"[\s–\-,=]|és", "", rest):
+                sentence = sentence[:m.start()] + sentence[m.end():]
+        sentences[n] = sentence
+    return " ".join(sentences)
 
 
 @dataclass
@@ -176,9 +209,19 @@ def _call(client: LlmClient, mod: str) -> str:
     return "to_text_szabad" if mod == "szabad" and "to_text_szabad" in client.cfg.hivasok else "to_text"
 
 
+def _version_no(version: str) -> int:
+    m = re.search(r"\.v(\d+)$", version)
+    return int(m.group(1)) if m else 0
+
+
 def framed(version: str) -> bool:
     """A v1 prompt a teljes választ a modellel íratta; a v2-től a keret a kódé."""
-    return not version.endswith(".v1")
+    return _version_no(version) >= 2
+
+
+def minimal_view(version: str) -> bool:
+    """A v3-tól a modell csak a válasz magjához szükséges részt látja az eredményből."""
+    return _version_no(version) >= 3
 
 
 def to_text(question: str, r: MetricResult, client: LlmClient, mod: str = "jelolo",
@@ -189,7 +232,7 @@ def to_text(question: str, r: MetricResult, client: LlmClient, mod: str = "jelol
     call = _call(client, mod)
     version = client.cfg.hivasok[call].version
     keret = framed(version)
-    view = build_view(r, placeholders=(mod == "jelolo"))
+    view = build_view(r, placeholders=(mod == "jelolo"), minimal=minimal_view(version))
     system = load_template(client, call)
     if mod == "szabad" and call == "to_text":           # régi beállítás, külön kontrollprompt nélkül
         system = system.split("Szabályok:")[0] + "Válaszolj legfeljebb öt mondatban. A válaszod egy JSON-objektum: {\"szoveg\": \"…\"}."
@@ -215,6 +258,8 @@ def to_text(question: str, r: MetricResult, client: LlmClient, mod: str = "jelol
     if not model_text:
         verdict.ok = False
         verdict.problemak.append("üres vagy nem értelmezhető válasz")
+    if mod != "szabad":
+        core = dedupe(core, view)                         # csak a megjelenítés (a kapu már ítélt)
     final = core
     if keret:
         head, tail = ans.frame(r)

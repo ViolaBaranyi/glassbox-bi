@@ -57,7 +57,7 @@ válaszd — a `uv sync` után ott van, és mindkettő magától felismeri.
 | 1 | Környezet | a verziók rögzítve vannak a kimenetben |
 | 2 | Adat | a valódi Olist-adat; ha még nincs meg, letölti a Kaggle-ről |
 | 3 | Tárház | 9 CSV → csillagséma DuckDB-ben, **V-1 validációval** |
-| 4 | Tesztek | 312 teszt: szivárgásvédelem, V-1, adatmodell, abláció, betanítás, kohorsz, modellválasztás, bootstrap, lezárt futás, referencia-modellek, magyarázatok, szemantikus réteg, nyelvi réteg, felület; ha bármelyik bukik, **a demó megáll** |
+| 4 | Tesztek | 341 teszt: szivárgásvédelem, V-1, adatmodell, abláció, betanítás, kohorsz, modellválasztás, bootstrap, lezárt futás, referencia-modellek, magyarázatok, szemantikus réteg, nyelvi réteg, felület; ha bármelyik bukik, **a demó megáll** |
 | 5 | Betanítás | a **lezárt v3 protokoll** szerint: LightGBM súlyozás nélkül, a fák száma bővülő ablakos CV-vel, címke-tisztítással; érintetlen, legkésőbbi időszakon mérve; a kalibráció csak diagnosztika |
 | 6 | Összegzés | rangsorolás, kalibráció, kizárt rendelések, artefaktumok helye |
 
@@ -163,22 +163,46 @@ Mi történik egy kérdéssel (rendszerterv 14.):
 5. **KAPU ②** (`narrative/verifier.py`): a szöveg minden száma visszavezethető-e az
    eredményre, minden érték a saját csoportja mellett áll-e (a felcserélt érték a
    hallucináció egyik tipikus alakja: a szám maga létezik, csak rossz helyen), a
-   „legmagasabb / legalacsonyabb” tényleg az-e, és nincs-e benne oksági állítás. Ha nem
-   megy át, a sablonos válasz látszik.
+   „legmagasabb / legalacsonyabb” tényleg az-e, a 95%-os tartomány határai tartományként
+   szerepelnek-e, és nincs-e benne oksági állítás. Ha nem megy át, a sablonos válasz látszik.
+
+Amiben a kód biztosabban dönt, ott a kód dönt, és a felület megmutatja, mit írt át a modell
+űrlapján: az időkifejezést („tavaly”, „2018 első felében”, „az elmúlt három hónapban”) a kód
+számolja (`narrative/idoszak.py`); a kérdés felsőfoka („leglassabb”) adja a sorrend irányát;
+egy értékre szűrve nincs bontás ugyanarra; a jövőbeli időszak előrejelzés, erre indokolt
+elutasítás jön.
 
 Minden hívás egy sor a `logs/llm_calls.jsonl`-ban (modell és ujjlenyomata, idő, tokenek, a
 kapuk ítélete) — ez a mérőpad nyersanyaga. Helyi modellnél az idő részekre bontva is: a
 modell betöltése, a prompt beolvasása, a válasz generálása. Az első valódi futásban
-(okt. 15., `qwen3.5:4b`, laptop, videókártya nélkül) egy kérdés 93 mp volt, ebből ~40 mp
-csak a v1 prompt beolvasása (2050 token) — ezért készült a rövidebb v2 (a prompt kb. fele
-akkora). A modell a hívás után 30 percig a memóriában marad (`tartas`), és a *Kérdezz*
-oldal megnyitásakor a háttérben betöltődik, amíg a kérdést gépeled.
+(okt. 15., `qwen3.5:4b`, laptop, videókártya nélkül) egy kérdés 93 mp volt; a napló 2050
+bemeneti tokent mutatott, holott a v1 prompt kb. 4300 token — **a gép alapértelmezett, 2048
+tokenes kontextusán csonkolódott**, a modell a prompt nagy részét nem is látta. Ezért a
+kontextusméret most rögzített (`kontextus = 4096`; ha egy hívás a határig ér, a napló jelzi),
+és a v2 prompt fele akkora (2057 token, mérve). A fejlesztői próbán (okt. 16.) egy kérdés
+mediánja 37 mp volt (① 19 mp, ② 19 mp): a második kérdéstől a prompt eleje a modell
+gyorsítótárából jön (34 mp helyett ~11 mp beolvasás). A modell a hívás után 30 percig a
+memóriában marad (`tartas`), és a *Kérdezz* oldal megnyitásakor a háttérben betöltődik,
+amíg a kérdést gépeled.
 
 **Fejlesztői próbasor.** A `uv run python -m narrative.proba` 19 kérdést futtat végig
 (`eval/fejlesztoi_kerdessor.toml`, köztük 6 csapdát, amelyre elutasítás a helyes válasz),
 és kérdésenként megmondja, jól értette-e a modell, átment-e a válasz a 2. kapun, és mennyi
 ideig tartott; a jelentés a `logs/` mappába kerül. Ez hangolásra való — a dolgozat mérése a
-későbbi, lezárt kérdéssoron megy, amelyben ezek a kérdések nem szerepelhetnek. A beállítás a `configs/llm.toml`-ban van; más
+későbbi, lezárt kérdéssoron megy, amelyben ezek a kérdések nem szerepelhetnek. Az első
+futás (okt. 16., v2): 10/13 helyes értelmezés, 5/6 helyes elutasítás, a 2. kapun 6/13 szöveg
+ment át — a bukások többsége a kapu hibája volt (a sima szóközzel írt ezres tagolás, a
+csoportnévbe vágó mondathatár, a rövidített dátum), kettő valódi (kitalált jelölők; a 95%-os
+tartomány „mélypontként” és „csúcsként”). A v3-mal (okt. 16. 11:07): 12/13 értelmezés, 6/6
+elutasítás, a 2. kapun 10/13, medián 32 mp/kérdés. A kapu ezután még szigorúbb lett (havi
+bontásnál a hónapnév évszám nélkül is, a „csúcs” és a „mélypont” is felsőfok, a szűrés
+tagadása hiba): ugyanazokon a szövegeken 8/13 megy át, és mind az öt elakadó valódi hiba
+(rossz csúcshónap, rossz kategórianév, kitalált szám, „kb. 60%” az 59,1% helyett, a szűrés
+tagadása). A harmadik futás (11:33) a szigorúbb kapuval: 12/13 értelmezés (új hiba: a modell
+a mintapéldából egy hétfő-szűrőt vett át — azóta a hét napjára, régióra és államra csak akkor
+szűr, ha a kérdés említi), 6/6 elutasítás, a 2. kapun 9/13 (mind a négy elakadó valódi
+hiba), medián 29 mp/kérdés. A modell a jelölő mellé gyakran a számot is leírja („15,3 nap
+(15,3 nap)”) — a megjelenítés az ismétlést egyszer mutatja. A beállítás a `configs/llm.toml`-ban van; más
 modellt vagy OpenAI-kompatibilis API-t a `.env`-ben lehet megadni (`LLM_MODEL`,
 `LLM_PROVIDER=api`, `LLM_BASE_URL`, `LLM_API_KEY`). A modellválasztás még mérés előtt áll:
 a `qwen3.5:4b` javaslat (kicsi, többnyelvű); a végleges a 120 kérdéses készleten dől el,
@@ -203,7 +227,7 @@ egy kisebb és egy erősebb modell összevetésével (rendszerterv M-4).
 | M2 — referencia-modellek: logisztikus regresszió, döntési fa, random forest (`pipeline/reference_models.py`), lezárt összevetés (`pipeline/v3_reference.py`) | **kész — lefutott okt. 9.** (`docs/v3_referencia_eredmeny.md`) |
 | M3 — SHAP-magyarázatok a négy modellre (pontos TreeSHAP, ill. lineáris SHAP, a 22 jellemzőre összevonva), additivitás-ellenőrzés, sablonos magyarázó szöveg (`xai/`) | **kész (v1)** |
 | M5 — Streamlit BI-felület: áttekintés (SQL), rendelés-magyarázat négy modellel, modell-oldal, egyezés-ellenőrzés a lezárt futással (`ui/`, `python -m ui`) | **kész (v1)** |
-| Tesztek — szivárgás (14), V-1 és adatmodell (10), abláció (6), betanítás (6), kohorsz (2), modellválasztás (8), bootstrap (6), lezárt futás (14), referencia-modellek (9), magyarázatok (12), szöveg és megjelenítés (22), felület (20), egyezési mértékek (5), kontrollkar (5), nevek és feliratok (5), a magyarázatok hűsége (8), README-parancsok (2), környezet (7), szemantikus réteg (99), nyelvi réteg (52) | **kész, 312/312** (egy csak Node.js-szel fut, nélküle kihagyja) |
+| Tesztek — szivárgás (14), V-1 és adatmodell (10), abláció (6), betanítás (6), kohorsz (2), modellválasztás (8), bootstrap (6), lezárt futás (14), referencia-modellek (9), magyarázatok (12), szöveg és megjelenítés (22), felület (20), egyezési mértékek (5), kontrollkar (5), nevek és feliratok (5), a magyarázatok hűsége (8), README-parancsok (2), környezet (7), szemantikus réteg (99), nyelvi réteg (81) | **kész, 341/341** (egy csak Node.js-szel fut, nélküle kihagyja) |
 | Tároló — MIT licenc, CI (Ubuntu + Windows), uv-környezet (`uv.lock`; pip-nek `requirements.lock`), döntési napló | **kész** |
 | M2 — 40 futásos sweep, hiperparaméter-hangolás | következő |
 | M3 — KernelSHAP-kontrollkar: mind a négy modell ugyanazzal a magyarázóval (valószínűség-tér, közös háttér, 200 rögzített teszt-rendelés), a kar saját zajával (`xai/kernel_arm.py`, `xai/agreement.py`) | **kész** (`docs/kernel_kar_eredmeny.md`) |
@@ -212,7 +236,7 @@ egy kisebb és egy erősebb modell összevetésével (rendszerterv M-4).
 | M1 — szemantikus réteg: metrikakatalógus (11 mérőszám, 8 bontás), az adatból generált fehérlista, KAPU ① indokolt elutasítással, SQL-építő szintaxisfából (sqlglot) utólagos SQL-őrrel, MetricResult a lefuttatott SQL-lel, sablonos válasz számhivatkozásokkal (`semantic/`) | **kész (v1)** |
 | M1 — a PostgreSQL-változat ellenőrzése: a valódi adaton 354 lekérdezés DuckDB-ben és PostgreSQL 17-ben, cellánként összevetve (`semantic/pg_ellenorzes.py`) | **kész — 0 eltérés** (`docs/pg_ellenorzes.md`) |
 | M5 — *Kérdezz* oldal: kérdésépítő, példakérdések, válasz + ábra + táblázat, „Próbáld ki az 1. kaput” | **kész (v1)** |
-| M4 — nyelvi réteg: szabad szöveges kérdés → ugyanaz a gépi alak (helyi Ollama vagy OpenAI-kompatibilis API, JSON-sémához kötött kimenet, egy javító kör, ragozott szűrőértékek feloldása), a modell fogalmazta válaszmag hely-kitöltéssel, a hatókör és a korlát a kódtól, KAPU ② (számok, csoport–érték kötés, „legmagasabb”, oksági állítás), sablon tartaléknak, napló időbontással; kontrollág a K1-hez; fejlesztői próbasor (`narrative/`, `eval/`) | **kész (v2)** — első valódi futás okt. 15. (v1: helyes, de 93 mp/kérdés) |
+| M4 — nyelvi réteg: szabad szöveges kérdés → ugyanaz a gépi alak (helyi Ollama vagy OpenAI-kompatibilis API, JSON-sémához kötött kimenet, egy javító kör, ragozott szűrőértékek feloldása, időkifejezés és sorrend a kódtól), a modell fogalmazta válaszmag hely-kitöltéssel, a hatókör és a korlát a kódtól, KAPU ② (számok, csoport–érték kötés, „legmagasabb”, a tartomány szerepe, oksági állítás), sablon tartaléknak, napló időbontással; kontrollág a K1-hez; fejlesztői próbasor (`narrative/`, `eval/`) | **kész (v3)** — valódi modellel: okt. 15. (v1, 93 mp), okt. 16. fejlesztői próba (v2: 10/13, 5/6, medián 37 mp; v3: 12/13, 6/6, medián 29–32 mp) |
 | M6 — mérőpad: 120 kérdéses lezárt készlet (csapdakérdésekkel), K1 a fő ágon és a kontrollágon, két modellel | következő |
 
 ---
@@ -686,7 +710,7 @@ glassbox-bi/
     ├── test_readme.py       2 teszt (a README parancsai PowerShellben is bemásolhatók: nincs <…> helyőrző)
     ├── test_kornyezet.py    7 teszt (a uv.lock és a requirements.lock ugyanazt rögzíti, Python 3.14 mindenhol, nincs gépfüggő útvonal a tárolóban, a két Windows-parancsfájl CRLF-es és nem hivatkozik virtuális környezetre)
     ├── test_semantic.py     99 teszt (a katalógus és a hibás katalógusok, fehérlista és írásmódok, a KAPU ① minden elutasítási kódja, SQL-őr, idézés, minden szám egyezik egy független pandas-számolással, Wilson-tartomány, kevés adat, determinizmus, a válasz minden száma visszavezethető, ábrák magyar súgóval, a Kérdezz oldal végigkattintva, PostgreSQL-összevetés)
-    ├── test_nyelvi_reteg.py 52 teszt (a kliens kérése az Ollamának és az API-nak, tartás, kontextusméret, időbontás, előtöltés, újrapróbálás, állapot, napló; ① séma és prompt a katalógusból mindkét változatban, a v2 rövidebb és nem nő az adattal, a régi prompt is fut, a példák érvényesek, ragozott értékek feloldása, kétértelmű szónál nincs találgatás, a hosszú lista csak a javító körbe kerül, javító kör csak formai hibára, elutasítás akkor is, ha a modell „közeli” mérőszámot választana, a kérdés adat, nem utasítás; ② keret a kódtól, jelölők, a KAPU ② elkapja a kitalált számot, jelölőt, a felcserélt csoportértéket, a hamis „legmagasabb”-at akkor is, ha a név előtte áll, az oksági állítást; ragozott nevek; kontrollág saját prompttal; a fejlesztői próbasor és parancsa; a teljes út; a szabad szöveges fül — Streamlit AppTest)
+    ├── test_nyelvi_reteg.py 81 teszt (időkifejezések, a kód javításai a modell űrlapján — a valódi modell okt. 16-i három futásának válaszain is (`tests/adat`), az állam szerepe, a kérdésben nem említett szűrő, előrejelzés-elutasítás, minimális nézet, ezres tagolás sima szóközzel, mondathatár, tartomány-szerep, rövid dátum, csúcs és hónapnév, többes számú felsőfok, a szűrés tagadása, ismételt érték; a kliens kérése az Ollamának és az API-nak, tartás, kontextusméret, időbontás, előtöltés, újrapróbálás, állapot, napló; ① séma és prompt a katalógusból mindkét változatban, a v2 rövidebb és nem nő az adattal, a régi prompt is fut, a példák érvényesek, ragozott értékek feloldása, kétértelmű szónál nincs találgatás, a hosszú lista csak a javító körbe kerül, javító kör csak formai hibára, elutasítás akkor is, ha a modell „közeli” mérőszámot választana, a kérdés adat, nem utasítás; ② keret a kódtól, jelölők, a KAPU ② elkapja a kitalált számot, jelölőt, a felcserélt csoportértéket, a hamis „legmagasabb”-at akkor is, ha a név előtte áll, az oksági állítást; ragozott nevek; kontrollág saját prompttal; a fejlesztői próbasor és parancsa; a teljes út; a szabad szöveges fül — Streamlit AppTest)
     └── conftest.py          közös szintetikus tárház és modellek a fenti tesztekhez
 ```
 

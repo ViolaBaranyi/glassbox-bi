@@ -211,6 +211,10 @@ def show_free_answer(fa) -> None:
                                                             "nem egyértelmű: " + ", ".join(
                                                                 value_label(cat, n.dimenzio, k) for k in n.jeloltek[:5]))
                                      for n in s.feloldasok))
+        if s.javitasok:
+            names = {"idoablak": "időszak", "rendezes": "sorrend", "bontas": "bontás", "elutasitas": "elutasítás"}
+            st.markdown("Amit a rendszer a modell űrlapján átírt (ezekben a kód biztosabban dönt):\n"
+                        + "\n".join(f"- **{names.get(f.mezo, f.mezo)}**: {f.ok}" for f in s.javitasok))
         st.caption(f"Idő: {nv.fmt_num(s.ido_ms / 1000, 1)} mp{time_parts(s.idok)}"
                    + (f" · prompt: `{s.prompt}`" if s.prompt else "")
                    + (f" · modell-ujjlenyomat: `{s.digest[:12]}`" if s.digest else "")

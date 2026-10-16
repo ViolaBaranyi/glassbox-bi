@@ -28,17 +28,19 @@ modell = ""              # dátumozott pillanatkép, soha nem „latest”
 # változatok a prompts/ mappában maradnak, és ide visszaírva ugyanúgy futnak (összevető mérés).
 # v1 → v2 (2026-10-15): rövidebb ① prompt, tömör szűrő-alak; a ②-ben a hatókört és a
 # korlátot a kód írja, a modell csak a válasz magját (docs/dontesi_naplo.md).
+# v2 → v3 (2026-10-16, a fejlesztői próba után): ① egysoros űrlap; ② a modell csak a
+# maghoz szükséges részt látja, rossz/jó példa a számjegyekre, a 95%-os tartomány szerepe.
 [hivas.to_spec]
-prompt = "prompts/to_spec.v2.md"
+prompt = "prompts/to_spec.v3.md"
 temperature = 0.0
 max_tokens = 250
 
 [hivas.to_text]
-prompt = "prompts/to_text.v2.md"
+prompt = "prompts/to_text.v3.md"
 temperature = 0.2
 max_tokens = 250
 
 [hivas.to_text_szabad]
-prompt = "prompts/to_text_szabad.v2.md"
+prompt = "prompts/to_text_szabad.v3.md"
 temperature = 0.2
 max_tokens = 250

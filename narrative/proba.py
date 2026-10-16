@@ -109,6 +109,7 @@ def run_one(q: dict, cat, wl, con, client: LlmClient, only_spec: bool, mod: str)
     row = {"id": q["id"], "kerdes": q["kerdes"], "itelet": verdict, "elteresek": diffs,
            "kapu1": s.gate.status, "spec": s.gate.spec.to_dict() if s.gate.ok else None,
            "javito_kor": s.javito_kor, "feloldasok": [dataclasses.asdict(n) for n in s.feloldasok],
+           "javitasok": [dataclasses.asdict(f) for f in s.javitasok],
            "urlap": s.urlap, "ido1_ms": round(s.ido_ms), "idok1": _sum_times(s.idok),
            "modell_hiba": s.hiba}
     t = fa.szoveg
@@ -117,6 +118,8 @@ def run_one(q: dict, cat, wl, con, client: LlmClient, only_spec: bool, mod: str)
                     "modell_szoveg": t.modell_szoveg, "kapu2": None if t.verdict is None else t.verdict.ok,
                     "kapu2_problemak": [] if t.verdict is None else t.verdict.problemak,
                     "ismetelt_jelolok": [] if t.verdict is None else t.verdict.ismetelt_jelolok,
+                    "ismetelt_ertekek": [] if t.verdict is None else t.verdict.ismetelt_ertekek,
+                    "sajat_szamok": 0 if t.verdict is None else t.verdict.kozvetlen_szamok,
                     "ido2_ms": round(t.ido_ms), "idok2": t.idok})
     row["ido_ms"] = round(fa.ido_ms)
     return row
@@ -137,6 +140,9 @@ def summary(rows: list[dict]) -> dict:
         "helyes_elutasitas": sum(r["itelet"] == "helyes elutasítás" for r in traps),
         "csapda": len(traps),
         "javito_kor": sum(r["javito_kor"] for r in rows),
+        "kodbeli_javitas": sum(bool(r.get("javitasok")) for r in rows),
+        "sajat_szam_szoveg": sum(bool(r.get("sajat_szamok")) for r in texts),
+        "ismetelt_szoveg": sum(bool(r.get("ismetelt_ertekek") or r.get("ismetelt_jelolok")) for r in texts),
         "kapu2_atment": sum(bool(r["kapu2"]) for r in texts),
         "szoveg": len(texts),
         "ido1_median_ms": statistics.median(r["ido1_ms"] for r in rows) if rows else None,
@@ -144,9 +150,10 @@ def summary(rows: list[dict]) -> dict:
         "ido_median_ms": statistics.median(r["ido_ms"] for r in rows) if rows else None,
     }
     for part in ("betoltes_ms", "prompt_ms", "generalas_ms"):
-        vals = [r["idok1"].get(part) for r in rows if r["idok1"].get(part) is not None]
-        if vals:
-            out[f"ido1_{part.removesuffix('_ms')}_median_ms"] = statistics.median(vals)
+        for n, key, pool in (("1", "idok1", rows), ("2", "idok2", texts)):
+            vals = [r[key].get(part) for r in pool if (r.get(key) or {}).get(part) is not None]
+            if vals:
+                out[f"ido{n}_{part.removesuffix('_ms')}_median_ms"] = statistics.median(vals)
     return out
 
 
@@ -159,16 +166,20 @@ def report_md(rows: list[dict], head: dict) -> str:
              "| | |", "|---|---|",
              f"| helyes értelmezés | {s['helyes_ertelmezes']}/{s['ertelmezendo']} |",
              f"| helyes elutasítás (csapda) | {s['helyes_elutasitas']}/{s['csapda']} |",
-             f"| javító kör kellett | {s['javito_kor']} |"]
+             f"| javító kör kellett | {s['javito_kor']} |",
+             f"| a kód javított az értelmezésen | {s['kodbeli_javitas']} |"]
     if s["szoveg"]:
-        lines.append(f"| 2. kapu átment (a modell szövege látszik) | {s['kapu2_atment']}/{s['szoveg']} |")
-    lines += [f"| ① ideje, medián | {_sec(s['ido1_median_ms'])} mp |"]
-    for part, name in (("betoltes", "ebből betöltés"), ("prompt", "ebből a prompt beolvasása"),
-                       ("generalas", "ebből generálás")):
-        if f"ido1_{part}_median_ms" in s:
-            lines.append(f"| … {name}, medián | {_sec(s[f'ido1_{part}_median_ms'])} mp |")
-    if s["szoveg"]:
-        lines.append(f"| ② ideje, medián | {_sec(s['ido2_median_ms'])} mp |")
+        lines += [f"| 2. kapu átment (a modell szövege látszik) | {s['kapu2_atment']}/{s['szoveg']} |",
+                  f"| a modell jelölő helyett maga írt számot | {s['sajat_szam_szoveg']}/{s['szoveg']} |",
+                  f"| ugyanaz az érték kétszer a szövegben | {s['ismetelt_szoveg']}/{s['szoveg']} |"]
+    for n, name in (("1", "①"), ("2", "②")):
+        if s.get(f"ido{n}_median_ms") is None:
+            continue
+        lines.append(f"| {name} ideje, medián | {_sec(s[f'ido{n}_median_ms'])} mp |")
+        for part, pname in (("betoltes", "ebből betöltés"), ("prompt", "ebből a prompt beolvasása"),
+                            ("generalas", "ebből generálás")):
+            if f"ido{n}_{part}_median_ms" in s:
+                lines.append(f"| … {pname}, medián | {_sec(s[f'ido{n}_{part}_median_ms'])} mp |")
     lines += [f"| egy kérdés összesen, medián | {_sec(s['ido_median_ms'])} mp |", "",
               "| # | kérdés | ítélet | ① mp | ② mp | megjegyzés |", "|---|---|---|---|---|---|"]
     for r in rows:
@@ -178,6 +189,9 @@ def report_md(rows: list[dict], head: dict) -> str:
         if r.get("feloldasok"):
             note += ("; " if note else "") + "feloldva: " + ", ".join(
                 f"„{f['beirt']}” → {f['kulcs'] or '?'}" for f in r["feloldasok"])
+        if r.get("javitasok"):
+            note += ("; " if note else "") + "a kód javította: " + ", ".join(
+                f"{f['mezo']} ({f['ok']})" for f in r["javitasok"])
         if r.get("kapu2") is False:
             note += ("; " if note else "") + "2. kapu: " + "; ".join(r["kapu2_problemak"])
         lines.append(f"| {r['id']} | {r['kerdes']} | {r['itelet']} | {_sec(r['ido1_ms'])} | "

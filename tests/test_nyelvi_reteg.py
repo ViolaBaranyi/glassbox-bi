@@ -175,12 +175,13 @@ def test_beallitas_es_env(tmp_path):
     assert read_env_file(env) == {"LLM_MODEL": "valami:2b", "LLM_API_KEY": "k"}
     cfg = load_config(env={})
     assert cfg.szolgaltato == "ollama" and cfg.modell and ":" in cfg.modell
-    assert cfg.hivasok["to_spec"].temperature == 0.0 and cfg.hivasok["to_spec"].version == "to_spec.v2"
-    assert cfg.hivasok["to_text"].version == "to_text.v2" and cfg.hivasok["to_text_szabad"].version == "to_text_szabad.v2"
+    assert cfg.hivasok["to_spec"].temperature == 0.0 and cfg.hivasok["to_spec"].version == "to_spec.v3"
+    assert cfg.hivasok["to_text"].version == "to_text.v3" and cfg.hivasok["to_text_szabad"].version == "to_text_szabad.v3"
     assert cfg.tartas == "30m" and cfg.kontextus == 4096
-    for call in cfg.hivasok.values():                                     # minden prompt létezik (a v1 is)
+    for call in cfg.hivasok.values():                         # minden prompt létezik (a korábbi változatok is)
         assert (ts.ROOT / call.prompt).exists()
-        assert (ts.ROOT / call.prompt.replace(".v2.", ".v1.")).exists()
+        for old in ("v1", "v2"):
+            assert (ts.ROOT / call.prompt.replace(".v3.", f".{old}.")).exists()
     with pytest.raises(ValueError, match="szolgáltató"):
         load_config(env={"LLM_PROVIDER": "valami"})
 
@@ -190,7 +191,7 @@ def test_naplo(tmp_path, cat, wl):
     client = fake_client(lambda p: form(cat), log_path=log)
     ts.to_spec("Mennyi a késési arány?", cat, wl, client, question_id="gold-001")
     row = json.loads(log.read_text(encoding="utf-8").splitlines()[-1])
-    assert row["hivas"] == "to_spec" and row["prompt"] == "to_spec.v2" and row["modell"] == MODEL
+    assert row["hivas"] == "to_spec" and row["prompt"] == "to_spec.v3" and row["modell"] == MODEL
     assert row["ervenyes"] is True and row["kerdes_id"] == "gold-001" and row["tokens_in"] == 1000
     assert {"ts", "latency_ms", "retry", "javito_kor", "valasz"} <= set(row)
     assert (row["betoltes_ms"], row["prompt_ms"], row["generalas_ms"]) == (120, 20400, 6000)
@@ -397,9 +398,9 @@ def test_a_nezetben_minden_szamnak_jeloloje_van(result):
 def test_jelolos_szoveg_atmegy_a_kapun(result):
     view = tt.build_view(result)
     (first, _), (last, n_last) = _labels(view)[0], _labels(view)[-1]
-    text = (f"A kérdés {{N}} kézbesített rendelésre vonatkozik ({{TOL}} – {{IG}}). A késési arány {{O}} "
-            f"({{O_A}}–{{O_F}}). A legmagasabb {first}: {{S1}}%, {{S1_N}} rendelés, az összesített "
-            f"{{S1_X}}-szerese; a legalacsonyabb {last}: {{S{n_last}}}. A különbség együttjárás, nem ok.")
+    text = (f"A késési arány {{O}} (95%-os tartománya {{O_A}} – {{O_F}}). A legmagasabb {first}: {{S1}}%, "
+            f"{{S1_N}} rendelés, az összesített {{S1_X}}-szerese; a legalacsonyabb {last}: {{S{n_last}}}. "
+            "A különbség együttjárás, nem ok.")
     out = tt.to_text("Melyik államban késnek a legtöbbet?", result, _text_client(text))
     assert not out.sablon and out.verdict.ok, out.verdict.problemak
     assert "{" not in out.szoveg and "%%" not in out.szoveg
@@ -471,13 +472,15 @@ def test_keret_a_kodtol_mag_a_modelltol(result):
     client = _text_client(f"A legtöbbet {first} területén késnek ({{S1}}), ez az összesített {{O}} {{S1_X}}-szerese.")
     out = tt.to_text("Melyik államban késnek a legtöbbet?", result, client)
     head, tail = ans.frame(result)
-    assert out.keret and not out.sablon and out.prompt == "to_text.v2"
+    assert out.keret and not out.sablon and out.prompt == "to_text.v3"
     assert out.szoveg.startswith(head.text) and out.szoveg.endswith(tail.text)
     assert "együttjárást" in tail.text and view.values["S1"][0] in out.szoveg
     assert ans.uncovered_numbers(out.szoveg, out.hivatkozasok) == []     # minden szám hivatkozott
     assert out.modell_szoveg.startswith("A legtöbbet") and out.idok["prompt_ms"] == 20400
     system = client.calls[-1]["payload"]["messages"][0]["content"]
-    assert "MAGJÁT" in system and "ne ismételd" in system
+    assert "MAGJÁT" in system and "ne írj" in system
+    user = client.calls[-1]["payload"]["messages"][1]["content"]
+    assert "{N}" not in user and "{TOL}" not in user and "Korlát:" not in user     # v3: csak a maghoz kell
 
 
 def test_regi_szovegprompt_keret_nelkul(result):
@@ -518,7 +521,7 @@ def test_kontrollag_csak_mer(result):
     view = tt.build_view(result)
     client = _text_client(f"A késési arány {view.values['O'][0]}, tavaly 9,9% volt.")
     out = tt.to_text("?", result, client, mod="szabad")
-    assert not out.sablon and "9,9%" in out.szoveg and out.prompt == "to_text_szabad.v2"
+    assert not out.sablon and "9,9%" in out.szoveg and out.prompt == "to_text_szabad.v3"
     assert out.verdict.fedetlen == ["9,9"] and not out.verdict.ok
     payload = out.nezet
     assert "{" not in payload                                            # jelölők nélküli nézet
@@ -531,13 +534,234 @@ def test_a_teljes_ut(cat, wl, con):
     def responder(payload):
         if _is_spec_call(payload):
             return form(cat, bontas=["vevo_regio"])
-        return {"szoveg": "A kérdés {N} kézbesített rendelésre vonatkozik. A késési arány {O}."}
+        return {"szoveg": "A késési arány {O}."}
     client = fake_client(responder)
     fa = pipeline.ask("Melyik régióban késnek a legtöbbet?", cat, wl, con, client)
     assert fa.ok and not fa.modell_hiba and not fa.szoveg.sablon and fa.szoveg.verdict.ok
     direct = engine.run(fa.spec.gate.spec, cat, wl, con)
     assert fa.eredmeny == direct                                        # ugyanaz, mint a kérdésépítőnél
     assert len(client.calls) == 2
+
+
+# ------------------------------------------- v3: a fejlesztői próba (okt. 16.) tanulságai
+@pytest.mark.parametrize("question,tol,ig", [
+    ("Mennyi volt a forgalom tavaly?", "2017-01-01", "2017-12-31"),
+    ("Hogyan alakult a forgalom havonta 2017-ben?", "2017-01-01", "2017-12-31"),
+    ("Mekkora volt a késési arány az elmúlt három hónapban?", "2018-06-01", "2018-08-31"),
+    ("Mennyi volt a szállítási idő 2018 első felében?", "2018-01-01", "2018-06-30"),
+    ("Mi a késési arány 2018 márciusában?", "2018-03-01", "2018-03-31"),
+    ("Mennyi a késés a 2018 harmadik negyedévében?", "2018-07-01", "2018-09-30"),
+    ("Mennyi volt a forgalom 2017 és 2018 között?", "2017-01-01", "2018-12-31"),
+    ("Mekkora volt a forgalom idén?", "2018-01-01", "2018-08-31"),
+    ("Mi volt a múlt hónapban?", "2018-08-01", "2018-08-31"),
+    ("Mennyi a késés az elmúlt 2 hétben?", "2018-08-18", "2018-08-31"),
+    ("Mennyi volt tavalyelőtt?", "2016-01-01", "2016-12-31"),
+])
+def test_idokifejezes_a_kodtol(question, tol, ig):
+    from datetime import date
+    from narrative.idoszak import parse_window
+    hit = parse_window(question, date(2018, 9, 1))
+    assert hit.window() == {"tol": tol, "ig": ig}, hit
+
+
+def test_ismeretlen_idokifejezest_a_modellre_hagy():
+    from datetime import date
+    from narrative.idoszak import parse_window
+    for q in ("Melyik államban késnek a legtöbbet?", "A hét melyik napján rendelnek a legtöbben?",
+              "Mi volt márciusban?", "Mennyi lesz a forgalom a következő hónapban?",
+              "Mi a különbség 2017-ben és 2018-ban?"):                    # több évszám „között” nélkül
+        assert parse_window(q, date(2018, 9, 1)) is None, q
+
+
+def test_a_kod_javitja_az_ertelmezest(cat, wl):
+    """A modell 2026-10-16-i valódi hibái: „tavaly” → mától visszafelé egy év (és fordított
+    ablak), „leglassabb” → növekvő sorrend, egy régióra szűrve régiónkénti bontás."""
+    cases = [
+        ("Mennyi volt a forgalom tavaly, régiónként?", form(cat, metrika="forgalom", bontas=["vevo_regio"],
+                                                            tol="2017-09-01", ig="2017-08-31"), "idoablak"),
+        ("Melyik eladói államból a leglassabb a kiszállítás?",
+         form(cat, metrika="atlagos_szallitasi_ido", bontas=["elado_allam"], rendezes="ertek_novekvo"), "rendezes"),
+        ("Mekkora az átlagos késés az északkeleti régióban?",
+         form(cat, metrika="atlagos_keses", bontas=["vevo_regio"], szuro={"vevo_regio": ["Északkelet"]}), "bontas"),
+    ]
+    for question, f, field in cases:
+        client = fake_client(lambda p, f=f: f)
+        att = ts.to_spec(question, cat, wl, client)
+        assert att.gate.ok and not att.javito_kor, (question, att.gate.elutasitas)
+        assert [c.mezo for c in att.javitasok] == [field], att.javitasok
+        s = att.gate.spec
+        if field == "idoablak":
+            assert att.gepi_alak["idoablak"] == {"tol": "2017-01-01", "ig": "2017-12-31"}
+            assert s.ig.isoformat() == "2017-12-31"          # (a „tól” a próbaadat első napja: azt a kapu elhagyja)
+        elif field == "rendezes":
+            assert s.rendezes == "ertek_csokkeno"
+        else:
+            assert s.bontas == () and s.filters == {"vevo_regio": ("NE",)}
+        assert "javitas" not in client.calls[-1]["payload"]                   # a modell nem kap ebből semmit
+    # amit a kérdés nem mond, abba a kód nem nyúl
+    ok = ts.to_spec("Melyik régióban késnek a legtöbbet?", cat, wl, fake_client(lambda p: form(cat, bontas=["vevo_regio"])))
+    assert ok.gate.ok and ok.javitasok == []
+
+
+def test_a_jovore_elorejelzes_elutasitas(cat, wl):
+    client = fake_client(lambda p: form(cat, metrika="forgalom", tol="2018-09-01", ig="2018-09-30"))
+    att = ts.to_spec("Mennyi lesz a forgalom a következő hónapban?", cat, wl, client)
+    assert att.gate.elutasitas.kod == "nem_elerheto" and "előrejelzés" in att.gate.elutasitas.uzenet
+    assert [c.mezo for c in att.javitasok] == ["elutasitas"]
+    past = ts.to_spec("Mekkora volt a forgalom 2015-ben?", cat, wl,
+                      fake_client(lambda p: form(cat, metrika="forgalom", tol="2015-01-01", ig="2015-12-31")))
+    assert past.gate.elutasitas.kod == "adaton_kivuli_idoablak"            # a múlt más: arra nincs adat
+
+
+def test_a_valodi_modell_urlapjai_a_javitasokkal(cat, wl):
+    """Regresszió a valódi modell (qwen3.5:4b) 2026-10-16-i válaszain (tests/adat, három futás):
+    a v2 kódjával 10/13 értelmezés és 5/6 csapda volt jó; a javításokkal mind a 19."""
+    from narrative import proba
+    fixture = json.loads((Path(__file__).parent / "adat" / "proba_2026-10-16_to_spec.json").read_text(encoding="utf-8"))
+    questions = {q["id"]: q for q in proba.load_questions()}
+    for run in ("urlapok", "urlapok_v3", "urlapok_v3b"):   # a három futás válaszai
+        verdicts = {}
+        for qid, f in fixture[run].items():
+            att = ts.to_spec(questions[qid]["kerdes"], cat, wl, fake_client(lambda p, f=f: f))
+            verdicts[qid] = proba.judge(questions[qid], att.gate, cat, wl)
+        bad = {k: v for k, v in verdicts.items() if v[0] not in ("helyes", "helyes elutasítás")}
+        assert not bad, (run, bad)
+
+
+def test_az_allam_szerepe_a_kerdesbol(cat, wl):
+    """„eladói államból” → az eladó állama, akkor is, ha a modell a vevőét választaná (okt. 16., v3)."""
+    f = form(cat, metrika="atlagos_szallitasi_ido", bontas=["vevo_allam"], rendezes="ertek_novekvo")
+    att = ts.to_spec("Melyik eladói államból a leglassabb a kiszállítás?", cat, wl, fake_client(lambda p: f))
+    assert att.gate.spec.bontas == ("elado_allam",) and att.gate.spec.rendezes == "ertek_csokkeno"
+    assert {c.mezo for c in att.javitasok} == {"bontas", "rendezes"}
+    both = ts.to_spec("Az eladó és a vevő állama közül melyik számít?", cat, wl, fake_client(lambda p: f))
+    assert both.gate.spec.bontas == ("vevo_allam",)                         # mindkettőt említi: nem nyúl hozzá
+
+
+def test_csucs_es_honapnev_evszam_nelkul(cat, wl, con):
+    r = engine.run(sp.check({"metrika": "forgalom", "bontas": ["honap"], "idoablak": {"tol": "2017-01-01", "ig": "2017-12-31"}},
+                            cat, wl).spec, cat, wl, con)
+    from semantic.catalog import MONTHS
+    rows = [row for row in r.sorok if not row["keves_adat"]]
+    top = max(rows, key=lambda row: row["ertek"])
+    other = next(row for row in rows if row is not top)
+    month = lambda row: row["megnevezes"].split(". ")[1]
+    assert month(top) in MONTHS
+    ok = tt.to_text("?", r, _text_client(f"A forgalom {month(top)}ban érte el a csúcsát."))
+    assert not ok.sablon, ok.verdict.problemak
+    bad = tt.to_text("?", r, _text_client(f"A forgalom {month(other)}ban érte el a csúcsát."))
+    assert bad.sablon and "nem a legnagyobb" in bad.ok_sablon
+
+
+def test_tobbes_szamu_felsofok(result):
+    view = tt.build_view(result)
+    labels = _labels(view)
+    last, before = labels[-1], labels[-2]
+    text = f"A legkisebb értékek: {before[0]} ({{S{before[1]}}}) és {last[0]} ({{S{last[1]}}}) a legkisebb."
+    out = tt.to_text("?", result, _text_client(text))
+    assert not any("nem a legkisebb" in p for p in out.verdict.problemak), out.verdict.problemak
+
+
+def test_a_szures_tagadasa(result):
+    out = tt.to_text("?", result, _text_client("A késési arány {O}, és az eredmény nem tartalmaz időbeli szűrést."))
+    assert out.sablon and "szűrés" in out.ok_sablon
+
+
+def test_kettospontos_nev_masodik_fele():
+    from narrative import verifier as vf
+    pats = vf._name_patterns("kisgépek: sütők és kávéfőzők")
+    assert any(p.search(vf.fold("utána a sütők és kávéfőzők (X)")) for p, folded in pats if folded)
+
+
+def test_ismetelt_ertek_egyszer_latszik():
+    view = tt.View(text="", values={"O": ("15,3\u00a0nap", "o"), "S1": ("20,10\u00a0BRL", "s"),
+                                    "N": ("1\u00a0167", "n"), "X": ("2,3", "x")})
+    assert tt.dedupe("Rio de Janeiróban 15,3\u00a0nap (15,3 nap).", view) == "Rio de Janeiróban 15,3\u00a0nap."
+    assert tt.dedupe("a játékoknál (20,10\u00a0BRL) 20,10 BRL.", view) == "a játékoknál 20,10\u00a0BRL."
+    assert tt.dedupe("1 167 (1\u00a0167) rendelés", view) == "1 167 rendelés"
+    assert tt.dedupe("2,3 = 2,3-szerese", view) == "2,3-szerese"
+    assert tt.dedupe("15,3\u00a0nap és 20,10\u00a0BRL", view) == "15,3\u00a0nap és 20,10\u00a0BRL"   # különbözők maradnak
+
+
+def test_a_kerdesben_nem_emlitett_szuro_kimarad(cat, wl):
+    """A modell a „hétfőn leadott” mintapéldából hétfő-szűrőt tett egy napot nem említő kérdésre."""
+    f = form(cat, metrika="kesett_rendelesek", szuro={"vevo_allam": ["SP"], "het_napja": ["hétfő"]},
+             tol="2018-01-01", ig="2018-12-31")
+    att = ts.to_spec("Hány rendelés késett 2018-ban São Paulóban?", cat, wl, fake_client(lambda p: f))
+    assert att.gate.ok and att.gate.spec.filters == {"vevo_allam": ("SP",)}
+    assert [c.mezo for c in att.javitasok] == ["szuro"] and "hétfő" in att.javitasok[0].ok
+    keep = ts.to_spec("Hány rendelés késett hétfőn São Paulóban?", cat, wl, fake_client(lambda p: f))
+    assert keep.gate.spec.filters == {"het_napja": ("1",), "vevo_allam": ("SP",)} and not keep.javitasok
+    weekend = form(cat, szuro={"het_napja": ["szombat", "vasárnap"]})
+    att = ts.to_spec("Mennyi a késési arány hétvégén?", cat, wl, fake_client(lambda p: weekend))
+    assert att.gate.spec.filters == {"het_napja": ("6", "7")}
+    for q, code in (("Mennyi a késési arány az RJ államban?", "RJ"), ("És Rio de Janeiróban?", "RJ"),
+                    ("Mi a helyzet a déli régióban?", "S")):
+        dim = "vevo_regio" if code == "S" else "vevo_allam"
+        assert ts.grounded(cat, wl, dim, code, q), q
+    assert not ts.grounded(cat, wl, "vevo_allam", "SP", "Mennyi a késési arány?")
+
+
+def test_zarojelben_ismetelt_ertekek():
+    view = tt.View(text="", values={"O_A": ("5,8%", "a"), "O_F": ("6,7%", "b"), "S1": ("12,7%", "s")})
+    assert tt.dedupe("A tartomány 5,8% és 6,7% között van (5,8% – 6,7%).", view) == "A tartomány 5,8% és 6,7% között van."
+    assert tt.dedupe("Északkelet (12,7%) a legtöbb.", view) == "Északkelet (12,7%) a legtöbb."
+
+
+def test_minimalis_nezet(result):
+    full, small = tt.build_view(result), tt.build_view(result, minimal=True)
+    assert {"N", "TOL", "IG"} <= set(full.values) and not {"N", "TOL", "IG"} & set(small.values)
+    assert "Hatókör" not in small.text and "Korlát" not in small.text and "Időszak" not in small.text
+    assert "Szűrés:" in small.text and "Mérőszám:" in small.text and "{S1}" in small.text
+    assert len(small.text) < len(full.text)
+
+
+def test_ezres_tagolas_sima_szokozzel(result):
+    """A modell a nem törő szóközt gyakran simára cseréli — a szám ettől még ugyanaz."""
+    view = tt.build_view(result)
+    shown = view.values["S1_N"][0]
+    assert "\u00a0" in shown or "\u202f" in shown or len(shown) < 5
+    plain = shown.replace("\u00a0", " ").replace("\u202f", " ")
+    first = _labels(view)[0][0]
+    out = tt.to_text("?", result, _text_client(f"{first} ({{S1}}) — {plain} rendelés alapján."))
+    assert not out.sablon, out.verdict.problemak
+
+
+def test_mondathatar_nem_vag_a_csoportnevbe(cat, wl, con):
+    from narrative import verifier as vf
+    r = engine.run(sp.check({"metrika": "kesesi_arany", "bontas": ["vevo_regio"]}, cat, wl).spec, cat, wl, con)
+    assert len(vf._sentences("Az A. pont után. Ez a második mondat. {S1} a harmadik.", r)) == 3
+    assert len(vf._sentences("2018. augusztus 29. és 2018. június 1. között", r)) == 1
+
+
+def test_a_tartomany_hatara_nem_csucs(cat, wl, con):
+    r = engine.run(sp.check({"metrika": "kesesi_arany", "szuro": {"het_napja": ["7"]}}, cat, wl).spec, cat, wl, con)
+    view = tt.build_view(r, minimal=True)
+    good = tt.to_text("?", r, _text_client("A késési arány {O}, 95%-os tartománya {O_A} – {O_F}."))
+    assert not good.sablon, good.verdict.problemak
+    bad = tt.to_text("?", r, _text_client("A késési arány {O}. A mélypont {O_A}, a csúcs {O_F} volt."))
+    assert bad.sablon and "tartomány" in bad.ok_sablon
+    lo, hi = view.values["O_A"][0], view.values["O_F"][0]
+    if lo != view.values["O"][0] and hi != view.values["O"][0]:
+        literal = tt.to_text("?", r, _text_client(f"A késési arány {{O}}. A mélypont {lo}, a csúcs {hi}."))
+        assert literal.sablon and "tartomány" in literal.ok_sablon              # leírva is
+
+
+def test_az_eredmeny_datuma_roviden_is(cat, wl, con):
+    r = engine.run(sp.check({"metrika": "kesesi_arany", "idoablak": {"tol": "2018-06-01"}}, cat, wl).spec,
+                   cat, wl, con)
+    from semantic.catalog import MONTHS
+    from datetime import date
+    ig = date.fromisoformat(r.idoablak["ig"])
+    out = tt.to_text("?", r, _text_client(f"A késési arány {{O}} volt {MONTHS[ig.month - 1]} {ig.day}-ig."))
+    assert not out.sablon, out.verdict.problemak
+
+
+def test_ismetelt_ertek_merve(result):
+    view = tt.build_view(result)
+    first = _labels(view)[0][0]
+    out = tt.to_text("?", result, _text_client(f"{first} ({{S1}}) — az arány {view.values['S1'][0]}."))
+    assert not out.sablon and out.verdict.ismetelt_ertekek == [view.values["S1"][0].replace("\u00a0", " ")]
 
 
 # ------------------------------------------------------- a fejlesztői próbasor
@@ -626,7 +850,7 @@ def test_a_proba_parancs(cat, synth_db, tmp_path, monkeypatch, capsys):
     reports = sorted(tmp_path.glob("proba_*.md"))
     assert len(reports) == 1 and len(list(tmp_path.glob("proba_*.json"))) == 1
     data = json.loads(reports[0].with_suffix(".json").read_text(encoding="utf-8"))
-    assert [r["id"] for r in data["kerdesek"]] == ["f01", "f11", "f14"] and data["promptok"] == ["to_spec.v2", "to_text.v2"]
+    assert [r["id"] for r in data["kerdesek"]] == ["f01", "f11", "f14"] and data["promptok"] == ["to_spec.v3", "to_text.v3"]
 
 
 # ------------------------------------------------------------- a felület
@@ -648,7 +872,7 @@ def test_a_kerdezz_oldal_szabad_szoveges_fule(app_env, monkeypatch, cat):
     def responder(payload):
         if _is_spec_call(payload):
             return form(cat, bontas=["vevo_regio"])
-        return {"szoveg": "A kérdés {N} kézbesített rendelésre vonatkozik. A késési arány {O}."}
+        return {"szoveg": "A késési arány {O}."}
     monkeypatch.setattr(backend, "llm_client", lambda: fake_client(responder))
     at = AppTest.from_file(str(APP), default_timeout=180).run()
     at.switch_page("oldalak/kerdezz.py").run()
@@ -657,7 +881,7 @@ def test_a_kerdezz_oldal_szabad_szoveges_fule(app_env, monkeypatch, cat):
     at.button(key="kerdezz_szabad_pelda_0").click().run()
     assert not at.exception, [e.value for e in at.exception]
     answers = [m.value for m in at.markdown if m.value.startswith("**Válasz.**")]
-    assert any("kézbesített rendelésre vonatkozik. A késési arány" in a for a in answers)
+    assert any("kézbesített rendelésre vonatkozik" in a and "A késési arány" in a for a in answers)
     assert any("2. kapu: átment" in c.value for c in at.caption)
     at.button(key="kerdezz_atvetel").click().run()                       # átvétel a kérdésépítőbe
     assert not at.exception

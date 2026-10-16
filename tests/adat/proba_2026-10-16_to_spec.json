@@ -1,0 +1,926 @@
+{
+ "leiras": "A qwen3.5:4b első válasza (① hívás) a fejlesztői próbasor kérdéseire, 2026-10-16, három futásból (a laptopon, logs/): to_spec.v2 (10:17) és to_spec.v3 (11:07 és 11:33). Csak a modell űrlapjai — adat nincs bennük.",
+ "modell": "qwen3.5:4b",
+ "digest": "d8b0f5e9760c",
+ "prompt": [
+  "to_spec.v2",
+  "to_spec.v3"
+ ],
+ "urlapok": {
+  "f01": {
+   "metrika": "kesesi_arany",
+   "kert": "késések aránya",
+   "bontas": [
+    "vevo_regio"
+   ],
+   "szuro": [],
+   "idoablak": {
+    "tol": "",
+    "ig": ""
+   },
+   "rendezes": "ertek_csokkeno",
+   "limit": 10
+  },
+  "f02": {
+   "metrika": "forgalom",
+   "kert": "forgalom",
+   "bontas": [
+    "honap"
+   ],
+   "szuro": [],
+   "idoablak": {
+    "tol": "2017-01-01",
+    "ig": "2017-12-31"
+   },
+   "rendezes": "bontas",
+   "limit": 100
+  },
+  "f03": {
+   "metrika": "atlagos_szallitasi_ido",
+   "kert": "átlagos szállítási idő",
+   "bontas": [],
+   "szuro": [
+    {
+     "dimenzio": "vevo_allam",
+     "ertekek": [
+      "RJ"
+     ]
+    }
+   ],
+   "idoablak": {
+    "tol": "",
+    "ig": ""
+   },
+   "rendezes": "ertek_csokkeno",
+   "limit": 10
+  },
+  "f04": {
+   "metrika": "atlagos_kosarertek",
+   "kert": "átlagos kosárérték",
+   "bontas": [
+    "kategoria"
+   ],
+   "szuro": [],
+   "idoablak": {
+    "tol": "",
+    "ig": ""
+   },
+   "rendezes": "ertek_csokkeno",
+   "limit": 5
+  },
+  "f05": {
+   "metrika": "rendelesek_szama",
+   "kert": "rendelések száma",
+   "bontas": [
+    "het_napja"
+   ],
+   "szuro": [],
+   "idoablak": {
+    "tol": "",
+    "ig": ""
+   },
+   "rendezes": "ertek_csokkeno",
+   "limit": 10
+  },
+  "f06": {
+   "metrika": "kesesi_arany",
+   "kert": "késési arány",
+   "bontas": [],
+   "szuro": [],
+   "idoablak": {
+    "tol": "2018-06-01",
+    "ig": "2018-09-01"
+   },
+   "rendezes": "ertek_csokkeno",
+   "limit": 10
+  },
+  "f07": {
+   "metrika": "atlagos_szallitasi_dij",
+   "kert": "átlagos szállítási díj",
+   "bontas": [],
+   "szuro": [
+    {
+     "dimenzio": "kategoria",
+     "ertekek": [
+      "játékok"
+     ]
+    }
+   ],
+   "idoablak": {
+    "tol": "",
+    "ig": ""
+   },
+   "rendezes": "ertek_csokkeno",
+   "limit": 10
+  },
+  "f08": {
+   "metrika": "atlagos_szallitasi_ido",
+   "kert": "szállítási idő",
+   "bontas": [
+    "elado_allam"
+   ],
+   "szuro": [],
+   "idoablak": {
+    "tol": "",
+    "ig": ""
+   },
+   "rendezes": "ertek_novekvo",
+   "limit": 10
+  },
+  "f09": {
+   "metrika": "kesett_rendelesek",
+   "kert": "késett rendelések száma",
+   "bontas": [],
+   "szuro": [
+    {
+     "dimenzio": "vevo_allam",
+     "ertekek": [
+      "SP"
+     ]
+    }
+   ],
+   "idoablak": {
+    "tol": "2018-01-01",
+    "ig": "2018-12-31"
+   },
+   "rendezes": "ertek_csokkeno",
+   "limit": 10
+  },
+  "f10": {
+   "metrika": "atlagos_keses",
+   "kert": "átlagos késés",
+   "bontas": [
+    "vevo_regio"
+   ],
+   "szuro": [
+    {
+     "dimenzio": "vevo_regio",
+     "ertekek": [
+      "Északkelet"
+     ]
+    }
+   ],
+   "idoablak": {
+    "tol": "",
+    "ig": ""
+   },
+   "rendezes": "ertek_csokkeno",
+   "limit": 10
+  },
+  "f11": {
+   "metrika": "forgalom",
+   "kert": "forgalom",
+   "bontas": [
+    "vevo_regio"
+   ],
+   "szuro": [
+    {
+     "dimenzio": "kategoria",
+     "ertekek": [
+      "egészség- és szépségápolási termékek"
+     ]
+    }
+   ],
+   "idoablak": {
+    "tol": "2017-09-01",
+    "ig": "2017-08-31"
+   },
+   "rendezes": "ertek_csokkeno",
+   "limit": 10
+  },
+  "f12": {
+   "metrika": "atlagos_vallalt_ido",
+   "kert": "vállalt szállítási idő",
+   "bontas": [
+    "vevo_allam"
+   ],
+   "szuro": [],
+   "idoablak": {
+    "tol": "",
+    "ig": ""
+   },
+   "rendezes": "ertek_novekvo",
+   "limit": 3
+  },
+  "f13": {
+   "metrika": "kesesi_arany",
+   "kert": "késési arány",
+   "bontas": [],
+   "szuro": [
+    {
+     "dimenzio": "het_napja",
+     "ertekek": [
+      "vasárnap"
+     ]
+    }
+   ],
+   "idoablak": {
+    "tol": "",
+    "ig": ""
+   },
+   "rendezes": "ertek_csokkeno",
+   "limit": 10
+  },
+  "f14": {
+   "metrika": "nem_elerheto",
+   "kert": "haszonkulcs",
+   "bontas": [],
+   "szuro": [],
+   "idoablak": {
+    "tol": "",
+    "ig": ""
+   },
+   "rendezes": "ertek_csokkeno",
+   "limit": 10
+  },
+  "f15": {
+   "metrika": "nem_elerheto",
+   "kert": "értékelés",
+   "bontas": [],
+   "szuro": [],
+   "idoablak": {
+    "tol": "",
+    "ig": ""
+   },
+   "rendezes": "ertek_csokkeno",
+   "limit": 10
+  },
+  "f16": {
+   "metrika": "forgalom",
+   "kert": "forgalom",
+   "bontas": [],
+   "szuro": [],
+   "idoablak": {
+    "tol": "2018-09-01",
+    "ig": "2018-09-30"
+   },
+   "rendezes": "ertek_csokkeno",
+   "limit": 10
+  },
+  "f17": {
+   "metrika": "forgalom",
+   "kert": "forgalom",
+   "bontas": [],
+   "szuro": [],
+   "idoablak": {
+    "tol": "2015-01-01",
+    "ig": "2015-12-31"
+   },
+   "rendezes": "ertek_csokkeno",
+   "limit": 10
+  },
+  "f18": {
+   "metrika": "kesesi_arany",
+   "kert": "késési arány",
+   "bontas": [],
+   "szuro": [
+    {
+     "dimenzio": "kesett",
+     "ertekek": [
+      "késett"
+     ]
+    },
+    {
+     "dimenzio": "kesett",
+     "ertekek": [
+      "időben érkezett"
+     ]
+    }
+   ],
+   "idoablak": {
+    "tol": "",
+    "ig": ""
+   },
+   "rendezes": "ertek_csokkeno",
+   "limit": 10
+  },
+  "f19": {
+   "metrika": "nem_elerheto",
+   "kert": "vevők nevei és címek",
+   "bontas": [],
+   "szuro": [],
+   "idoablak": {
+    "tol": "",
+    "ig": ""
+   },
+   "rendezes": "ertek_csokkeno",
+   "limit": 10
+  }
+ },
+ "urlapok_v3": {
+  "f01": {
+   "metrika": "kesesi_arany",
+   "kert": "késési arány",
+   "bontas": [
+    "vevo_regio"
+   ],
+   "szuro": [],
+   "idoablak": {
+    "tol": "",
+    "ig": ""
+   },
+   "rendezes": "ertek_csokkeno",
+   "limit": 10
+  },
+  "f02": {
+   "metrika": "forgalom",
+   "kert": "forgalom",
+   "bontas": [
+    "honap"
+   ],
+   "szuro": [],
+   "idoablak": {
+    "tol": "2017-01-01",
+    "ig": "2017-12-31"
+   },
+   "rendezes": "bontas",
+   "limit": 100
+  },
+  "f03": {
+   "metrika": "atlagos_szallitasi_ido",
+   "kert": "átlagos szállítási idő",
+   "bontas": [],
+   "szuro": [
+    {
+     "dimenzio": "vevo_allam",
+     "ertekek": [
+      "RJ"
+     ]
+    }
+   ],
+   "idoablak": {
+    "tol": "",
+    "ig": ""
+   },
+   "rendezes": "ertek_csokkeno",
+   "limit": 10
+  },
+  "f04": {
+   "metrika": "atlagos_kosarertek",
+   "kert": "átlagos kosárérték",
+   "bontas": [
+    "kategoria"
+   ],
+   "szuro": [],
+   "idoablak": {
+    "tol": "",
+    "ig": ""
+   },
+   "rendezes": "ertek_csokkeno",
+   "limit": 5
+  },
+  "f05": {
+   "metrika": "rendelesek_szama",
+   "kert": "rendelések száma",
+   "bontas": [
+    "het_napja"
+   ],
+   "szuro": [],
+   "idoablak": {
+    "tol": "",
+    "ig": ""
+   },
+   "rendezes": "ertek_csokkeno",
+   "limit": 10
+  },
+  "f06": {
+   "metrika": "kesesi_arany",
+   "kert": "késési arány",
+   "bontas": [],
+   "szuro": [],
+   "idoablak": {
+    "tol": "2018-06-01",
+    "ig": "2018-09-01"
+   },
+   "rendezes": "ertek_csokkeno",
+   "limit": 10
+  },
+  "f07": {
+   "metrika": "atlagos_szallitasi_dij",
+   "kert": "átlagos szállítási díj",
+   "bontas": [],
+   "szuro": [
+    {
+     "dimenzio": "kategoria",
+     "ertekek": [
+      "játékok"
+     ]
+    }
+   ],
+   "idoablak": {
+    "tol": "",
+    "ig": ""
+   },
+   "rendezes": "ertek_csokkeno",
+   "limit": 10
+  },
+  "f08": {
+   "metrika": "atlagos_szallitasi_ido",
+   "kert": "szállítási idő",
+   "bontas": [
+    "vevo_allam"
+   ],
+   "szuro": [],
+   "idoablak": {
+    "tol": "",
+    "ig": ""
+   },
+   "rendezes": "ertek_novekvo",
+   "limit": 10
+  },
+  "f09": {
+   "metrika": "kesett_rendelesek",
+   "kert": "késett rendelések száma",
+   "bontas": [],
+   "szuro": [
+    {
+     "dimenzio": "vevo_allam",
+     "ertekek": [
+      "SP"
+     ]
+    },
+    {
+     "dimenzio": "kategoria",
+     "ertekek": []
+    }
+   ],
+   "idoablak": {
+    "tol": "2018-01-01",
+    "ig": "2018-12-31"
+   },
+   "rendezes": "ertek_csokkeno",
+   "limit": 10
+  },
+  "f10": {
+   "metrika": "atlagos_keses",
+   "kert": "átlagos késés",
+   "bontas": [
+    "vevo_regio"
+   ],
+   "szuro": [
+    {
+     "dimenzio": "vevo_regio",
+     "ertekek": [
+      "Északkelet"
+     ]
+    }
+   ],
+   "idoablak": {
+    "tol": "",
+    "ig": ""
+   },
+   "rendezes": "ertek_csokkeno",
+   "limit": 10
+  },
+  "f11": {
+   "metrika": "forgalom",
+   "kert": "forgalom",
+   "bontas": [
+    "vevo_regio"
+   ],
+   "szuro": [
+    {
+     "dimenzio": "kategoria",
+     "ertekek": [
+      "egészség- és szépségápolási termékek"
+     ]
+    }
+   ],
+   "idoablak": {
+    "tol": "2017-09-01",
+    "ig": "2017-08-31"
+   },
+   "rendezes": "ertek_csokkeno",
+   "limit": 10
+  },
+  "f12": {
+   "metrika": "atlagos_vallalt_ido",
+   "kert": "vállalt szállítási idő",
+   "bontas": [
+    "vevo_allam"
+   ],
+   "szuro": [],
+   "idoablak": {
+    "tol": "",
+    "ig": ""
+   },
+   "rendezes": "ertek_novekvo",
+   "limit": 3
+  },
+  "f13": {
+   "metrika": "kesesi_arany",
+   "kert": "késési arány",
+   "bontas": [],
+   "szuro": [
+    {
+     "dimenzio": "het_napja",
+     "ertekek": [
+      "vasárnap"
+     ]
+    }
+   ],
+   "idoablak": {
+    "tol": "",
+    "ig": ""
+   },
+   "rendezes": "ertek_csokkeno",
+   "limit": 10
+  },
+  "f14": {
+   "metrika": "nem_elerheto",
+   "kert": "haszonkulcs",
+   "bontas": [
+    "kategoria"
+   ],
+   "szuro": [],
+   "idoablak": {
+    "tol": "",
+    "ig": ""
+   },
+   "rendezes": "ertek_csokkeno",
+   "limit": 10
+  },
+  "f15": {
+   "metrika": "nem_elerheto",
+   "kert": "értékelés",
+   "bontas": [],
+   "szuro": [],
+   "idoablak": {
+    "tol": "",
+    "ig": ""
+   },
+   "rendezes": "ertek_csokkeno",
+   "limit": 10
+  },
+  "f16": {
+   "metrika": "forgalom",
+   "kert": "forgalom",
+   "bontas": [],
+   "szuro": [],
+   "idoablak": {
+    "tol": "2018-09-01",
+    "ig": "2018-09-30"
+   },
+   "rendezes": "ertek_csokkeno",
+   "limit": 10
+  },
+  "f17": {
+   "metrika": "forgalom",
+   "kert": "forgalom",
+   "bontas": [],
+   "szuro": [],
+   "idoablak": {
+    "tol": "2015-01-01",
+    "ig": "2015-12-31"
+   },
+   "rendezes": "ertek_csokkeno",
+   "limit": 10
+  },
+  "f18": {
+   "metrika": "kesesi_arany",
+   "kert": "késési arány",
+   "bontas": [],
+   "szuro": [
+    {
+     "dimenzio": "kesett",
+     "ertekek": [
+      "késett"
+     ]
+    },
+    {
+     "dimenzio": "kesett",
+     "ertekek": [
+      "időben érkezett"
+     ]
+    }
+   ],
+   "idoablak": {
+    "tol": "",
+    "ig": ""
+   },
+   "rendezes": "ertek_csokkeno",
+   "limit": 10
+  },
+  "f19": {
+   "metrika": "nem_elerheto",
+   "kert": "vevők nevei és címek",
+   "bontas": [],
+   "szuro": [],
+   "idoablak": {
+    "tol": "",
+    "ig": ""
+   },
+   "rendezes": "ertek_csokkeno",
+   "limit": 10
+  }
+ },
+ "urlapok_v3b": {
+  "f01": {
+   "metrika": "kesesi_arany",
+   "kert": "késések aránya",
+   "bontas": [
+    "vevo_regio"
+   ],
+   "szuro": [],
+   "idoablak": {
+    "tol": "",
+    "ig": ""
+   },
+   "rendezes": "ertek_csokkeno",
+   "limit": 10
+  },
+  "f02": {
+   "metrika": "forgalom",
+   "kert": "forgalom",
+   "bontas": [
+    "honap"
+   ],
+   "szuro": [],
+   "idoablak": {
+    "tol": "2017-01-01",
+    "ig": "2017-12-31"
+   },
+   "rendezes": "bontas",
+   "limit": 100
+  },
+  "f03": {
+   "metrika": "atlagos_szallitasi_ido",
+   "kert": "átlagos szállítási idő",
+   "bontas": [],
+   "szuro": [
+    {
+     "dimenzio": "vevo_allam",
+     "ertekek": [
+      "RJ"
+     ]
+    }
+   ],
+   "idoablak": {
+    "tol": "",
+    "ig": ""
+   },
+   "rendezes": "ertek_csokkeno",
+   "limit": 10
+  },
+  "f04": {
+   "metrika": "atlagos_kosarertek",
+   "kert": "átlagos kosárérték",
+   "bontas": [
+    "kategoria"
+   ],
+   "szuro": [],
+   "idoablak": {
+    "tol": "",
+    "ig": ""
+   },
+   "rendezes": "ertek_csokkeno",
+   "limit": 5
+  },
+  "f05": {
+   "metrika": "rendelesek_szama",
+   "kert": "rendelések száma",
+   "bontas": [
+    "het_napja"
+   ],
+   "szuro": [],
+   "idoablak": {
+    "tol": "",
+    "ig": ""
+   },
+   "rendezes": "ertek_csokkeno",
+   "limit": 10
+  },
+  "f06": {
+   "metrika": "kesesi_arany",
+   "kert": "késési arány",
+   "bontas": [],
+   "szuro": [],
+   "idoablak": {
+    "tol": "2018-06-01",
+    "ig": "2018-09-01"
+   },
+   "rendezes": "ertek_csokkeno",
+   "limit": 10
+  },
+  "f07": {
+   "metrika": "atlagos_szallitasi_dij",
+   "kert": "átlagos szállítási díj",
+   "bontas": [],
+   "szuro": [
+    {
+     "dimenzio": "kategoria",
+     "ertekek": [
+      "játékok"
+     ]
+    }
+   ],
+   "idoablak": {
+    "tol": "",
+    "ig": ""
+   },
+   "rendezes": "ertek_csokkeno",
+   "limit": 10
+  },
+  "f08": {
+   "metrika": "atlagos_szallitasi_ido",
+   "kert": "szállítási idő",
+   "bontas": [
+    "vevo_allam"
+   ],
+   "szuro": [],
+   "idoablak": {
+    "tol": "",
+    "ig": ""
+   },
+   "rendezes": "ertek_novekvo",
+   "limit": 10
+  },
+  "f09": {
+   "metrika": "kesett_rendelesek",
+   "kert": "késett rendelések száma",
+   "bontas": [],
+   "szuro": [
+    {
+     "dimenzio": "vevo_allam",
+     "ertekek": [
+      "SP"
+     ]
+    },
+    {
+     "dimenzio": "het_napja",
+     "ertekek": [
+      "hétfő"
+     ]
+    }
+   ],
+   "idoablak": {
+    "tol": "2018-01-01",
+    "ig": "2018-12-31"
+   },
+   "rendezes": "ertek_csokkeno",
+   "limit": 10
+  },
+  "f10": {
+   "metrika": "atlagos_keses",
+   "kert": "átlagos késés",
+   "bontas": [
+    "vevo_regio"
+   ],
+   "szuro": [
+    {
+     "dimenzio": "vevo_regio",
+     "ertekek": [
+      "Északkelet"
+     ]
+    }
+   ],
+   "idoablak": {
+    "tol": "",
+    "ig": ""
+   },
+   "rendezes": "ertek_csokkeno",
+   "limit": 10
+  },
+  "f11": {
+   "metrika": "forgalom",
+   "kert": "forgalom",
+   "bontas": [
+    "vevo_regio"
+   ],
+   "szuro": [
+    {
+     "dimenzio": "kategoria",
+     "ertekek": [
+      "egészség- és szépségápolási termékek"
+     ]
+    }
+   ],
+   "idoablak": {
+    "tol": "2017-01-01",
+    "ig": "2017-12-31"
+   },
+   "rendezes": "ertek_csokkeno",
+   "limit": 10
+  },
+  "f12": {
+   "metrika": "atlagos_vallalt_ido",
+   "kert": "vállalt szállítási idő",
+   "bontas": [
+    "vevo_allam"
+   ],
+   "szuro": [],
+   "idoablak": {
+    "tol": "",
+    "ig": ""
+   },
+   "rendezes": "ertek_novekvo",
+   "limit": 3
+  },
+  "f13": {
+   "metrika": "kesesi_arany",
+   "kert": "késési arány",
+   "bontas": [],
+   "szuro": [
+    {
+     "dimenzio": "het_napja",
+     "ertekek": [
+      "vasárnap"
+     ]
+    }
+   ],
+   "idoablak": {
+    "tol": "",
+    "ig": ""
+   },
+   "rendezes": "ertek_csokkeno",
+   "limit": 10
+  },
+  "f14": {
+   "metrika": "nem_elerheto",
+   "kert": "haszonkulcs",
+   "bontas": [
+    "kategoria"
+   ],
+   "szuro": [],
+   "idoablak": {
+    "tol": "",
+    "ig": ""
+   },
+   "rendezes": "ertek_csokkeno",
+   "limit": 10
+  },
+  "f15": {
+   "metrika": "nem_elerheto",
+   "kert": "értékelés",
+   "bontas": [],
+   "szuro": [],
+   "idoablak": {
+    "tol": "",
+    "ig": ""
+   },
+   "rendezes": "ertek_csokkeno",
+   "limit": 10
+  },
+  "f16": {
+   "metrika": "forgalom",
+   "kert": "forgalom",
+   "bontas": [],
+   "szuro": [],
+   "idoablak": {
+    "tol": "2018-09-01",
+    "ig": "2018-09-30"
+   },
+   "rendezes": "ertek_csokkeno",
+   "limit": 10
+  },
+  "f17": {
+   "metrika": "forgalom",
+   "kert": "forgalom",
+   "bontas": [],
+   "szuro": [],
+   "idoablak": {
+    "tol": "2015-01-01",
+    "ig": "2015-12-31"
+   },
+   "rendezes": "ertek_csokkeno",
+   "limit": 10
+  },
+  "f18": {
+   "metrika": "kesesi_arany",
+   "kert": "késési arány",
+   "bontas": [],
+   "szuro": [
+    {
+     "dimenzio": "kesett",
+     "ertekek": [
+      "késett"
+     ]
+    },
+    {
+     "dimenzio": "kesett",
+     "ertekek": [
+      "időben érkezett"
+     ]
+    }
+   ],
+   "idoablak": {
+    "tol": "",
+    "ig": ""
+   },
+   "rendezes": "ertek_csokkeno",
+   "limit": 10
+  },
+  "f19": {
+   "metrika": "nem_elerheto",
+   "kert": "vevők nevei és címek",
+   "bontas": [],
+   "szuro": [],
+   "idoablak": {
+    "tol": "",
+    "ig": ""
+   },
+   "rendezes": "ertek_csokkeno",
+   "limit": 10
+  }
+ }
+}

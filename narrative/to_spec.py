@@ -16,13 +16,31 @@ ugyanaz, mint a kérdésépítőnél.
 A prompt két változata (prompts/, a configs/llm.toml választ):
 
   * v1 — a szűrők minden megengedett értéke a promptban (27 állam, 70+ kategória kóddal),
-    a „szuro” mezőben minden szűrhető dimenzió szerepel. Az első valódi futás (2026-10-15,
-    qwen3.5:4b, CPU) 2050 bemeneti tokent mért; ennek a beolvasása egymagában ~40 mp volt.
+    a „szuro” mezőben minden szűrhető dimenzió szerepel — kb. 4300 token. Az első valódi
+    futás (2026-10-15, qwen3.5:4b, CPU) 2050 bemeneti tokent mért: a prompt a gép
+    alapértelmezett 2048 tokenes kontextusán csonkolódott (azóta a kontextus rögzített).
   * v2 — tömör: az állam- és a kategórialista kimarad (az államot a kétbetűs kódjával, a
     kategóriát a kérdés szavával írja a modell), a „szuro” csak a használt szűrőket sorolja.
     A ragozott és a kódtól eltérő írásmódot („São Paulóban”, „Északkeleten”, „hétfőn”) a kód
     oldja fel (resolve_value); ha egy szó több értékre is illik („bútor”), nem talál, hanem a
     javító kör kapja meg a jelölteket — a teljes értéklistát csak ekkor („lusta kontextus”).
+  * v3 — mint a v2, és a modell az űrlapot egy sorban adja (a többsoros, behúzott JSON kétszer
+    annyi kimeneti token).
+
+Kódbeli javítások a modell űrlapján (correct; v2-től, a fejlesztői próba alapján): amit a kód
+biztosabban tud, azt a kód dönti el, és a felület megmutatja, mit és miért írt át —
+  * az időkifejezést („tavaly”, „2018 első felében”, „az elmúlt három hónapban”) a kód
+    számolja (narrative/idoszak.py), a modell dátuma helyett;
+  * ha a kérdés felsőfoka egyértelmű irányt ad („leglassabb” → a legnagyobb értékek elöl), a
+    rendezés ehhez igazodik;
+  * ha a bontás dimenziójára egyetlen értékkel szűr (pl. Északkelet, régiónként), a bontás
+    elmarad — egy csoportra bontani értelmetlen;
+  * ha a kérdés csak az eladót (vagy csak a vevőt) nevezi meg, az állam ennek a szerepnek
+    az állama;
+  * a hét napjára, régióra vagy államra csak akkor szűr, ha a kérdés említi (nevével,
+    szótövével vagy az állam kódjával) — a modell egyszer a mintapéldából vett át egy szűrőt;
+  * ha az időablak a rendszer „mai” napja utáni, az előrejelzés — erre a „nem elérhető”
+    elutasítás jön (nem az „adaton kívüli időszak”).
 """
 
 from __future__ import annotations
@@ -33,7 +51,9 @@ import time
 from dataclasses import dataclass, field
 from datetime import date
 
+from narrative import idoszak
 from narrative.client import ROOT, LlmClient, LLMUnavailable
+from narrative.verifier import fold
 from semantic import spec as sp
 from semantic.catalog import (SORT_ORDERS, Catalog, Whitelist, _fold, normalize_value, value_aliases,
                               value_label)
@@ -344,6 +364,116 @@ def resolve_filters(query: dict, cat: Catalog, wl: Whitelist) -> tuple[dict, lis
     return {**query, "szuro": out}, notes
 
 
+# ------------------------------------------------------- kódbeli javítások
+MAX_Q = ("legtöbb", "legnagyobb", "legmagasabb", "leghosszabb", "leglassabb", "legdrágább")
+MIN_Q = ("legkevesebb", "legkisebb", "legalacsonyabb", "legrövidebb", "leggyorsabb", "legolcsóbb", "legkevésbé")
+FORECAST = "előrejelzés a jövőre"
+
+
+@dataclass
+class Correction:
+    mezo: str                  # idoablak | rendezes | bontas | szuro | elutasitas
+    ok: str                    # miért (a felületnek)
+    regi: object = None
+    uj: object = None
+
+
+GROUNDED_DIMS = ("het_napja", "vevo_regio", "vevo_allam", "elado_allam")
+
+
+def grounded(cat: Catalog, wl: Whitelist, dim_id: str, key: str, question: str) -> bool:
+    """Említi-e a kérdés ezt a szűrőértéket (a nevét, a szótövét vagy az állam kódját)?"""
+    if dim_id == "het_napja" and "hetveg" in _fold(question) and str(key) in ("6", "7"):
+        return True
+    if dim_id in STATE_DIMS and re.search(rf"(?<![A-Za-z]){re.escape(str(key))}(?![A-Za-z])", question):
+        return True
+    label = value_label(cat, dim_id, key).split(" (")[0]
+    words = [w for w in re.findall(r"[a-z0-9]+", _fold(label)) if len(w) >= 3]
+    asked = re.findall(r"[a-z0-9]+", _fold(question))
+    return any(_stem_match(q, w) >= min(4, len(w)) for q in asked for w in words)
+
+
+def correct(query: dict, question: str, cat: Catalog, wl: Whitelist | None = None) -> tuple[dict, list[Correction]]:
+    """A modell űrlapjának javítása ott, ahol a kód biztosabban dönt (lásd a modul leírását)."""
+    out = dict(query)
+    fixes: list[Correction] = []
+    # a kérdésben nem említett nap, régió vagy állam nem lehet szűrő (a fejlesztői próbán a modell
+    # a „hétfőn leadott” mintapéldából egy hétfő-szűrőt tett egy hét napját nem említő kérdésre)
+    szuro0 = out.get("szuro") if isinstance(out.get("szuro"), dict) else {}
+    if wl is not None and szuro0:
+        kept = {}
+        for dim, vals in szuro0.items():
+            if dim not in GROUNDED_DIMS or not isinstance(vals, list):
+                kept[dim] = vals
+                continue
+            keys = [normalize_value(cat, wl, dim, v) for v in vals]
+            if any(k is None for k in keys):              # fel nem oldott érték: a kapu dönt
+                kept[dim] = vals
+                continue
+            ok = [v for v, k in zip(vals, keys) if grounded(cat, wl, dim, k, question)]
+            dropped = [value_label(cat, dim, k) for v, k in zip(vals, keys) if v not in ok]
+            if dropped:
+                rovid = cat.dimensions[dim].rovid
+                fixes.append(Correction("szuro", f"a kérdés nem említi ({rovid}: {', '.join(dropped)})", vals, ok))
+            if ok:
+                kept[dim] = ok
+        out["szuro"] = kept
+        if not kept:
+            out.pop("szuro")
+    hit = idoszak.parse_window(question, _ma(cat))
+    if hit is not None:
+        old = {k: v for k, v in (out.get("idoablak") or {}).items() if v and str(v).strip()}
+        if hit.window() != old:
+            out["idoablak"] = hit.window()
+            fixes.append(Correction("idoablak", f"a kérdés „{hit.kifejezes}” kifejezése szerint (a rendszer "
+                                                f"„mai” napja: {_ma(cat).isoformat()})", old or None, hit.window()))
+    dims = [d for d in (out.get("bontas") or []) if d]
+    szuro = out.get("szuro") if isinstance(out.get("szuro"), dict) else {}
+    if len(dims) == 1 and dims[0] in cat.dimensions and len(szuro.get(dims[0]) or []) == 1:
+        rovid = cat.dimensions[dims[0]].rovid
+        fixes.append(Correction("bontas", f"a kérdés {sp.az(rovid)} {rovid} egyetlen értékére szűr — egy "
+                                          "csoportra bontani fölösleges", dims, []))
+        out.pop("bontas", None)
+        dims = []
+    fq = fold(question)
+    # az állam szerepe: ha a kérdés csak az eladót (vagy csak a vevőt) nevezi meg, a modell nem
+    # választhatja a másikét (a fejlesztői próbán: „eladói államból” → a vevő állama)
+    roles = {"elado": ("vevo_allam", "elado_allam"), "vevo": ("elado_allam", "vevo_allam")}
+    for word, (wrong, right) in roles.items():
+        other = "vevo" if word == "elado" else "elado"
+        if word in fq and other not in fq:
+            if wrong in dims:
+                dims = [right if d == wrong else d for d in dims]
+                fixes.append(Correction("bontas", f"a kérdés {'az eladó' if word == 'elado' else 'a vevő'} "
+                                                  "államáról szól", [wrong], [right]))
+                out["bontas"] = dims
+            if wrong in szuro and right not in szuro:
+                szuro = {(right if k == wrong else k): v for k, v in szuro.items()}
+                fixes.append(Correction("szuro", f"a kérdés {'az eladó' if word == 'elado' else 'a vevő'} "
+                                                 "államáról szól", wrong, right))
+                out["szuro"] = szuro
+    has_max = any(fold(w) in fq for w in MAX_Q)
+    has_min = any(fold(w) in fq for w in MIN_Q)
+    if dims and has_max != has_min and out.get("rendezes") in ("ertek_csokkeno", "ertek_novekvo"):
+        want = "ertek_csokkeno" if has_max else "ertek_novekvo"
+        if out["rendezes"] != want:
+            word = next(w for w in (MAX_Q if has_max else MIN_Q) if fold(w) in fq)
+            fixes.append(Correction("rendezes", f"a kérdés „{word}…” szava szerint "
+                                                + ("a legnagyobb értékek elöl" if has_max else "a legkisebb értékek elöl"),
+                                    out["rendezes"], want))
+            out["rendezes"] = want
+    return out, fixes
+
+
+def _future(query: dict, cat: Catalog) -> bool:
+    """Az időablak a rendszer „mai” napján vagy utána kezdődik: ez előrejelzés."""
+    tol = (query.get("idoablak") or {}).get("tol")
+    try:
+        return bool(tol) and date.fromisoformat(str(tol)) >= _ma(cat)
+    except ValueError:
+        return False
+
+
 def _choices(cat: Catalog, wl: Whitelist, dim_id: str, keys) -> str:
     if dim_id in STATE_DIMS:
         return "; ".join(f"{k} ({value_label(cat, dim_id, k).split(' (')[0]})" for k in keys)
@@ -364,6 +494,7 @@ class SpecAttempt:
     ido_ms: float = 0.0
     hiba: str | None = None                              # ha a modell nem érhető el
     feloldasok: list[Resolution] = field(default_factory=list)   # a nem pontos írásmódú szűrőértékek
+    javitasok: list[Correction] = field(default_factory=list)    # amit a kód átírt a modell űrlapján
     idok: list[dict] = field(default_factory=list)       # hívásonként: betöltés, prompt, generálás (ms)
     prompt: str = ""                                     # a prompt változata
 
@@ -406,11 +537,17 @@ def to_spec(question: str, cat: Catalog, wl: Whitelist, client: LlmClient,
         att.idok.append(reply.idok)
         problem = None
         notes: list[Resolution] = []
+        fixes: list[Correction] = []
         try:
             att.urlap = parse_json(reply.text)
-            att.gepi_alak, notes = resolve_filters(to_query_spec(att.urlap, cat), cat, wl)
-            att.feloldasok = notes
+            resolved, notes = resolve_filters(to_query_spec(att.urlap, cat), cat, wl)
+            att.gepi_alak, fixes = correct(resolved, question, cat, wl)
+            att.feloldasok, att.javitasok = notes, fixes
             att.gate = sp.check(att.gepi_alak, cat, wl)
+            if not att.gate.ok and att.gate.elutasitas.kod == "adaton_kivuli_idoablak" and _future(att.gepi_alak, cat):
+                fixes.append(Correction("elutasitas", "a kérdés a rendszer „mai” napja utáni időszakra vonatkozik — "
+                                                      "ez előrejelzés", "adaton_kivuli_idoablak", NOT_IN_CATALOG))
+                att.gate = sp.check({"metrika": FORECAST}, cat, wl)
             if not att.gate.ok and att.gate.elutasitas.kod in REPAIRABLE:
                 problem = att.gate.elutasitas.uzenet
         except json.JSONDecodeError as exc:
@@ -420,6 +557,7 @@ def to_spec(question: str, cat: Catalog, wl: Whitelist, client: LlmClient,
                    ervenyes=bool(att.gate and att.gate.ok),
                    kod=None if not att.gate or att.gate.ok else att.gate.elutasitas.kod,
                    feloldas=[[n.dimenzio, n.beirt, n.kulcs] for n in notes] or None,
+                   javitas=[[f.mezo, f.regi, f.uj] for f in fixes] or None,
                    kerdes_id=question_id, kerdes=question, valasz=reply.text)
         if problem is None or round_ == 1:
             break

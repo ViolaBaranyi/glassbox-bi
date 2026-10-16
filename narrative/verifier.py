@@ -15,7 +15,23 @@ utána ezt nézi:
      külön kell nézni (a felcserélt érték a hallucináció egyik tipikus alakja);
   4. a „legmagasabb / legalacsonyabb” állítás tényleg a legnagyobb / legkisebb megbízható
      csoportról szól-e — akár előtte, akár utána áll a csoport neve;
-  5. nincs-e oksági állítás („okozza”, „eredményezi” …) — az eredmény együttjárás.
+  5. nincs-e oksági állítás („okozza”, „eredményezi” …) — az eredmény együttjárás;
+  6. a 95%-os tartomány határai tartományként szerepelnek-e (a fejlesztői próbán a modell az
+     összesített érték tartományát az időszak „mélypontjának” és „csúcsának” nevezte — a
+     számok visszavezethetők voltak, a szerepük hamis);
+  7. nem tagadja-e a modell a szűrést („nem tartalmaz időbeli vagy regionális szűrést” — a
+     hatókört a kód írja, a modellnek nincs róla mondanivalója).
+
+Havi bontásnál a hónap neve évszám nélkül is a sor neve („decemberben érte el a csúcsát”
+— a „csúcs” és a „mélypont” is felsőfok), „X: Y” alakú névnél az Y is; többes számú
+felsőfoknál („az Észak és a Közép-Nyugat … a legkisebb”) elég, ha a mellérendelt nevek
+egyike a szélső érték.
+
+A számokat ezres tagolással is felismeri, akár nem törő, akár sima szóközzel írták („987 648”
+— a modell a nézet nem törő szóközét gyakran simára cseréli; a fejlesztői próbán ezért esett
+el négy helyes szöveg). A mondathatár csak nagybetű vagy jelölő előtt van, és nem vág bele a
+csoportnevekbe („háztartási gépek (2. csoport)”). Az eredmény dátumai rövidítve is
+elfogadottak („augusztus 29.”).
 
 A csoportnevet ragozva is felismeri („Északkeleten”, „São Paulóban”, „2018 márciusában”):
 a keresés kis- és nagybetűtől, valamint ékezettől függetlenül, a név elejére illeszt. A
@@ -33,18 +49,28 @@ import re
 import unicodedata
 from collections import Counter
 from dataclasses import dataclass, field
+from datetime import date
 
-from semantic.answer import _NUMBER, CONFIDENCE, uncovered_numbers
+from semantic.answer import CONFIDENCE
+from semantic.catalog import MONTHS, fmt_long_date
 from semantic.engine import MetricResult
 
 PLACEHOLDER = re.compile(r"\{([A-Z][A-Z0-9_]*)\}")
 ROW_PATH = re.compile(r"sorok\[(\d+)\]\.(?:ertek|rendelesek|alap|reszesedes|relativ)$")
-MAX_WORDS = ("legmagasabb", "legnagyobb", "legtobb", "leghosszabb", "leglassabb")
-MIN_WORDS = ("legalacsonyabb", "legkisebb", "legkevesebb", "legrovidebb", "leggyorsabb")
+MAX_WORDS = ("legmagasabb", "legnagyobb", "legtobb", "leghosszabb", "leglassabb", "csucs")
+MIN_WORDS = ("legalacsonyabb", "legkisebb", "legkevesebb", "legrovidebb", "leggyorsabb", "melypont")
+COORDINATED = re.compile(r"^\s*(?:\([^)]*\))?\s*(?:es|valamint|illetve|,)\s*(?:az?\s+)?$")
+SCOPE_DENIAL = re.compile(r"(?:\bnem\b|\bnincs\w*|\bnelkul)[^.;]*\bszur|\bszur\w*[^.;]*(?:\bnem\b|\bnincs\w*|\bnelkul)")
 ORDINAL = re.compile(r"(?:masodik|harmadik|negyedik|otodik|hatodik)\s*$")
 CLAUSE = re.compile(r"[,;:–—]|\s(?:mig|de|viszont|pedig|illetve|es|valamint|ugyanakkor|azonban)\s")
 LISTING = re.compile(r"\b(?:illetve|rendre)\b")
 CAUSAL = re.compile(r"\b(okoz\w*|okozój\w*|eredményez\w*|következtében|hatására)\b", re.I)
+NBSP = re.compile(r"[\u00a0\u202f]")
+# szám magyar alakban: ezres tagolás (nem törő vagy sima szóközzel), tizedesvessző
+NUMBER = re.compile(r"\d{1,3}(?:[ \u00a0\u202f]\d{3})+(?:,\d+)?|\d+(?:,\d+)?")
+SENTENCE_END = re.compile(r"(?<=[.!?;])\s+(?=[A-ZÁÉÍÓÖŐÚÜŰ{„])")
+CI_KEYS = ("O_A", "O_F")
+CI_WORDS = re.compile(r"tartomany|intervallum|95|bizonytalan|ingadoz|hibahatar")
 
 
 @dataclass
@@ -55,11 +81,16 @@ class Verdict:
     fedetlen: list[str] = field(default_factory=list)
     ismeretlen_jelolok: list[str] = field(default_factory=list)
     kozvetlen_szamok: int = 0        # amit a modell jelölő helyett maga írt le (de visszavezethető)
-    ismetelt_jelolok: list[str] = field(default_factory=list)   # stílus: ugyanaz a szám többször (nem hiba)
+    ismetelt_jelolok: list[str] = field(default_factory=list)   # stílus: ugyanaz a jelölő többször (nem hiba)
+    ismetelt_ertekek: list[str] = field(default_factory=list)   # stílus: ugyanaz az érték többször a szövegben
 
     @property
     def fedett(self) -> int:
         return self.szamok - len(self.fedetlen)
+
+
+def _as_date(v) -> date:
+    return v if isinstance(v, date) else date.fromisoformat(str(v)[:10])
 
 
 def distinctive(shown: str) -> bool:
@@ -80,6 +111,11 @@ def _name_patterns(label: str) -> list[tuple[re.Pattern, bool]]:
     m = re.fullmatch(r"(\d{4})\. (\w+)", f)                       # „2018. március” → „2018 márciusában”
     if m:
         return [(re.compile(rf"(?<!\w){m.group(1)}\.?\s+{m.group(2)}\w*"), True)]
+    m = re.fullmatch(r"[^:]+: (.+)", f)                           # „kisgépek: sütők és kávéfőzők” → a második fele is
+    if m and len(m.group(1)) >= 8:
+        tail = r"\w*" if f[-1:].isalnum() else ""
+        return [(re.compile(rf"(?<!\w){re.escape(f)}{tail}"), True),
+                (re.compile(rf"(?<!\w){re.escape(m.group(1))}{tail}"), True)]
     m = re.fullmatch(r"(.+?) \(([a-z]{2})\)", f)                   # „são paulo (sp)” → „São Paulóban”, „SP”
     if m:
         code = label[-3:-1]
@@ -103,11 +139,21 @@ def name_spans(text: str, result: MetricResult) -> list[Span]:
     names += [(c, None) for f in result.szurok for c in f["cimkek"]]
     folded = fold(text)
     spans: list[Span] = []
+
+    def add(pattern, on_folded, row):
+        for m in pattern.finditer(folded if on_folded else text):
+            if not any(m.start() < s.end and s.start < m.end() for s in spans):
+                spans.append(Span(m.start(), m.end(), row))
+
     for label, row in sorted(names, key=lambda n: -len(n[0])):
         for pattern, on_folded in _name_patterns(label):
-            for m in pattern.finditer(folded if on_folded else text):
-                if not any(m.start() < s.end and s.start < m.end() for s in spans):
-                    spans.append(Span(m.start(), m.end(), row))
+            add(pattern, on_folded, row)
+    # havi bontásnál a hónap neve évszám nélkül is a sor neve, ha egyértelmű („decemberben”)
+    if result.bontas and result.bontas.get("id") == "honap":
+        months = [fold(r["megnevezes"]).split(". ", 1)[-1] for r in result.sorok]
+        if len(set(months)) == len(months):
+            for i, month in enumerate(months):
+                add(re.compile(rf"(?<!\w){re.escape(month)}\w*"), True, i)
     return sorted(spans, key=lambda s: s.start)
 
 
@@ -137,8 +183,58 @@ def _nearest(spans: list[Span], clause: tuple[int, int], start: int, end: int, p
     return None
 
 
-def _sentences(text: str) -> list[str]:
-    return [s for s in re.split(r"(?<=[.!?;])\s+", text) if s.strip()]
+def norm(text: str) -> str:
+    """A nem törő szóközök simára — a modell és a nézet így ugyanazt a számalakot látja."""
+    return NBSP.sub(" ", text)
+
+
+def numbers(text: str) -> list[str]:
+    return NUMBER.findall(norm(text))
+
+
+def uncovered(text: str, refs) -> list[str]:
+    """A szöveg számai közül azok, amelyek nem vezethetők vissza a hivatkozott alakokra."""
+    rest = norm(text)
+    for shown in sorted({norm(shown) for shown, _ in refs}, key=len, reverse=True):
+        rest = rest.replace(shown, " ")
+    return NUMBER.findall(rest)
+
+
+def _sentences(text: str, result: MetricResult | None = None) -> list[str]:
+    """Mondatok: határ csak írásjel + szóköz + nagybetű/jelölő előtt, és nem csoportnéven belül."""
+    spans = name_spans(text, result) if result is not None else []
+    out, start = [], 0
+    for m in SENTENCE_END.finditer(text):
+        if any(s.start < m.start() < s.end for s in spans):
+            continue
+        out.append(text[start:m.start()])
+        start = m.end()
+    out.append(text[start:])
+    return [s for s in out if s.strip()]
+
+
+def _date_forms(d) -> list[str]:
+    """Egy eredménybeli dátum elfogadott alakjai: „2018. augusztus 29.”, „augusztus 29.”."""
+    month = MONTHS[d.month - 1]
+    return [fmt_long_date(d), f"{month} {d.day}.", f"{month} {d.day}"]
+
+
+def ci_problems(model_text: str, view_values: dict, result: MetricResult) -> list[str]:
+    """A 95%-os tartomány határa (jelölővel vagy leírva) csak tartományként szerepelhet."""
+    keys = [k for k in CI_KEYS if k in view_values]
+    if not keys:
+        return []
+    others = {norm(shown) for k, (shown, _) in view_values.items() if k not in CI_KEYS}
+    literal = {k: norm(view_values[k][0]) for k in keys if norm(view_values[k][0]) not in others}
+    out = []
+    for sentence in _sentences(model_text, result):
+        ns = norm(sentence)
+        used = [k for k in keys if "{" + k + "}" in sentence or
+                (k in literal and re.search(rf"(?<![\d,]){re.escape(literal[k])}", ns))]
+        if used and not CI_WORDS.search(fold(sentence)):
+            out.append("a 95%-os tartomány határa (" + ", ".join("{" + k + "}" for k in used)
+                       + ") nem tartományként szerepel")
+    return out
 
 
 # ------------------------------------------------------------ 3. a kötés
@@ -147,7 +243,7 @@ def binding_problems(model_text: str, result: MetricResult, row_of: dict[str, in
     if not result.bontas or not row_of:
         return []
     out = []
-    for sentence in _sentences(model_text):
+    for sentence in _sentences(model_text, result):
         spans = name_spans(sentence, result)
         if not spans:
             continue
@@ -169,6 +265,22 @@ def binding_problems(model_text: str, result: MetricResult, row_of: dict[str, in
     return out
 
 
+def _coordinated(spans: list[Span], span: Span, folded: str) -> list[Span]:
+    """A névvel „és”-sel (vesszővel) mellérendelt nevek: többes számú felsőfoknál a csoport."""
+    rows = [s for s in spans if s.row is not None]
+    i = rows.index(span)
+    group = [span]
+    j = i
+    while j > 0 and COORDINATED.match(folded[rows[j - 1].end:rows[j].start]):
+        j -= 1
+        group.append(rows[j])
+    j = i
+    while j + 1 < len(rows) and COORDINATED.match(folded[rows[j].end:rows[j + 1].start]):
+        j += 1
+        group.append(rows[j])
+    return group
+
+
 # ------------------------------------------------------------ 4. a felsőfok
 def superlative_problems(text: str, result: MetricResult) -> list[str]:
     if not result.bontas:
@@ -182,7 +294,7 @@ def superlative_problems(text: str, result: MetricResult) -> list[str]:
     lo = {i for i, r in reliable if r["ertek"] == bottom}
     volume = result.metrika["id"] != "rendelesek_szama"
     out = []
-    for sentence in _sentences(text):
+    for sentence in _sentences(text, result):
         folded = fold(sentence)
         spans = name_spans(sentence, result)
         if not any(s.row is not None for s in spans):
@@ -199,6 +311,8 @@ def superlative_problems(text: str, result: MetricResult) -> list[str]:
                                     prefer_before=False)
                     if span is None or span.row is None or span.row in expected:
                         continue
+                    if any(s.row in expected for s in _coordinated(spans, span, folded)):
+                        continue                               # „az Észak és a Közép-Nyugat … a legkisebb”
                     want = result.sorok[min(expected)]["megnevezes"]
                     out.append(f"„{result.sorok[span.row]['megnevezes']}” nem a {what} érték (az: „{want}”)")
     return list(dict.fromkeys(out))
@@ -218,19 +332,27 @@ def verify(model_text: str, final_text: str, view_values: dict, unknown: list[st
         v.problemak.append("ismeretlen jelölő: " + ", ".join("{" + u + "}" for u in unknown))
     names = [(r["megnevezes"], f"sorok[{i}].megnevezes") for i, r in enumerate(result.sorok)]
     names += [(c, f"szurok[{i}].cimkek") for i, f in enumerate(result.szurok) for c in f["cimkek"]]
+    # az eredmény dátumai (az időablak és az adat széle), rövidítve is: a kérdés hatóköre, nem állítás
+    dates = [(form, f"{part}.{end}") for part in ("idoablak", "adat") for end in ("tol", "ig")
+             if (getattr(result, part) or {}).get(end)
+             for form in _date_forms(_as_date((getattr(result, part))[end]))]
     # évszám a címkékből és a dátumokból („2018 márciusában”): megnevezés, nem állítás
-    years = {y for text, _ in names + list(view_values.values()) for y in re.findall(r"\b(?:19|20)\d\d\b", text)}
-    fixed = [(CONFIDENCE, "konstans: a tartományok szintje")] + [(y, "évszám") for y in years]
+    years = {y for text, _ in names + dates + list(view_values.values())
+             for y in re.findall(r"\b(?:19|20)\d\d\b", text)}
+    fixed = [(CONFIDENCE, "konstans: a tartományok szintje")] + [(y, "évszám") for y in years] + dates
     values = [(shown, path) for shown, path in view_values.values() if mod == "szabad" or distinctive(shown)]
     own = PLACEHOLDER.sub(" ", model_text)                       # amit a modell maga írt
-    plain = own
+    plain = norm(own)
     for text, _ in sorted(names + fixed, key=lambda r: -len(r[0])):
-        plain = plain.replace(text, " ")
-    written = _NUMBER.findall(plain)                             # a modell saját számai
-    v.fedetlen = uncovered_numbers(own, names + fixed + values)
-    v.szamok = len(_NUMBER.findall(final_text))
+        plain = plain.replace(norm(text), " ")
+    written = NUMBER.findall(plain)                              # a modell saját számai
+    v.fedetlen = uncovered(own, names + fixed + values)
+    v.szamok = len(numbers(final_text))
     v.kozvetlen_szamok = len(written) - len(v.fedetlen)
     v.ismetelt_jelolok = sorted(k for k, n in Counter(PLACEHOLDER.findall(model_text)).items() if n > 1)
+    nf = norm(final_text)
+    v.ismetelt_ertekek = sorted({norm(shown) for shown, _ in view_values.values()
+                                 if distinctive(shown) and len(re.findall(rf"(?<![\d,]){re.escape(norm(shown))}", nf)) > 1})
     if v.fedetlen:
         v.problemak.append("vissza nem vezethető szám: " + ", ".join(v.fedetlen))
     if mod != "szabad":
@@ -239,6 +361,9 @@ def verify(model_text: str, final_text: str, view_values: dict, unknown: list[st
                   if k in used and (m := ROW_PATH.match(path))}
         v.problemak += binding_problems(model_text, result, row_of)
     v.problemak += superlative_problems(final_text, result)
+    v.problemak += ci_problems(model_text, view_values, result)
+    if any(SCOPE_DENIAL.search(fold(sentence)) for sentence in _sentences(model_text, result)):
+        v.problemak.append("állítás a szűrésről (a hatókört a rendszer írja; a modell tagadta a szűrést)")
     causal = sorted({m.group(0).lower() for m in CAUSAL.finditer(final_text)})
     if causal:
         v.problemak.append("oksági állítás: " + ", ".join(causal))
