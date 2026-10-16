@@ -12,7 +12,9 @@ utána ezt nézi:
      írhat: az túl könnyen egyezne véletlenül (a 02. szakasz 9,8%-os mérése);
   3. a csoport értéke a saját csoportja mellett áll-e: „az Észak ({S1})” hamis, ha az {S1}
      az Északkelet értéke. A szám maga visszavezethető — a hiba a kötésben van, ezért ezt
-     külön kell nézni (a felcserélt érték a hallucináció egyik tipikus alakja);
+     külön kell nézni (a felcserélt érték a hallucináció egyik tipikus alakja). A számjeggyel
+     leírt csoportértéket is így nézi, ha egyértelmű, melyik csoporté („Bahiában 12,2%”) — a
+     kontrollágon minden szám ilyen, így a K1 két ága ugyanazzal a mércével mérődik;
   4. a „legmagasabb / legalacsonyabb” állítás tényleg a legnagyobb / legkisebb megbízható
      csoportról szól-e — akár előtte, akár utána áll a csoport neve;
   5. nincs-e oksági állítás („okozza”, „eredményezi” …) — az eredmény együttjárás;
@@ -64,6 +66,7 @@ SCOPE_DENIAL = re.compile(r"(?:\bnem\b|\bnincs\w*|\bnelkul)[^.;]*\bszur|\bszur\w
 ORDINAL = re.compile(r"(?:masodik|harmadik|negyedik|otodik|hatodik)\s*$")
 CLAUSE = re.compile(r"[,;:–—]|\s(?:mig|de|viszont|pedig|illetve|es|valamint|ugyanakkor|azonban)\s")
 LISTING = re.compile(r"\b(?:illetve|rendre)\b")
+ANAPHORA = re.compile(r"^\s*(?:ez|ennek|erre|ebben|ehhez|utobbi|elobbi)\b")
 CAUSAL = re.compile(r"\b(okoz\w*|okozój\w*|eredményez\w*|következtében|hatására)\b", re.I)
 NBSP = re.compile(r"[\u00a0\u202f]")
 # szám magyar alakban: ezres tagolás (nem törő vagy sima szóközzel), tizedesvessző
@@ -238,31 +241,96 @@ def ci_problems(model_text: str, view_values: dict, result: MetricResult) -> lis
 
 
 # ------------------------------------------------------------ 3. a kötés
-def binding_problems(model_text: str, result: MetricResult, row_of: dict[str, int]) -> list[str]:
-    """A csoportértékek jelölője a saját csoportja mellett áll-e. row_of: jelölő → sor."""
+def binding_problems(model_text: str, result: MetricResult, row_of: dict[str, int],
+                     shown: dict[str, str] | None = None) -> list[str]:
+    """A csoportértékek jelölője a saját csoportja mellett áll-e. row_of: jelölő → sor;
+    shown: a leírt számokból képzett belső jelölők alakja (az üzenetbe az kerül).
+
+    Ha a mondat „Ez / Ennek / Utóbbi …”-val kezdődik, és az érték előtt nincs név, az érték az
+    előző mondat csoportjáé („A számítógépeknél a legnagyobb ({S1}). Ez az összesített 9,0-szerese,
+    utána a sütők …” — a 9,0 nem a sütőké); ha az előző mondat több csoportot is nevez, nem dönt."""
+    shown = shown or {}
     if not result.bontas or not row_of:
         return []
     out = []
+    prev_row: int | None = None                  # az előző mondat egyetlen megnevezett csoportja
+
+    def wrong(key: str, want: int, got: int, how: str) -> str:
+        label = shown.get(key, "{" + key + "}")
+        return (f"a(z) {label} „{result.sorok[want]['megnevezes']}” értéke, de "
+                f"„{result.sorok[got]['megnevezes']}” {how}")
+
     for sentence in _sentences(model_text, result):
         spans = name_spans(sentence, result)
-        if not spans:
-            continue
         folded = fold(sentence)
         marks = [m for m in PLACEHOLDER.finditer(sentence) if m.group(1) in row_of]
+        anaphoric = ANAPHORA.match(folded) is not None and prev_row is not None
         rows_named = [s for s in spans if s.row is not None]
+        if not spans:
+            if anaphoric:
+                out += [wrong(m.group(1), row_of[m.group(1)], prev_row, "értékére utal („ez …”)")
+                        for m in marks if row_of[m.group(1)] != prev_row]
+            continue
         if LISTING.search(folded) and len(rows_named) == len({row_of[m.group(1)] for m in marks}) > 1:
             # „az Észak és az Északkelet aránya {S2}, illetve {S1}” — a sorrend dönt
             order = list(dict.fromkeys(row_of[m.group(1)] for m in marks))
             if [s.row for s in rows_named] != order:
                 out.append("a felsorolásban a csoportnevek és az értékek sorrendje nem egyezik")
-            continue
-        for m in marks:
-            span = _nearest(spans, _clause(folded, spans, m.start()), m.start(), m.end(), prefer_before=True)
-            want = row_of[m.group(1)]
-            if span is not None and span.row is not None and span.row != want:
-                out.append(f"a(z) {{{m.group(1)}}} „{result.sorok[want]['megnevezes']}” értéke, de "
-                           f"„{result.sorok[span.row]['megnevezes']}” mellett áll")
+        else:
+            for m in marks:
+                want = row_of[m.group(1)]
+                clause = _clause(folded, spans, m.start())
+                unnamed = not any(clause[0] <= s.start < clause[1] for s in spans) and \
+                    not any(s.end <= m.start() for s in spans)
+                if unnamed and anaphoric:
+                    if want != prev_row:
+                        out.append(wrong(m.group(1), want, prev_row, "értékére utal („ez …”)"))
+                    continue
+                span = _nearest(spans, clause, m.start(), m.end(), prefer_before=True)
+                if span is not None and span.row is not None and span.row != want:
+                    out.append(wrong(m.group(1), want, span.row, "mellett áll"))
+        named = {s.row for s in rows_named}
+        prev_row = named.pop() if len(named) == 1 else None
     return out
+
+
+LITERAL = "ZL"                        # a leírt számokból képzett belső jelölők előtagja
+
+
+def literal_marks(model_text: str, view_values: dict, result: MetricResult) -> tuple[str, dict[str, int], dict[str, str]]:
+    """A modell által számjeggyel leírt csoportértékek belső jelölővé alakítva, hogy a kötés
+    ugyanúgy ellenőrizhető legyen, mint a jelölőknél: (szöveg, jelölő → sor, jelölő → a leírt
+    szám). A kontrollágon minden szám ilyen, a fő ágon az, amit a modell a jelölő helyett maga
+    írt le — a K1 két ága így ugyanazzal a mércével mérődik. Csak a jellegzetes (distinctive)
+    és egyértelmű értékek számítanak: ha ugyanez a szám az eredményben máshol is szerepel (egy
+    másik csoportnál vagy az összesítettnél), nem tudni, melyikre gondolt."""
+    owner: dict[str, int | None] = {}
+    for _key, (shown, path) in view_values.items():
+        found = NUMBER.findall(norm(shown))
+        if len(found) != 1:
+            continue
+        m = ROW_PATH.match(path)
+        row = int(m.group(1)) if m and distinctive(shown) else -1
+        num = found[0]
+        if num in owner and owner[num] != row:
+            owner[num] = None                                    # kétértelmű
+        else:
+            owner.setdefault(num, row)
+    text = norm(model_text)
+    holes = [(m.start(), m.end()) for m in PLACEHOLDER.finditer(text)]
+    out, rows, labels, last = [], {}, {}, 0
+    for m in NUMBER.finditer(text):
+        if any(a <= m.start() < b for a, b in holes):
+            continue                                             # a {S1} „1”-e nem szám
+        row = owner.get(m.group(0))
+        if row is None or row < 0:
+            continue
+        key = f"{LITERAL}{len(rows) + 1}"
+        rows[key], labels[key] = row, m.group(0)
+        out.append(text[last:m.start()] + "{" + key + "}")
+        last = m.end()
+    out.append(text[last:])
+    return "".join(out), rows, labels
 
 
 def _coordinated(spans: list[Span], span: Span, folded: str) -> list[Span]:
@@ -355,11 +423,13 @@ def verify(model_text: str, final_text: str, view_values: dict, unknown: list[st
                                  if distinctive(shown) and len(re.findall(rf"(?<![\d,]){re.escape(norm(shown))}", nf)) > 1})
     if v.fedetlen:
         v.problemak.append("vissza nem vezethető szám: " + ", ".join(v.fedetlen))
+    # 3. a kötés: a jelölők (fő ág) és a számjeggyel leírt csoportértékek (mindkét ág)
+    marked, row_of, shown_as = literal_marks(model_text, view_values, result)
     if mod != "szabad":
         used = set(PLACEHOLDER.findall(model_text))
-        row_of = {k: int(m.group(1)) for k, (_, path) in view_values.items()
-                  if k in used and (m := ROW_PATH.match(path))}
-        v.problemak += binding_problems(model_text, result, row_of)
+        row_of.update({k: int(m.group(1)) for k, (_, path) in view_values.items()
+                       if k in used and (m := ROW_PATH.match(path))})
+    v.problemak += binding_problems(marked, result, row_of, shown_as)
     v.problemak += superlative_problems(final_text, result)
     v.problemak += ci_problems(model_text, view_values, result)
     if any(SCOPE_DENIAL.search(fold(sentence)) for sentence in _sentences(model_text, result)):

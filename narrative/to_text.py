@@ -197,6 +197,7 @@ class TextAttempt:
     prompt: str = ""                  # a prompt változata
     keret: bool = False               # True: a hatókört és a korlátot a kód írta (v2)
     idok: dict = field(default_factory=dict)   # betöltés, prompt, generálás (ms), ha a szolgáltató megadja
+    mag: str = ""                     # a modell állítása számokkal (behelyettesítve, a keret nélkül) — a K1 kézi ellenőrzéséhez
 
 
 def _template(r: MetricResult, reason: str, **kw) -> TextAttempt:
@@ -258,6 +259,7 @@ def to_text(question: str, r: MetricResult, client: LlmClient, mod: str = "jelol
     if not model_text:
         verdict.ok = False
         verdict.problemak.append("üres vagy nem értelmezhető válasz")
+    claimed = core
     if mod != "szabad":
         core = dedupe(core, view)                         # csak a megjelenítés (a kapu már ítélt)
     final = core
@@ -271,7 +273,7 @@ def to_text(question: str, r: MetricResult, client: LlmClient, mod: str = "jelol
                kozvetlen_szamok=verdict.kozvetlen_szamok, ismetelt_jelolok=verdict.ismetelt_jelolok or None,
                kerdes_id=question_id, kerdes=question, valasz=reply.text)
     meta = dict(modell_szoveg=model_text, verdict=verdict, modell=reply.model, digest=reply.digest,
-                ido_ms=elapsed, nezet=view.text, prompt=version, keret=keret, idok=reply.idok)
+                ido_ms=elapsed, nezet=view.text, prompt=version, keret=keret, idok=reply.idok, mag=claimed)
     if verdict.ok or mod == "szabad":
         return TextAttempt(szoveg=final, sablon=False, hivatkozasok=refs, **meta)
     return _template(r, "a modell szövege nem ment át a 2. kapun: " + "; ".join(verdict.problemak), **meta)

@@ -53,16 +53,34 @@ def _window(q: dict, metric: str, cat, wl) -> tuple[str | None, str | None]:
     return (g.spec.tol.isoformat() if g.spec.tol else None, g.spec.ig.isoformat() if g.spec.ig else None)
 
 
-def judge(q: dict, gate: sp.GateResult, cat, wl) -> tuple[str, list[str]]:
+def _as_list(v) -> list:
+    return list(v) if isinstance(v, (list, tuple)) else [v]
+
+
+def core_ok(q: dict, gate: sp.GateResult) -> bool | None:
+    """F-1 (rendszerterv 04.): helyes-e a mérőszám és a bontás. None: csapdakérdés."""
+    if q.get("elutasitas"):
+        return None
+    if not gate.ok:
+        return False
+    return gate.spec.metrika in _as_list(q.get("metrika")) and list(gate.spec.bontas) == list(q.get("bontas", []))
+
+
+def judge(q: dict, gate: sp.GateResult, cat, wl, groups=None) -> tuple[str, list[str]]:
     """(ítélet, eltérések). Ítélet: helyes | hibás értelmezés | helyes elutasítás |
-    téves elutasítás | hiányzó elutasítás | más elutasítás."""
+    téves elutasítás | hiányzó elutasítás | más elutasítás.
+
+    A metrika, a rendezés és az elvárt elutasítás lista is lehet (bármelyik jó). „teljes”:
+    természetes sorrendnél a sor nem lehet csonka — ehhez kell a groups(spec) → a csoportok
+    száma a teljes sorban (a mérés az adatbázisból számolja; nélküle ez az ellenőrzés kimarad)."""
     want_reject = q.get("elutasitas")
     if want_reject:
         if gate.ok:
             return "hiányzó elutasítás", [f"elfogadva: {gate.spec.key()}"]
         kod = gate.elutasitas.kod
-        return ("helyes elutasítás", []) if want_reject in ("*", kod) else \
-            ("más elutasítás", [f"elvárt: {want_reject}, kapott: {kod}"])
+        wanted = _as_list(want_reject)
+        return ("helyes elutasítás", []) if "*" in wanted or kod in wanted else \
+            ("más elutasítás", [f"elvárt: {' vagy '.join(wanted)}, kapott: {kod}"])
     if not gate.ok:
         return "téves elutasítás", [f"{gate.elutasitas.kod}: {gate.elutasitas.uzenet}"]
     s, diffs = gate.spec, []
@@ -83,9 +101,14 @@ def judge(q: dict, gate: sp.GateResult, cat, wl) -> tuple[str, list[str]]:
             diffs.append(f"tól: {got_tol or 'az adat eleje'} (elvárt: {tol or 'az adat eleje'})")
         if "ig" in q and got_ig != ig:
             diffs.append(f"ig: {got_ig or 'az adat vége'} (elvárt: {ig or 'az adat vége'})")
-    for key in ("rendezes", "limit"):
-        if key in q and getattr(s, key) != q[key]:
-            diffs.append(f"{key}: {getattr(s, key)} (elvárt: {q[key]})")
+    if "rendezes" in q and s.rendezes not in _as_list(q["rendezes"]):
+        diffs.append(f"rendezes: {s.rendezes} (elvárt: {' vagy '.join(_as_list(q['rendezes']))})")
+    if "limit" in q and s.limit != q["limit"]:
+        diffs.append(f"limit: {s.limit} (elvárt: {q['limit']})")
+    if q.get("teljes") and groups is not None and s.rendezes == "bontas" and s.bontas:
+        n = groups(s)
+        if s.limit < n:
+            diffs.append(f"csonka sor: {s.limit} csoport látszik a {n}-ból")
     return ("helyes", []) if not diffs else ("hibás értelmezés", diffs)
 
 
