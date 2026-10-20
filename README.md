@@ -57,7 +57,7 @@ válaszd — a `uv sync` után ott van, és mindkettő magától felismeri.
 | 1 | Környezet | a verziók rögzítve vannak a kimenetben |
 | 2 | Adat | a valódi Olist-adat; ha még nincs meg, letölti a Kaggle-ről |
 | 3 | Tárház | 9 CSV → csillagséma DuckDB-ben, **V-1 validációval** |
-| 4 | Tesztek | 356 teszt: szivárgásvédelem, V-1, adatmodell, abláció, betanítás, kohorsz, modellválasztás, bootstrap, lezárt futás, referencia-modellek, magyarázatok, szemantikus réteg, nyelvi réteg, mérés, felület; ha bármelyik bukik, **a demó megáll** |
+| 4 | Tesztek | 357 teszt: szivárgásvédelem, V-1, adatmodell, abláció, betanítás, kohorsz, modellválasztás, bootstrap, lezárt futás, referencia-modellek, magyarázatok, szemantikus réteg, nyelvi réteg, mérés, felület; ha bármelyik bukik, **a demó megáll** |
 | 5 | Betanítás | a **lezárt v3 protokoll** szerint: LightGBM súlyozás nélkül, a fák száma bővülő ablakos CV-vel, címke-tisztítással; érintetlen, legkésőbbi időszakon mérve; a kalibráció csak diagnosztika |
 | 6 | Összegzés | rangsorolás, kalibráció, kizárt rendelések, artefaktumok helye |
 
@@ -246,7 +246,7 @@ ilyen), hogy a két ág ugyanazzal a mércével mérődjön.
 | M2 — referencia-modellek: logisztikus regresszió, döntési fa, random forest (`pipeline/reference_models.py`), lezárt összevetés (`pipeline/v3_reference.py`) | **kész — lefutott okt. 9.** (`docs/v3_referencia_eredmeny.md`) |
 | M3 — SHAP-magyarázatok a négy modellre (pontos TreeSHAP, ill. lineáris SHAP, a 22 jellemzőre összevonva), additivitás-ellenőrzés, sablonos magyarázó szöveg (`xai/`) | **kész (v1)** |
 | M5 — Streamlit BI-felület: áttekintés (SQL), rendelés-magyarázat négy modellel, modell-oldal, egyezés-ellenőrzés a lezárt futással (`ui/`, `python -m ui`) | **kész (v1)** |
-| Tesztek — szivárgás (14), V-1 és adatmodell (10), abláció (6), betanítás (6), kohorsz (2), modellválasztás (8), bootstrap (6), lezárt futás (14), referencia-modellek (9), magyarázatok (12), szöveg és megjelenítés (22), felület (20), egyezési mértékek (5), kontrollkar (5), nevek és feliratok (5), a magyarázatok hűsége (8), README-parancsok (2), környezet (7), szemantikus réteg (99), nyelvi réteg (81), mérés és mérési kérdéssor (15) | **kész, 356/356** (egy csak Node.js-szel fut, nélküle kihagyja) |
+| Tesztek — szivárgás (14), V-1 és adatmodell (10), abláció (6), betanítás (6), kohorsz (2), modellválasztás (8), bootstrap (6), lezárt futás (14), referencia-modellek (9), magyarázatok (12), szöveg és megjelenítés (22), felület (20), egyezési mértékek (5), kontrollkar (5), nevek és feliratok (5), a magyarázatok hűsége (8), README-parancsok (2), környezet (7), szemantikus réteg (99), nyelvi réteg (81), mérés és mérési kérdéssor (16) | **kész, 357/357** (egy csak Node.js-szel fut, nélküle kihagyja) |
 | Tároló — MIT licenc, CI (Ubuntu + Windows), uv-környezet (`uv.lock`; pip-nek `requirements.lock`), döntési napló | **kész** |
 | M2 — 40 futásos sweep, hiperparaméter-hangolás | következő |
 | M3 — KernelSHAP-kontrollkar: mind a négy modell ugyanazzal a magyarázóval (valószínűség-tér, közös háttér, 200 rögzített teszt-rendelés), a kar saját zajával (`xai/kernel_arm.py`, `xai/agreement.py`) | **kész** (`docs/kernel_kar_eredmeny.md`) |
@@ -256,7 +256,7 @@ ilyen), hogy a két ág ugyanazzal a mércével mérődjön.
 | M1 — a PostgreSQL-változat ellenőrzése: a valódi adaton 354 lekérdezés DuckDB-ben és PostgreSQL 17-ben, cellánként összevetve (`semantic/pg_ellenorzes.py`) | **kész — 0 eltérés** (`docs/pg_ellenorzes.md`) |
 | M5 — *Kérdezz* oldal: kérdésépítő, példakérdések, válasz + ábra + táblázat, „Próbáld ki az 1. kaput” | **kész (v1)** |
 | M4 — nyelvi réteg: szabad szöveges kérdés → ugyanaz a gépi alak (helyi Ollama vagy OpenAI-kompatibilis API, JSON-sémához kötött kimenet, egy javító kör, ragozott szűrőértékek feloldása, időkifejezés és sorrend a kódtól), a modell fogalmazta válaszmag hely-kitöltéssel, a hatókör és a korlát a kódtól, KAPU ② (számok, csoport–érték kötés, „legmagasabb”, a tartomány szerepe, oksági állítás), sablon tartaléknak, napló időbontással; kontrollág a K1-hez; fejlesztői próbasor (`narrative/`, `eval/`) | **kész (v3)** — valódi modellel: okt. 15. (v1, 93 mp), okt. 16. fejlesztői próba (v2: 10/13, 5/6, medián 37 mp; v3: 12/13, 6/6, medián 29–32 mp) |
-| M6 — mérőpad: 120 kérdéses lezárt készlet (csapdakérdésekkel), K1 a fő ágon és a kontrollágon, két modellel | **folyamatban** — a mérőprogram (`narrative/meres.py`), a protokoll tervezete (`docs/k1_protokoll.json`, modellek: `qwen3.5:4b` és `qwen3.5:2b`) és a 130 kérdés (Claude 80, Viola 50) kész; Viola ellenőrzése, a lezárás, a jóváhagyás és a mérés hátravan |
+| M6 — mérőpad: 120 kérdéses lezárt készlet (csapdakérdésekkel), K1 a fő ágon és a kontrollágon, két modellel | **mérés kész, kézi ellenőrzés hátravan** — a kérdéssor lezárva, a protokoll jóváhagyva (okt. 16.); `qwen3.5:4b` (okt. 19.): F-1 85%, F-2 89%, K1 a modell szövegében 29% / 30% (fő ág / kontrollág), a felhasználóhoz eljut 0% / 30%; `qwen3.5:2b` (okt. 19.): F-1 44%, F-2 86%, K1 40% / 46%, eljut 0% / 46% (`docs/k1_eredmeny_qwen3.5-4b.md`, `docs/k1_eredmeny_qwen3.5-2b.md`); a kapu tévesztéseinek kézi becslése (`tools/kezi_minta.py`) hátravan |
 
 ---
 
@@ -611,6 +611,8 @@ uv run python -m narrative.meres --jovahagy "Baranyi Viola"   # a protokoll jóv
 uv run python -m narrative.meres --olvashato  # a kérdéssor olvasható változata (eval\meresi_kerdessor.md)
 uv run python -m narrative.meres              # a mérés a qwen3.5:4b-vel (kb. 4–5 óra a laptopon)
 uv run python -m narrative.meres --modell qwen3.5:2b   # ugyanez a kisebb modellel
+uv run python tools\kezi_minta.py minta logs\meres\MAPPA       # a kézi ellenőrzés mintája a hatókörrel
+uv run python tools\kezi_minta.py kiertekel logs\meres\MAPPA   # a kitöltött minta: a kapu pontossága, K1 korrigálva
 uv run python -m narrative.meres --folytat logs\meres\MAPPA    # megszakadt mérés folytatása (a mappát a mérés kiírja)
 
 # lezárt futások — okt. 9-én lefutottak; újra csak --ismetles kapcsolóval indulnak
@@ -696,7 +698,8 @@ glassbox-bi/
 │   ├── dontesi_naplo.md     minden módszertani döntés: mikor, miért, látta-e már a tesztet
 │   ├── v3_protokoll.json    a lezárt futás protokollja (gépi, ezt ellenőrzi a futás)
 │   ├── v3_protokoll.md      ugyanez magyarázattal és a döntésekkel
-│   ├── k1_protokoll.json    a nyelvi réteg mérésének protokollja (tervezet; a lezárt kérdéssor ujjlenyomatával)
+│   ├── k1_protokoll.json    a nyelvi réteg mérésének protokollja (jóváhagyva okt. 16.; a lezárt kérdéssor ujjlenyomatával)
+│   ├── k1_eredmeny_*.md     a K1 mérés jelentése modellenként (és .json)
 │   ├── v3_lezart_eredmeny.json  a lezárt futás teljes eredménye (ujjlenyomattal)
 │   ├── v3_lezart_eredmeny.md    ugyanez röviden, táblázattal
 │   ├── v3_referencia_protokoll.json  a referencia-összevetés protokollja

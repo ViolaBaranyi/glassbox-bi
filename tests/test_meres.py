@@ -87,6 +87,18 @@ def test_claude_kerdesei_nem_valtoztak():
 
 
 @needs_gold
+def test_a_lezart_kerdessor_nem_valtozott():
+    """Ha a protokoll jóváhagyott, a kérdéssor ujjlenyomata a lezáráskorival egyezik (okt. 16.,
+    14:25: ce87d85f…) — a lezárás után a kérdéssor nem változhat."""
+    protocol, _ = meres.load_protocol()
+    if protocol["allapot"] != "jovahagyva":
+        pytest.skip("a protokoll még nincs jóváhagyva")
+    questions = proba.load_questions(GOLD)
+    assert meres.readiness(protocol, questions, meres.sha256_text(GOLD)) == []
+    assert protocol["kerdessor"]["sha256"] == "ce87d85fd44038c96f107f6474b4c6cdf1a5978afb88b3bfa6629784a69bc01f"
+
+
+@needs_gold
 def test_a_meresi_kerdessor_nem_ismetli_a_hangolasra_hasznaltakat(cat):
     gold = {_fold(q["kerdes"]) for q in proba.load_questions(GOLD)}
     dev = {_fold(q["kerdes"]) for q in proba.load_questions()}
@@ -230,8 +242,10 @@ kerdes = "Mekkora a haszon?"
 elutasitas = "nem_elerheto"
 """, encoding="utf-8")
     protocol = json.loads((ROOT / "docs" / "k1_protokoll.json").read_text(encoding="utf-8"))
+    # a valódi protokoll már lezárt és jóváhagyott lehet: a másolat tervezetként indul
+    protocol.update({"allapot": "tervezet", "jovahagyas": None})
     protocol["kerdessor"].update({"fajl": str(qfile), "kerdesek": 4, "megvalaszolando": 3, "csapda": 1,
-                                  "szerzok": {"claude": 2, "viola": 2}})
+                                  "szerzok": {"claude": 2, "viola": 2}, "sha256": None, "lezarva": None})
     protocol["beallitasok"]["ismetles"] = 2
     protocol["modellek"][1]["nev"] = None                         # a megnevezést a teszt végzi
     pfile = tmp / "docs" / "k1_protokoll.json"
@@ -351,6 +365,26 @@ def test_a_meres_vegig_es_folytatas(cat, synth_db, tmp_path, monkeypatch, capsys
     (run / "jelentes.md").unlink()
     meres.main(["--jelentes", str(run)])
     assert (run / "jelentes.md").exists()
+    # a kézi minta újra, a hatókörrel: ugyanaz a kulcs; a kitöltött minta kiértékelése
+    import csv
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("kezi_minta", ROOT / "tools" / "kezi_minta.py")
+    km = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(km)
+    key_before = (run / "kezi_ellenorzes_kulcs.csv").read_bytes()
+    assert km.sample(run) == 12 and (run / "kezi_ellenorzes_kulcs.csv").read_bytes() == key_before
+    rows = list(csv.reader((run / "kezi_ellenorzes.csv").open(encoding="utf-8-sig", newline=""), delimiter=";"))
+    assert all(r[2].startswith("HATÓKÖR") for r in rows[1:]) and (run / "kezi_ellenorzes_utmutato.txt").exists()
+    key = {r[0]: r for r in csv.reader((run / "kezi_ellenorzes_kulcs.csv").open(encoding="utf-8-sig", newline=""), delimiter=";")}
+    for r in rows[1:]:
+        r[4] = "igen" if key[r[0]][4] == "igen" else "nem"         # a kapu itt mindig igazat mond
+    with (run / "kezi_ellenorzes.csv").open("w", encoding="utf-8-sig", newline="") as f:
+        csv.writer(f, delimiter=";").writerows(rows)
+    with pytest.raises(SystemExit, match="ki van töltve"):
+        km.sample(run)                                             # a kitöltöttet nem írja felül
+    out = km.evaluate(run)
+    assert out["kitoltetlen"] == [] and out["agak"]["szabad"]["pontossag"] == 1.0
+    assert out["agak"]["szabad"]["k1_korrigalt"] == 1.0 and out["agak"]["jelolo"]["k1_korrigalt"] == 0.0
 
 
 def test_lezaratlan_kerdessoron_nem_mer(tmp_path, monkeypatch, capsys):
