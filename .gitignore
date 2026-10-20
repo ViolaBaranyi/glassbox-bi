@@ -25,3 +25,6 @@ venv*/
 
 # Node.js (a PostgreSQL-ellenőrzés futtatója: tools/pg)
 node_modules/
+
+# a v3 nyelvi réteg külön munkamappája (tools/v3_futtatas.bat, git worktree)
+v3_kod/

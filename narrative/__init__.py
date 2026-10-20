@@ -10,3 +10,7 @@ Nyelvi réteg (M4, rendszerterv 14.): két szigorúan határolt nyelvimodell-hí
 A modell a kérdésen kívül csak a metrikakatalógus kivonatát (①) és a lekérdezés eredményét
 (②) látja; adatsort, adatbázist, modellt soha.
 """
+
+# A nyelvi réteg változata (a mérés fejléce rögzíti). v3: a lezárt K1 mérés kódja (okt. 16.,
+# ujjlenyomat db97e252…); v4: a v3 mérésén látott hibák javítása (okt. 20.) — új kérdéseken mérve.
+VERZIO = "v4"

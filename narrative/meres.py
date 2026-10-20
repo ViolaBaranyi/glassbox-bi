@@ -40,7 +40,7 @@ from datetime import datetime
 from pathlib import Path
 
 from data.db import DB_PATH, WarehouseUnavailable, connect, use_utf8_console
-from narrative import proba
+from narrative import VERZIO, proba
 from narrative.client import ROOT, LlmClient, load_config
 from narrative.to_spec import to_spec
 from narrative.to_text import TextAttempt, to_text
@@ -183,9 +183,19 @@ def validate(questions: list[dict], cat, wl=None) -> list[str]:
     return out
 
 
-def readiness(protocol: dict, questions: list[dict], set_sha: str) -> list[str]:
-    """Miért NEM lehet még mérni (üres lista: lehet)."""
+def frozen_fingerprint(cfg, root: Path = ROOT) -> str:
+    """A nyelvi réteg ujjlenyomata mindhárom prompttal — ezt rögzíti a protokoll („kod.ujjlenyomat”)."""
+    return code_fingerprint(root, [cfg.hivasok[c].prompt for c in ("to_spec", "to_text", "to_text_szabad")
+                                   if c in cfg.hivasok])
+
+
+def readiness(protocol: dict, questions: list[dict], set_sha: str, code_fp: str | None = None) -> list[str]:
+    """Miért NEM lehet még mérni (üres lista: lehet). Ha a protokoll rögzíti a kód ujjlenyomatát
+    (v2-től), a mostani kódnak azzal kell egyeznie — a lezárás után a kód nem változhat."""
     out = []
+    want = (protocol.get("kod") or {}).get("ujjlenyomat")
+    if want and code_fp and code_fp != want:
+        out.append(f"a nyelvi réteg kódja nem a protokollban rögzített változat ({code_fp[:16]} ≠ {want[:16]})")
     ks = protocol["kerdessor"]
     if protocol.get("allapot") != "jovahagyva":
         out.append(f"a protokoll állapota „{protocol.get('allapot')}”, nem „jovahagyva”")
@@ -641,7 +651,8 @@ def _header(cfg, client, protocol, p_sha, qfile, q_sha, n, reps, only_spec) -> d
                           "sha256": p_sha, "verzio": protocol.get("verzio")},
             "kerdessor": {"fajl": protocol["kerdessor"]["fajl"], "sha256": q_sha, "kerdesek": n},
             "promptok": prompts, "ismetles": reps, "csak_ertelmezes": only_spec,
-            "kod": {**git_commit(), "ujjlenyomat": code_fingerprint(ROOT, [v["fajl"] for v in prompts.values()])}}
+            "kod": {**git_commit(), "verzio": VERZIO,
+                    "ujjlenyomat": code_fingerprint(ROOT, [v["fajl"] for v in prompts.values()])}}
 
 
 SAME_ON_RESUME = ("modell", "szolgaltato", "kontextus", "homerseklet", "protokoll", "kerdessor", "promptok",
@@ -663,7 +674,11 @@ def main(argv: list[str] | None = None) -> None:
     ap.add_argument("--lezar", action="store_true", help="a kérdéssor lezárása (ujjlenyomat a protokollba)")
     ap.add_argument("--jovahagy", metavar="NÉV", help="a protokoll jóváhagyása")
     ap.add_argument("--olvashato", action="store_true", help="a kérdéssor olvasható változata (eval/meresi_kerdessor.md)")
+    ap.add_argument("--protokoll", type=Path, help="másik protokoll (alapból docs/k1_protokoll.json)")
     a = ap.parse_args(argv)
+    global PROTOKOLL
+    if a.protokoll:
+        PROTOKOLL = a.protokoll if a.protokoll.is_absolute() else ROOT / a.protokoll
 
     if a.lezar:
         sha = lock()
@@ -708,11 +723,13 @@ def main(argv: list[str] | None = None) -> None:
             if any(q.get("szerzo") == author for q in questions):
                 print(f"  {author} kérdései: {author_fingerprint(questions, author)}")
         print("Formai hiba: nincs." if not problems else "Hibák:\n  " + "\n  ".join(problems))
-        reasons = readiness(protocol, questions, q_sha)
+        code_fp = frozen_fingerprint(load_config())
+        print(f"A nyelvi réteg ({VERZIO}) kódjának ujjlenyomata: {code_fp}")
+        reasons = readiness(protocol, questions, q_sha, code_fp)
         print("Mérhető: igen." if not reasons else "Még nem mérhető:\n  " + "\n  ".join(reasons))
         return
 
-    reasons = readiness(protocol, questions, q_sha)
+    reasons = readiness(protocol, questions, q_sha, frozen_fingerprint(load_config()))
     if reasons:
         print("A mérés nem indul el:\n  " + "\n  ".join(reasons), file=sys.stderr)
         sys.exit(2)

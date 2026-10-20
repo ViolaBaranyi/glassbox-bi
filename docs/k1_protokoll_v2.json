@@ -1,0 +1,106 @@
+{
+  "nev": "Üvegdoboz BI — K1 mérés v2: a v3 és a v4 nyelvi réteg ugyanazon az új, lezárt kérdéssoron",
+  "verzio": 2,
+  "allapot": "tervezet",
+  "jovahagyas": null,
+  "elozmeny": "docs/k1_protokoll.json (v1, jóváhagyva 2026-10-16) — eredmény: docs/k1_eredmeny_qwen3.5-4b.md és -2b.md. A v1 eredménye változatlanul a dolgozatba kerül; a v4 a v1 mérésén látott hibákból készült, ezért a v1 kérdéssorán mérve optimista lenne.",
+  "kerdessor": {
+    "fajl": "eval/meresi_kerdessor_v2.toml",
+    "sha256": null,
+    "lezarva": null,
+    "kerdesek": null,
+    "megvalaszolando": null,
+    "csapda": null,
+    "szerzok": {
+      "viola": null
+    },
+    "szabaly": "Csak Viola írja (Claude a v3 hibáit már látta, akaratlanul is a v4-nek kedvező kérdéseket írna), és csak a v4 kódjának lezárása UTÁN adja át: a kérdések ismeretében a kód nem változhat. Az elvárt értelmezést Claude írja, Viola ellenőrzi; a lezárás után a fájl nem változik (egységesített sorvégű SHA256)."
+  },
+  "kod": {
+    "verzio": "v4",
+    "ujjlenyomat": "7a3a5e94fe9efe50a28464f086712d3aa25121ca27d88c4897de97a1e17ce2a5",
+    "v3": {
+      "commit": "f5db16915e45a111ac7b1c4adb6665c505b8352d",
+      "ujjlenyomat": "db97e252c99023464139716f3634c781426f21fc3e8e5ce04c225ed81e792728",
+      "futtatas": "tools/v3_futtatas.bat — git worktree a v3 commitból (v3_kod/), mellé ez a protokoll, az új kérdéssor és a tárház"
+    },
+    "szabaly": "A mérőprogram csak akkor indul, ha a nyelvi réteg kódjának ujjlenyomata a fenti „ujjlenyomat” (v4), ill. a v3 futásnál a jelentés fejlécében a v3 ujjlenyomata áll.",
+    "lezarva": "2026-10-20"
+  },
+  "modellek": [
+    {
+      "nev": "qwen3.5:4b",
+      "szerep": "a fő összevetés modellje (v3 és v4)"
+    },
+    {
+      "nev": "qwen3.5:2b",
+      "szerep": "kisebb — csak a v4-gyel, leíró jelleggel"
+    }
+  ],
+  "futasok": [
+    {
+      "kod": "v4",
+      "modell": "qwen3.5:4b",
+      "parancs": "uv run python -m narrative.meres --protokoll docs/k1_protokoll_v2.json"
+    },
+    {
+      "kod": "v3",
+      "modell": "qwen3.5:4b",
+      "parancs": "tools\\v3_futtatas.bat"
+    },
+    {
+      "kod": "v4",
+      "modell": "qwen3.5:2b",
+      "parancs": "uv run python -m narrative.meres --protokoll docs/k1_protokoll_v2.json --modell qwen3.5:2b"
+    }
+  ],
+  "beallitasok": {
+    "ismetles": 1,
+    "promptok": {
+      "to_spec": "to_spec.v3",
+      "to_text": "to_text.v3",
+      "to_text_szabad": "to_text_szabad.v3"
+    },
+    "kontextus": 4096,
+    "homerseklet": {
+      "to_spec": 0.0,
+      "to_text": 0.2
+    },
+    "megjegyzes": "Egy ismétlés: a v1-ben a három ismétlés szinte azonos volt (a gépi alak 128/130, a kontrollszöveg 80/81 kérdésnél ugyanaz — rögzített mag), a hatásos mintaelemszám a kérdések száma; az idő több kérdésre jobban megéri."
+  },
+  "agak": {
+    "fo": "jelolo — mint a v1-ben",
+    "kontroll": "szabad — mint a v1-ben",
+    "parositas": "mint a v1-ben: egy ① hívás, ugyanabból az eredményből a két ág"
+  },
+  "mutatok": {
+    "fo": "Helyes válasz a feltett kérdésre (teljes egyezés: mérőszám, bontás, szűrő, időablak, rendezés) a megválaszolandó kérdéseken: a v4 és a v3 különbsége a 4B modellel, kérdésenként párosítva.",
+    "masodlagos": [
+      "F-1 (mérőszám és bontás) és F-2 (a csapdák elutasítása), v3 és v4, 4B",
+      "K1 a v4-ben: a modell szövegében megjelölt és a felhasználóhoz eljutó arány ágonként (a v4 kapuval)",
+      "K1 a v3 szövegein a v4 kapuval újrapontozva is — így a két kód szövegei ugyanazzal a mércével",
+      "a fő ágon a sablonra váltás aránya, v3 és v4",
+      "a 2B a v4-gyel (leíró)",
+      "idő: az ① és a ② mediánja"
+    ]
+  },
+  "statisztika": {
+    "intervallum": "Wilson, 95%",
+    "paros_osszevetes": "kérdésenként (a v4 és a v3 ítélete ugyanarra a kérdésre): a helyes arányok különbsége, 95%-os bootstrap-intervallummal (a kérdések újramintavételével)",
+    "bootstrap": {
+      "B": 2000,
+      "mag": 20261020
+    }
+  },
+  "kezi_ellenorzes": {
+    "cel": "A v4 kapu tévesztései: a v4 a v1 téves riasztásait javította — itt derül ki, hogy közben nem enged-e át valódi hibát.",
+    "minta": "A v4 4B futásából 60 szöveg, a v1-gyel azonos rétegezéssel (20–20 meg nem jelölt a két ágon, 10–10 megjelölt), vakon (tools/kezi_minta.py).",
+    "ki": "Baranyi Viola",
+    "mag": 20261021
+  },
+  "elteresek_a_v1_tol": [
+    "egy ismétlés három helyett (lásd beallitasok.megjegyzes)",
+    "a kérdéssort csak Viola írja",
+    "a v4 kód ujjlenyomata a protokollban rögzített; a v3 külön munkamappában, változatlanul fut"
+  ]
+}

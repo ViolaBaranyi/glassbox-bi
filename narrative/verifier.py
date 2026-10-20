@@ -54,6 +54,7 @@ from dataclasses import dataclass, field
 from datetime import date
 
 from semantic.answer import CONFIDENCE
+from xai.labels import CATEGORIES
 from semantic.catalog import MONTHS, fmt_long_date
 from semantic.engine import MetricResult
 
@@ -62,7 +63,11 @@ ROW_PATH = re.compile(r"sorok\[(\d+)\]\.(?:ertek|rendelesek|alap|reszesedes|rela
 MAX_WORDS = ("legmagasabb", "legnagyobb", "legtobb", "leghosszabb", "leglassabb", "csucs")
 MIN_WORDS = ("legalacsonyabb", "legkisebb", "legkevesebb", "legrovidebb", "leggyorsabb", "melypont")
 COORDINATED = re.compile(r"^\s*(?:\([^)]*\))?\s*(?:es|valamint|illetve|,)\s*(?:az?\s+)?$")
-SCOPE_DENIAL = re.compile(r"(?:\bnem\b|\bnincs\w*|\bnelkul)[^.;]*\bszur|\bszur\w*[^.;]*(?:\bnem\b|\bnincs\w*|\bnelkul)")
+# v4: a tagadás a „szűr” szó közelében (legfeljebb négy szóra) — „a szűrése alapján számolták ki, így nem
+# tartalmazza …” nem tagadás; a falsság külön feltétel (verify)
+SCOPE_DENIAL = re.compile(r"(?:\bnem\b|\bnincs\w*|\bnelkul\w*)(?:\s+\w+){0,4}?\s+szur\w*|"
+                          r"\bszur\w*(?:\s+\w+){0,2}?\s+(?:nem\b|nincs\w*|nelkul\w*)")
+SCOPE_TIME = re.compile(r"idoszak|idore|idobeli|idoablak|\bev(?:re|ekre)?\b|honap\w*|datum|\b20\d\d\b")
 ORDINAL = re.compile(r"(?:masodik|harmadik|negyedik|otodik|hatodik)\s*$")
 CLAUSE = re.compile(r"[,;:–—]|\s(?:mig|de|viszont|pedig|illetve|es|valamint|ugyanakkor|azonban)\s")
 LISTING = re.compile(r"\b(?:illetve|rendre)\b")
@@ -135,11 +140,29 @@ class Span:
     row: int | None                  # a csoport sora; None: szűrő neve (nem csoport)
 
 
+_SHORT_COUNT = Counter(fold(v.split(" (")[0]) for v in CATEGORIES.values())
+_FULL_NAMES = {fold(v) for v in CATEGORIES.values()}
+
+
+def short_alias(label: str) -> str | None:
+    """v4: a zárójeles kategórianév rövid alakja („lakástextil” a „lakástextil (ágy, fürdő, asztal)”
+    helyett), ha egyértelmű: más kategóriának nem ez a neve, és más rövid alak sem ez (a „háztartási
+    gépek (2. csoport)” rövid alakja egy másik kategória neve — az nem lehet)."""
+    if " (" not in label or re.fullmatch(r".+ \([A-Z]{2}\)", label):
+        return None
+    short = label.split(" (")[0]
+    fs = fold(short)
+    if len(fs) < 6 or _SHORT_COUNT[fs] > 1 or fs in _FULL_NAMES:
+        return None
+    return short
+
+
 def name_spans(text: str, result: MetricResult) -> list[Span]:
     """A csoport- és szűrőnevek előfordulásai a szövegben (a hosszabb név nyer: „Északkelet”
     előbb, mint „Észak”)."""
     names = [(row["megnevezes"], i) for i, row in enumerate(result.sorok)]
     names += [(c, None) for f in result.szurok for c in f["cimkek"]]
+    names += [(a, i) for label, i in list(names) if (a := short_alias(label))]
     folded = fold(text)
     spans: list[Span] = []
 
@@ -195,11 +218,22 @@ def numbers(text: str) -> list[str]:
     return NUMBER.findall(norm(text))
 
 
+def _distinct_number(n: str) -> bool:
+    """Elég jellegzetes-e egy szám mértékegység nélkül is (tizedesvessző vagy legalább három jegy)."""
+    return "," in n or len(re.sub(r"\D", "", n)) >= 3
+
+
 def uncovered(text: str, refs) -> list[str]:
-    """A szöveg számai közül azok, amelyek nem vezethetők vissza a hivatkozott alakokra."""
+    """A szöveg számai közül azok, amelyek nem vezethetők vissza a hivatkozott alakokra. v4: a
+    jellegzetes szám mértékegység nélkül vagy más alakú mértékegységgel is visszavezethető
+    („542 kilométerre” — az eredményben „542 km”; „137,30 illetve 136,75 BRL”)."""
     rest = norm(text)
-    for shown in sorted({norm(shown) for shown, _ in refs}, key=len, reverse=True):
+    shown_all = sorted({norm(shown) for shown, _ in refs}, key=len, reverse=True)
+    for shown in shown_all:
         rest = rest.replace(shown, " ")
+    bare = sorted({n for shown in shown_all for n in NUMBER.findall(shown) if _distinct_number(n)}, key=len, reverse=True)
+    for n in bare:
+        rest = re.sub(rf"(?<![\d,]){re.escape(n)}(?!\d|,\d)", " ", rest)
     return NUMBER.findall(rest)
 
 
@@ -271,9 +305,17 @@ def binding_problems(model_text: str, result: MetricResult, row_of: dict[str, in
                 out += [wrong(m.group(1), row_of[m.group(1)], prev_row, "értékére utal („ez …”)")
                         for m in marks if row_of[m.group(1)] != prev_row]
             continue
+        names_first = (len(rows_named) >= 2 and len(marks) >= len(rows_named)
+                       and max(s.end for s in rows_named) <= min(m.start() for m in marks))
         if LISTING.search(folded) and len(rows_named) == len({row_of[m.group(1)] for m in marks}) > 1:
             # „az Észak és az Északkelet aránya {S2}, illetve {S1}” — a sorrend dönt
             order = list(dict.fromkeys(row_of[m.group(1)] for m in marks))
+            if [s.row for s in rows_named] != order:
+                out.append("a felsorolásban a csoportnevek és az értékek sorrendje nem egyezik")
+        elif names_first:
+            # v4: „Rio de Janeiro és Minas Gerais … 13,3% és 11,7%” — előbb a nevek, utána az értékek:
+            # az első értékek a nevek sorrendjében (a további értékek visszautalnak, azokat nem nézi)
+            order = [row_of[m.group(1)] for m in marks][:len(rows_named)]
             if [s.row for s in rows_named] != order:
                 out.append("a felsorolásban a csoportnevek és az értékek sorrendje nem egyezik")
         else:
@@ -432,7 +474,9 @@ def verify(model_text: str, final_text: str, view_values: dict, unknown: list[st
     v.problemak += binding_problems(marked, result, row_of, shown_as)
     v.problemak += superlative_problems(final_text, result)
     v.problemak += ci_problems(model_text, view_values, result)
-    if any(SCOPE_DENIAL.search(fold(sentence)) for sentence in _sentences(model_text, result)):
+    windowed = not (result.idoablak or {}).get("teljes", True)
+    if any(SCOPE_DENIAL.search(f := fold(sentence)) and (result.szurok or (windowed and SCOPE_TIME.search(f)))
+           for sentence in _sentences(model_text, result)):
         v.problemak.append("állítás a szűrésről (a hatókört a rendszer írja; a modell tagadta a szűrést)")
     causal = sorted({m.group(0).lower() for m in CAUSAL.finditer(final_text)})
     if causal:

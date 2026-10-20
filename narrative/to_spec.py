@@ -41,6 +41,20 @@ biztosabban tud, azt a kód dönti el, és a felület megmutatja, mit és miért
     szótövével vagy az állam kódjával) — a modell egyszer a mintapéldából vett át egy szűrőt;
   * ha az időablak a rendszer „mai” napja utáni, az előrejelzés — erre a „nem elérhető”
     elutasítás jön (nem az „adaton kívüli időszak”).
+
+v4 (a v3 lezárt mérése után, 2026-10-20 — a mérésen látott hibákból; a v4-et új, előre nem
+látott kérdéseken kell mérni, lásd a döntési naplót):
+  * a kategóriára is csak akkor szűr, ha a kérdés említi (a modell a „játékok” szűrőt a
+    mintapéldából vette át); a „késett / időben” szűrő csak akkor marad, ha a kérdés tényleg
+    így szűkít („a késve érkezett rendeléseknél”), és a késett rendelések számánál, ill. az
+    átlagos késésnél a „késett” szűrő fölösleges (a mérőszám eleve azokra vonatkozik) — elmarad,
+    nem elutasítás; az időben érkezettekre szűrt késés továbbra is tiltott kombináció;
+  * ha a kérdés semmilyen időt nem említ, a modell időablaka elmarad (kitalált időszak);
+  * havi / éves bontásnál felsőfok nélkül a sor időrendben és teljes hosszában jön;
+  * ha a modell a „nem elérhető” mellé egy létező mérőszám nevét írja, az a mérőszám;
+  * „São Pauló-i eladók”: az állam neve után álló „eladó / vevő” szó dönti el a szerepet;
+  * ha egy szó több kategóriára is illik, de csak egyiknek az első szava („bútor” → bútorok és
+    lakásdekoráció), az nyer.
 """
 
 from __future__ import annotations
@@ -325,6 +339,14 @@ def resolve_value(cat: Catalog, wl: Whitelist, dim_id: str, raw) -> tuple[str | 
         return None, []
     ranked = sorted(scores, key=lambda k: -scores[k])
     winners = [k for k in ranked if scores[k] == scores[ranked[0]]]
+    if len(winners) > 1:
+        # v4: döntetlennél az nyer, amelynek a címkéje ezzel a szóval KEZDŐDIK („bútor” → „bútorok és
+        # lakásdekoráció”, nem a „… kárpitos bútorok”) — ha csak egy ilyen van
+        first = [k for k in winners if any(_stem_match(query[0], (re.findall(r"[a-z0-9]+", a) or [""])[0])
+                                           for a in value_aliases(cat, dim_id, k))]
+        if len(first) == 1:
+            winners = first
+            ranked = first + [k for k in ranked if k not in first]
     return (winners[0] if len(winners) == 1 else None), ranked[:8]
 
 
@@ -366,6 +388,34 @@ def resolve_filters(query: dict, cat: Catalog, wl: Whitelist) -> tuple[dict, lis
 
 # ------------------------------------------------------- kódbeli javítások
 MAX_Q = ("legtöbb", "legnagyobb", "legmagasabb", "leghosszabb", "leglassabb", "legdrágább")
+EXTREME_Q = ("csúcs", "mélypont", "legrosszabb", "legjobb", "rekord")     # felsőfok irány nélkül
+LATE_METRICS = ("kesett_rendelesek", "atlagos_keses")
+# v4: időbeli bontást kérő szavak (ha a modell nem bontott)
+TIME_BREAKDOWN_Q = {"honap": re.compile(r"\b(?:havonta|havonkent|havi\s+bontas\w*|honaprol\s+honapra|honaponkent)\b"),
+                    "ev": re.compile(r"\b(?:evente|evenkent\w*|eves\s+bontas\w*|evrol\s+evre)\b")}
+# v4: a bontás jele dimenziónként — ha nincs, és a kérdés egyetlen értéket nevez meg, az szűrő
+BREAKDOWN_CUE = {"vevo_regio": r"regio(?:nkent|k\b|kban|kra|k\s+szerint|k\s+kozott|s\s+bontas)|melyik\s+regio|mely\s+regio",
+                 "vevo_allam": r"allam(?:onkent|ok\b|okban|okra|ok\s+szerint|ok\s+kozott)|melyik\s+allam|mely\s+allam",
+                 "elado_allam": r"allam(?:onkent|ok\b|okban|okra|ok\s+szerint|ok\s+kozott)|melyik\s+\w*\s*allam|mely\s+allam",
+                 "kategoria": r"kategori(?:ankent|ak\b|akban|akra|ak\s+szerint|ak\s+kozott)|melyik\s+\w*\s*kategori|mely\s+\w*\s*kategori",
+                 "het_napja": r"napjain|naponta|napok\b|naponkent|melyik\s+nap|a\s+het\s+napja"}
+# v4: a kérdés vevőt (nem rendelést) számol — a katalógus erre nem képes (a modell rendelésszámot választana)
+CUSTOMER_COUNT_Q = re.compile(r"\b(?:hany|hanyan)\s+(?:kulonbozo\s+)?(?:vevo|vasarlo)|\b(?:vevo|vasarlo)\w*\s+(?:szama|a\s+legtobben|"
+                              r"legtobben|hanyan)|\blegtobb?\s+(?:vevo|vasarlo)|\bkulonbozo\s+(?:vevo|vasarlo)|"
+                              r"\bvannak\s+a\s+(?:vevo|vasarlo)\w*\s+a\s+legtobben|\b(?:vevo|vasarlo)\w*\s+\w+\s+a\s+legtobben")
+# v4: két bontás egyszerre („régiók és termékkategóriák szerint”, „államonként és havonta”)
+TWO_BREAKDOWN_VERB = re.compile(r"\b(?:szerint|bonts\w*|bontas\w*|egyszerre)\b|\w+(?:nkent|onkent|enkent)\b")
+PLURAL_CUE = {"vevo_regio": r"regio(?:nkent|k\b|kra|k\s+szerint)", "vevo_allam": r"allam(?:onkent|ok\b|okra|ok\s+szerint)",
+              "kategoria": r"kategori(?:ankent|ak\b|akra|ak\s+szerint)", "het_napja": r"naponkent|napjai\s+szerint",
+              "honap": r"havonta|honaponkent|havi\s+bontas", "ev": r"evente|evenkent|eves\s+bontas"}
+RANKING_Q = re.compile(r"\b(?:melyik|mely|rangsor\w*|top)\b")
+COMPARE_Q = re.compile(r"\b(?:tobb|kevesebb|nagyobb|kisebb|mint|kulonbseg\w*|difi\w*|osszehasonlit\w*|osszevet\w*)\b")                     # eleve a késett rendelésekre vonatkoznak
+# a „késett / időben” szűrő csak akkor jogos, ha a kérdés így szűkít (nem elég, hogy a mérőszám neve „késés”)
+LATE_FILTER_Q = re.compile(
+    r"\bkes(?:ve|etten|ett|ettek|o)\s+(?:erkez|kezbesit|rendel|szallit|csomag|kiszallit)\w*|"
+    r"\bkesett\w*\s+(?:rendeles|szallitas|csomag|kiszallitas)\w*\s*(?:nel|eknel|ek\s+kozott|ok\s+kozott|ban|ben)\b|"
+    r"\bkesettek(?:nel|\s+kozott)\b|\bidoben\s+(?:erkez|kezbesit|szallit|kiszallit)\w*|\bhataridon\s+(?:belul|tul)\b|"
+    r"\bpontosan\s+(?:erkez|kezbesit)\w*")
 MIN_Q = ("legkevesebb", "legkisebb", "legalacsonyabb", "legrövidebb", "leggyorsabb", "legolcsóbb", "legkevésbé")
 FORECAST = "előrejelzés a jövőre"
 
@@ -378,7 +428,7 @@ class Correction:
     uj: object = None
 
 
-GROUNDED_DIMS = ("het_napja", "vevo_regio", "vevo_allam", "elado_allam")
+GROUNDED_DIMS = ("het_napja", "vevo_regio", "vevo_allam", "elado_allam", "kategoria")   # v4: a kategória is
 
 
 def grounded(cat: Catalog, wl: Whitelist, dim_id: str, key: str, question: str) -> bool:
@@ -390,7 +440,42 @@ def grounded(cat: Catalog, wl: Whitelist, dim_id: str, key: str, question: str) 
     label = value_label(cat, dim_id, key).split(" (")[0]
     words = [w for w in re.findall(r"[a-z0-9]+", _fold(label)) if len(w) >= 3]
     asked = re.findall(r"[a-z0-9]+", _fold(question))
+    if dim_id == "kategoria":
+        # v4: közös szótő („számítógépes” ~ „számítógépek”): legalább 5 betű, és a rövidebb szó legalább
+        # 60%-a — az általános szavak („termék”, „kategória”) nélkül; vagy a kulcs angol szava
+        words = [w for w in re.findall(r"[a-z0-9]+", _GENERIC.sub(" ", _fold(label))) if len(w) >= 3]
+        asked = re.findall(r"[a-z0-9]+", _GENERIC.sub(" ", _fold(question)))
+        en = [w for w in re.split(r"[_\W]+", str(key)) if len(w) >= 4]
+        return any((c := _common(q, w)) >= min(5, len(w)) and c >= 0.6 * min(len(q), len(w))
+                   for q in asked for w in words) or any(e in asked for e in en)
     return any(_stem_match(q, w) >= min(4, len(w)) for q in asked for w in words)
+
+
+def _common(a: str, b: str) -> int:
+    n = 0
+    for x, y in zip(a, b):
+        if x != y:
+            break
+        n += 1
+    return n
+
+
+def _state_role(cat: Catalog, key: str, question: str) -> str | None:
+    """„São Pauló-i eladók”, „a Paranába menő rendeléseknél … vevők”: az állam neve (vagy kódja)
+    után legfeljebb három szón belül álló „eladó / vevő” szó szerepe; None, ha nincs ilyen."""
+    f = fold(" ".join(question.split()))
+    name = fold(value_label(cat, "vevo_allam", key).split(" (")[0])
+    stem = name[:-1] if len(name) > 4 else name                 # „São Paulo” ~ „São Pauló-i”, „Paulóban”
+    spans = [m.end() for m in re.finditer(rf"(?<![a-z]){re.escape(stem)}", f)]
+    spans += [m.end() for m in re.finditer(rf"(?<![A-Za-z]){re.escape(str(key))}(?![A-Za-z])", question)]
+    for end in spans:
+        after = re.findall(r"[a-z]+", f[end:])[:4]
+        for w in after[1:] if after and not after[0].startswith(("elado", "vevo")) else after:
+            if w.startswith("elado"):
+                return "elado"
+            if w.startswith("vevo"):
+                return "vevo"
+    return None
 
 
 def correct(query: dict, question: str, cat: Catalog, wl: Whitelist | None = None) -> tuple[dict, list[Correction]]:
@@ -420,7 +505,105 @@ def correct(query: dict, question: str, cat: Catalog, wl: Whitelist | None = Non
         out["szuro"] = kept
         if not kept:
             out.pop("szuro")
+    # v4: a „késett / időben” szűrő — fölösleges a késési mérőszámoknál, kitalált, ha a kérdés nem így szűkít
+    szuro1 = out.get("szuro") if isinstance(out.get("szuro"), dict) else {}
+    late = szuro1.get("kesett")
+    if isinstance(late, list) and late:
+        keys = [normalize_value(cat, wl, "kesett", v) if wl is not None else v for v in late]
+        if not LATE_FILTER_Q.search(fold(" ".join(question.split()))):
+            fixes.append(Correction("szuro", "a kérdés nem szűkít a késett vagy az időben érkezett rendelésekre",
+                                    late, []))
+            szuro1 = {k: v for k, v in szuro1.items() if k != "kesett"}
+        elif out.get("metrika") in LATE_METRICS and keys == ["kesett"]:
+            fixes.append(Correction("szuro", "a mérőszám eleve a késett rendelésekre vonatkozik — a szűrő fölösleges",
+                                    late, []))
+            szuro1 = {k: v for k, v in szuro1.items() if k != "kesett"}
+        if szuro1:
+            out["szuro"] = szuro1
+        else:
+            out.pop("szuro", None)
+    # v4: a modell a „nem elérhető” mellé egy létező mérőszám nevét írta
+    metric = out.get("metrika")
+    if isinstance(metric, str) and metric not in cat.metrics:
+        fm = fold(metric).strip().replace(" ", "_")
+        same = [m for m in cat.metrics if fm in (m, fold(cat.metrics[m].nev).replace(" ", "_"))]
+        same = same or [m for m in cat.metrics if len(fm) >= 8 and m.endswith("_" + fm)]
+        if len(same) == 1:
+            fixes.append(Correction("metrika", "a modell a katalógus egy mérőszámát nevezte meg", metric, same[0]))
+            out["metrika"] = same[0]
+    fq0 = fold(" ".join(question.split()))
+    # v4: amit az adat nem tud (fizetés, értékelés, készlet, vevőszám …), arra akkor is elutasítás, ha a
+    # modell egy közeli mérőszámot választott — a rendszer nem válaszol egy másik kérdésre (UC-2)
+    if out.get("metrika") in cat.metrics:
+        asked = None
+        if CUSTOMER_COUNT_Q.search(fq0):
+            asked = "vevők száma (a katalógus rendelést számol, vevőt nem)"
+        else:
+            for u in cat.unavailable:
+                # a hosszabb kulcsszó összetételben is („bankkártyával”), a rövid csak szó elején („jövő”, de
+                # nem „bejövő”); a „részlet” kimarad („részletesen” ≠ részletfizetés)
+                hit_word = next((kw for kw in u.kulcsszavak if fold(kw) != "reszlet"
+                                 and (fold(kw) in fq0 if len(fold(kw)) >= 5
+                                      else re.search(rf"\b{re.escape(fold(kw))}", fq0))), None)
+                if hit_word:
+                    asked = hit_word
+                    break
+        if asked:
+            fixes.append(Correction("elutasitas", f"a kérdés „{asked}” adatot kér, ami nincs a tárházban",
+                                    out["metrika"], asked))
+            out["metrika"] = asked
+            return out, fixes
+    # v4: két bontás egyszerre — a kapu mondja meg, hogy egyszerre egy lehet (ne csendben az egyik jöjjön)
+    cues = [d for d, pattern in PLURAL_CUE.items() if re.search(pattern, fq0)]
+    if len(cues) >= 2 and TWO_BREAKDOWN_VERB.search(fq0):
+        dims_now = [d for d in (out.get("bontas") or []) if d]
+        if sorted(dims_now) != sorted(cues[:2]):
+            fixes.append(Correction("bontas", "a kérdés egyszerre két bontást kér", dims_now, cues[:2]))
+            out["bontas"] = cues[:2]
+            return out, fixes
+    dims0 = [d for d in (out.get("bontas") or []) if d]
+    szuro2 = out.get("szuro") if isinstance(out.get("szuro"), dict) else {}
+    # v4: „havonta”, „évente” — a modell nem bontott
+    if not dims0:
+        for dim, pattern in TIME_BREAKDOWN_Q.items():
+            if pattern.search(fq0):
+                fixes.append(Correction("bontas", f"a kérdés „{pattern.search(fq0).group(0)}” szava szerint", [], [dim]))
+                out["bontas"] = dims0 = [dim]
+                break
+    # v4: a bontás dimenziójából a kérdés egyetlen értéket nevez meg, és bontást nem kér → szűrő
+    if wl is not None and len(dims0) == 1 and dims0[0] in BREAKDOWN_CUE and dims0[0] not in szuro2:
+        dim = dims0[0]
+        named = [k for k in wl.values.get(dim, ()) if grounded(cat, wl, dim, k, question)]
+        labels = {k: fold(value_label(cat, dim, k).split(" (")[0]) for k in named}
+        named = [k for k in named if not any(o != k and labels[o].startswith(labels[k]) for o in named)]
+        if len(named) == 1 and not re.search(BREAKDOWN_CUE[dim], fq0) and not RANKING_Q.search(fq0):
+            rovid = cat.dimensions[dim].rovid
+            fixes.append(Correction("bontas", f"a kérdés egyetlen értéket nevez meg ({rovid}: "
+                                              f"{value_label(cat, dim, named[0])}) — az szűrő, nem bontás",
+                                    dims0, []))
+            szuro2 = {**szuro2, dim: [named[0]]}
+            out["szuro"], dims0 = szuro2, []
+            out.pop("bontas", None)
+    # v4: összehasonlítás („több … mint”, „különbség”) egy dimenzió több értéke között → bontás szerint
+    if not dims0 and COMPARE_Q.search(fq0):
+        multi = [d for d, v in szuro2.items() if isinstance(v, list) and len(v) >= 2 and d in cat.dimensions]
+        if len(multi) == 1:
+            fixes.append(Correction("bontas", "a kérdés több értéket hasonlít össze — bontás szerint", [], multi))
+            out["bontas"] = dims0 = multi
+    # v4: ugyanaz az állam eladóként és vevőként is, de a kérdés eladót nem említ → a vevő (alapszerep)
+    if "elado" not in fq0 and isinstance(szuro2.get("elado_allam"), list) and isinstance(szuro2.get("vevo_allam"), list):
+        both = [v for v in szuro2["elado_allam"] if v in szuro2["vevo_allam"]]
+        if both:
+            rest = [v for v in szuro2["elado_allam"] if v not in both]
+            fixes.append(Correction("szuro", "a kérdés eladót nem említ — az állam a vevőé", szuro2["elado_allam"], rest))
+            szuro2 = {k: v for k, v in szuro2.items() if k != "elado_allam"} | ({"elado_allam": rest} if rest else {})
+            out["szuro"] = szuro2
     hit = idoszak.parse_window(question, _ma(cat))
+    old_window = {k: v for k, v in (out.get("idoablak") or {}).items() if v and str(v).strip()}
+    future = bool(old_window.get("tol")) and str(old_window["tol"]) >= _ma(cat).isoformat()
+    if hit is None and old_window and not future and not idoszak.mentions_time(question):
+        fixes.append(Correction("idoablak", "a kérdés nem említ időszakot", old_window, None))
+        out.pop("idoablak", None)
     if hit is not None:
         old = {k: v for k, v in (out.get("idoablak") or {}).items() if v and str(v).strip()}
         if hit.window() != old:
@@ -436,6 +619,22 @@ def correct(query: dict, question: str, cat: Catalog, wl: Whitelist | None = Non
         out.pop("bontas", None)
         dims = []
     fq = fold(question)
+    # v4: „São Pauló-i eladók” — az állam neve utáni „eladó / vevő” szó dönti el a szerepet
+    for wrong, right, role in (("vevo_allam", "elado_allam", "elado"), ("elado_allam", "vevo_allam", "vevo")):
+        vals = szuro.get(wrong)
+        if not isinstance(vals, list) or not vals:
+            continue
+        keys = [normalize_value(cat, wl, wrong, v) if wl is not None else v for v in vals]
+        move = [v for v, k in zip(vals, keys) if k and _state_role(cat, k, question) == role]
+        if move:
+            rest = [v for v in vals if v not in move]
+            szuro = {k: v for k, v in szuro.items() if k != wrong}
+            if rest:
+                szuro[wrong] = rest
+            szuro[right] = list(dict.fromkeys((szuro.get(right) or []) + move))
+            fixes.append(Correction("szuro", f"a kérdés {'az eladó' if role == 'elado' else 'a vevő'} államáról szól "
+                                             f"({', '.join(map(str, move))})", wrong, right))
+            out["szuro"] = szuro
     # az állam szerepe: ha a kérdés csak az eladót (vagy csak a vevőt) nevezi meg, a modell nem
     # választhatja a másikét (a fejlesztői próbán: „eladói államból” → a vevő állama)
     roles = {"elado": ("vevo_allam", "elado_allam"), "vevo": ("elado_allam", "vevo_allam")}
@@ -454,6 +653,13 @@ def correct(query: dict, question: str, cat: Catalog, wl: Whitelist | None = Non
                 out["szuro"] = szuro
     has_max = any(fold(w) in fq for w in MAX_Q)
     has_min = any(fold(w) in fq for w in MIN_Q)
+    extreme = has_max or has_min or any(fold(w) in fq for w in EXTREME_Q)
+    if len(dims) == 1 and dims[0] in ("honap", "ev") and not extreme:
+        max_limit = int(cat.settings.get("max_limit", 100))
+        if out.get("rendezes") != "bontas" or (out.get("limit") or 0) < max_limit:
+            fixes.append(Correction("rendezes", "idősor felsőfok nélkül: időrendben, a teljes sor",
+                                    out.get("rendezes"), "bontas"))
+            out["rendezes"], out["limit"] = "bontas", max_limit
     if dims and has_max != has_min and out.get("rendezes") in ("ertek_csokkeno", "ertek_novekvo"):
         want = "ertek_csokkeno" if has_max else "ertek_novekvo"
         if out["rendezes"] != want:

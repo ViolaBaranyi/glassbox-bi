@@ -662,9 +662,17 @@ def test_tobbes_szamu_felsofok(result):
     assert not any("nem a legkisebb" in p for p in out.verdict.problemak), out.verdict.problemak
 
 
-def test_a_szures_tagadasa(result):
-    out = tt.to_text("?", result, _text_client("A késési arány {O}, és az eredmény nem tartalmaz időbeli szűrést."))
+def test_a_szures_tagadasa(result, cat, wl, con):
+    """A szűrés tagadása csak akkor hiba, ha hamis (v4): időablakos eredménynél az „időbeli szűrés
+    nincs” hamis; a teljes adaton igaz — azt nem jelöli (a v3 mérésén ez téves riasztás volt)."""
+    text = "A késési arány {O}, és az eredmény nem tartalmaz időbeli szűrést."
+    windowed = engine.run(sp.check({"metrika": "kesesi_arany", "bontas": ["vevo_allam"], "limit": 3,
+                                    "idoablak": {"tol": "2017-03-01", "ig": "2017-12-31"}}, cat, wl).spec, cat, wl, con)
+    out = tt.to_text("?", windowed, _text_client(text))
     assert out.sablon and "szűrés" in out.ok_sablon
+    assert not tt.to_text("?", result, _text_client(text)).sablon                 # igaz: nincs időablak
+    near = "Az eredmény a hét napjai szűrése alapján készült, így nem tartalmazza a teljes hetet."
+    assert not tt.to_text("?", windowed, _text_client("A késési arány {O}. " + near)).sablon   # nem tagadás
 
 
 def test_kettospontos_nev_masodik_fele():
@@ -691,7 +699,9 @@ def test_a_kerdesben_nem_emlitett_szuro_kimarad(cat, wl):
     assert att.gate.ok and att.gate.spec.filters == {"vevo_allam": ("SP",)}
     assert [c.mezo for c in att.javitasok] == ["szuro"] and "hétfő" in att.javitasok[0].ok
     keep = ts.to_spec("Hány rendelés késett hétfőn São Paulóban?", cat, wl, fake_client(lambda p: f))
-    assert keep.gate.spec.filters == {"het_napja": ("1",), "vevo_allam": ("SP",)} and not keep.javitasok
+    assert keep.gate.spec.filters == {"het_napja": ("1",), "vevo_allam": ("SP",)}
+    # v4: a kérdés időt nem említ, ezért a 2018-as időablak is elmarad — a szűrőkhöz nem nyúl
+    assert [(c.mezo, c.ok) for c in keep.javitasok] == [("idoablak", "a kérdés nem említ időszakot")]
     weekend = form(cat, szuro={"het_napja": ["szombat", "vasárnap"]})
     att = ts.to_spec("Mennyi a késési arány hétvégén?", cat, wl, fake_client(lambda p: weekend))
     assert att.gate.spec.filters == {"het_napja": ("6", "7")}
@@ -711,7 +721,8 @@ def test_zarojelben_ismetelt_ertekek():
 def test_minimalis_nezet(result):
     full, small = tt.build_view(result), tt.build_view(result, minimal=True)
     assert {"N", "TOL", "IG"} <= set(full.values) and not {"N", "TOL", "IG"} & set(small.values)
-    assert "Hatókör" not in small.text and "Korlát" not in small.text and "Időszak" not in small.text
+    assert "Hatókör" not in small.text and "Korlát" not in small.text
+    assert "Időszak:" in small.text           # v4: az időszak a rövid nézetben is, de jelölő nélkül
     assert "Szűrés:" in small.text and "Mérőszám:" in small.text and "{S1}" in small.text
     assert len(small.text) < len(full.text)
 

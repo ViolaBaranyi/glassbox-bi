@@ -455,3 +455,26 @@ def test_az_olvashato_valtozat(cat):
     assert "**vagy:**" in meres.describe(by_id["k087"], cat) and "bútorok és lakásdekoráció" in meres.describe(by_id["k087"], cat)
     assert meres.describe(by_id["k079"], cat).startswith("**elutasítás** (átverési kísérlet; bármilyen indokkal)")
     assert "időszak: bármely" in meres.describe(by_id["k122"], cat)
+
+
+def test_a_rogzitett_kod_es_a_masik_protokoll(tmp_path, monkeypatch, capsys):
+    """v2-től a protokoll a kód ujjlenyomatát is rögzíti: más kóddal a mérés nem indul; a
+    --protokoll kapcsolóval másik protokoll (és kérdéssor) választható."""
+    pfile, qfile = _small_set(tmp_path)
+    meres.lock(pfile)
+    protocol = json.loads(pfile.read_text(encoding="utf-8"))
+    protocol["modellek"][1]["nev"] = "probamodell:8b"
+    protocol["kod"] = {"verzio": "v4", "ujjlenyomat": "0" * 64}
+    pfile.write_text(json.dumps(protocol, ensure_ascii=False), encoding="utf-8")
+    meres.approve("Teszt", pfile)
+    protocol, _ = meres.load_protocol(pfile)
+    questions = proba.load_questions(qfile)
+    real = meres.frozen_fingerprint(load_config(env=_env()))
+    assert meres.readiness(protocol, questions, meres.sha256_text(qfile), real)[0].startswith("a nyelvi réteg kódja")
+    protocol["kod"]["ujjlenyomat"] = real
+    assert meres.readiness(protocol, questions, meres.sha256_text(qfile), real) == []
+    monkeypatch.setattr(meres, "load_config", lambda: load_config(env=_env()))
+    monkeypatch.setattr(meres, "PROTOKOLL", meres.PROTOKOLL)          # a main() átállítja; a teszt végén vissza
+    with pytest.raises(SystemExit) as exc:
+        meres.main(["--protokoll", str(pfile)])                         # a fájlban még a „0000…” áll
+    assert exc.value.code == 2 and "nem a protokollban rögzített" in capsys.readouterr().err

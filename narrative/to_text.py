@@ -84,6 +84,12 @@ def build_view(r: MetricResult, placeholders: bool = True, minimal: bool = False
         lines.append("Szűrés: " + "; ".join(f"{f['rovid']}: " + " vagy ".join(f["cimkek"]) for f in r.szurok) + ".")
     else:
         lines.append("Szűrés: nincs.")
+    if minimal:
+        # v4: az időszak a rövid nézetben is (jelölő nélkül) — enélkül a modell „nincs adat”, „nincs szűrés”
+        # mondatokat írt időablakos kérdésre (a v3 mérése, okt. 19.)
+        tol, ig = date.fromisoformat(r.idoablak["tol"]), date.fromisoformat(r.idoablak["ig"])
+        lines.append(f"Időszak: {fmt_long_date(tol)} – {fmt_long_date(ig)}"
+                     + (" (a teljes adat)." if r.idoablak["teljes"] else "."))
     if "idoablak_szukitve" in r.megjegyzesek and not minimal:
         lines.append(f"Megjegyzés: a kérdés időszaka túlnyúlt az adaton; az adat "
                      f"{put('ADAT_TOL', fmt_long_date(date.fromisoformat(r.adat['tol'])), 'adat.tol')} és "
