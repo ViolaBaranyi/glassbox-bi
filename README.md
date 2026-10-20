@@ -236,6 +236,20 @@ optimista lenne: a mérése új, Viola által írt, lezárt kérdéssoron megy, 
 `tools\v3_futtatas.bat`). A protokoll rögzíti a v4 kód ujjlenyomatát — más kóddal a mérés nem
 indul el.
 
+**A v2 mérés eredménye (okt. 20., `docs/k1_v2_eredmeny.md`).** Viola 56 új kérdésén (45
+megválaszolandó + 11 csapda), a qwen3.5:4b-vel, kérdésenként párosítva: teljes egyezés v3 40,0% →
+v4 48,9% (+8,9 pp, 95%: −2,2 – +20,0 pp; 5 kérdésen csak a v4, 1-en csak a v3 helyes), F-1
+64,4% → 66,7%, F-2 mindkettőnél 63,6% (a csillagos csapdákból 7/8; a csillag nélküli, két
+bontást kívánó 3 kérdést egyik kód sem utasította el). A v1 kérdésein látott javulás (+21,6 pp)
+tehát nagyrészt a hangolásé volt: új kérdéseken kisebb, és az intervallum a nullát is
+tartalmazza. K1 a fő ágon ugyanazzal (a v4) kapuval: a v4 szövegeinek 36,4%-a megjelölt, a v3-éinak
+52,4%-a (párosítva −19,0 pp, 95%: −35,7 – −2,4); a felhasználóhoz a fő ágon egyik sem jut el
+(sablon), a kontrollágon 36,4% igen. A 2B a v4-gyel: teljes egyezés 20,0%, F-1 35,6%, a
+megválaszolandó kérdések harmadát (15/45) tévesen elutasítja. Az új kérdések nehezebbek: a v4 fő
+hibája, hogy a „mikor / melyik hónapban / hogy változott / 2017 vs 2018” kérdésből nem csinál
+idősort (7 kérdés), és az évszakos, „utolsó N hónap” időszakokat rosszul fordítja. Az összevetés
+kódja (`tools/k1_v2_osszevetes.py`) a futások előtt készült, ujjlenyomata a protokollban.
+
 ---
 
 ## Mi van kész
@@ -255,7 +269,7 @@ indul el.
 | M2 — referencia-modellek: logisztikus regresszió, döntési fa, random forest (`pipeline/reference_models.py`), lezárt összevetés (`pipeline/v3_reference.py`) | **kész — lefutott okt. 9.** (`docs/v3_referencia_eredmeny.md`) |
 | M3 — SHAP-magyarázatok a négy modellre (pontos TreeSHAP, ill. lineáris SHAP, a 22 jellemzőre összevonva), additivitás-ellenőrzés, sablonos magyarázó szöveg (`xai/`) | **kész (v1)** |
 | M5 — Streamlit BI-felület: áttekintés (SQL), rendelés-magyarázat négy modellel, modell-oldal, egyezés-ellenőrzés a lezárt futással (`ui/`, `python -m ui`) | **kész (v1)** |
-| Tesztek — szivárgás (14), V-1 és adatmodell (10), abláció (6), betanítás (6), kohorsz (2), modellválasztás (8), bootstrap (6), lezárt futás (14), referencia-modellek (9), magyarázatok (12), szöveg és megjelenítés (22), felület (20), egyezési mértékek (5), kontrollkar (5), nevek és feliratok (5), a magyarázatok hűsége (8), README-parancsok (2), környezet (7), szemantikus réteg (99), nyelvi réteg (81), nyelvi réteg v4 (22), mérés és mérési kérdéssor (17) | **kész, 380/380** (egy csak Node.js-szel fut, nélküle kihagyja) |
+| Tesztek — szivárgás (14), V-1 és adatmodell (10), abláció (6), betanítás (6), kohorsz (2), modellválasztás (8), bootstrap (6), lezárt futás (14), referencia-modellek (9), magyarázatok (12), szöveg és megjelenítés (22), felület (20), egyezési mértékek (5), kontrollkar (5), nevek és feliratok (5), a magyarázatok hűsége (8), README-parancsok (2), környezet (7), szemantikus réteg (99), nyelvi réteg (81), nyelvi réteg v4 (22), mérés és mérési kérdéssor (17), K1 v2 összevetés (3) | **kész, 383/383** (egy csak Node.js-szel fut, nélküle kihagyja) |
 | Tároló — MIT licenc, CI (Ubuntu + Windows), uv-környezet (`uv.lock`; pip-nek `requirements.lock`), döntési napló | **kész** |
 | M2 — 40 futásos sweep, hiperparaméter-hangolás | következő |
 | M3 — KernelSHAP-kontrollkar: mind a négy modell ugyanazzal a magyarázóval (valószínűség-tér, közös háttér, 200 rögzített teszt-rendelés), a kar saját zajával (`xai/kernel_arm.py`, `xai/agreement.py`) | **kész** (`docs/kernel_kar_eredmeny.md`) |
@@ -622,6 +636,7 @@ uv run python -m narrative.meres              # a mérés a qwen3.5:4b-vel (kb. 
 uv run python -m narrative.meres --modell qwen3.5:2b   # ugyanez a kisebb modellel
 uv run python -m narrative.meres --protokoll docs\k1_protokoll_v2.json   # v2: a v4 az új kérdéssoron
 tools\v3_futtatas.bat                         # v2: a v3 ugyanazon (külön munkamappában, v3_kod\)
+uv run python tools\k1_v2_osszevetes.py --v4 logs\meres\MAPPA --v3 v3_kod\logs\meres\MAPPA --v4-2b logs\meres\MAPPA   # v2: összevetés → docs\k1_v2_eredmeny.md
 uv run python tools\kezi_minta.py minta logs\meres\MAPPA       # a kézi ellenőrzés mintája a hatókörrel
 uv run python tools\kezi_minta.py kiertekel logs\meres\MAPPA   # a kitöltött minta: a kapu pontossága, K1 korrigálva
 uv run python -m narrative.meres --folytat logs\meres\MAPPA    # megszakadt mérés folytatása (a mappát a mérés kiírja)
