@@ -47,7 +47,8 @@ with tabs[0]:
         "hónapról hónapra, és melyik államokban vagy termékeknél késnek a legtöbbet. Ezek tények, "
         "a modelltől függetlenül.\n"
         "2. **Rendelés kockázata** — válassz egy rendelést. Látod a becsült késési esélyt, hogy "
-        "mennyire hihető ez a szám, és hogy melyik adat mennyivel növelte vagy csökkentette.\n"
+        "mennyire hihető ez a szám, és hogy melyik adat mennyivel növelte vagy csökkentette. A "
+        "határidő-görbe azt mutatja, mit becsülne a modell, ha a webáruház más szállítási időt ígérne.\n"
         "3. **A modell** — itt derül ki, mennyire lehet megbízni a modellben. Kezdd a "
         "„Röviden” résszel.\n"
         "4. **Kérdezz** — tegyél fel kérdést a rendelésekről: írd le magyarul (ehhez helyi nyelvi "
@@ -83,6 +84,10 @@ with tabs[1]:
          "megígérte a kézbesítést. Az „ígért szállítási idő” az, hogy ez hány nappal van a "
          "rendelés után."),
         ("Késés", "a csomag az ígért nap után érkezett meg."),
+        ("Határidő-görbe", "a Rendelés kockázata oldalon: a modell becslése ugyanarra a rendelésre, "
+                           "ha az ígért szállítási idő más lenne. A modell viselkedését mutatja, nem azt, "
+                           "mi történne a valóságban; és mivel a késést az ígért naphoz mérjük, hosszabb "
+                           "ígéretnél ugyanaz a szállítás ritkábban számít késésnek."),
         ("Késési arány", "a rendelések hány százaléka késett. Ha 100 rendelésből 7 késett, a "
                          "késési arány 7%."),
         ("Kihagyott rendelések", "törölt, elveszett vagy még úton lévő rendelések. Nem tudjuk, "

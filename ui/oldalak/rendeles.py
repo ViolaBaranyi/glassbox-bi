@@ -223,6 +223,58 @@ with common.details("Szakmai részletek a magyarázatról"):
         "- Az arányos átváltás eltérését a valószínűség-tér Shapley-értékeitől a KernelSHAP-"
         "kontrollkar méri (*A modell* oldal).")
 
+# ------------------------------------------------------ határidő-görbe
+st.markdown("##### Mi lenne, ha más határidőt vállalnánk?")
+st.caption("A platform a rendeléskor megígér egy kézbesítési napot. A tényezők közül ez az egyetlen, "
+           "amelyről a cég maga dönt. Az ábra azt mutatja, mit becsülne a modell **ugyanerre a "
+           "rendelésre**, ha az ígért szállítási idő más lenne — minden más adat változatlan.")
+four = st.toggle("Mind a négy módszer görbéje", key="hatarido_negy",
+                 help="Alapból a fő modellé (LightGBM). Bekapcsolva a három másik módszeré is.")
+dd = d.deadline(b, key, all_models=four)
+sm, rng = dd["osszegzes"], dd["tartomany"]
+st.altair_chart(charts.deadline_chart(dd["gorbe"], rng, ink=common.ink()), width="stretch")
+if sm["nap"] is not None:
+    parts = [f"Most **{sm['nap']} nap** van vállalva: a fő modell becslése {nv.fmt_pct(sm['most'])}."]
+    if sm["hosszabb"] is not None:
+        parts.append(f"{sm['hosszabb_nap']} nap vállalásával {nv.fmt_pct(sm['hosszabb'])} lenne")
+        parts[-1] += (f", {sm['rovidebb_nap']} nappal {nv.fmt_pct(sm['rovidebb'])}." if sm["rovidebb"] is not None
+                      else ".")
+    st.markdown(" ".join(parts))
+    if not sm["tanitoban_elofordult"]:
+        st.warning(
+            f"Ennél a rendelésnél a vállalt idő ({sm['nap']} nap) "
+            + ("rövidebb" if sm["nap"] < rng["min"] else "hosszabb")
+            + f", mint a tanulási időszak bármelyik rendelésénél (ott {nv.fmt_num(rng['min'], 0)} és "
+            f"{nv.fmt_num(rng['max'], 0)} nap között volt). Ilyet a modell nem látott, ezért a becslés itt "
+            "különösen bizonytalan."
+            + (f" A teszt-időszak rendeléseinek {nv.fmt_pct(dd['teszt_kivul'], 1)}-ánál rövidebb a vállalt idő "
+               "a tanulási időszak legrövidebbjénél: a platform 2018 nyarán rövidebb határidőket is vállalt."
+               if sm["nap"] < rng["min"] else ""), icon=":material/warning:")
+    elif not sm["tanult_savban"]:
+        st.caption(f"A {sm['nap']} napos vállalás a tanulási időszakban ritka volt (a rendelések 1%-ánál is "
+                   "ritkább): a becslés itt bizonytalanabb.")
+st.caption(
+    "**Hogyan olvasd — és mire vigyázz?** (1) Ez a *modell* viselkedése, nem ígéret arra, mi "
+    "történne a valóságban, ha a platform mást vállalna. (2) A késést az ígért naphoz mérjük: hosszabb "
+    "ígéretnél ugyanaz a szállítás ritkábban számít késésnek. A görbe esése ezt is tartalmazza, nem azt, "
+    "hogy a csomag gyorsabban érne oda. (3) A szürke sávban a modell keveset vagy semmit nem tanult: a "
+    f"tanulási időszakban a vállalt idő {nv.fmt_num(rng['min'], 0)} és {nv.fmt_num(rng['max'], 0)} nap "
+    f"között volt, a rendelések 98%-ánál {nv.fmt_num(rng['also'], 0)} és {nv.fmt_num(rng['felso'], 0)} "
+    "nap között.")
+with common.details("Szakmai részletek a határidő-görbéről"):
+    st.markdown(
+        "- Egyetlen jellemző változik (`vallalt_ido_nap` = a vállalt határidő napja − a rendelés napja), "
+        "1 és 60 nap között; a többi — az ünnep közelsége és a hónap is, amelyek a rendelés napjából "
+        "jönnek — változatlan. A pont a rendelés saját értéke: ott a görbe pontosan a fenti becslés.\n"
+        "- A szürke sávon kívül sem oksági a görbe: egy jellemző „elmozdítása” olyan rendelést is "
+        "előállíthat, amilyen a valóságban ritka (például távoli államba nagyon rövid ígéret).\n"
+        "- A tanult tartományon kívül a fa-alapú modellek (LightGBM, döntési fa, random forest) laposak — "
+        "a legszélső tanult értéket viszik tovább —, a logisztikus regresszió egyenesen folytatja a "
+        "vonalat. Egyik sem megbízható ott.\n"
+        "- Az ellenpéldás magyarázatok (például a DiCE) helyett azért ez a görbe, mert a többi tényezőt "
+        "(állam, kategória, távolság, hónap) a döntéshozó nem tudja megváltoztatni; egyetlen jellemzőre "
+        "szűkítve az ellenpélda ugyanezt a görbét adná, csak véletlen kereséssel.")
+
 # --------------------------------------------------------- négy modell
 st.markdown("##### Mit mondana ugyanerről a rendelésről három másik módszer?")
 st.caption("Ugyanebből az adatból négy különböző módszert tanítottunk be. Ha hasonló tényezőket "

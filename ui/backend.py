@@ -700,6 +700,18 @@ def faith_details_table(res: dict) -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
+# ------------------------------------------------ határidő-görbe (Rendelés oldal)
+def deadline(b: Bundle, order_key, all_models: bool = False) -> dict:
+    """Egy rendelés határidő-görbéje (a LightGBM, vagy mind a négy modell) és a mondathoz kellő számok."""
+    from xai import deadline as dl
+    i = find_order(b, order_key)
+    if i is None:
+        raise ValueError(f"Nincs ilyen rendelés: {order_key}")
+    cv = dl.curve(b, b.X.loc[[i]], KINDS if all_models else ("lightgbm",))
+    return {"gorbe": cv, "osszegzes": dl.summary(cv, b), "tartomany": dl.training_range(b),
+            "teszt_kivul": dl.outside_share(b, b.split.test)}
+
+
 # ------------------------------------------------ a magyarázatok stabilitása (K3)
 def stability_results(path: Path | None = None) -> dict | None:
     """A stabilitásmérés mentett eredménye (python -m xai.stability), ha van."""

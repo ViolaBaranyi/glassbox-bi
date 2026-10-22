@@ -589,6 +589,44 @@ def stability_chart(df: pd.DataFrame, model_order: list[str], ink: Ink = LIGHT) 
     return alt.layer(err, pts).properties(height=alt.Step(18))
 
 
+# -------------------------------------------------- határidő-görbe (Rendelés oldal)
+# Módszer-színek: semlegesek (a piros/kék a „növeli/csökkenti”, a kék/narancs/zöld az időszakoké).
+DEADLINE_MODEL_COLORS = {"lightgbm": "#4a4e69", "logreg": "#2a9d8f", "random_forest": "#8d6e97",
+                         "dontesi_fa": "#a0855b"}
+DEADLINE_SHADE = "a tanulási időszakban ritka (1% alatt) vagy elő sem fordult"
+
+
+def deadline_chart(df: pd.DataFrame, rng: dict, ink: Ink = LIGHT) -> alt.LayerChart:
+    """A becslés a vállalt szállítási idő függvényében; szürke sáv: ahol a modell keveset tanult."""
+    d = df.copy()
+    d["p_szoveg"] = [nv.fmt_pct(v) for v in d["valoszinuseg"]]
+    d["nap_szoveg"] = [f"{n} nap" for n in d["nap"]]
+    d["sav"] = ["a tanulási időszakban gyakori" if t else DEADLINE_SHADE for t in d["tartomanyban"]]
+    x_lo, x_hi = 0.5, float(max(60, d["nap"].max())) + 0.5
+    shade = pd.DataFrame({"x": [x_lo, rng["felso"] + 0.5], "x2": [rng["also"] - 0.5, x_hi],
+                          "felirat": [DEADLINE_SHADE] * 2})
+    shade = shade[shade["x2"] > shade["x"]]
+    xs = alt.Scale(domain=[x_lo, x_hi], nice=False)
+    rect = alt.Chart(shade).mark_rect(color=ink.muted, opacity=0.18).encode(
+        x=alt.X("x:Q", scale=xs), x2="x2:Q", tooltip=[alt.Tooltip("felirat:N", title="szürke sáv")])
+    names = d.drop_duplicates("kulcs").set_index("kulcs")["modell"]
+    keys = [k for k in DEADLINE_MODEL_COLORS if k in names.index]
+    color = alt.Color("modell:N", title="módszer",
+                      scale=alt.Scale(domain=[names[k] for k in keys], range=[DEADLINE_MODEL_COLORS[k] for k in keys]),
+                      legend=alt.Legend(orient="top", labelLimit=0) if len(keys) > 1 else None)
+    tip = [alt.Tooltip("modell:N", title="módszer"), alt.Tooltip("nap_szoveg:N", title="vállalt idő"),
+           alt.Tooltip("p_szoveg:N", title="becsült kockázat"), alt.Tooltip("sav:N", title="a tanulási időszakban")]
+    x = alt.X("nap:Q", scale=xs, title="vállalt szállítási idő (nap)",
+              axis=alt.Axis(tickMinStep=1, labelExpr=_COMMA))
+    y = alt.Y("valoszinuseg:Q", scale=alt.Scale(zero=True), axis=_pct_axis("becsült késési kockázat"))
+    line = alt.Chart(d).mark_line(strokeWidth=2).encode(x=x, y=y, color=color, tooltip=tip)
+    now = d[d["jelenlegi"]]
+    rule = alt.Chart(now.drop_duplicates("nap")).mark_rule(color=ink.rule, strokeDash=[4, 3]).encode(
+        x=alt.X("nap:Q", scale=xs), tooltip=[alt.Tooltip("nap_szoveg:N", title="most vállalt")])
+    pts = alt.Chart(now).mark_point(filled=True, size=110, opacity=1).encode(x=x, y=y, color=color, tooltip=tip)
+    return alt.layer(rect, rule, line, pts).properties(height=300)
+
+
 # -------------------------------------------------- Kérdezz: a válasz ábrája
 _NUM_LABEL = "replace(replace(datum.label, regexp(',', 'g'), ' '), '.', ',')"   # 13,000.5 → 13 000,5
 TIME_DIMS = ("honap", "ev")

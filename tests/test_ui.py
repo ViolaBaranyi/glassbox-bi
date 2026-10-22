@@ -435,6 +435,9 @@ def test_a_felulet_minden_oldala_lefut(app_env, synth_bundle):
     assert any(other in m.value for m in at.markdown) or any(other in c.value for c in at.caption)
     at.button[0].click().run()                                   # véletlen rendelés
     _ok(at)
+    assert any("Mi lenne, ha más határidőt" in m.value for m in at.markdown)
+    at.toggle(key="hatarido_negy").set_value(True).run()         # a határidő-görbe mind a négy modellel
+    _ok(at)
     at.text_input(key="kulcs_be").input("nincs-ilyen").run()
     _ok(at)
     assert any("Nincs ilyen rendelés" in w.value for w in at.warning)
