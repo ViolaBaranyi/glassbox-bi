@@ -342,7 +342,7 @@ def _groups_counter(cat, wl, con):
 def run_unit(q: dict, rep: int, cat, wl, con, client: LlmClient, only_spec: bool = False) -> dict:
     qid = f"{q['id']}#{rep}"
     t0 = time.perf_counter()
-    att = to_spec(q["kerdes"], cat, wl, client, question_id=qid)
+    att = to_spec(q["kerdes"], cat, wl, client, question_id=qid, con=con)
     verdict, diffs = proba.judge(q, att.gate, cat, wl, groups=_groups_counter(cat, wl, con))
     row = {"id": q["id"], "ismetles": rep, "kerdes": q["kerdes"], "szerzo": q.get("szerzo"),
            "tipus": q.get("tipus"), "csapda": q.get("csapda"), "itelet": verdict, "elteresek": diffs,

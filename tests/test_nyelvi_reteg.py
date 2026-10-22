@@ -569,8 +569,9 @@ def test_ismeretlen_idokifejezest_a_modellre_hagy():
     from narrative.idoszak import parse_window
     for q in ("Melyik államban késnek a legtöbbet?", "A hét melyik napján rendelnek a legtöbben?",
               "Mi volt márciusban?", "Mennyi lesz a forgalom a következő hónapban?",
-              "Mi a különbség 2017-ben és 2018-ban?"):                    # több évszám „között” nélkül
+              "Hány rendelés volt 2017-ben, és mennyi 2018 tavaszán?"):    # több évszám, összevetés nélkül
         assert parse_window(q, date(2018, 9, 1)) is None, q
+    # v5: két év összevetése („2017-ben és 2018-ban”) már mindkét évet fedi — tests/test_v5.py
 
 
 def test_a_kod_javitja_az_ertelmezest(cat, wl):

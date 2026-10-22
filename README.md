@@ -57,7 +57,7 @@ válaszd — a `uv sync` után ott van, és mindkettő magától felismeri.
 | 1 | Környezet | a verziók rögzítve vannak a kimenetben |
 | 2 | Adat | a valódi Olist-adat; ha még nincs meg, letölti a Kaggle-ről |
 | 3 | Tárház | 9 CSV → csillagséma DuckDB-ben, **V-1 validációval** |
-| 4 | Tesztek | 380 teszt: szivárgásvédelem, V-1, adatmodell, abláció, betanítás, kohorsz, modellválasztás, bootstrap, lezárt futás, referencia-modellek, magyarázatok, szemantikus réteg, nyelvi réteg, mérés, felület; ha bármelyik bukik, **a demó megáll** |
+| 4 | Tesztek | 448 teszt: szivárgásvédelem, V-1, adatmodell, abláció, betanítás, kohorsz, modellválasztás, bootstrap, lezárt futás, referencia-modellek, magyarázatok, szemantikus réteg, nyelvi réteg, mérés, felület; ha bármelyik bukik, **a demó megáll** |
 | 5 | Betanítás | a **lezárt v3 protokoll** szerint: LightGBM súlyozás nélkül, a fák száma bővülő ablakos CV-vel, címke-tisztítással; érintetlen, legkésőbbi időszakon mérve; a kalibráció csak diagnosztika |
 | 6 | Összegzés | rangsorolás, kalibráció, kizárt rendelések, artefaktumok helye |
 
@@ -265,6 +265,28 @@ kialakításából, nem a modell méretéből jönnek —, a csapdákat viszont 
 kevesebb alá nem támasztott állítást ír; a 9B szövegeinek is kb. harmadát megjelöli a kapu, tehát
 a kapu nagyobb modellnél is kell.
 
+**v5 (okt. 22., lezárva, ujjlenyomat `9295c1cd…` — még nem mért).** Mivel a hibák a modell méretétől függetlenek,
+a javítás a kódban van: a nyelvi réteg a v2 mérésén látott hibaosztályokat determinisztikusan,
+átlátható szólistákkal kezeli, és a felület minden átírást kimond (`narrative/szotar.py`,
+`narrative/idoszak.py`, `narrative/to_spec.py`). Új: évszakok, „az év első / utolsó N hónapja”,
+„tavalyelőtt”, „… óta”, két év vagy két negyedév összevetése, „mostanság” (rögzítve: az elmúlt 3
+hónap); „mikor / melyik hónapban / hogy változott” → idősor; köznyelvi kategória-, régió- és
+mérőszámnevek („lakberendezés”, „északra”, „mibe kerül a szállítás”, „mellé fognak a határidővel”);
+„hova / honnan”, „hányadik a sorban”, „X és Y közül hol volt a legkisebb”; „az 5 legforgalmasabb
+államban …” két lépésben (előbb a rangsor egy külön lekérdezéssel, aztán a kérdés az első ötre
+szűrve — a felület kiírja, melyik az öt); a 2. kapu elfogadja a kerekített számot, ha a modell jelzi
+(„kb. 59%”, az eredményben 59,1%); a kódban elutasított
+kérések: a rendszert becsapni próbáló, a két egymásra épülő lépést kívánó („azokban a hónapokban,
+amikor …”), a „honnan hova” párokat és a jövőt kérdező. A már lefutott mérések tárolt ① válaszai a
+v5 kódon (`tools/visszajatszas.py`, modell nélkül): a v2 kérdéssoron a 4B teljes egyezése 48,9% →
+100%, a 9B-é 53,3% → 100%, a 2B-é 20,0% → 60,0%, romlás nélkül. **Ez nem eredmény, hanem a
+hangolás tükre:** a szabályok épp ezekhez a kérdésekhez készültek, a 100% csak azt mutatja, hogy
+minden látott hibát lefedtek (a v4-nél a hangolás +21,6 pontja új kérdéseken +8,9 lett). A
+fejlesztői próbasor élő futása a videókártyán (okt. 22.): értelmezés 13/13, csapda 6/6, 2. kapu
+9/13 (3 valódi hibát fogott meg, 1 téves riasztás — a kerekítés, azóta javítva), 6,9 mp/kérdés. A mérés egy harmadik, friss kérdéssoron lesz: Viola írja,
+munkakörönkénti szerepkártyák szerint (`eval/v3_kerdesiras_utmutato.md`); a fejlesztés a kérdéseket a
+v5 lezárásáig nem látja, és senki nem futtatja őket a rendszeren.
+
 ---
 
 ## Mi van kész
@@ -284,7 +306,7 @@ a kapu nagyobb modellnél is kell.
 | M2 — referencia-modellek: logisztikus regresszió, döntési fa, random forest (`pipeline/reference_models.py`), lezárt összevetés (`pipeline/v3_reference.py`) | **kész — lefutott okt. 9.** (`docs/v3_referencia_eredmeny.md`) |
 | M3 — SHAP-magyarázatok a négy modellre (pontos TreeSHAP, ill. lineáris SHAP, a 22 jellemzőre összevonva), additivitás-ellenőrzés, sablonos magyarázó szöveg (`xai/`) | **kész (v1)** |
 | M5 — Streamlit BI-felület: áttekintés (SQL), rendelés-magyarázat négy modellel, modell-oldal, egyezés-ellenőrzés a lezárt futással (`ui/`, `python -m ui`) | **kész (v1)** |
-| Tesztek — szivárgás (14), V-1 és adatmodell (10), abláció (6), betanítás (6), kohorsz (2), modellválasztás (8), bootstrap (6), lezárt futás (14), referencia-modellek (9), magyarázatok (12), szöveg és megjelenítés (22), felület (20), egyezési mértékek (5), kontrollkar (5), nevek és feliratok (5), a magyarázatok hűsége (8), README-parancsok (2), környezet (7), szemantikus réteg (99), nyelvi réteg (81), nyelvi réteg v4 (22), mérés és mérési kérdéssor (17), K1 v2 összevetés (3), két futás összevetése (3) | **kész, 386/386** (egy csak Node.js-szel fut, nélküle kihagyja) |
+| Tesztek — szivárgás (14), V-1 és adatmodell (10), abláció (6), betanítás (6), kohorsz (2), modellválasztás (8), bootstrap (6), lezárt futás (14), referencia-modellek (9), magyarázatok (12), szöveg és megjelenítés (22), felület (20), egyezési mértékek (5), kontrollkar (5), nevek és feliratok (5), a magyarázatok hűsége (8), README-parancsok (2), környezet (7), szemantikus réteg (99), nyelvi réteg (81), nyelvi réteg v4 (22), nyelvi réteg v5 (62), mérés és mérési kérdéssor (17), K1 v2 összevetés (3), két futás összevetése (3) | **kész, 448/448** (egy csak Node.js-szel fut, nélküle kihagyja) |
 | Tároló — MIT licenc, CI (Ubuntu + Windows), uv-környezet (`uv.lock`; pip-nek `requirements.lock`), döntési napló | **kész** |
 | M2 — 40 futásos sweep, hiperparaméter-hangolás | következő |
 | M3 — KernelSHAP-kontrollkar: mind a négy modell ugyanazzal a magyarázóval (valószínűség-tér, közös háttér, 200 rögzített teszt-rendelés), a kar saját zajával (`xai/kernel_arm.py`, `xai/agreement.py`) | **kész** (`docs/kernel_kar_eredmeny.md`) |
@@ -655,6 +677,7 @@ uv run python tools\k1_v2_osszevetes.py --v4 logs\meres\MAPPA --v3 v3_kod\logs\m
 uv run python -m narrative.meres --protokoll docs\k1_protokoll_v2_9b.json   # kiegészítés: a qwen3.5:9b ugyanazon a kérdéssoron
 uv run python tools\k1_futas_osszevetes.py --a logs\meres\A --b logs\meres\B --cimke-a "9B (GPU)" --cimke-b "4B (GPU)" --protokoll docs\k1_protokoll_v2_9b.json --kimenet docs\k1_9b_eredmeny.md   # két futás párosítva
 tools\gep_ellenorzes.bat                     # a gép adatai (videókártya, Ollama, modellek) → logs\gep_ellenorzes.txt
+uv run python tools\visszajatszas.py logs\meres\MAPPA [MAPPA2 …] --reszletes   # fejlesztés: a tárolt ① válaszok a mostani kódon (optimista, nem mérés)
 uv run python tools\kezi_minta.py minta logs\meres\MAPPA       # a kézi ellenőrzés mintája a hatókörrel
 uv run python tools\kezi_minta.py kiertekel logs\meres\MAPPA   # a kitöltött minta: a kapu pontossága, K1 korrigálva
 uv run python -m narrative.meres --folytat logs\meres\MAPPA    # megszakadt mérés folytatása (a mappát a mérés kiírja)
@@ -727,7 +750,7 @@ glassbox-bi/
 │   ├── pg_ellenorzes.py     a PostgreSQL-változat ellenőrzése (tools/pg futtatja)
 │   └── __main__.py          python -m semantic: ugyanez parancssorból
 ├── tools/pg/                a PostgreSQL-ellenőrzés futtatója (Node.js + PGlite, rögzített verzió)
-├── narrative/               nyelvi réteg (M4): kliens, ① kérdés → gépi alak, ② eredmény → mondat, KAPU ②, próba (proba.py), mérés (meres.py)
+├── narrative/               nyelvi réteg (M4): kliens, ① kérdés → gépi alak, ② eredmény → mondat, KAPU ②, próba (proba.py), mérés (meres.py), időkifejezések (idoszak.py), köznyelvi szótár (szotar.py)
 ├── prompts/                 a hívások promptja, verziózva (v1 és v2; a ② kontrollágának külön prompt: to_text_szabad)
 ├── eval/                    fejlesztői próbasor (hangolásra) és a mérési kérdéssor (lezárva; K1)
 ├── configs/llm.toml         a nyelvi modell beállítása (helyi Ollama vagy API; a kulcs a .env-ben)

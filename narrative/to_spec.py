@@ -55,17 +55,33 @@ látott kérdéseken kell mérni, lásd a döntési naplót):
   * „São Pauló-i eladók”: az állam neve után álló „eladó / vevő” szó dönti el a szerepet;
   * ha egy szó több kategóriára is illik, de csak egyiknek az első szava („bútor” → bútorok és
     lakásdekoráció), az nyer.
+
+v5 (a v2 mérése után, 2026-10-22 — a 4B-nél és a 9B-nél egyaránt látott hibákból; a v3 kérdéssoron
+mérendő; a v1 és a v2 tárolt válaszain a visszajátszás csak optimista becslés):
+  * időkifejezések (évszak, az év első / utolsó N hónapja, „tavalyelőtt”, „… óta”, két év vagy két
+    negyedév, „mostanság” = az elmúlt 3 hónap) és idősor-szándék („mikor”, „melyik hónapban”, „hogy
+    változott”) — narrative/idoszak.py;
+  * köznyelvi kategória-, régió- és mérőszámnevek (narrative/szotar.py): a kérdésben kimondott
+    mérőszám nyer, a kérdésben megnevezett kategória és régió szűrő;
+  * a hely és a helyezés: „eladói régió” → az eladó állama, „hova / honnan”, „SP-ből” (eladó),
+    „hányadik” → a teljes rangsor, „X és Y közül hol a legkisebb” → bontás, a kérdésben nem
+    szereplő szűrőérték helyett a megnevezett;
+  * „az 5 legforgalmasabb állam(ban) …”: két lépés — előbb a rangsor (külön lekérdezés a tárházon,
+    a kérdés időszakában), aztán a kérdés az első N-re szűrve (interpret, ha kap tárházat);
+  * a kód utasítja el: a rendszer szabályait felülírni próbáló kérés, a két egymásra épülő lépés
+    („azokban a hónapokban, amikor …”), a „honnan hova” párok (két bontás), a jövő (előrejelzés).
 """
 
 from __future__ import annotations
 
+import copy
 import json
 import re
 import time
 from dataclasses import dataclass, field
 from datetime import date
 
-from narrative import idoszak
+from narrative import idoszak, szotar
 from narrative.client import ROOT, LlmClient, LLMUnavailable
 from narrative.verifier import fold
 from semantic import spec as sp
@@ -317,6 +333,10 @@ def resolve_value(cat: Catalog, wl: Whitelist, dim_id: str, raw) -> tuple[str | 
     key = normalize_value(cat, wl, dim_id, raw)
     if key is not None:
         return key, [key]
+    if dim_id == "kategoria":                                # v5: köznyelvi név („lakberendezés”, „sport”)
+        key = szotar.category_of(str(raw), wl.values.get(dim_id, ()))
+        if key is not None:
+            return key, [key]
     query = _words(str(raw))
     if not query:
         return None, []
@@ -404,11 +424,55 @@ CUSTOMER_COUNT_Q = re.compile(r"\b(?:hany|hanyan)\s+(?:kulonbozo\s+)?(?:vevo|vas
                               r"legtobben|hanyan)|\blegtobb?\s+(?:vevo|vasarlo)|\bkulonbozo\s+(?:vevo|vasarlo)|"
                               r"\bvannak\s+a\s+(?:vevo|vasarlo)\w*\s+a\s+legtobben|\b(?:vevo|vasarlo)\w*\s+\w+\s+a\s+legtobben")
 # v4: két bontás egyszerre („régiók és termékkategóriák szerint”, „államonként és havonta”)
-TWO_BREAKDOWN_VERB = re.compile(r"\b(?:szerint|bonts\w*|bontas\w*|egyszerre)\b|\w+(?:nkent|onkent|enkent)\b")
-PLURAL_CUE = {"vevo_regio": r"regio(?:nkent|k\b|kra|k\s+szerint)", "vevo_allam": r"allam(?:onkent|ok\b|okra|ok\s+szerint)",
-              "kategoria": r"kategori(?:ankent|ak\b|akra|ak\s+szerint)", "het_napja": r"naponkent|napjai\s+szerint",
-              "honap": r"havonta|honaponkent|havi\s+bontas", "ev": r"evente|evenkent|eves\s+bontas"}
+TWO_BREAKDOWN_VERB = re.compile(r"\b(?:szerint|bonts\w*|bontas\w*|egyszerre)\b|\w+(?:nkent|onkent|enkent|ente|onta)\b")
+# v5: számnév + a dimenzió neve is több csoportot jelent („a 3 legnagyobb régió … negyedévente”)
+_NUMERAL = r"\b\d+\s+(?:leg\w+\s+)?(?:\w+\s+)?"
+PLURAL_CUE = {"vevo_regio": r"regio(?:nkent|k\b|kra|k\s+szerint)|" + _NUMERAL + r"regio",
+              "vevo_allam": r"allam(?:onkent|ok\b|okra|ok\s+szerint)|" + _NUMERAL + r"allam",
+              "kategoria": r"kategori(?:ankent|ak\b|akra|ak\s+szerint)|" + _NUMERAL + r"kategori",
+              "het_napja": r"naponkent|napjai\s+szerint",
+              "honap": r"\bhavonta|\bhonaponkent|\bhavi\s+bontas|\bnegyedev(?:ente|enkent)",
+              "ev": r"\bevente|\bevenkent|\beves\s+bontas"}
+# v5: „honnan hova” — az eladó és a vevő helye egyszerre: két bontás
+FROM_TO_Q = re.compile(r"\bhonnan\b.*\bhova\b|\bhova\b.*\bhonnan\b")
+# v5: „volt-e olyan év / hónap, amikor X több, mint Y” — időszakonként csoportok összevetése: két bontás
+WHEN_COMPARE_Q = re.compile(r"\bolyan\s+(ev|honap)\w*\s*,?\s*amikor\b")
+# v5: két egymásra épülő lépés („azokban a hónapokban, amikor sok volt a csúszás”, „amikor a legnagyobb volt
+# a forgalom”) — előbb időszakot kellene választani, aztán abban mérni; a rendszer egyszerre egy lekérdezést futtat
+MULTI_STEP_Q = re.compile(r"\b(?:azok|azon|olyan|abban|azokban)\w*\s+(?:a\s+)?(?:honap|ev|nap|het|idoszak)\w*\s*,?\s*amikor\b|"
+                          r"\bamikor\s+(?:a\s+)?leg\w+")
+REJECT_KEY = "__elutasitas__"
+# v5: jövőre vonatkozó kérdés („a következő évben”, „fog nőni”) — előrejelzés, a katalógus a múltról szól
+FUTURE_Q = re.compile(r"\bkovetkezo\s+(?:ev|honap|negyedev|felev|het|idoszak)\w*|\bjovo\s*(?:ev|honap|het|negyedev)\w*|\bjovore\b|"
+                      r"\bfog(?:nak)?\s+\w+ni\b|\belore\s*jelez\w*|\belorejelz\w*|\bbecsuld\s+meg\b")
+# v5: a kérdésben kimondott, nem elérhető adat — ilyenkor a modell elutasítását a kód nem írja felül
+# (minta, a katalógus nem elérhető kulcsszava — ha van ilyen csoport; különben a kért dolog neve)
+EXTRA_UNAVAILABLE = [(r"\bertekel\w*", "értékelés"), (r"\bvelemeny\w*", "vélemény"), (r"\bcsillag\w*", "csillag"),
+                     (r"\braktar\w*", "raktár"), (r"\bkeszlet\w*", "készlet"), (r"\blemond\w*", "lemondás"),
+                     (r"\btorolt\w*", "törölt"), (r"\bvisszakuld\w*", "visszaküldés"),
+                     (r"\b(?:haszon\w*|hasznot|haszna\w*|hasznat)\b", "haszon"), (r"\bnyereseg\w*", "nyereség"),
+                     (r"\bprofit\w*", "profit"), (r"\barres\w*", "árrés"), (r"\badozott\w*", "haszon"),
+                     (r"\bmarketing\w*", "marketingköltség"), (r"\bfutar\w*", "futárcég"), (r"\bszin(?:u|e|ek)\w*", "termék színe"),
+                     (r"\bidojaras\w*", "időjárás")]
+UNAVAILABLE_STEMS = ("kartya", "fizetes", "fizetesi", "boleto", "jovo", "elorejelz", "becsul")
+# v5: átverési kísérlet — a rendszer szabályainak felülírása; ilyenkor a kód utasít el (adatot nem ad)
+INJECTION_Q = re.compile(r"\bhagyd\s+figyelmen\s+kivul|\bfelejtsd\s+el\b|\bignore\s+(?:all|the|your|previous)|"
+                         r"\b(?:rendszer)?prompt\w*|\bsystem\s+prompt|\beddigi\s+(?:utasitas|szabaly)\w*|"
+                         r"\butasitasai\w*|\bszabalyokat\b|\bjailbreak")
+# v5: a kérdés a kategóriák szerint bont („mibol”, „melyik kategória”) — ilyenkor nem szűrő
+CATEGORY_BREAKDOWN_Q = re.compile(r"\bmi(?:bol|t|nek)\b|\bmelyik\s+(?:\w+\s+)?(?:kategori|termek|aru)\w*|\bkategori\w*\s+szerint")
 RANKING_Q = re.compile(r"\b(?:melyik|mely|rangsor\w*|top)\b")
+# v5: „az 5 legforgalmasabb állam(ban) …”, „a 3 legkisebb régió … összesen” — előbb a rangsor (egy
+# külön lekérdezés), aztán a kérdés erre a csoportra szűrve. A „legjobb / legrosszabb” a kérdés saját
+# mérőszámának rangsora (sima rangsor), azt nem bontjuk két lépésre.
+TOP_N_Q = re.compile(r"\b(?P<n>\d{1,2}|" + "|".join(sorted(idoszak.F_NUMBERS, key=len, reverse=True)) + r")\s+"
+                     r"(?P<sup>leg\w+)(?P<mid>(?:\s+\w+){0,2}?)\s+(?P<dim>(?:eladoi\s+|vevoi\s+)?(?:allam|kategori|regio))\w*")
+TOGETHER_Q = re.compile(r"\b(?:osszesen|egyutt\w*|osszesitve|osszeadva)\b")
+SPREAD_Q = re.compile(r"\begymas\w*|\bkozott\b|\bosszehasonlit\w*|\bosszevet\w*|\bkulonbseg\w*|\bter\w*\s+el\b")
+# v5: „melyik hónapban / évben” — időbeli rangsor, nem a bontás dimenziójáé
+_TIME_RANK = re.compile(r"\b(?:melyik|mely)\s+(?:\w+\s+){0,2}?(?:honap|ev|negyedev)\w*")
+# v5: több megnevezett érték közül választ („hol”, „melyikben”, „közülük”)
+WHICH_Q = re.compile(r"\b(?:hol|melyik\w*|mely|kozul\w*)\b")
 COMPARE_Q = re.compile(r"\b(?:tobb|kevesebb|nagyobb|kisebb|mint|kulonbseg\w*|difi\w*|osszehasonlit\w*|osszevet\w*)\b")                     # eleve a késett rendelésekre vonatkoznak
 # a „késett / időben” szűrő csak akkor jogos, ha a kérdés így szűkít (nem elég, hogy a mérőszám neve „késés”)
 LATE_FILTER_Q = re.compile(
@@ -446,9 +510,30 @@ def grounded(cat: Catalog, wl: Whitelist, dim_id: str, key: str, question: str) 
         words = [w for w in re.findall(r"[a-z0-9]+", _GENERIC.sub(" ", _fold(label))) if len(w) >= 3]
         asked = re.findall(r"[a-z0-9]+", _GENERIC.sub(" ", _fold(question)))
         en = [w for w in re.split(r"[_\W]+", str(key)) if len(w) >= 4]
+        if key in szotar.category_mentions(question):        # v5: köznyelvi név („lakberendezés”)
+            return True
         return any((c := _common(q, w)) >= min(5, len(w)) and c >= 0.6 * min(len(q), len(w))
                    for q in asked for w in words) or any(e in asked for e in en)
     return any(_stem_match(q, w) >= min(4, len(w)) for q in asked for w in words)
+
+
+def _any_grounded(cat: Catalog, wl: Whitelist, dim_id: str, vals, question: str) -> bool:
+    """Említi-e a kérdés a szűrő értékei közül legalább egyet (nem lista: nem nyúlunk hozzá)."""
+    if not isinstance(vals, list):
+        return True
+    keys = [normalize_value(cat, wl, dim_id, v) for v in vals]
+    return any(k is not None and grounded(cat, wl, dim_id, k, question) for k in keys)
+
+
+def _superlative(fq: str) -> bool:
+    """Van-e a kérdésben irányt adó felsőfok (elírástűrően: „legtob”)."""
+    sq = _squeeze(fq)
+    return any(_squeeze(fold(w)) in sq for w in MAX_Q + MIN_Q)
+
+
+def _squeeze(text: str) -> str:
+    """Az ismétlődő betűk egyre: „legtobb” ~ „legtob” (elírástűrő összevetéshez)."""
+    return re.sub(r"(.)\1+", r"\1", text)
 
 
 def _common(a: str, b: str) -> int:
@@ -467,8 +552,13 @@ def _state_role(cat: Catalog, key: str, question: str) -> str | None:
     name = fold(value_label(cat, "vevo_allam", key).split(" (")[0])
     stem = name[:-1] if len(name) > 4 else name                 # „São Paulo” ~ „São Pauló-i”, „Paulóban”
     spans = [m.end() for m in re.finditer(rf"(?<![a-z]){re.escape(stem)}", f)]
+    first = name.split()[0] if name.split() else ""
+    if len(first) >= 3 and first != stem:              # v5: „Rióból”, „rio-bol” — a név első szava is
+        spans += [m.end() for m in re.finditer(rf"(?<![a-z]){re.escape(first)}(?=\w{{0,3}}-?(?:bol|rol|tol)\b)", f)]
     spans += [m.end() for m in re.finditer(rf"(?<![A-Za-z]){re.escape(str(key))}(?![A-Za-z])", question)]
     for end in spans:
+        if re.match(r"\w{0,3}-?(?:bol|rol|tol)\b", f[end:]):     # v5: „SP-ből”, „Rióból” — innen indul: az eladóé
+            return "elado"
         after = re.findall(r"[a-z]+", f[end:])[:4]
         for w in after[1:] if after and not after[0].startswith(("elado", "vevo")) else after:
             if w.startswith("elado"):
@@ -478,8 +568,21 @@ def _state_role(cat: Catalog, key: str, question: str) -> str | None:
     return None
 
 
-def correct(query: dict, question: str, cat: Catalog, wl: Whitelist | None = None) -> tuple[dict, list[Correction]]:
-    """A modell űrlapjának javítása ott, ahol a kód biztosabban dönt (lásd a modul leírását)."""
+def _unavailable_in_question(cat: Catalog, fq: str) -> bool:
+    """A kérdés maga nevez-e meg nem elérhető adatot (a katalógus kulcsszavai és a v5 szótövek)."""
+    for u in cat.unavailable:
+        for kw in u.kulcsszavak:
+            k = fold(kw)
+            if k != "reszlet" and (k in fq if len(k) >= 5 else re.search(rf"\b{re.escape(k)}", fq)):
+                return True
+    return (any(stem in fq for stem in UNAVAILABLE_STEMS) or any(re.search(p, fq) for p, _ in EXTRA_UNAVAILABLE)
+            or bool(CUSTOMER_COUNT_Q.search(fq) or FUTURE_Q.search(fq) or INJECTION_Q.search(fq)))
+
+
+def correct(query: dict, question: str, cat: Catalog, wl: Whitelist | None = None,
+            model_metric: str | None = None) -> tuple[dict, list[Correction]]:
+    """A modell űrlapjának javítása ott, ahol a kód biztosabban dönt (lásd a modul leírását).
+    model_metric: a modell űrlapjának mérőszáma (ha a „kert” miatt elutasítás lett belőle)."""
     out = dict(query)
     fixes: list[Correction] = []
     # a kérdésben nem említett nap, régió vagy állam nem lehet szűrő (a fejlesztői próbán a modell
@@ -532,6 +635,25 @@ def correct(query: dict, question: str, cat: Catalog, wl: Whitelist | None = Non
             fixes.append(Correction("metrika", "a modell a katalógus egy mérőszámát nevezte meg", metric, same[0]))
             out["metrika"] = same[0]
     fq0 = fold(" ".join(question.split()))
+    # v5: átverési kísérlet — a kérdés a rendszer szabályait akarja felülírni: nem adatkérdés
+    if INJECTION_Q.search(fq0):
+        fixes.append(Correction("elutasitas", "a kérdés a rendszer szabályait akarja felülírni", out.get("metrika"), "atveres"))
+        out[REJECT_KEY] = ("nem_adatkerdes", "A kérdés a rendszer működését próbálja megváltoztatni, nem az adatról "
+                                             "kérdez — erre nem válaszolok. Adatkérdést (pl. forgalom, késés, szállítás) "
+                                             "szívesen megválaszolok.")
+        return out, fixes
+    # v5: elutasítás lett volna, de a kérdés nem nevez meg nem elérhető adatot, és egyetlen mérőszámot
+    # mond ki („végösszeg”, „bevétel”, „fuvardíj”) — vagy a modell egy létező mérőszámot választott, csak
+    # a „kert” mezőbe írt egy nem elérhetőt („haszonkulcs”), ami a kérdésben nincs
+    metric = out.get("metrika")
+    if isinstance(metric, str) and metric not in cat.metrics and not _unavailable_in_question(cat, fq0):
+        cue = szotar.metric_cue(question)
+        if cue:
+            fixes.append(Correction("metrika", f"a kérdés „{cue[1]}” kifejezése szerint", metric, cue[0]))
+            out["metrika"] = cue[0]
+        elif model_metric in cat.metrics:
+            fixes.append(Correction("metrika", f"a modell megjegyzése („{metric}”) nem a kérdésből jön", metric, model_metric))
+            out["metrika"] = model_metric
     # v4: amit az adat nem tud (fizetés, értékelés, készlet, vevőszám …), arra akkor is elutasítás, ha a
     # modell egy közeli mérőszámot választott — a rendszer nem válaszol egy másik kérdésre (UC-2)
     if out.get("metrika") in cat.metrics:
@@ -548,11 +670,40 @@ def correct(query: dict, question: str, cat: Catalog, wl: Whitelist | None = Non
                 if hit_word:
                     asked = hit_word
                     break
+            if not asked:                                   # v5: a köznyelvi tövek („értékelt”, „futárcég”, „hasznot”)
+                asked = next((label for pattern, label in EXTRA_UNAVAILABLE if re.search(pattern, fq0)), None)
         if asked:
             fixes.append(Correction("elutasitas", f"a kérdés „{asked}” adatot kér, ami nincs a tárházban",
                                     out["metrika"], asked))
             out["metrika"] = asked
             return out, fixes
+    # v5: két egymásra épülő lépés — indokolt elutasítás, a két lépés külön kérdezhető
+    if MULTI_STEP_Q.search(fq0) and not (WHEN_COMPARE_Q.search(fq0) and COMPARE_Q.search(fq0)):
+        fixes.append(Correction("elutasitas", "a kérdés két egymásra épülő lépést kér", out.get("metrika"), "tobblepeses"))
+        out[REJECT_KEY] = ("tobblepeses", "A kérdés két egymásra épülő lépést kér: előbb ki kellene választani az "
+                                          "időszakot („amikor …”), aztán abban mérni. A rendszer egyszerre egy lekérdezést "
+                                          "futtat — kérdezd meg a két lépést külön, és a második kérdésben nevezd meg az időszakot.")
+        return out, fixes
+    # v5: jövőre vonatkozó kérdés — előrejelzés (a katalógus a múltról szól)
+    if FUTURE_Q.search(fq0) and out.get("metrika") != FORECAST:
+        fixes.append(Correction("elutasitas", f"a kérdés a jövőre vonatkozik („{FUTURE_Q.search(fq0).group(0)}”)",
+                                out.get("metrika"), FORECAST))
+        out["metrika"] = FORECAST
+        return out, fixes
+    # v5: a kérdés egyetlen mérőszámot mond ki, a modell egy másikat választott (és azt a kérdés nem említi)
+    if out.get("metrika") in cat.metrics:
+        cues = szotar.metric_cues(question)
+        cue = szotar.metric_cue(question)
+        if cue and cue[0] != out["metrika"] and out["metrika"] not in cues:
+            fixes.append(Correction("metrika", f"a kérdés „{cue[1]}” kifejezése szerint", out["metrika"], cue[0]))
+            out["metrika"] = cue[0]
+    # v5: „honnan hova” — az eladó és a vevő helye egyszerre: két bontás (a kapu megmondja, hogy egy lehet)
+    if FROM_TO_Q.search(fq0):
+        two = ["elado_allam", "vevo_regio" if "regio" in fq0 else "vevo_allam"]
+        fixes.append(Correction("bontas", "a kérdés honnan–hova párokat kér: az eladó és a vevő szerint egyszerre",
+                                out.get("bontas") or [], two))
+        out["bontas"] = two
+        return out, fixes
     # v4: két bontás egyszerre — a kapu mondja meg, hogy egyszerre egy lehet (ne csendben az egyik jöjjön)
     cues = [d for d, pattern in PLURAL_CUE.items() if re.search(pattern, fq0)]
     if len(cues) >= 2 and TWO_BREAKDOWN_VERB.search(fq0):
@@ -563,20 +714,47 @@ def correct(query: dict, question: str, cat: Catalog, wl: Whitelist | None = Non
             return out, fixes
     dims0 = [d for d in (out.get("bontas") or []) if d]
     szuro2 = out.get("szuro") if isinstance(out.get("szuro"), dict) else {}
-    # v4: „havonta”, „évente” — a modell nem bontott
-    if not dims0:
+    # v4: „havonta”, „évente” — a modell nem bontott; v5: vagy olyan dimenzió szerint bontott, amit a kérdés nem kér
+    unasked = bool(dims0) and dims0[0] not in ("honap", "ev") and not re.search(BREAKDOWN_CUE.get(dims0[0], r"(?!)"), fq0) \
+        and not re.search(PLURAL_CUE.get(dims0[0], r"(?!)"), fq0)
+    if not dims0 or unasked:
         for dim, pattern in TIME_BREAKDOWN_Q.items():
             if pattern.search(fq0):
-                fixes.append(Correction("bontas", f"a kérdés „{pattern.search(fq0).group(0)}” szava szerint", [], [dim]))
+                fixes.append(Correction("bontas", f"a kérdés „{pattern.search(fq0).group(0)}” szava szerint", dims0, [dim]))
                 out["bontas"] = dims0 = [dim]
                 break
+    # v5: „eladói régió” — az eladónak nincs régiója a katalógusban: az eladó állama szerint (a válasz kimondja)
+    if "vevo_regio" in dims0 and re.search(r"\belado\w*\s+regio", fq0):
+        fixes.append(Correction("bontas", "az eladónak nincs régiója — az eladó állama szerint", ["vevo_regio"], ["elado_allam"]))
+        out["bontas"] = dims0 = ["elado_allam" if d == "vevo_regio" else d for d in dims0]
+    # v5: „hova” / „honnan” — a cél, ill. a kiindulás helye szerinti bontás
+    if not dims0 and not FROM_TO_Q.search(fq0):
+        where = ("vevo_regio" if "regio" in fq0 else "vevo_allam") if re.search(r"\bhova\b", fq0) else \
+                "elado_allam" if re.search(r"\bhonnan\b", fq0) else None
+        if where and where not in szuro2:
+            fixes.append(Correction("bontas", f"a kérdés „{'hova' if where.startswith('vevo') else 'honnan'}” szava szerint",
+                                    [], [where]))
+            out["bontas"] = dims0 = [where]
+    # v5: „hányadik a sorban” — a helyezés: a teljes rangsor kell, nem a szűrt egy érték
+    # (akkor is, ha a modell ugyanarra a dimenzióra bontott és szűrt is)
+    if re.search(r"\bhanyadik\b", fq0) and (not dims0 or (len(dims0) == 1 and dims0[0] in szuro2)):
+        single = [d for d, v in szuro2.items() if isinstance(v, list) and len(v) == 1 and d in BREAKDOWN_CUE
+                  and (not dims0 or d == dims0[0])]
+        if len(single) == 1:
+            d = single[0]
+            fixes.append(Correction("bontas", "a kérdés a helyezést kérdezi — a teljes rangsor kell", dims0, [d]))
+            szuro2 = {k: v for k, v in szuro2.items() if k != d}
+            out["szuro"], out["bontas"], dims0 = szuro2, [d], [d]
+            out["limit"] = int(cat.settings.get("max_limit", 100))
     # v4: a bontás dimenziójából a kérdés egyetlen értéket nevez meg, és bontást nem kér → szűrő
-    if wl is not None and len(dims0) == 1 and dims0[0] in BREAKDOWN_CUE and dims0[0] not in szuro2:
-        dim = dims0[0]
+    if wl is not None and len(dims0) == 1 and dims0[0] in BREAKDOWN_CUE and \
+            (dims0[0] not in szuro2 or not _any_grounded(cat, wl, dims0[0], szuro2[dims0[0]], question)):
+        dim = dims0[0]                               # v5: a modell szűrője a kérdésben nem szereplő érték (pl. Délkelet)
         named = [k for k in wl.values.get(dim, ()) if grounded(cat, wl, dim, k, question)]
         labels = {k: fold(value_label(cat, dim, k).split(" (")[0]) for k in named}
         named = [k for k in named if not any(o != k and labels[o].startswith(labels[k]) for o in named)]
-        if len(named) == 1 and not re.search(BREAKDOWN_CUE[dim], fq0) and not RANKING_Q.search(fq0):
+        if len(named) == 1 and not re.search(BREAKDOWN_CUE[dim], fq0) and not RANKING_Q.search(_TIME_RANK.sub(" ", fq0)) \
+                and not re.search(r"\bhanyadik\b", fq0):              # v5: „hányadik”: a helyezéshez a teljes sor kell
             rovid = cat.dimensions[dim].rovid
             fixes.append(Correction("bontas", f"a kérdés egyetlen értéket nevez meg ({rovid}: "
                                               f"{value_label(cat, dim, named[0])}) — az szűrő, nem bontás",
@@ -585,11 +763,24 @@ def correct(query: dict, question: str, cat: Catalog, wl: Whitelist | None = Non
             out["szuro"], dims0 = szuro2, []
             out.pop("bontas", None)
     # v4: összehasonlítás („több … mint”, „különbség”) egy dimenzió több értéke között → bontás szerint
-    if not dims0 and COMPARE_Q.search(fq0):
+    # v5: vagy közülük a legnagyobbat / legkisebbet keresi („a bútor meg a sport közül hol volt a legkisebb”)
+    pick = bool(WHICH_Q.search(fq0)) and _superlative(fq0) and not idoszak.series_intent(question)
+    if not dims0 and (COMPARE_Q.search(fq0) or pick):
         multi = [d for d, v in szuro2.items() if isinstance(v, list) and len(v) >= 2 and d in cat.dimensions]
         if len(multi) == 1:
             fixes.append(Correction("bontas", "a kérdés több értéket hasonlít össze — bontás szerint", [], multi))
             out["bontas"] = dims0 = multi
+    # v5: „volt-e olyan év, amikor X több, mint Y” — időszakonként csoportok: két bontás
+    when = WHEN_COMPARE_Q.search(fq0)
+    if when and COMPARE_Q.search(fq0):
+        tdim = "ev" if when.group(1) == "ev" else "honap"
+        other = [d for d in dims0 if d not in ("ev", "honap")] or \
+                [d for d, v in szuro2.items() if isinstance(v, list) and v and d in cat.dimensions and d not in ("ev", "honap")]
+        if other:
+            fixes.append(Correction("bontas", "a kérdés időszakonként hasonlít össze csoportokat — két bontás kellene",
+                                    dims0, [tdim, other[0]]))
+            out["bontas"] = [tdim, other[0]]
+            return out, fixes
     # v4: ugyanaz az állam eladóként és vevőként is, de a kérdés eladót nem említ → a vevő (alapszerep)
     if "elado" not in fq0 and isinstance(szuro2.get("elado_allam"), list) and isinstance(szuro2.get("vevo_allam"), list):
         both = [v for v in szuro2["elado_allam"] if v in szuro2["vevo_allam"]]
@@ -618,6 +809,33 @@ def correct(query: dict, question: str, cat: Catalog, wl: Whitelist | None = Non
                                           "csoportra bontani fölösleges", dims, []))
         out.pop("bontas", None)
         dims = []
+    # v5: idősort kér („mikor”, „melyik hónapban”, „hogy változott”, két időszak összevetése)
+    intent = idoszak.series_intent(question)
+    if intent and not dims:
+        fixes.append(Correction("bontas", f"a kérdés „{intent[1]}” kifejezése idősort kér", [], [intent[0]]))
+        out["bontas"] = dims = [intent[0]]
+    elif dims == ["ev"] and idoszak._QUARTERLY.search(fold(question)):
+        fixes.append(Correction("bontas", "negyedéves bontás nincs — a havi sor a legközelebbi", ["ev"], ["honap"]))
+        out["bontas"] = dims = ["honap"]
+    # v5: a kérdés köznyelvi szóval egyetlen kategóriát nevez meg, a modell nem szűrt és nem bontott rá
+    if wl is not None and "kategoria" not in szuro and "kategoria" not in dims and not CATEGORY_BREAKDOWN_Q.search(fold(question)):
+        key = szotar.category_of(question, wl.values.get("kategoria", ()))
+        if key is not None:
+            fixes.append(Correction("szuro", f"a kérdés megnevezi a kategóriát ({value_label(cat, 'kategoria', key)})",
+                                    None, [key]))
+            szuro = {**szuro, "kategoria": [key]}
+            out["szuro"] = szuro
+    # v5: eladói állam, pedig a kérdés eladót nem említ, és nem „-ból / -ből” (innen) — az állam a vevőé
+    fqq = fold(question)
+    if "elado" not in fqq and not FROM_TO_Q.search(fqq) and isinstance(szuro.get("elado_allam"), list) and wl is not None:
+        keys = [normalize_value(cat, wl, "elado_allam", v) for v in szuro["elado_allam"]]
+        move = [v for v, k in zip(szuro["elado_allam"], keys) if k and _state_role(cat, k, question) != "elado"]
+        if move and "vevo_allam" not in szuro:
+            rest = [v for v in szuro["elado_allam"] if v not in move]
+            szuro = {k: v for k, v in szuro.items() if k != "elado_allam"} | ({"elado_allam": rest} if rest else {})
+            szuro["vevo_allam"] = move
+            fixes.append(Correction("szuro", "a kérdés eladót nem említ — az állam a vevőé", "elado_allam", "vevo_allam"))
+            out["szuro"] = szuro
     fq = fold(question)
     # v4: „São Pauló-i eladók” — az állam neve utáni „eladó / vevő” szó dönti el a szerepet
     for wrong, right, role in (("vevo_allam", "elado_allam", "elado"), ("elado_allam", "vevo_allam", "vevo")):
@@ -651,8 +869,18 @@ def correct(query: dict, question: str, cat: Catalog, wl: Whitelist | None = Non
                 fixes.append(Correction("szuro", f"a kérdés {'az eladó' if word == 'elado' else 'a vevő'} "
                                                  "államáról szól", wrong, right))
                 out["szuro"] = szuro
-    has_max = any(fold(w) in fq for w in MAX_Q)
-    has_min = any(fold(w) in fq for w in MIN_Q)
+    # v5: a kérdés egyetlen vevői régiót nevez meg („északra”, „déli régióban”), a modell nem szűrt rá
+    # (az állam szerepének javítása után: „SP-ből északra” — az SP az eladóé, a régió a vevőé)
+    if wl is not None and not {"vevo_regio", "vevo_allam"} & (set(szuro) | set(dims)) and \
+            not re.search(BREAKDOWN_CUE["vevo_regio"], fold(question)):
+        key = szotar.region_of(question)
+        if key is not None and key in wl.values.get("vevo_regio", ()):
+            fixes.append(Correction("szuro", f"a kérdés megnevezi a régiót ({value_label(cat, 'vevo_regio', key)})", None, [key]))
+            szuro = {**szuro, "vevo_regio": [key]}
+            out["szuro"] = szuro
+    sq = _squeeze(fq)                                # v5: „legtob”, „legnagyob” (elírás) is
+    has_max = any(_squeeze(fold(w)) in sq for w in MAX_Q)
+    has_min = any(_squeeze(fold(w)) in sq for w in MIN_Q)
     extreme = has_max or has_min or any(fold(w) in fq for w in EXTREME_Q)
     if len(dims) == 1 and dims[0] in ("honap", "ev") and not extreme:
         max_limit = int(cat.settings.get("max_limit", 100))
@@ -663,7 +891,7 @@ def correct(query: dict, question: str, cat: Catalog, wl: Whitelist | None = Non
     if dims and has_max != has_min and out.get("rendezes") in ("ertek_csokkeno", "ertek_novekvo"):
         want = "ertek_csokkeno" if has_max else "ertek_novekvo"
         if out["rendezes"] != want:
-            word = next(w for w in (MAX_Q if has_max else MIN_Q) if fold(w) in fq)
+            word = next(w for w in (MAX_Q if has_max else MIN_Q) if _squeeze(fold(w)) in sq)
             fixes.append(Correction("rendezes", f"a kérdés „{word}…” szava szerint "
                                                 + ("a legnagyobb értékek elöl" if has_max else "a legkisebb értékek elöl"),
                                     out["rendezes"], want))
@@ -722,8 +950,103 @@ def _repair_message(problem: str, cat: Catalog, wl: Whitelist, notes: list[Resol
                   "olyat kér, ami nincs a listákban, a metrika legyen \"nem_elerheto\".")
 
 
+def _top_n(question: str) -> dict | None:
+    """„az 5 legforgalmasabb állam” → {n, dim, metrika, irany, kifejezes, maszkolt kérdés}; None, ha
+    nincs ilyen, vagy a felsőfok nem ad saját rangsor-mérőszámot („legjobb”, „legrosszabb”)."""
+    f = fold(question)                                   # pozíciótartó: a maszk az eredeti szövegre
+    m = TOP_N_Q.search(f)
+    if not m:
+        return None
+    sup, mid, dim_word = m.group("sup"), m.group("mid"), m.group("dim")
+    phrase = sup + mid
+    if re.search(r"forgalm|bevetel|arbevetel", phrase):
+        metric = "forgalom"
+    elif re.search(r"rendel|vasarl|nepszeru|keresett", phrase):
+        metric = "rendelesek_szama"
+    elif sup in ("legnagyobb", "legkisebb") and not mid.strip():
+        metric = "rendelesek_szama"                     # „a 3 legkisebb régió”: a rendelések száma szerint
+    else:
+        return None
+    dim = ("kategoria" if "kategori" in dim_word else "vevo_regio" if "regio" in dim_word else
+           "elado_allam" if "elado" in dim_word else "vevo_allam")
+    asc = bool(re.match(r"leg(?:kisebb|kevesebb|gyengebb|alacsonyabb)", sup))
+    return {"n": idoszak._number(m.group("n")), "dim": dim, "metrika": metric, "novekvo": asc,
+            "kifejezes": question[m.start():m.end()],
+            "maszkolt": question[:m.start()] + " " * (m.end() - m.start()) + question[m.end():]}
+
+
+def _apply_top_n(top: dict, query: dict, question: str, cat: Catalog, wl: Whitelist, con) -> tuple[dict, list]:
+    """A rangsor lefuttatása (a kérdés időszakára, más szűrő nélkül), az első N a szűrőbe; a bontás
+    a kérdés szerint („miből” → kategória, „összesen” → nincs, „egymástól” → a csoport szerint)."""
+    from semantic import engine                       # körkörös import elkerülése
+    dim, n = top["dim"], top["n"]
+    rank = {"metrika": top["metrika"], "bontas": [dim], "limit": n,
+            "rendezes": "ertek_novekvo" if top["novekvo"] else "ertek_csokkeno"}
+    if query.get("idoablak"):
+        rank["idoablak"] = query["idoablak"]
+    g = sp.check(rank, cat, wl)
+    if not g.ok:
+        return query, []
+    rows = engine.run(g.spec, cat, wl, con).sorok
+    keys = [str(r["kulcs"]) for r in rows][:n]         # a motor az összes csoportot adja, rendezve
+    if not keys:
+        return query, []
+    out = copy.deepcopy(query)
+    szuro = out.get("szuro") if isinstance(out.get("szuro"), dict) else {}
+    out["szuro"] = {**szuro, dim: keys}
+    metric_name = cat.metrics[top["metrika"]].nev.lower()
+    fixes = [Correction("szuro", f"„{top['kifejezes'].strip()}”: előbb a rangsor ({metric_name} szerint, a kérdés "
+                                 f"időszakában), ebből az első {len(keys)}: "
+                                 + ", ".join(value_label(cat, dim, k) for k in keys), szuro.get(dim), keys)]
+    fq = fold(question)
+    dims = [d for d in (out.get("bontas") or []) if d]
+    new = dims
+    if dims == [dim]:
+        if dim != "kategoria" and CATEGORY_BREAKDOWN_Q.search(fold(top["maszkolt"])):
+            new = ["kategoria"]
+        elif TOGETHER_Q.search(fq):
+            new = []
+    elif not dims and SPREAD_Q.search(fq) and not TOGETHER_Q.search(fq):
+        new = [dim]
+    if new != dims:
+        fixes.append(Correction("bontas", "a csoporton belül a kérdés szerint", dims, new))
+        if new:
+            out["bontas"] = new
+        else:
+            out.pop("bontas", None)
+    if out.get("bontas") == [dim]:
+        out["limit"] = max(int(out.get("limit") or 0), len(keys))
+    return out, fixes
+
+
+def interpret(form: dict, question: str, cat: Catalog, wl: Whitelist, con=None) -> tuple[dict, sp.GateResult, list, list]:
+    """A modell űrlapjától a kapu ítéletéig — a modell nélküli rész (értékfeloldás, kódbeli javítások,
+    KAPU ①). Ugyanez fut a visszajátszásban is (tools/visszajatszas.py): a tárolt űrlapok az új kóddal.
+    con: a tárház (v5: az „az 5 legforgalmasabb állam” rangsorához; nélküle ez a lépés kimarad)."""
+    resolved, notes = resolve_filters(to_query_spec(form, cat), cat, wl)
+    query, fixes = correct(copy.deepcopy(resolved), question, cat, wl, model_metric=form.get("metrika"))
+    top = _top_n(question)
+    if top and con is not None and REJECT_KEY not in query and len(query.get("bontas") or []) < 2:
+        # a rangsor-kifejezés a részlekérdezésé: a javítások a kérdés többi részét nézik
+        q2, fixes2 = correct(copy.deepcopy(resolved), top["maszkolt"], cat, wl, model_metric=form.get("metrika"))
+        plain = q2.get("metrika") == top["metrika"] and not TOGETHER_Q.search(fold(question))
+        if REJECT_KEY not in q2 and not plain:
+            q2, extra = _apply_top_n(top, q2, question, cat, wl, con)
+            if extra:
+                query, fixes = q2, fixes2 + extra
+    if REJECT_KEY in query:                          # v5: a kód utasítja el (pl. két egymásra épülő lépés)
+        kod, uzenet = query.pop(REJECT_KEY)
+        return query, sp.GateResult(False, None, sp.Rejection(kod, uzenet)), notes, fixes
+    gate = sp.check(query, cat, wl)
+    if not gate.ok and gate.elutasitas.kod == "adaton_kivuli_idoablak" and _future(query, cat):
+        fixes.append(Correction("elutasitas", "a kérdés a rendszer „mai” napja utáni időszakra vonatkozik — "
+                                              "ez előrejelzés", "adaton_kivuli_idoablak", NOT_IN_CATALOG))
+        gate = sp.check({"metrika": FORECAST}, cat, wl)
+    return query, gate, notes, fixes
+
+
 def to_spec(question: str, cat: Catalog, wl: Whitelist, client: LlmClient,
-            question_id: str | None = None) -> SpecAttempt:
+            question_id: str | None = None, con=None) -> SpecAttempt:
     """Kérdés → űrlap (nyelvi modell) → értékfeloldás → KAPU ①. Legfeljebb egy javító kör."""
     version = client.cfg.hivasok["to_spec"].version
     tomor = compact(version)
@@ -746,14 +1069,8 @@ def to_spec(question: str, cat: Catalog, wl: Whitelist, client: LlmClient,
         fixes: list[Correction] = []
         try:
             att.urlap = parse_json(reply.text)
-            resolved, notes = resolve_filters(to_query_spec(att.urlap, cat), cat, wl)
-            att.gepi_alak, fixes = correct(resolved, question, cat, wl)
+            att.gepi_alak, att.gate, notes, fixes = interpret(att.urlap, question, cat, wl, con)
             att.feloldasok, att.javitasok = notes, fixes
-            att.gate = sp.check(att.gepi_alak, cat, wl)
-            if not att.gate.ok and att.gate.elutasitas.kod == "adaton_kivuli_idoablak" and _future(att.gepi_alak, cat):
-                fixes.append(Correction("elutasitas", "a kérdés a rendszer „mai” napja utáni időszakra vonatkozik — "
-                                                      "ez előrejelzés", "adaton_kivuli_idoablak", NOT_IN_CATALOG))
-                att.gate = sp.check({"metrika": FORECAST}, cat, wl)
             if not att.gate.ok and att.gate.elutasitas.kod in REPAIRABLE:
                 problem = att.gate.elutasitas.uzenet
         except json.JSONDecodeError as exc:

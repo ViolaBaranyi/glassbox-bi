@@ -223,6 +223,37 @@ def _distinct_number(n: str) -> bool:
     return "," in n or len(re.sub(r"\D", "", n)) >= 3
 
 
+# v5: kerekített szám, ha a modell kimondja, hogy kerekít („kb. 59%” — az eredményben 59,1%)
+APPROX = re.compile(r"(?:\bkb\.?|\bkörülbelül|\bmintegy|\bközel|\bnagyjából|\bmajdnem|\bcsaknem|"
+                    r"\bmegközelítőleg|\bkerekítve|\bdurván)\s+$", re.I)
+
+
+def _value(n: str) -> float:
+    return float(re.sub(r"[ \u00a0\u202f]", "", n).replace(",", "."))
+
+
+def approximations(text: str, view_values: dict) -> list[str]:
+    """A szöveg „kb. N” alakú számai, amelyek az eredmény egy értékének kerekítései a leírt
+    pontossággal, ugyanazzal a mértékegységgel (% vagy nem %). Legalább két értékes jegy kell
+    — „kb. 5%” sok értékre ráillene (a kitalált egész szám esélye, 6. lelet)."""
+    values = []
+    for shown, _ in view_values.values():
+        t = norm(shown)
+        for m in NUMBER.finditer(t):
+            values.append((_value(m.group(0)), t[m.end():].lstrip().startswith("%")))
+    t = norm(text)
+    out = []
+    for m in NUMBER.finditer(t):
+        n = m.group(0)
+        if not APPROX.search(t[:m.start()]) or len(re.sub(r"\D", "", n).lstrip("0")) < 2:
+            continue
+        dec = len(n.split(",")[1]) if "," in n else 0
+        pct, x = t[m.end():].lstrip().startswith("%"), _value(n)
+        if any(p == pct and abs(v - x) <= 0.5 * 10 ** -dec + 1e-9 for v, p in values):
+            out.append(n)
+    return out
+
+
 def uncovered(text: str, refs) -> list[str]:
     """A szöveg számai közül azok, amelyek nem vezethetők vissza a hivatkozott alakokra. v4: a
     jellegzetes szám mértékegység nélkül vagy más alakú mértékegységgel is visszavezethető
@@ -457,6 +488,14 @@ def verify(model_text: str, final_text: str, view_values: dict, unknown: list[st
         plain = plain.replace(norm(text), " ")
     written = NUMBER.findall(plain)                              # a modell saját számai
     v.fedetlen = uncovered(own, names + fixed + values)
+    approx = Counter(approximations(own, view_values))           # v5: „kb. 59%” a 59,1%-ból
+    kept = []
+    for n in v.fedetlen:
+        if approx[n] > 0:
+            approx[n] -= 1
+        else:
+            kept.append(n)
+    v.fedetlen = kept
     v.szamok = len(numbers(final_text))
     v.kozvetlen_szamok = len(written) - len(v.fedetlen)
     v.ismetelt_jelolok = sorted(k for k, n in Counter(PLACEHOLDER.findall(model_text)).items() if n > 1)

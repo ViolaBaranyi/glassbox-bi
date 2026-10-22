@@ -143,7 +143,7 @@ def _sum_times(times: list[dict]) -> dict:
 def run_one(q: dict, cat, wl, con, client: LlmClient, only_spec: bool, mod: str) -> dict:
     t0 = time.perf_counter()
     if only_spec:
-        att = to_spec(q["kerdes"], cat, wl, client, question_id=q["id"])
+        att = to_spec(q["kerdes"], cat, wl, client, question_id=q["id"], con=con)
         fa = FreeAnswer(q["kerdes"], att, None, None, (time.perf_counter() - t0) * 1000.0)
     else:
         fa = ask(q["kerdes"], cat, wl, con, client, mod=mod, question_id=q["id"])

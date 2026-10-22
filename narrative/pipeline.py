@@ -38,7 +38,7 @@ class FreeAnswer:
 def ask(question: str, cat: Catalog, wl: Whitelist, con, client: LlmClient, mod: str = "jelolo",
         question_id: str | None = None) -> FreeAnswer:
     t0 = time.perf_counter()
-    att = to_spec(question, cat, wl, client, question_id=question_id)
+    att = to_spec(question, cat, wl, client, question_id=question_id, con=con)
     if not att.gate.ok:
         return FreeAnswer(question, att, None, None, (time.perf_counter() - t0) * 1000.0)
     result = engine.run(att.gate.spec, cat, wl, con, att.gate.megjegyzesek)
