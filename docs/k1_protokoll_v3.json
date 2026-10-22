@@ -1,10 +1,10 @@
 {
   "nev": "Üvegdoboz BI — K1 mérés v3: a v4 és a v5 nyelvi réteg ugyanazon az új, lezárt kérdéssoron",
   "verzio": 3,
-  "allapot": "tervezet",
+  "allapot": "jovahagyva",
   "jovahagyas": {
-    "ki": null,
-    "mikor": null
+    "ki": "Baranyi Viola",
+    "mikor": "2026-10-22"
   },
   "elozmeny": "docs/k1_protokoll_v2.json (jóváhagyva 2026-10-20; eredmény: docs/k1_v2_eredmeny.md) és a kiegészítése, docs/k1_protokoll_v2_9b.json (docs/k1_9b_eredmeny.md, docs/k1_v2_gepvaltas.md). A v5 a v2 mérésén látott hibákból készült, ezért a v2 kérdéssorán mérve optimista lenne (a visszajátszás ott 100%-ot ad — a hangolás tükre, nem eredmény).",
   "kerdessor": {
