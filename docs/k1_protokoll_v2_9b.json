@@ -1,0 +1,108 @@
+{
+  "nev": "Üvegdoboz BI — K1 mérés v2, kiegészítés: a nagyobb modell (qwen3.5:9b) ugyanazon a lezárt kérdéssoron, ugyanazzal a kóddal",
+  "verzio": "2-9b",
+  "allapot": "jovahagyva",
+  "jovahagyas": {
+    "ki": "Baranyi Viola",
+    "mikor": "2026-10-22"
+  },
+  "elozmeny": "docs/k1_protokoll_v2.json (jóváhagyva 2026-10-20; eredmény: docs/k1_v2_eredmeny.md). A v2 a v3 és a v4 kódot vetette össze a 4B-vel; ez a kiegészítés a kódot rögzíti, és a modell méretét változtatja. A kiegészítést a v2 eredményeinek ismeretében, de a 9B bármilyen futása előtt írtuk; a kód és a kérdéssor azóta nem változott.",
+  "kerdessor": {
+    "fajl": "eval/meresi_kerdessor_v2.toml",
+    "sha256": "1c41464d69438a9ceb47fcdb25c3dcf48fed676eb63cbb92e82101d1c08e5dd9",
+    "lezarva": "2026-10-22T11:13:28",
+    "kerdesek": 56,
+    "megvalaszolando": 45,
+    "csapda": 11,
+    "szerzok": {
+      "viola": 56
+    },
+    "szabaly": "Ugyanaz a lezárt kérdéssor, mint a v2-ben (SHA256 1c41464d69438a9ceb47fcdb25c3dcf48fed676eb63cbb92e82101d1c08e5dd9); a lezárás itt csak megerősíti, hogy a fájl nem változott."
+  },
+  "kod": {
+    "verzio": "v4",
+    "ujjlenyomat": "7a3a5e94fe9efe50a28464f086712d3aa25121ca27d88c4897de97a1e17ce2a5",
+    "szabaly": "A mérőprogram csak a v4 kóddal indul (ugyanaz az ujjlenyomat, mint a v2-ben); a kód a 9B miatt nem változik."
+  },
+  "gep": {
+    "nev": "violapc",
+    "videokartya": "NVIDIA GeForce RTX 4060 Laptop GPU, 8 GB",
+    "processzor": "AMD Ryzen 7 7735HS (8 mag)",
+    "memoria": "23 GB",
+    "ollama": "0.40.8",
+    "megjegyzes": "A 9B (kb. 6,6 GB) a kártyára nagyrészt befér; ha nem teljesen, a maradék a processzoron fut — ez csak az időt érinti."
+  },
+  "modellek": [
+    {
+      "nev": "qwen3.5:9b",
+      "szerep": "a kiegészítés modellje (fő)"
+    }
+  ],
+  "alap": {
+    "futas": "a v4 4B ismétlése ugyanezen a gépen (violapc, videókártya), a docs/k1_protokoll_v2.json szerint, 2026-10-22 — a döntési napló aznapi sora rögzíti",
+    "modell": "qwen3.5:4b (lenyomat d8b0f5e9760c…, ugyanaz, mint a laptopon)",
+    "indok": "ugyanaz a gép, ugyanaz a kód: a különbség a modellé (a laptopos 4B a processzoron futott, ott a gép is más)"
+  },
+  "futasok": [
+    {
+      "kod": "v4",
+      "modell": "qwen3.5:9b",
+      "parancs": "uv run python -m narrative.meres --protokoll docs/k1_protokoll_v2_9b.json"
+    }
+  ],
+  "beallitasok": {
+    "ismetles": 1,
+    "promptok": {
+      "to_spec": "to_spec.v3",
+      "to_text": "to_text.v3",
+      "to_text_szabad": "to_text_szabad.v3"
+    },
+    "kontextus": 4096,
+    "homerseklet": {
+      "to_spec": 0.0,
+      "to_text": 0.2
+    },
+    "megjegyzes": "Egy ismétlés: a v1-ben a három ismétlés szinte azonos volt (a gépi alak 128/130, a kontrollszöveg 80/81 kérdésnél ugyanaz — rögzített mag), a hatásos mintaelemszám a kérdések száma; az idő több kérdésre jobban megéri."
+  },
+  "agak": {
+    "fo": "jelolo — mint a v1-ben",
+    "kontroll": "szabad — mint a v1-ben",
+    "parositas": "mint a v1-ben: egy ① hívás, ugyanabból az eredményből a két ág"
+  },
+  "mutatok": {
+    "fo": "Helyes válasz a feltett kérdésre (teljes egyezés: mérőszám, bontás, szűrő, időablak, rendezés) a megválaszolandó kérdéseken: a 9B és a 4B (ugyanezen a gépen) különbsége, kérdésenként párosítva.",
+    "masodlagos": [
+      "F-1 (mérőszám és bontás) és F-2 (a csapdák elutasítása, bármilyen és az elvárt indokkal), 9B és 4B, párosítva",
+      "kérdésenként az azonos ① értelmezés és az azonos ítélet száma",
+      "K1 ágonként: a modell szövegének megjelölt aránya (ugyanazzal a 2. kapuval), a felhasználóhoz jutó megjelölt szöveg, a sablonra váltás; a megjelölt arány különbsége párosítva",
+      "kérdéstípusonként a helyes értelmezés / helyes elutasítás",
+      "idő: az ① és a ② mediánja, az összes idő"
+    ],
+    "hipotezis": "Nincs irányított előrejelzés: a nagyobb modell várhatóan jobban érti a kérdéseket (F-1, teljes egyezés), a K1-re nincs várakozás. A dolgozat állítása (a kapu a modelltől függetlenül véd) akkor is áll, ha a 9B kevesebb megjelölt szöveget ír — ezért a K1-et mindkét irányban jelentjük."
+  },
+  "statisztika": {
+    "intervallum": "Wilson, 95%",
+    "paros_osszevetes": "kérdésenként (a 9B és a 4B ítélete ugyanarra a kérdésre): a különbség 95%-os bootstrap-intervallummal (a kérdések újramintavételével)",
+    "bootstrap": {
+      "B": 2000,
+      "mag": 20261022
+    }
+  },
+  "elemzes": {
+    "eszkoz": "tools/k1_futas_osszevetes.py",
+    "sha256": "47631bf7565619050dce79b2dff03a8126aaca3ba7e4c3e0a8667b2d5012cf8d",
+    "parancs": "uv run python tools/k1_futas_osszevetes.py --a logs/meres/<9B MAPPA> --b logs/meres/<4B GPU MAPPA> --cimke-a \"9B (GPU)\" --cimke-b \"4B (GPU)\" --protokoll docs/k1_protokoll_v2_9b.json --kimenet docs/k1_9b_eredmeny.md",
+    "megjegyzes": "Az összevetés kódja a futás előtt készült; ha utána változik, a jelentés figyelmeztet, és az eltérés a dolgozatba kerül."
+  },
+  "kezi_ellenorzes": {
+    "cel": "A 2. kapu tévesztései a 9B szövegein (a minta a futás végén készül, a v2-vel azonos rétegezéssel).",
+    "minta": "60 szöveg, vakon (tools/kezi_minta.py) — leíró, ha Viola ráér",
+    "ki": "Baranyi Viola",
+    "mag": 20261023
+  },
+  "elteresek_a_v2_tol": [
+    "más modell (qwen3.5:9b), más gép (videókártya); a kód, a promptok, a beállítások és a kérdéssor ugyanaz",
+    "a fő összevetés alapja a 4B ugyanezen a gépen, nem a laptopos futás",
+    "egyetlen új modell, előre kiválasztva: a 2B és a 4B családjából (a promptok erre a családra készültek); más modellt ez a kiegészítés nem enged"
+  ]
+}

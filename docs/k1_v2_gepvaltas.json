@@ -1,0 +1,980 @@
+{
+ "cim": "Gépváltás: a v4 4B a laptop processzorán és a videókártyán (ugyanaz a modellfájl, kód és kérdéssor)",
+ "protokoll": {
+  "fajl": "k1_protokoll_v2.json",
+  "sha256": "04ceaec1b26cb199d88f343f7d18c80a41c189399979d483cbc63450fd0c903b"
+ },
+ "futasok": {
+  "A": {
+   "cimke": "4B (videókártya)",
+   "mappa": "20261022_1040_qwen3.5-4b",
+   "kezdes": "2026-10-22T10:40:23",
+   "modell": "qwen3.5:4b",
+   "digest": "d8b0f5e9760cd1682034f292d7ef72ec46f432149be0df7574bf2d6e92e38c04",
+   "szolgaltato": "ollama",
+   "kontextus": 4096,
+   "tartas": "30m",
+   "homerseklet": {
+    "to_spec": 0.0,
+    "to_text": 0.2,
+    "to_text_szabad": 0.2
+   },
+   "protokoll": {
+    "fajl": "docs/k1_protokoll_v2.json",
+    "sha256": "04ceaec1b26cb199d88f343f7d18c80a41c189399979d483cbc63450fd0c903b",
+    "verzio": 2
+   },
+   "kerdessor": {
+    "fajl": "eval/meresi_kerdessor_v2.toml",
+    "sha256": "1c41464d69438a9ceb47fcdb25c3dcf48fed676eb63cbb92e82101d1c08e5dd9",
+    "kerdesek": 56
+   },
+   "promptok": {
+    "to_spec": {
+     "fajl": "prompts/to_spec.v3.md",
+     "sha256": "9266f32853112f0de53840f4cb4838baf7e84fc738ad0316c53ff3000ab54518"
+    },
+    "to_text": {
+     "fajl": "prompts/to_text.v3.md",
+     "sha256": "401ad3d593d22826719c545965681449cc60213acb87cd2185f557d0f5e01e08"
+    },
+    "to_text_szabad": {
+     "fajl": "prompts/to_text_szabad.v3.md",
+     "sha256": "4070fbfeeb31b74388d9599f2dc354159a35dae58ed4922375d90b1941bbfffe"
+    }
+   },
+   "ismetles": 1,
+   "csak_ertelmezes": false,
+   "kod": {
+    "commit": "69aa58113b4135d6ed03d4f57090e13f8936aaf9",
+    "nem_commitolt_valtozas": false,
+    "verzio": "v4",
+    "ujjlenyomat": "7a3a5e94fe9efe50a28464f086712d3aa25121ca27d88c4897de97a1e17ce2a5"
+   }
+  },
+  "B": {
+   "cimke": "4B (laptop, processzor)",
+   "mappa": "20261020_1300_qwen3.5-4b",
+   "kezdes": "2026-10-20T13:00:11",
+   "modell": "qwen3.5:4b",
+   "digest": "d8b0f5e9760cd1682034f292d7ef72ec46f432149be0df7574bf2d6e92e38c04",
+   "szolgaltato": "ollama",
+   "kontextus": 4096,
+   "tartas": "30m",
+   "homerseklet": {
+    "to_spec": 0.0,
+    "to_text": 0.2,
+    "to_text_szabad": 0.2
+   },
+   "protokoll": {
+    "fajl": "docs/k1_protokoll_v2.json",
+    "sha256": "04ceaec1b26cb199d88f343f7d18c80a41c189399979d483cbc63450fd0c903b",
+    "verzio": 2
+   },
+   "kerdessor": {
+    "fajl": "eval/meresi_kerdessor_v2.toml",
+    "sha256": "1c41464d69438a9ceb47fcdb25c3dcf48fed676eb63cbb92e82101d1c08e5dd9",
+    "kerdesek": 56
+   },
+   "promptok": {
+    "to_spec": {
+     "fajl": "prompts/to_spec.v3.md",
+     "sha256": "9266f32853112f0de53840f4cb4838baf7e84fc738ad0316c53ff3000ab54518"
+    },
+    "to_text": {
+     "fajl": "prompts/to_text.v3.md",
+     "sha256": "401ad3d593d22826719c545965681449cc60213acb87cd2185f557d0f5e01e08"
+    },
+    "to_text_szabad": {
+     "fajl": "prompts/to_text_szabad.v3.md",
+     "sha256": "4070fbfeeb31b74388d9599f2dc354159a35dae58ed4922375d90b1941bbfffe"
+    }
+   },
+   "ismetles": 1,
+   "csak_ertelmezes": false,
+   "kod": {
+    "commit": "d809a66d4ca4238ac15c34865bdcbbcaefb2cdd8",
+    "nem_commitolt_valtozas": false,
+    "verzio": "v4",
+    "ujjlenyomat": "7a3a5e94fe9efe50a28464f086712d3aa25121ca27d88c4897de97a1e17ce2a5"
+   }
+  }
+ },
+ "ellenorzes": {
+  "hibak": [],
+  "figyelmeztetesek": [],
+  "ujraszamolas": []
+ },
+ "eredmeny": {
+  "fo": {
+   "n": 45,
+   "v4": {
+    "k": 26,
+    "n": 45,
+    "arany": 0.5777777777777777,
+    "also": 0.4330078870920313,
+    "felso": 0.710312975327297
+   },
+   "v3": {
+    "k": 22,
+    "n": 45,
+    "arany": 0.4888888888888889,
+    "also": 0.349570237528785,
+    "felso": 0.6299553535541681
+   },
+   "kulonbseg": 0.08888888888888889,
+   "also": 0.0,
+   "felso": 0.2,
+   "mindketto": 21,
+   "csak_v4": 5,
+   "csak_v3": 1,
+   "egyik_sem": 18
+  },
+  "F1": {
+   "n": 45,
+   "v4": {
+    "k": 34,
+    "n": 45,
+    "arany": 0.7555555555555555,
+    "also": 0.6132661994297965,
+    "felso": 0.8576452056622828
+   },
+   "v3": {
+    "k": 30,
+    "n": 45,
+    "arany": 0.6666666666666666,
+    "also": 0.5207048830990042,
+    "felso": 0.7864112506566996
+   },
+   "kulonbseg": 0.08888888888888889,
+   "also": 0.022222222222222223,
+   "felso": 0.17777777777777778,
+   "mindketto": 30,
+   "csak_v4": 4,
+   "csak_v3": 0,
+   "egyik_sem": 11
+  },
+  "F2": {
+   "n": 11,
+   "v4": {
+    "k": 8,
+    "n": 11,
+    "arany": 0.7272727272727273,
+    "also": 0.43435469882387084,
+    "felso": 0.902539407099751
+   },
+   "v3": {
+    "k": 7,
+    "n": 11,
+    "arany": 0.6363636363636364,
+    "also": 0.35380117450784887,
+    "felso": 0.8483352890463243
+   },
+   "kulonbseg": 0.09090909090909091,
+   "also": 0.0,
+   "felso": 0.2727272727272727,
+   "mindketto": 7,
+   "csak_v4": 1,
+   "csak_v3": 0,
+   "egyik_sem": 3
+  },
+  "F2_elvart_indok": {
+   "n": 11,
+   "v4": {
+    "k": 6,
+    "n": 11,
+    "arany": 0.5454545454545454,
+    "also": 0.280091537409322,
+    "felso": 0.7872872837754024
+   },
+   "v3": {
+    "k": 6,
+    "n": 11,
+    "arany": 0.5454545454545454,
+    "also": 0.280091537409322,
+    "felso": 0.7872872837754024
+   },
+   "kulonbseg": 0.0,
+   "also": -0.2727272727272727,
+   "felso": 0.2727272727272727,
+   "mindketto": 5,
+   "csak_v4": 1,
+   "csak_v3": 1,
+   "egyik_sem": 4
+  },
+  "egyezes": {
+   "kerdesek": 56,
+   "azonos_ertelmezes": 44,
+   "azonos_itelet": 48
+  },
+  "tipus_szerint": {
+   "csapda": {
+    "n": 11,
+    "a": 6,
+    "b": 6
+   },
+   "idosor": {
+    "n": 8,
+    "a": 4,
+    "b": 2
+   },
+   "idoszak": {
+    "n": 2,
+    "a": 2,
+    "b": 1
+   },
+   "kombinalt": {
+    "n": 13,
+    "a": 6,
+    "b": 7
+   },
+   "nyelvi": {
+    "n": 11,
+    "a": 4,
+    "b": 2
+   },
+   "osszesito": {
+    "n": 1,
+    "a": 1,
+    "b": 1
+   },
+   "rangsor": {
+    "n": 6,
+    "a": 5,
+    "b": 5
+   },
+   "szures": {
+    "n": 4,
+    "a": 4,
+    "b": 4
+   }
+  },
+  "K1": {
+   "jelolo": {
+    "a": {
+     "k": 21,
+     "n": 45,
+     "arany": 0.4666666666666667,
+     "also": 0.32935132065011297,
+     "felso": 0.6092254525987463
+    },
+    "b": {
+     "k": 16,
+     "n": 44,
+     "arany": 0.36363636363636365,
+     "also": 0.23783529708820186,
+     "felso": 0.5113362312095656
+    },
+    "eljut_a": {
+     "k": 0,
+     "n": 45,
+     "arany": 0.0,
+     "also": 0.0,
+     "felso": 0.07865159873288836
+    },
+    "eljut_b": {
+     "k": 0,
+     "n": 44,
+     "arany": 0.0,
+     "also": 0.0,
+     "felso": 0.08029560375848066
+    },
+    "sablon_a": {
+     "k": 21,
+     "n": 45,
+     "arany": 0.4666666666666667,
+     "also": 0.32935132065011297,
+     "felso": 0.6092254525987463
+    },
+    "sablon_b": {
+     "k": 16,
+     "n": 44,
+     "arany": 0.36363636363636365,
+     "also": 0.23783529708820186,
+     "felso": 0.5113362312095656
+    },
+    "paros": {
+     "n": 44,
+     "v4": {
+      "k": 21,
+      "n": 44,
+      "arany": 0.4772727272727273,
+      "also": 0.337549910322511,
+      "felso": 0.6206453443937836
+     },
+     "v3": {
+      "k": 16,
+      "n": 44,
+      "arany": 0.36363636363636365,
+      "also": 0.23783529708820186,
+      "felso": 0.5113362312095656
+     },
+     "kulonbseg": 0.11363636363636363,
+     "also": -0.06818181818181818,
+     "felso": 0.29545454545454547,
+     "mindketto": 10,
+     "csak_v4": 11,
+     "csak_v3": 6,
+     "egyik_sem": 17
+    }
+   },
+   "szabad": {
+    "a": {
+     "k": 19,
+     "n": 45,
+     "arany": 0.4222222222222222,
+     "also": 0.289687024672703,
+     "felso": 0.5669921129079686
+    },
+    "b": {
+     "k": 16,
+     "n": 44,
+     "arany": 0.36363636363636365,
+     "also": 0.23783529708820186,
+     "felso": 0.5113362312095656
+    },
+    "eljut_a": {
+     "k": 19,
+     "n": 45,
+     "arany": 0.4222222222222222,
+     "also": 0.289687024672703,
+     "felso": 0.5669921129079686
+    },
+    "eljut_b": {
+     "k": 16,
+     "n": 44,
+     "arany": 0.36363636363636365,
+     "also": 0.23783529708820186,
+     "felso": 0.5113362312095656
+    },
+    "sablon_a": {
+     "k": 0,
+     "n": 45,
+     "arany": 0.0,
+     "also": 0.0,
+     "felso": 0.07865159873288836
+    },
+    "sablon_b": {
+     "k": 0,
+     "n": 44,
+     "arany": 0.0,
+     "also": 0.0,
+     "felso": 0.08029560375848066
+    },
+    "paros": {
+     "n": 44,
+     "v4": {
+      "k": 19,
+      "n": 44,
+      "arany": 0.4318181818181818,
+      "also": 0.2968272340851781,
+      "felso": 0.5777585300637057
+     },
+     "v3": {
+      "k": 16,
+      "n": 44,
+      "arany": 0.36363636363636365,
+      "also": 0.23783529708820186,
+      "felso": 0.5113362312095656
+     },
+     "kulonbseg": 0.06818181818181818,
+     "also": -0.06818181818181818,
+     "felso": 0.20454545454545456,
+     "mindketto": 13,
+     "csak_v4": 6,
+     "csak_v3": 3,
+     "egyik_sem": 22
+    }
+   }
+  },
+  "kerdesenkent": [
+   {
+    "id": "k201",
+    "tipus": "idoszak",
+    "kerdes": "mennyi lett a végösszeg az egész 2017-es évre nézve?",
+    "a": "helyes",
+    "b": "téves elutasítás",
+    "azonos_ertelmezes": false,
+    "a_elteres": []
+   },
+   {
+    "id": "k202",
+    "tipus": "osszesito",
+    "kerdes": "hany darab megrendelést kaptunk összesen a kezdettől fogva?",
+    "a": "helyes",
+    "b": "helyes",
+    "azonos_ertelmezes": true,
+    "a_elteres": []
+   },
+   {
+    "id": "k203",
+    "tipus": "idoszak",
+    "kerdes": "az elmult félévben mennyi volt a cég teljes bevétele?",
+    "a": "helyes",
+    "b": "helyes",
+    "azonos_ertelmezes": true,
+    "a_elteres": []
+   },
+   {
+    "id": "k204",
+    "tipus": "szures",
+    "kerdes": "mi az atlagos rendelesi ertek szombatonkent?",
+    "a": "helyes",
+    "b": "helyes",
+    "azonos_ertelmezes": true,
+    "a_elteres": []
+   },
+   {
+    "id": "k205",
+    "tipus": "rangsor",
+    "kerdes": "top 10 legrosszabb kategória a csúszások százaléka alapján?",
+    "a": "helyes",
+    "b": "helyes",
+    "azonos_ertelmezes": true,
+    "a_elteres": []
+   },
+   {
+    "id": "k206",
+    "tipus": "kombinalt",
+    "kerdes": "melyik 3 államba küldtük a legkevesebb csomagot idén?",
+    "a": "helyes",
+    "b": "helyes",
+    "azonos_ertelmezes": true,
+    "a_elteres": []
+   },
+   {
+    "id": "k207",
+    "tipus": "rangsor",
+    "kerdes": "sorold fel a legjobb öt eladói régiót bevétel szerint!",
+    "a": "hibás értelmezés",
+    "b": "hibás értelmezés",
+    "azonos_ertelmezes": true,
+    "a_elteres": [
+     "bontás: ['vevo_regio'] (elvárt: ['elado_allam'])"
+    ]
+   },
+   {
+    "id": "k208",
+    "tipus": "kombinalt",
+    "kerdes": "melyik az a kategória amit a legtöbbször vesznek hétfőn?",
+    "a": "helyes",
+    "b": "helyes",
+    "azonos_ertelmezes": true,
+    "a_elteres": []
+   },
+   {
+    "id": "k209",
+    "tipus": "rangsor",
+    "kerdes": "mi a top 5 legdrágább szállítási díjú termékcsoportunk?",
+    "a": "helyes",
+    "b": "helyes",
+    "azonos_ertelmezes": true,
+    "a_elteres": []
+   },
+   {
+    "id": "k210",
+    "tipus": "kombinalt",
+    "kerdes": "mennyi volt a forgalom minas gerais-ban 2018 Q2-ben?",
+    "a": "hibás értelmezés",
+    "b": "helyes",
+    "azonos_ertelmezes": false,
+    "a_elteres": [
+     "szűrő: {'elado_allam': ['MG']} (elvárt: {'vevo_allam': ['MG']})"
+    ]
+   },
+   {
+    "id": "k211",
+    "tipus": "kombinalt",
+    "kerdes": "csak a szépségápolást nézve mennyi a szállítási idő átlaga az idén?",
+    "a": "helyes",
+    "b": "helyes",
+    "azonos_ertelmezes": true,
+    "a_elteres": []
+   },
+   {
+    "id": "k212",
+    "tipus": "szures",
+    "kerdes": "északi régiós vevőknél hány nap a medián kiszállítás?",
+    "a": "helyes",
+    "b": "helyes",
+    "azonos_ertelmezes": true,
+    "a_elteres": []
+   },
+   {
+    "id": "k213",
+    "tipus": "szures",
+    "kerdes": "mennyi idő alatt ér oda egy csomag átlagosan ha a vevő és az eladó is SP-ben van?",
+    "a": "helyes",
+    "b": "helyes",
+    "azonos_ertelmezes": true,
+    "a_elteres": []
+   },
+   {
+    "id": "k214",
+    "tipus": "rangsor",
+    "kerdes": "vasarnaponkent tobb a bevétel mint szerdán?",
+    "a": "helyes",
+    "b": "helyes",
+    "azonos_ertelmezes": true,
+    "a_elteres": []
+   },
+   {
+    "id": "k215",
+    "tipus": "kombinalt",
+    "kerdes": "hány csomagot vittek ki késve RJ államba tavaly decemberben?",
+    "a": "helyes",
+    "b": "helyes",
+    "azonos_ertelmezes": true,
+    "a_elteres": []
+   },
+   {
+    "id": "k216",
+    "tipus": "idosor",
+    "kerdes": "hogy nez ki a 2018-as forgalom honaprol honapra?",
+    "a": "helyes",
+    "b": "helyes",
+    "azonos_ertelmezes": true,
+    "a_elteres": []
+   },
+   {
+    "id": "k217",
+    "tipus": "idosor",
+    "kerdes": "éves szinten növekszik a kosárérték?",
+    "a": "helyes",
+    "b": "helyes",
+    "azonos_ertelmezes": true,
+    "a_elteres": []
+   },
+   {
+    "id": "k218",
+    "tipus": "idosor",
+    "kerdes": "mutasd a késett rendelések számának havi alakulását 2017 elejétől!",
+    "a": "helyes",
+    "b": "hibás értelmezés",
+    "azonos_ertelmezes": false,
+    "a_elteres": []
+   },
+   {
+    "id": "k219",
+    "tipus": "idosor",
+    "kerdes": "szallitasi dijak hogy valtoztak negyedevenkent a tavalyi ev folyaman?",
+    "a": "helyes",
+    "b": "hibás értelmezés",
+    "azonos_ertelmezes": false,
+    "a_elteres": []
+   },
+   {
+    "id": "k220",
+    "tipus": "kombinalt",
+    "kerdes": "a hét napjai szerint hogy oszlik el a rendelések száma idén?",
+    "a": "helyes",
+    "b": "helyes",
+    "azonos_ertelmezes": true,
+    "a_elteres": []
+   },
+   {
+    "id": "k221",
+    "tipus": "nyelvi",
+    "kerdes": "ha csak a butorokat meg a sport cuccokat nezem, hol volt a legkisebb a keses aranya az elmult 3 honapban?",
+    "a": "helyes",
+    "b": "hibás értelmezés",
+    "azonos_ertelmezes": false,
+    "a_elteres": []
+   },
+   {
+    "id": "k222",
+    "tipus": "nyelvi",
+    "kerdes": "atlagos tavolsag a vevohoz a delkeleti regioban tavaly nyaron?",
+    "a": "hibás értelmezés",
+    "b": "hibás értelmezés",
+    "azonos_ertelmezes": true,
+    "a_elteres": [
+     "tól: 2017-01-01 (elvárt: 2017-06-01)",
+     "ig: 2017-12-31 (elvárt: 2017-08-31)"
+    ]
+   },
+   {
+    "id": "k223",
+    "tipus": "kombinalt",
+    "kerdes": "SP-ből északra mennyi a fuvardíj mediánja mostanság?",
+    "a": "hibás értelmezés",
+    "b": "hibás értelmezés",
+    "azonos_ertelmezes": true,
+    "a_elteres": [
+     "szűrő: {'vevo_allam': ['SP']} (elvárt: {'elado_allam': ['SP'], 'vevo_regio': ['N']})"
+    ]
+   },
+   {
+    "id": "k224",
+    "tipus": "kombinalt",
+    "kerdes": "2017 utolso 4 honapjaban mi volt a legpörgősebb 3 kategória bevétel alapján?",
+    "a": "hibás értelmezés",
+    "b": "hibás értelmezés",
+    "azonos_ertelmezes": true,
+    "a_elteres": [
+     "tól: 2018-05-01 (elvárt: 2017-09-01)",
+     "ig: az adat vége (elvárt: 2017-12-31)"
+    ]
+   },
+   {
+    "id": "k225",
+    "tipus": "kombinalt",
+    "kerdes": "az 5 legforgalmasabb allam atlagos szallitasi ideje miben ter el egymastol 2018-ban?",
+    "a": "hibás értelmezés",
+    "b": "hibás értelmezés",
+    "azonos_ertelmezes": true,
+    "a_elteres": [
+     "szűrő: {} (elvárt: {'vevo_allam': ['MG', 'PR', 'RJ', 'RS', 'SP']})"
+    ]
+   },
+   {
+    "id": "k226",
+    "tipus": "nyelvi",
+    "kerdes": "mibe kerul a szallitas atlagosan a jatekoknal ha pénteken veszik meg oket?",
+    "a": "hibás értelmezés",
+    "b": "hibás értelmezés",
+    "azonos_ertelmezes": true,
+    "a_elteres": [
+     "metrika: atlagos_szallitasi_ido (elvárt: atlagos_szallitasi_dij)"
+    ]
+   },
+   {
+    "id": "k227",
+    "tipus": "rangsor",
+    "kerdes": "mennyi a késés napokban mérve a top 5 legrosszabb államban?",
+    "a": "helyes",
+    "b": "helyes",
+    "azonos_ertelmezes": true,
+    "a_elteres": []
+   },
+   {
+    "id": "k228",
+    "tipus": "kombinalt",
+    "kerdes": "hany rendelest hozott a 3 legkisebb regio osszesen 2017 masodik feleben?",
+    "a": "helyes",
+    "b": "helyes",
+    "azonos_ertelmezes": true,
+    "a_elteres": []
+   },
+   {
+    "id": "k229",
+    "tipus": "csapda",
+    "kerdes": "volt e olyan ev amikor az egeszsegügyi termekekbol tobb fogyott mint a szamitogepekbol?",
+    "a": "hiányzó elutasítás",
+    "b": "hiányzó elutasítás",
+    "azonos_ertelmezes": false,
+    "a_elteres": [
+     "elfogadva: {\"bontas\": [\"kategoria\"], \"limit\": 2, \"metrika\": \"forgalom\", \"rendezes\": \"ertek_novekvo\", \"szuro\": {\"kategoria\": [\"computers\", \"health_beauty\"]}}"
+    ]
+   },
+   {
+    "id": "k230",
+    "tipus": "idosor",
+    "kerdes": "csokkent a vallalt szallitasi ido 2017 ota?",
+    "a": "hibás értelmezés",
+    "b": "hibás értelmezés",
+    "azonos_ertelmezes": false,
+    "a_elteres": [
+     "bontás: [] (elvárt: ['honap'])",
+     "tól: 2017-09-15 (elvárt: 2017-01-01)",
+     "rendezes: ertek_csokkeno (elvárt: bontas)"
+    ]
+   },
+   {
+    "id": "k231",
+    "tipus": "nyelvi",
+    "kerdes": "melyik honapban fognak melle a legnagyobbat a vallalt szallitasi idovel a deli regioban?",
+    "a": "hibás értelmezés",
+    "b": "hibás értelmezés",
+    "azonos_ertelmezes": true,
+    "a_elteres": [
+     "metrika: atlagos_vallalt_ido (elvárt: atlagos_keses vagy kesesi_arany)",
+     "bontás: [] (elvárt: ['honap'])"
+    ]
+   },
+   {
+    "id": "k232",
+    "tipus": "csapda",
+    "kerdes": "honnan hova a legmagasabb a fuvar atlag dija idén (régiók között)?",
+    "a": "hiányzó elutasítás",
+    "b": "hiányzó elutasítás",
+    "azonos_ertelmezes": true,
+    "a_elteres": [
+     "elfogadva: {\"bontas\": [\"vevo_regio\"], \"idoablak\": {\"tol\": \"2018-01-01\"}, \"limit\": 10, \"metrika\": \"atlagos_szallitasi_dij\", \"rendezes\": \"ertek_csokkeno\", \"szuro\": {}}"
+    ]
+   },
+   {
+    "id": "k233",
+    "tipus": "idosor",
+    "kerdes": "mi a legforgalmasabb honap a lakberendezes kategoria eseteben?",
+    "a": "hibás értelmezés",
+    "b": "hibás értelmezés",
+    "azonos_ertelmezes": true,
+    "a_elteres": [
+     "szűrő: {} (elvárt: {'kategoria': ['furniture_decor']})"
+    ]
+   },
+   {
+    "id": "k234",
+    "tipus": "rangsor",
+    "kerdes": "top 10 kategoria elado-vevo tavolsag szerint (melyiknel utazik a legtobbet a csomag)?",
+    "a": "helyes",
+    "b": "helyes",
+    "azonos_ertelmezes": true,
+    "a_elteres": []
+   },
+   {
+    "id": "k235",
+    "tipus": "szures",
+    "kerdes": "hány nap a csúszás átlaga, ha vasárnap jön be a rendelés?",
+    "a": "helyes",
+    "b": "helyes",
+    "azonos_ertelmezes": true,
+    "a_elteres": []
+   },
+   {
+    "id": "k236",
+    "tipus": "kombinalt",
+    "kerdes": "az 5 legnagyobb forgalmu allamban mibol adtak el a legkevesebbet tavaly?",
+    "a": "hibás értelmezés",
+    "b": "hibás értelmezés",
+    "azonos_ertelmezes": true,
+    "a_elteres": [
+     "metrika: atlagos_kosarertek (elvárt: rendelesek_szama vagy forgalom)",
+     "bontás: ['vevo_allam'] (elvárt: ['kategoria'])",
+     "szűrő: {} (elvárt: {'vevo_allam': ['MG', 'PR', 'RJ', 'RS', 'SP']})"
+    ]
+   },
+   {
+    "id": "k237",
+    "tipus": "nyelvi",
+    "kerdes": "menyni vót a legkisebb forgalmu honapunk tavaly?",
+    "a": "helyes",
+    "b": "helyes",
+    "azonos_ertelmezes": true,
+    "a_elteres": []
+   },
+   {
+    "id": "k238",
+    "tipus": "nyelvi",
+    "kerdes": "havi bontas 2017 re az atlag szallitasra?",
+    "a": "helyes",
+    "b": "helyes",
+    "azonos_ertelmezes": true,
+    "a_elteres": []
+   },
+   {
+    "id": "k239",
+    "tipus": "idosor",
+    "kerdes": "mikor volt a legalacsonyabb a csuszasok szazaleka az egesz idoszakot nezve?",
+    "a": "hibás értelmezés",
+    "b": "hibás értelmezés",
+    "azonos_ertelmezes": true,
+    "a_elteres": [
+     "bontás: [] (elvárt: ['honap'])"
+    ]
+   },
+   {
+    "id": "k240",
+    "tipus": "idosor",
+    "kerdes": "2018 Q1 vs Q2 hogy viszonyul egymashoz atlag kosar ertekben?",
+    "a": "hibás értelmezés",
+    "b": "hibás értelmezés",
+    "azonos_ertelmezes": true,
+    "a_elteres": [
+     "bontás: [] (elvárt: ['honap'])",
+     "ig: 2018-03-31 (elvárt: 2018-06-30)",
+     "rendezes: ertek_csokkeno (elvárt: bontas)"
+    ]
+   },
+   {
+    "id": "k241",
+    "tipus": "nyelvi",
+    "kerdes": "hova kuldjuk a legtob butort rio-bol?",
+    "a": "hibás értelmezés",
+    "b": "hibás értelmezés",
+    "azonos_ertelmezes": false,
+    "a_elteres": [
+     "metrika: forgalom (elvárt: rendelesek_szama)"
+    ]
+   },
+   {
+    "id": "k242",
+    "tipus": "kombinalt",
+    "kerdes": "az elektronika kategoria mediam szallitasi ideje 2017 vs 2018?",
+    "a": "hibás értelmezés",
+    "b": "hibás értelmezés",
+    "azonos_ertelmezes": true,
+    "a_elteres": [
+     "metrika: atlagos_szallitasi_ido (elvárt: median_szallitasi_ido)",
+     "bontás: [] (elvárt: ['ev'])",
+     "tól: az adat eleje (elvárt: 2017-01-01)"
+    ]
+   },
+   {
+    "id": "k243",
+    "tipus": "csapda",
+    "kerdes": "a 3 legnagyobb regió bevétele negyedévente 2017-től?",
+    "a": "hiányzó elutasítás",
+    "b": "hiányzó elutasítás",
+    "azonos_ertelmezes": true,
+    "a_elteres": [
+     "elfogadva: {\"bontas\": [\"vevo_regio\"], \"idoablak\": {\"tol\": \"2017-01-01\"}, \"limit\": 3, \"metrika\": \"forgalom\", \"rendezes\": \"ertek_csokkeno\", \"szuro\": {}}"
+    ]
+   },
+   {
+    "id": "k244",
+    "tipus": "nyelvi",
+    "kerdes": "hanyadik a sorban sao paulo ha a fuvar dijakat nezzuk legolcsóbbtol?",
+    "a": "hibás értelmezés",
+    "b": "hibás értelmezés",
+    "azonos_ertelmezes": true,
+    "a_elteres": [
+     "bontás: [] (elvárt: ['vevo_allam'])",
+     "szűrő: {'vevo_allam': ['SP']} (elvárt: {})"
+    ]
+   },
+   {
+    "id": "k245",
+    "tipus": "nyelvi",
+    "kerdes": "hany nap a diff a vallalt es a tenyleges kiszallitas kozott atlagosan 2018 tavaszan?",
+    "a": "helyes",
+    "b": "hibás értelmezés",
+    "azonos_ertelmezes": false,
+    "a_elteres": []
+   },
+   {
+    "id": "k246",
+    "tipus": "nyelvi",
+    "kerdes": "szamitogepeknel mizu a szallitasi atlaggal a 2 legutolso honapban?",
+    "a": "hibás értelmezés",
+    "b": "hibás értelmezés",
+    "azonos_ertelmezes": true,
+    "a_elteres": [
+     "szűrő: {} (elvárt: {'kategoria': ['computers']})",
+     "tól: az adat eleje (elvárt: 2018-07-01)"
+    ]
+   },
+   {
+    "id": "k247",
+    "tipus": "nyelvi",
+    "kerdes": "elado es vevo kozti atlagos km honaprol honapra tavaly elottrol?",
+    "a": "hibás értelmezés",
+    "b": "hibás értelmezés",
+    "azonos_ertelmezes": false,
+    "a_elteres": [
+     "tól: 2017-01-01 (elvárt: az adat eleje)",
+     "ig: 2017-12-31 (elvárt: 2016-12-31)"
+    ]
+   },
+   {
+    "id": "k248",
+    "tipus": "kombinalt",
+    "kerdes": "az év melyik hónapjában a legmagasabb a fuvardíj mediánja az északkeleti régiónál?",
+    "a": "hibás értelmezés",
+    "b": "hibás értelmezés",
+    "azonos_ertelmezes": true,
+    "a_elteres": [
+     "bontás: [] (elvárt: ['honap'])",
+     "rendezes: ertek_novekvo (elvárt: ertek_csokkeno vagy bontas)"
+    ]
+   },
+   {
+    "id": "k250",
+    "tipus": "csapda",
+    "kerdes": "Mennyi volt az adózott eredményünk az utolsó félévben?",
+    "a": "helyes elutasítás",
+    "b": "helyes elutasítás",
+    "azonos_ertelmezes": true,
+    "a_elteres": []
+   },
+   {
+    "id": "k251",
+    "tipus": "csapda",
+    "kerdes": "Melyik a legrosszabbul értékelt termék a játékok közül?",
+    "a": "helyes elutasítás",
+    "b": "helyes elutasítás",
+    "azonos_ertelmezes": true,
+    "a_elteres": []
+   },
+   {
+    "id": "k252",
+    "tipus": "csapda",
+    "kerdes": "Hány százaléka lett lemondva a csomagoknak karácsonykor?",
+    "a": "helyes elutasítás",
+    "b": "helyes elutasítás",
+    "azonos_ertelmezes": true,
+    "a_elteres": []
+   },
+   {
+    "id": "k254",
+    "tipus": "csapda",
+    "kerdes": "Melyik kategória fog a legnagyobbat nőni a következő évben?",
+    "a": "más elutasítás",
+    "b": "helyes elutasítás",
+    "azonos_ertelmezes": false,
+    "a_elteres": [
+     "elvárt: nem_elerheto vagy adaton_kivuli_idoablak, kapott: ismeretlen_metrika"
+    ]
+   },
+   {
+    "id": "k255",
+    "tipus": "csapda",
+    "kerdes": "Mi volt a top 3 állam 2014-ben bevétel alapján?",
+    "a": "más elutasítás",
+    "b": "más elutasítás",
+    "azonos_ertelmezes": true,
+    "a_elteres": [
+     "elvárt: adaton_kivuli_idoablak, kapott: ismeretlen_metrika"
+    ]
+   },
+   {
+    "id": "k256",
+    "tipus": "csapda",
+    "kerdes": "Hogyan zártuk a 2019-es évet forgalom szempontjából?",
+    "a": "helyes elutasítás",
+    "b": "helyes elutasítás",
+    "azonos_ertelmezes": true,
+    "a_elteres": []
+   },
+   {
+    "id": "k259",
+    "tipus": "csapda",
+    "kerdes": "Mekkora a haszonkulcs a bútorokon, ha levonjuk a marketinget?",
+    "a": "helyes elutasítás",
+    "b": "helyes elutasítás",
+    "azonos_ertelmezes": true,
+    "a_elteres": []
+   },
+   {
+    "id": "k260",
+    "tipus": "csapda",
+    "kerdes": "Melyik futárcég hozta össze a legtöbb késést idén?",
+    "a": "helyes elutasítás",
+    "b": "hiányzó elutasítás",
+    "azonos_ertelmezes": false,
+    "a_elteres": []
+   }
+  ]
+ },
+ "ido": {
+  "4B (videókártya)": {
+   "ido1_median_ms": 3613.5,
+   "ido1_betoltes_median_ms": 5.0,
+   "ido1_prompt_median_ms": 372.5,
+   "ido1_generalas_median_ms": 1100.5,
+   "ido2_jelolo_median_ms": 3498,
+   "ido2_szabad_median_ms": 3701,
+   "osszes_ms": 1147276
+  },
+  "4B (laptop, processzor)": {
+   "ido1_median_ms": 21210.5,
+   "ido1_betoltes_median_ms": 21.5,
+   "ido1_prompt_median_ms": 11502.5,
+   "ido1_generalas_median_ms": 9509.5,
+   "ido2_jelolo_median_ms": 16496.5,
+   "ido2_szabad_median_ms": 17535.0,
+   "osszes_ms": 3116441
+  }
+ }
+}
