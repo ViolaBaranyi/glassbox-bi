@@ -287,6 +287,20 @@ fejlesztői próbasor élő futása a videókártyán (okt. 22.): értelmezés 1
 munkakörönkénti szerepkártyák szerint (`eval/v3_kerdesiras_utmutato.md`); a fejlesztés a kérdéseket a
 v5 lezárásáig nem látja, és senki nem futtatja őket a rendszeren.
 
+**A v3 mérés eredménye (okt. 22., `docs/k1_v3_eredmeny.md`).** Viola 50 új kérdésén (39
+megválaszolandó + 11 csapda, hat munkakör szerepkártyája szerint, a v5 lezárása után), a
+videókártyán, a 4B-vel, kérdésenként párosítva: teljes egyezés v4 59,0% → v5 64,1% (+5,1 pp, 95%:
+−5,1 – +15,4; 3 kérdésen csak a v5, 1-en csak a v4 helyes), F-1 71,8% → 79,5%, F-2 63,6% → 54,5%.
+A modell nyers válasza a két futásban 49/50 kérdésnél azonos volt, így a különbség tisztán a kódé:
+4 javulás, 3 romlás. A v2 kérdésein a visszajátszás 100%-ot adott — új kérdéseken a javulás kicsi,
+és az intervallum a nullát is tartalmazza: a látott hibákból írt szabályok egy része általánosít
+(időkifejezések, két év összevetése, a kérdésben kimondott mérőszám, a jövő), más része túl
+általános (a „-ból / -ből” mindig eladót jelent: „Bahiából jött be” a vevőé; a modell jogos
+„nem elérhető” elutasítását a kód egy mérőszám-szó alapján felülírta — 2 csapda). A K1 a fő ágon
+nem változott (a modell szövegeinek kb. 37%-át jelöli meg a kapu, a felhasználóhoz 0% jut), a
+kontrollágon 18% → 24%. A 9B a v5-tel: teljes egyezés 64,1% (mint a 4B), F-2 63,6%, de a fő ágon
+csak 14,7% szövegét kell megjelölni (a 4B-nél 37,8%). Egy futás 8–11 perc.
+
 ---
 
 ## Mi van kész
