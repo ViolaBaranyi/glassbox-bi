@@ -1,0 +1,7447 @@
+{
+ "letrehozva": "2026-10-22T20:44:00+00:00",
+ "kod_ujjlenyomat": "9295c1cdc88d360b3221863dc84bf8035856701d6e9ed35704f67e6e2f00004c",
+ "beallitas": {
+  "K": 200,
+  "mag": 20261026,
+  "ci_mag": 20261027,
+  "tartomany": [
+   0.5,
+   1.5
+  ],
+  "kerdessorok": [
+   "eval/meresi_kerdessor.toml",
+   "eval/meresi_kerdessor_v2.toml",
+   "eval/meresi_kerdessor_v3.toml"
+  ],
+  "alakok": {
+   "a": "a megjelenítés pontosságával",
+   "b": "eggyel kevesebb tizedessel",
+   "c": "eggyel kevesebb tizedessel, „kb.” előtaggal"
+  }
+ },
+ "eredmenyek": 186,
+ "sorok": [
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k001",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "darab",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k001",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "darab",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k002",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k002",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k003",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k003",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k003",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k003",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k003",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k003",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k004",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "km",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k004",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "km",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k005",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k005",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k005",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k005",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k005",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k005",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k006",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k006",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k006",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k006",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k006",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k006",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k007",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "darab",
+   "ertekek": 12,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k007",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "darab",
+   "ertekek": 12,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k008",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 5,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k008",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 5,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k009",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "arany",
+   "ertekek": 6,
+   "atcsuszas": 0.045
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k009",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "arany",
+   "ertekek": 6,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k009",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "arany",
+   "ertekek": 6,
+   "atcsuszas": 0.07
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k009",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "arany",
+   "ertekek": 6,
+   "atcsuszas": 0.015
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k009",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "arany",
+   "ertekek": 6,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k009",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "arany",
+   "ertekek": 6,
+   "atcsuszas": 0.06
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k010",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 12,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k010",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "brl",
+   "ertekek": 12,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k010",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "brl",
+   "ertekek": 12,
+   "atcsuszas": 0.015
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k010",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 12,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k010",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "brl",
+   "ertekek": 12,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k010",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "brl",
+   "ertekek": 12,
+   "atcsuszas": 0.015
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k011",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 12,
+   "atcsuszas": 0.02
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k011",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 12,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k011",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 12,
+   "atcsuszas": 0.165
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k011",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 12,
+   "atcsuszas": 0.02
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k011",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 12,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k011",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 12,
+   "atcsuszas": 0.16
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k012",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "darab",
+   "ertekek": 12,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k012",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "darab",
+   "ertekek": 12,
+   "atcsuszas": 0.005
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k013",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 8,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k013",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "brl",
+   "ertekek": 8,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k013",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "brl",
+   "ertekek": 8,
+   "atcsuszas": 0.005
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k013",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 8,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k013",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "brl",
+   "ertekek": 8,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k013",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "brl",
+   "ertekek": 8,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k014",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 12,
+   "atcsuszas": 0.04
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k014",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 12,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k014",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 12,
+   "atcsuszas": 0.305
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k014",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 12,
+   "atcsuszas": 0.035
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k014",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 12,
+   "atcsuszas": 0.06
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k014",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 12,
+   "atcsuszas": 0.265
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k015",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 7,
+   "atcsuszas": 0.01
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k015",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 7,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k015",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 7,
+   "atcsuszas": 0.125
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k015",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 7,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k015",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 7,
+   "atcsuszas": 0.04
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k015",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 7,
+   "atcsuszas": 0.16
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k016",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 6,
+   "atcsuszas": 0.02
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k016",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 6,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k016",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 6,
+   "atcsuszas": 0.065
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k016",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 6,
+   "atcsuszas": 0.005
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k016",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 6,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k016",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 6,
+   "atcsuszas": 0.07
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k017",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "km",
+   "ertekek": 12,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k017",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "km",
+   "ertekek": 12,
+   "atcsuszas": 0.025
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k018",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "arany",
+   "ertekek": 12,
+   "atcsuszas": 0.055
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k018",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "arany",
+   "ertekek": 12,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k018",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "arany",
+   "ertekek": 12,
+   "atcsuszas": 0.13
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k018",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "arany",
+   "ertekek": 12,
+   "atcsuszas": 0.07
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k018",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "arany",
+   "ertekek": 12,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k018",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "arany",
+   "ertekek": 12,
+   "atcsuszas": 0.115
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k019",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 12,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k019",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 12,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k020",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "km",
+   "ertekek": 6,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k020",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "km",
+   "ertekek": 6,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k021",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "arany",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k021",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "arany",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k021",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "arany",
+   "ertekek": 1,
+   "atcsuszas": 0.15
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k021",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "arany",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k021",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "arany",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k021",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "arany",
+   "ertekek": 1,
+   "atcsuszas": 0.175
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k022",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k022",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k022",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k022",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k022",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k022",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k023",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k023",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k023",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k023",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k023",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k023",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.01
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k024",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "darab",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k024",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "darab",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k025",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k025",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k025",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k025",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k025",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k025",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k026",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "km",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k026",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "km",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k027",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "darab",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k027",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "darab",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k028",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k028",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k028",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k028",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k028",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k028",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k029",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k029",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k029",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k029",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k029",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k029",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k030",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "arany",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k030",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "arany",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k030",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "arany",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k030",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "arany",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k030",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "arany",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k030",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "arany",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k031",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "darab",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k031",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "darab",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k032",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "arany",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k032",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "arany",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k032",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "arany",
+   "ertekek": 1,
+   "atcsuszas": 0.06
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k032",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "arany",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k032",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "arany",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k032",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "arany",
+   "ertekek": 1,
+   "atcsuszas": 0.085
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k033",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k033",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k034",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k034",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k034",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k034",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k034",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k034",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k035",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k035",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k035",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k035",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k035",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k035",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k036",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k036",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k036",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k036",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k036",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k036",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k037",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k037",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k037",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k037",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k037",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k037",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k038",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "darab",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k038",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "darab",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k039",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 22,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k039",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "brl",
+   "ertekek": 22,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k039",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "brl",
+   "ertekek": 22,
+   "atcsuszas": 0.045
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k039",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 22,
+   "atcsuszas": 0.005
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k039",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "brl",
+   "ertekek": 22,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k039",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "brl",
+   "ertekek": 22,
+   "atcsuszas": 0.04
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k040",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "darab",
+   "ertekek": 4,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k040",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "darab",
+   "ertekek": 4,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k041",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 7,
+   "atcsuszas": 0.03
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k041",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 7,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k041",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 7,
+   "atcsuszas": 0.28
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k041",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 7,
+   "atcsuszas": 0.02
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k041",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 7,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k041",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 7,
+   "atcsuszas": 0.26
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k042",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 4,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k042",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "brl",
+   "ertekek": 4,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k042",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "brl",
+   "ertekek": 4,
+   "atcsuszas": 0.01
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k042",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 4,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k042",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "brl",
+   "ertekek": 4,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k042",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "brl",
+   "ertekek": 4,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k043",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "darab",
+   "ertekek": 23,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k043",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "darab",
+   "ertekek": 23,
+   "atcsuszas": 0.015
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k044",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 13,
+   "atcsuszas": 0.085
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k044",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 13,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k044",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 13,
+   "atcsuszas": 0.24
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k044",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 13,
+   "atcsuszas": 0.065
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k044",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 13,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k044",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 13,
+   "atcsuszas": 0.21
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k045",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "darab",
+   "ertekek": 24,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k045",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "darab",
+   "ertekek": 24,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k046",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 13,
+   "atcsuszas": 0.04
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k046",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 13,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k046",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 13,
+   "atcsuszas": 0.245
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k046",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 13,
+   "atcsuszas": 0.035
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k046",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 13,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k046",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 13,
+   "atcsuszas": 0.21
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k047",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 12,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k047",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 12,
+   "atcsuszas": 0.005
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k048",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "arany",
+   "ertekek": 5,
+   "atcsuszas": 0.065
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k048",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "arany",
+   "ertekek": 5,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k048",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "arany",
+   "ertekek": 5,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k048",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "arany",
+   "ertekek": 5,
+   "atcsuszas": 0.04
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k048",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "arany",
+   "ertekek": 5,
+   "atcsuszas": 0.11
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k048",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "arany",
+   "ertekek": 5,
+   "atcsuszas": 0.11
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k049",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 12,
+   "atcsuszas": 0.035
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k049",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 12,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k049",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 12,
+   "atcsuszas": 0.235
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k049",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 12,
+   "atcsuszas": 0.01
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k049",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 12,
+   "atcsuszas": 0.06
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k049",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 12,
+   "atcsuszas": 0.25
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k050",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 6,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k050",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "brl",
+   "ertekek": 6,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k050",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "brl",
+   "ertekek": 6,
+   "atcsuszas": 0.005
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k050",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 6,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k050",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "brl",
+   "ertekek": 6,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k050",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "brl",
+   "ertekek": 6,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k051",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 13,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k051",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 13,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k052",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "darab",
+   "ertekek": 6,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k052",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "darab",
+   "ertekek": 6,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k053",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 7,
+   "atcsuszas": 0.01
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k053",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 7,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k053",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 7,
+   "atcsuszas": 0.125
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k053",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 7,
+   "atcsuszas": 0.015
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k053",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 7,
+   "atcsuszas": 0.015
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k053",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 7,
+   "atcsuszas": 0.065
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k054",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k054",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k054",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k054",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k054",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k054",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k055",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 12,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k055",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 12,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k056",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "darab",
+   "ertekek": 12,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k056",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "darab",
+   "ertekek": 12,
+   "atcsuszas": 0.03
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k057",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k057",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k057",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k057",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k057",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k057",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k058",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "arany",
+   "ertekek": 8,
+   "atcsuszas": 0.1
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k058",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "arany",
+   "ertekek": 8,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k058",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "arany",
+   "ertekek": 8,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k058",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "arany",
+   "ertekek": 8,
+   "atcsuszas": 0.105
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k058",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "arany",
+   "ertekek": 8,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k058",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "arany",
+   "ertekek": 8,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k059",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 3,
+   "atcsuszas": 0.005
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k059",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "brl",
+   "ertekek": 3,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k059",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "brl",
+   "ertekek": 3,
+   "atcsuszas": 0.01
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k059",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 3,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k059",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "brl",
+   "ertekek": 3,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k059",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "brl",
+   "ertekek": 3,
+   "atcsuszas": 0.02
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k060",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k060",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k060",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k060",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k060",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k060",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k061",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "arany",
+   "ertekek": 6,
+   "atcsuszas": 0.015
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k061",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "arany",
+   "ertekek": 6,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k061",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "arany",
+   "ertekek": 6,
+   "atcsuszas": 0.14
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k061",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "arany",
+   "ertekek": 6,
+   "atcsuszas": 0.03
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k061",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "arany",
+   "ertekek": 6,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k061",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "arany",
+   "ertekek": 6,
+   "atcsuszas": 0.115
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k062",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k062",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k062",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k062",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k062",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k062",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k063",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k063",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k064",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k064",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k064",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k064",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k064",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k064",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k081",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "darab",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k081",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "darab",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k082",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k082",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k082",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k082",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k082",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k082",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k083",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 7,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k083",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 7,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k084",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "arany",
+   "ertekek": 5,
+   "atcsuszas": 0.025
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k084",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "arany",
+   "ertekek": 5,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k084",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "arany",
+   "ertekek": 5,
+   "atcsuszas": 0.06
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k084",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "arany",
+   "ertekek": 5,
+   "atcsuszas": 0.09
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k084",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "arany",
+   "ertekek": 5,
+   "atcsuszas": 0.06
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k084",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "arany",
+   "ertekek": 5,
+   "atcsuszas": 0.035
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k086",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k086",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k086",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k086",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k086",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k086",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k087",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k087",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k087",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k087",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k087",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k087",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k088",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "darab",
+   "ertekek": 8,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k088",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "darab",
+   "ertekek": 8,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k089",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k089",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k089",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k089",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k089",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k089",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k090",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k090",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k091",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "darab",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k091",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "darab",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k092",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k092",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k092",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k092",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k092",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k092",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k093",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "darab",
+   "ertekek": 13,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k093",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "darab",
+   "ertekek": 13,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k094",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 4,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k094",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "brl",
+   "ertekek": 4,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k094",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "brl",
+   "ertekek": 4,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k094",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 4,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k094",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "brl",
+   "ertekek": 4,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k094",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "brl",
+   "ertekek": 4,
+   "atcsuszas": 0.01
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k095",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 9,
+   "atcsuszas": 0.01
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k095",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "brl",
+   "ertekek": 9,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k095",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "brl",
+   "ertekek": 9,
+   "atcsuszas": 0.025
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k095",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 9,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k095",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "brl",
+   "ertekek": 9,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k095",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "brl",
+   "ertekek": 9,
+   "atcsuszas": 0.02
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k096",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "arany",
+   "ertekek": 7,
+   "atcsuszas": 0.06
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k096",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "arany",
+   "ertekek": 7,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k096",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "arany",
+   "ertekek": 7,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k096",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "arany",
+   "ertekek": 7,
+   "atcsuszas": 0.06
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k096",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "arany",
+   "ertekek": 7,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k096",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "arany",
+   "ertekek": 7,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k097",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "km",
+   "ertekek": 6,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k097",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "km",
+   "ertekek": 6,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k098",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k098",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k099",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "darab",
+   "ertekek": 12,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k099",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "darab",
+   "ertekek": 12,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k100",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 9,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k100",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 9,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k101",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k101",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k101",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k101",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k101",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k101",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k102",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k102",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k102",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k102",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k102",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k102",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k103",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 12,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k103",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 12,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k104",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "darab",
+   "ertekek": 21,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k104",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "darab",
+   "ertekek": 21,
+   "atcsuszas": 0.005
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k105",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k105",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k105",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k105",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k105",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k105",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k106",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k106",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k106",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k106",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k106",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k106",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k107",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 24,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k107",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 24,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k108",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "darab",
+   "ertekek": 5,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k108",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "darab",
+   "ertekek": 5,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k109",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k109",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k109",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k109",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k109",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k109",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k110",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "arany",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k110",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "arany",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k110",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "arany",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k110",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "arany",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k110",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "arany",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k110",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "arany",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k111",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "km",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k111",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "km",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k118",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 2,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k118",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 2,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k121",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "darab",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k121",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "darab",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k122",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 12,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k122",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 12,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k123",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k123",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k123",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k123",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k123",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k123",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k124",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "darab",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k124",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "darab",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k126",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k126",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k126",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k126",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k126",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k126",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k127",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 7,
+   "atcsuszas": 0.03
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k127",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 7,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k127",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 7,
+   "atcsuszas": 0.185
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k127",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 7,
+   "atcsuszas": 0.04
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k127",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 7,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k127",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 7,
+   "atcsuszas": 0.16
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k130",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 3,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor",
+   "id": "k130",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 3,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k201",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k201",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k202",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "darab",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k202",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "darab",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k203",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k203",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k204",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k204",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k204",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k204",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k204",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k204",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k205",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "arany",
+   "ertekek": 12,
+   "atcsuszas": 0.045
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k205",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "arany",
+   "ertekek": 12,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k205",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "arany",
+   "ertekek": 12,
+   "atcsuszas": 0.12
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k205",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "arany",
+   "ertekek": 12,
+   "atcsuszas": 0.08
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k205",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "arany",
+   "ertekek": 12,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k205",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "arany",
+   "ertekek": 12,
+   "atcsuszas": 0.11
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k206",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "darab",
+   "ertekek": 5,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k206",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "darab",
+   "ertekek": 5,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k207",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 7,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k207",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 7,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k208",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "darab",
+   "ertekek": 12,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k208",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "darab",
+   "ertekek": 12,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k209",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 7,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k209",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "brl",
+   "ertekek": 7,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k209",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "brl",
+   "ertekek": 7,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k209",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 7,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k209",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "brl",
+   "ertekek": 7,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k209",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "brl",
+   "ertekek": 7,
+   "atcsuszas": 0.01
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k210",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k210",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k211",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k211",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k211",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k211",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k211",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k211",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k212",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k212",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k212",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k212",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k212",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k212",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k213",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k213",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k213",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k213",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k213",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k213",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k214",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 8,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k214",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 8,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k215",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "darab",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k215",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "darab",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k216",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 9,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k216",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 9,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k217",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 4,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k217",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "brl",
+   "ertekek": 4,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k217",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "brl",
+   "ertekek": 4,
+   "atcsuszas": 0.005
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k217",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 4,
+   "atcsuszas": 0.005
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k217",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "brl",
+   "ertekek": 4,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k217",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "brl",
+   "ertekek": 4,
+   "atcsuszas": 0.01
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k218",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "darab",
+   "ertekek": 21,
+   "atcsuszas": 0.005
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k218",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "darab",
+   "ertekek": 21,
+   "atcsuszas": 0.01
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k219",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 13,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k219",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "brl",
+   "ertekek": 13,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k219",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "brl",
+   "ertekek": 13,
+   "atcsuszas": 0.07
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k219",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 13,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k219",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "brl",
+   "ertekek": 13,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k219",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "brl",
+   "ertekek": 13,
+   "atcsuszas": 0.02
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k220",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "darab",
+   "ertekek": 8,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k220",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "darab",
+   "ertekek": 8,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k221",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "arany",
+   "ertekek": 3,
+   "atcsuszas": 0.075
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k221",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "arany",
+   "ertekek": 3,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k221",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "arany",
+   "ertekek": 3,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k221",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "arany",
+   "ertekek": 3,
+   "atcsuszas": 0.045
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k221",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "arany",
+   "ertekek": 3,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k221",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "arany",
+   "ertekek": 3,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k222",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "km",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k222",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "km",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k223",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k223",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k223",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k223",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k223",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k223",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k224",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 5,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k224",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 5,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k225",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 6,
+   "atcsuszas": 0.025
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k225",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 6,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k225",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 6,
+   "atcsuszas": 0.145
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k225",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 6,
+   "atcsuszas": 0.03
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k225",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 6,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k225",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 6,
+   "atcsuszas": 0.14
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k226",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k226",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k226",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k226",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k226",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k226",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k227",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 7,
+   "atcsuszas": 0.025
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k227",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 7,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k227",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 7,
+   "atcsuszas": 0.195
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k227",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 7,
+   "atcsuszas": 0.025
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k227",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 7,
+   "atcsuszas": 0.06
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k227",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 7,
+   "atcsuszas": 0.185
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k228",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "darab",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k228",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "darab",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k230",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 21,
+   "atcsuszas": 0.03
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k230",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 21,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k230",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 21,
+   "atcsuszas": 0.155
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k230",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 21,
+   "atcsuszas": 0.055
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k230",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 21,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k230",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 21,
+   "atcsuszas": 0.185
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k231",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 7,
+   "atcsuszas": 0.04
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k231",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 7,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k231",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 7,
+   "atcsuszas": 0.16
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k231",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 7,
+   "atcsuszas": 0.06
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k231",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 7,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k231",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 7,
+   "atcsuszas": 0.16
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k233",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 22,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k233",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 22,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k234",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "km",
+   "ertekek": 12,
+   "atcsuszas": 0.005
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k234",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "km",
+   "ertekek": 12,
+   "atcsuszas": 0.01
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k235",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k235",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k235",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k235",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k235",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k235",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k236",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "darab",
+   "ertekek": 12,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k236",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "darab",
+   "ertekek": 12,
+   "atcsuszas": 0.145
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k237",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 13,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k237",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 13,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k238",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 13,
+   "atcsuszas": 0.075
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k238",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 13,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k238",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 13,
+   "atcsuszas": 0.165
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k238",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 13,
+   "atcsuszas": 0.045
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k238",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 13,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k238",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 13,
+   "atcsuszas": 0.25
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k239",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "arany",
+   "ertekek": 22,
+   "atcsuszas": 0.08
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k239",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "arany",
+   "ertekek": 22,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k239",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "arany",
+   "ertekek": 22,
+   "atcsuszas": 0.125
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k239",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "arany",
+   "ertekek": 22,
+   "atcsuszas": 0.1
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k239",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "arany",
+   "ertekek": 22,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k239",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "arany",
+   "ertekek": 22,
+   "atcsuszas": 0.08
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k240",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 7,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k240",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "brl",
+   "ertekek": 7,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k240",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "brl",
+   "ertekek": 7,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k240",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 7,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k240",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "brl",
+   "ertekek": 7,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k240",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "brl",
+   "ertekek": 7,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k241",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "darab",
+   "ertekek": 12,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k241",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "darab",
+   "ertekek": 12,
+   "atcsuszas": 0.525
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k242",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 3,
+   "atcsuszas": 0.01
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k242",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 3,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k242",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 3,
+   "atcsuszas": 0.15
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k242",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 3,
+   "atcsuszas": 0.035
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k242",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 3,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k242",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 3,
+   "atcsuszas": 0.2
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k244",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 12,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k244",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "brl",
+   "ertekek": 12,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k244",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "brl",
+   "ertekek": 12,
+   "atcsuszas": 0.03
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k244",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 12,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k244",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "brl",
+   "ertekek": 12,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k244",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "brl",
+   "ertekek": 12,
+   "atcsuszas": 0.03
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k245",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k245",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k245",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.185
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k245",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k245",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k245",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.055
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k246",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k246",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k246",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k246",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k246",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k246",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k247",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "km",
+   "ertekek": 2,
+   "atcsuszas": 0.01
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k247",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "km",
+   "ertekek": 2,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k248",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 21,
+   "atcsuszas": 0.025
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k248",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "brl",
+   "ertekek": 21,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k248",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "brl",
+   "ertekek": 21,
+   "atcsuszas": 0.025
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k248",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 21,
+   "atcsuszas": 0.01
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k248",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "brl",
+   "ertekek": 21,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v2",
+   "id": "k248",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "brl",
+   "ertekek": 21,
+   "atcsuszas": 0.04
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k301",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k301",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k301",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k301",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k301",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k301",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k302",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "arany",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k302",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "arany",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k302",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "arany",
+   "ertekek": 1,
+   "atcsuszas": 0.11
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k302",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "arany",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k302",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "arany",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k302",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "arany",
+   "ertekek": 1,
+   "atcsuszas": 0.105
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k303",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 7,
+   "atcsuszas": 0.04
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k303",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 7,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k303",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 7,
+   "atcsuszas": 0.17
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k303",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 7,
+   "atcsuszas": 0.015
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k303",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 7,
+   "atcsuszas": 0.035
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k303",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 7,
+   "atcsuszas": 0.19
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k304",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "darab",
+   "ertekek": 9,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k304",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "darab",
+   "ertekek": 9,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k306",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 6,
+   "atcsuszas": 0.025
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k306",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 6,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k306",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 6,
+   "atcsuszas": 0.21
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k306",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 6,
+   "atcsuszas": 0.025
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k306",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 6,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k306",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 6,
+   "atcsuszas": 0.235
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k307",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 13,
+   "atcsuszas": 0.125
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k307",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 13,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k307",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 13,
+   "atcsuszas": 0.185
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k307",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 13,
+   "atcsuszas": 0.055
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k307",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 13,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k307",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 13,
+   "atcsuszas": 0.15
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k308",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 12,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k308",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 12,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k308",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 12,
+   "atcsuszas": 0.165
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k308",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 12,
+   "atcsuszas": 0.02
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k308",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 12,
+   "atcsuszas": 0.06
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k308",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 12,
+   "atcsuszas": 0.19
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k310",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k310",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k310",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k310",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k310",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k310",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k311",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 12,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k311",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 12,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k314",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k314",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k314",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k314",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k314",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k314",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k315",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "darab",
+   "ertekek": 3,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k315",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "darab",
+   "ertekek": 3,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k317",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 6,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k317",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 6,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k319",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "darab",
+   "ertekek": 12,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k319",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "darab",
+   "ertekek": 12,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k320",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 7,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k320",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 7,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k321",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 3,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k321",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 3,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k322",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 21,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k322",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 21,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k325",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 7,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k325",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 7,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k329",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k329",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k329",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k329",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k329",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k329",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k330",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 12,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k330",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "brl",
+   "ertekek": 12,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k330",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "brl",
+   "ertekek": 12,
+   "atcsuszas": 0.005
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k330",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 12,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k330",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "brl",
+   "ertekek": 12,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k330",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "brl",
+   "ertekek": 12,
+   "atcsuszas": 0.005
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k331",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 6,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k331",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 6,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k332",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "darab",
+   "ertekek": 7,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k332",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "darab",
+   "ertekek": 7,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k333",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "darab",
+   "ertekek": 12,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k333",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "darab",
+   "ertekek": 12,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k335",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 22,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k335",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 22,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k336",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 3,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k336",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 3,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k337",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "darab",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k337",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "darab",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k338",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 12,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k338",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 12,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k340",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "darab",
+   "ertekek": 8,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k340",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "darab",
+   "ertekek": 8,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k341",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "arany",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k341",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "arany",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k341",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "arany",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k341",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "arany",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k341",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "arany",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k341",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "arany",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k342",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "arany",
+   "ertekek": 7,
+   "atcsuszas": 0.015
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k342",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "arany",
+   "ertekek": 7,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k342",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "arany",
+   "ertekek": 7,
+   "atcsuszas": 0.105
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k342",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "arany",
+   "ertekek": 7,
+   "atcsuszas": 0.035
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k342",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "arany",
+   "ertekek": 7,
+   "atcsuszas": 0.045
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k342",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "arany",
+   "ertekek": 7,
+   "atcsuszas": 0.155
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k343",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k343",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k343",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k343",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k343",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k343",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k346",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "arany",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k346",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "arany",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k346",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "arany",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k346",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "arany",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k346",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "arany",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k346",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "arany",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k349",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "darab",
+   "ertekek": 12,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k349",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "darab",
+   "ertekek": 12,
+   "atcsuszas": 0.015
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k350",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "arany",
+   "ertekek": 8,
+   "atcsuszas": 0.105
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k350",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "arany",
+   "ertekek": 8,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k350",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "arany",
+   "ertekek": 8,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k350",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "arany",
+   "ertekek": 8,
+   "atcsuszas": 0.08
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k350",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "arany",
+   "ertekek": 8,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k350",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "arany",
+   "ertekek": 8,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k351",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k351",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k352",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 4,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k352",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 4,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k353",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 7,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k353",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 7,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k355",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 21,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k355",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 21,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k356",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 6,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k356",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "brl",
+   "ertekek": 6,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k357",
+   "ag": "jelolo",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k357",
+   "ag": "jelolo",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k357",
+   "ag": "jelolo",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k357",
+   "ag": "szabad",
+   "alak": "a",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k357",
+   "ag": "szabad",
+   "alak": "b",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  },
+  {
+   "halmaz": "meresi_kerdessor_v3",
+   "id": "k357",
+   "ag": "szabad",
+   "alak": "c",
+   "egyseg": "nap",
+   "ertekek": 1,
+   "atcsuszas": 0.0
+  }
+ ],
+ "osszegzes": {
+  "osszes": {
+   "jelolo|a": {
+    "atlag": 0.007849462365591397,
+    "ci95": [
+     0.0050268817204301075,
+     0.010940860215053765
+    ],
+    "n": 186
+   },
+   "jelolo|b": {
+    "atlag": 0.0,
+    "ci95": [
+     0.0,
+     0.0
+    ],
+    "n": 98
+   },
+   "jelolo|c": {
+    "atlag": 0.0528061224489796,
+    "ci95": [
+     0.037653061224489796,
+     0.06928571428571428
+    ],
+    "n": 98
+   },
+   "szabad|a": {
+    "atlag": 0.011666666666666669,
+    "ci95": [
+     0.006505376344086021,
+     0.01943615591397849
+    ],
+    "n": 186
+   },
+   "szabad|b": {
+    "atlag": 0.005561224489795919,
+    "ci95": [
+     0.0023966836734693876,
+     0.009540816326530612
+    ],
+    "n": 98
+   },
+   "szabad|c": {
+    "atlag": 0.05229591836734694,
+    "ci95": [
+     0.03688520408163266,
+     0.06816454081632653
+    ],
+    "n": 98
+   }
+  },
+  "egyseg": {
+   "arany": {
+    "jelolo|a": {
+     "atlag": 0.036052631578947364,
+     "ci95": [
+      0.021052631578947368,
+      0.05184210526315789
+     ],
+     "n": 19
+    },
+    "jelolo|b": {
+     "atlag": 0.0,
+     "ci95": [
+      0.0,
+      0.0
+     ],
+     "n": 19
+    },
+    "jelolo|c": {
+     "atlag": 0.056315789473684215,
+     "ci95": [
+      0.031835526315789474,
+      0.08263815789473682
+     ],
+     "n": 19
+    },
+    "szabad|a": {
+     "atlag": 0.039473684210526314,
+     "ci95": [
+      0.023677631578947367,
+      0.056315789473684215
+     ],
+     "n": 19
+    },
+    "szabad|b": {
+     "atlag": 0.01131578947368421,
+     "ci95": [
+      0.0,
+      0.02579605263157891
+     ],
+     "n": 19
+    },
+    "szabad|c": {
+     "atlag": 0.060263157894736845,
+     "ci95": [
+      0.035519736842105264,
+      0.08711184210526314
+     ],
+     "n": 19
+    }
+   },
+   "brl": {
+    "jelolo|a": {
+     "atlag": 0.0005555555555555556,
+     "ci95": [
+      0.0,
+      0.001388888888888889
+     ],
+     "n": 72
+    },
+    "jelolo|b": {
+     "atlag": 0.0,
+     "ci95": [
+      0.0,
+      0.0
+     ],
+     "n": 31
+    },
+    "jelolo|c": {
+     "atlag": 0.008064516129032258,
+     "ci95": [
+      0.0032258064516129032,
+      0.014193548387096775
+     ],
+     "n": 31
+    },
+    "szabad|a": {
+     "atlag": 0.00034722222222222224,
+     "ci95": [
+      6.944444444444444e-05,
+      0.0007638888888888889
+     ],
+     "n": 72
+    },
+    "szabad|b": {
+     "atlag": 0.0,
+     "ci95": [
+      0.0,
+      0.0
+     ],
+     "n": 31
+    },
+    "szabad|c": {
+     "atlag": 0.007419354838709678,
+     "ci95": [
+      0.003709677419354839,
+      0.01161290322580645
+     ],
+     "n": 31
+    }
+   },
+   "darab": {
+    "jelolo|a": {
+     "atlag": 0.00013157894736842105,
+     "ci95": [
+      0.0,
+      0.00039473684210526315
+     ],
+     "n": 38
+    },
+    "szabad|a": {
+     "atlag": 0.01973684210526316,
+     "ci95": [
+      0.0013157894736842105,
+      0.05078947368421053
+     ],
+     "n": 38
+    }
+   },
+   "km": {
+    "jelolo|a": {
+     "atlag": 0.0016666666666666666,
+     "ci95": [
+      0.0,
+      0.003888888888888889
+     ],
+     "n": 9
+    },
+    "szabad|a": {
+     "atlag": 0.003888888888888889,
+     "ci95": [
+      0.0,
+      0.010555555555555556
+     ],
+     "n": 9
+    }
+   },
+   "nap": {
+    "jelolo|a": {
+     "atlag": 0.014895833333333336,
+     "ci95": [
+      0.008643229166666667,
+      0.023124999999999996
+     ],
+     "n": 48
+    },
+    "jelolo|b": {
+     "atlag": 0.0,
+     "ci95": [
+      0.0,
+      0.0
+     ],
+     "n": 48
+    },
+    "jelolo|c": {
+     "atlag": 0.08031250000000001,
+     "ci95": [
+      0.05520833333333333,
+      0.10885677083333331
+     ],
+     "n": 48
+    },
+    "szabad|a": {
+     "atlag": 0.012708333333333334,
+     "ci95": [
+      0.007604166666666666,
+      0.018541666666666665
+     ],
+     "n": 48
+    },
+    "szabad|b": {
+     "atlag": 0.006874999999999999,
+     "ci95": [
+      0.0022916666666666667,
+      0.01229427083333332
+     ],
+     "n": 48
+    },
+    "szabad|c": {
+     "atlag": 0.078125,
+     "ci95": [
+      0.05333333333333334,
+      0.10718749999999999
+     ],
+     "n": 48
+    }
+   }
+  },
+  "ertekek": {
+   "1 érték": {
+    "jelolo|a": {
+     "atlag": 0.0,
+     "ci95": [
+      0.0,
+      0.0
+     ],
+     "n": 77
+    },
+    "jelolo|b": {
+     "atlag": 0.0,
+     "ci95": [
+      0.0,
+      0.0
+     ],
+     "n": 51
+    },
+    "jelolo|c": {
+     "atlag": 0.009901960784313726,
+     "ci95": [
+      0.001176470588235294,
+      0.021083333333333305
+     ],
+     "n": 51
+    },
+    "szabad|a": {
+     "atlag": 0.0,
+     "ci95": [
+      0.0,
+      0.0
+     ],
+     "n": 77
+    },
+    "szabad|b": {
+     "atlag": 0.0,
+     "ci95": [
+      0.0,
+      0.0
+     ],
+     "n": 51
+    },
+    "szabad|c": {
+     "atlag": 0.008431372549019607,
+     "ci95": [
+      0.0014705882352941176,
+      0.01804166666666665
+     ],
+     "n": 51
+    }
+   },
+   "2–5 érték": {
+    "jelolo|a": {
+     "atlag": 0.0095,
+     "ci95": [
+      0.0017500000000000003,
+      0.02
+     ],
+     "n": 20
+    },
+    "jelolo|b": {
+     "atlag": 0.0,
+     "ci95": [
+      0.0,
+      0.0
+     ],
+     "n": 8
+    },
+    "jelolo|c": {
+     "atlag": 0.029375,
+     "ci95": [
+      0.003125,
+      0.06689062499999991
+     ],
+     "n": 8
+    },
+    "szabad|a": {
+     "atlag": 0.010750000000000001,
+     "ci95": [
+      0.00225,
+      0.023
+     ],
+     "n": 20
+    },
+    "szabad|b": {
+     "atlag": 0.021249999999999998,
+     "ci95": [
+      0.0,
+      0.05003124999999983
+     ],
+     "n": 8
+    },
+    "szabad|c": {
+     "atlag": 0.048125,
+     "ci95": [
+      0.009375000000000001,
+      0.09939062499999991
+     ],
+     "n": 8
+    }
+   },
+   "6 vagy több érték": {
+    "jelolo|a": {
+     "atlag": 0.014269662921348314,
+     "ci95": [
+      0.009157303370786518,
+      0.0200561797752809
+     ],
+     "n": 89
+    },
+    "jelolo|b": {
+     "atlag": 0.0,
+     "ci95": [
+      0.0,
+      0.0
+     ],
+     "n": 39
+    },
+    "jelolo|c": {
+     "atlag": 0.11371794871794871,
+     "ci95": [
+      0.08627884615384615,
+      0.14269230769230765
+     ],
+     "n": 39
+    },
+    "szabad|a": {
+     "atlag": 0.02196629213483146,
+     "ci95": [
+      0.011797752808988765,
+      0.035790730337078636
+     ],
+     "n": 89
+    },
+    "szabad|b": {
+     "atlag": 0.009615384615384616,
+     "ci95": [
+      0.0039743589743589745,
+      0.016282051282051284
+     ],
+     "n": 39
+    },
+    "szabad|c": {
+     "atlag": 0.11051282051282052,
+     "ci95": [
+      0.08294871794871796,
+      0.1394871794871795
+     ],
+     "n": 39
+    }
+   }
+  },
+  "halmaz": {
+   "meresi_kerdessor": {
+    "jelolo|a": {
+     "atlag": 0.0068627450980392165,
+     "ci95": [
+      0.003676470588235294,
+      0.010540441176470584
+     ],
+     "n": 102
+    },
+    "jelolo|b": {
+     "atlag": 0.0,
+     "ci95": [
+      0.0,
+      0.0
+     ],
+     "n": 58
+    },
+    "jelolo|c": {
+     "atlag": 0.04646551724137931,
+     "ci95": [
+      0.026978448275862068,
+      0.06810560344827585
+     ],
+     "n": 58
+    },
+    "szabad|a": {
+     "atlag": 0.007303921568627452,
+     "ci95": [
+      0.004019607843137255,
+      0.01122549019607843
+     ],
+     "n": 102
+    },
+    "szabad|b": {
+     "atlag": 0.005948275862068965,
+     "ci95": [
+      0.001293103448275862,
+      0.01146551724137931
+     ],
+     "n": 58
+    },
+    "szabad|c": {
+     "atlag": 0.04517241379310345,
+     "ci95": [
+      0.026980603448275863,
+      0.0654331896551724
+     ],
+     "n": 58
+    }
+   },
+   "meresi_kerdessor_v2": {
+    "jelolo|a": {
+     "atlag": 0.01,
+     "ci95": [
+      0.004555555555555556,
+      0.016780555555555538
+     ],
+     "n": 45
+    },
+    "jelolo|b": {
+     "atlag": 0.0,
+     "ci95": [
+      0.0,
+      0.0
+     ],
+     "n": 24
+    },
+    "jelolo|c": {
+     "atlag": 0.06375,
+     "ci95": [
+      0.034994791666666664,
+      0.09417187499999996
+     ],
+     "n": 24
+    },
+    "szabad|a": {
+     "atlag": 0.026222222222222227,
+     "ci95": [
+      0.008555555555555556,
+      0.05255555555555555
+     ],
+     "n": 45
+    },
+    "szabad|b": {
+     "atlag": 0.0025,
+     "ci95": [
+      0.0,
+      0.0075
+     ],
+     "n": 24
+    },
+    "szabad|c": {
+     "atlag": 0.06145833333333334,
+     "ci95": [
+      0.03125,
+      0.09625
+     ],
+     "n": 24
+    }
+   },
+   "meresi_kerdessor_v3": {
+    "jelolo|a": {
+     "atlag": 0.007948717948717949,
+     "ci95": [
+      0.0010256410256410256,
+      0.017051282051282052
+     ],
+     "n": 39
+    },
+    "jelolo|b": {
+     "atlag": 0.0,
+     "ci95": [
+      0.0,
+      0.0
+     ],
+     "n": 16
+    },
+    "jelolo|c": {
+     "atlag": 0.059375,
+     "ci95": [
+      0.0237421875,
+      0.10188281249999995
+     ],
+     "n": 16
+    },
+    "szabad|a": {
+     "atlag": 0.006282051282051284,
+     "ci95": [
+      0.0019230769230769234,
+      0.01205128205128205
+     ],
+     "n": 39
+    },
+    "szabad|b": {
+     "atlag": 0.00875,
+     "ci95": [
+      0.0,
+      0.0196875
+     ],
+     "n": 16
+    },
+    "szabad|c": {
+     "atlag": 0.064375,
+     "ci95": [
+      0.0246875,
+      0.109375
+     ],
+     "n": 16
+    }
+   }
+  }
+ },
+ "ido_mp": 132.1
+}

@@ -57,7 +57,7 @@ válaszd — a `uv sync` után ott van, és mindkettő magától felismeri.
 | 1 | Környezet | a verziók rögzítve vannak a kimenetben |
 | 2 | Adat | a valódi Olist-adat; ha még nincs meg, letölti a Kaggle-ről |
 | 3 | Tárház | 9 CSV → csillagséma DuckDB-ben, **V-1 validációval** |
-| 4 | Tesztek | 462 teszt: szivárgásvédelem, V-1, adatmodell, abláció, betanítás, kohorsz, modellválasztás, bootstrap, lezárt futás, referencia-modellek, magyarázatok, szemantikus réteg, nyelvi réteg, mérés, felület; ha bármelyik bukik, **a demó megáll** |
+| 4 | Tesztek | 465 teszt: szivárgásvédelem, V-1, adatmodell, abláció, betanítás, kohorsz, modellválasztás, bootstrap, lezárt futás, referencia-modellek, magyarázatok, szemantikus réteg, nyelvi réteg, mérés, felület; ha bármelyik bukik, **a demó megáll** |
 | 5 | Betanítás | a **lezárt v3 protokoll** szerint: LightGBM súlyozás nélkül, a fák száma bővülő ablakos CV-vel, címke-tisztítással; érintetlen, legkésőbbi időszakon mérve; a kalibráció csak diagnosztika |
 | 6 | Összegzés | rangsorolás, kalibráció, kizárt rendelések, artefaktumok helye |
 
@@ -301,6 +301,17 @@ nem változott (a modell szövegeinek kb. 37%-át jelöli meg a kapu, a felhaszn
 kontrollágon 18% → 24%. A 9B a v5-tel: teljes egyezés 64,1% (mint a 4B), F-2 63,6%, de a fő ágon
 csak 14,7% szövegét kell megjelölni (a 4B-nél 37,8%). Egy futás 8–11 perc.
 
+**A második kapu véletlen átcsúszása (okt. 22., `docs/kapu_atcsuszas.md`).** Ha a modell egy számot
+kitalál, és az véletlenül egyezik az eredmény egy megjelenített értékével, a kapu átengedi. A valódi
+tárházon, a lezárt kapuval, modell nélkül (`tools/kapu_atcsuszas.py`, előre rögzítve): a három
+mérési kérdéssor 186 eredményén, a helyes nagyságrendből húzott 200–200 kitalált számmal a
+megjelenítés pontosságával írt szám a fő ágon 0,8%-ban [0,5; 1,1], a kontrollágon 1,2%-ban csúszik
+át (százalékos mérőszámnál 3,6–3,9%); eggyel kevesebb tizedessel jelzés nélkül 0,0% / 0,6%; „kb.”
+előtaggal viszont 5,3% / 5,2%, sok értéket mutató nézetnél 11%. A rendszerterv korai 9,8%-os
+becslése a mostani, pontos alakot megkövetelő kapura nem áll; a v5 „kb.”-szabálya (kevesebb téves
+riasztás) cserébe nagyobb átcsúszási esélyt ad. A kapu tehát a második védelmi vonal, a fő a
+hely-kitöltés.
+
 ---
 
 ## Mi van kész
@@ -320,7 +331,7 @@ csak 14,7% szövegét kell megjelölni (a 4B-nél 37,8%). Egy futás 8–11 perc
 | M2 — referencia-modellek: logisztikus regresszió, döntési fa, random forest (`pipeline/reference_models.py`), lezárt összevetés (`pipeline/v3_reference.py`) | **kész — lefutott okt. 9.** (`docs/v3_referencia_eredmeny.md`) |
 | M3 — SHAP-magyarázatok a négy modellre (pontos TreeSHAP, ill. lineáris SHAP, a 22 jellemzőre összevonva), additivitás-ellenőrzés, sablonos magyarázó szöveg (`xai/`) | **kész (v1)** |
 | M5 — Streamlit BI-felület: áttekintés (SQL), rendelés-magyarázat négy modellel, modell-oldal, egyezés-ellenőrzés a lezárt futással (`ui/`, `python -m ui`) | **kész (v1)** |
-| Tesztek — szivárgás (14), V-1 és adatmodell (10), abláció (6), betanítás (6), kohorsz (2), modellválasztás (8), bootstrap (6), lezárt futás (14), referencia-modellek (9), magyarázatok (12), szöveg és megjelenítés (22), felület (20), egyezési mértékek (5), kontrollkar (5), nevek és feliratok (5), a magyarázatok hűsége (8), a magyarázatok stabilitása (6), határidő-görbe (4), README-parancsok (2), környezet (7), szemantikus réteg (99), nyelvi réteg (81), nyelvi réteg v4 (22), nyelvi réteg v5 (62), mérés és mérési kérdéssor (17), K1 v2 összevetés (3), két futás összevetése (3), K1 v3 összevetés (4) | **kész, 462/462** (egy csak Node.js-szel fut, nélküle kihagyja) |
+| Tesztek — szivárgás (14), V-1 és adatmodell (10), abláció (6), betanítás (6), kohorsz (2), modellválasztás (8), bootstrap (6), lezárt futás (14), referencia-modellek (9), magyarázatok (12), szöveg és megjelenítés (22), felület (20), egyezési mértékek (5), kontrollkar (5), nevek és feliratok (5), a magyarázatok hűsége (8), a magyarázatok stabilitása (6), határidő-görbe (4), a kapu átcsúszása (3), README-parancsok (2), környezet (7), szemantikus réteg (99), nyelvi réteg (81), nyelvi réteg v4 (22), nyelvi réteg v5 (62), mérés és mérési kérdéssor (17), K1 v2 összevetés (3), két futás összevetése (3), K1 v3 összevetés (4) | **kész, 465/465** (egy csak Node.js-szel fut, nélküle kihagyja) |
 | Tároló — MIT licenc, CI (Ubuntu + Windows), uv-környezet (`uv.lock`; pip-nek `requirements.lock`), döntési napló | **kész** |
 | M2 — 40 futásos sweep, hiperparaméter-hangolás | következő |
 | M3 — KernelSHAP-kontrollkar: mind a négy modell ugyanazzal a magyarázóval (valószínűség-tér, közös háttér, 200 rögzített teszt-rendelés), a kar saját zajával (`xai/kernel_arm.py`, `xai/agreement.py`) | **kész** (`docs/kernel_kar_eredmeny.md`) |
@@ -331,6 +342,7 @@ csak 14,7% szövegét kell megjelölni (a 4B-nél 37,8%). Egy futás 8–11 perc
 | M1 — a PostgreSQL-változat ellenőrzése: a valódi adaton 354 lekérdezés DuckDB-ben és PostgreSQL 17-ben, cellánként összevetve (`semantic/pg_ellenorzes.py`) | **kész — 0 eltérés** (`docs/pg_ellenorzes.md`) |
 | M5 — *Kérdezz* oldal: kérdésépítő, példakérdések, válasz + ábra + táblázat, „Próbáld ki az 1. kaput” | **kész (v1)** |
 | M4 — nyelvi réteg: szabad szöveges kérdés → ugyanaz a gépi alak (helyi Ollama vagy OpenAI-kompatibilis API, JSON-sémához kötött kimenet, egy javító kör, ragozott szűrőértékek feloldása, időkifejezés és sorrend a kódtól), a modell fogalmazta válaszmag hely-kitöltéssel, a hatókör és a korlát a kódtól, KAPU ② (számok, csoport–érték kötés, „legmagasabb”, a tartomány szerepe, oksági állítás), sablon tartaléknak, napló időbontással; kontrollág a K1-hez; fejlesztői próbasor (`narrative/`, `eval/`) | **kész (v3)** — valódi modellel: okt. 15. (v1, 93 mp), okt. 16. fejlesztői próba (v2: 10/13, 5/6, medián 37 mp; v3: 12/13, 6/6, medián 29–32 mp) |
+| M6 — a második kapu véletlen átcsúszása: kitalált számok a valódi eredményeken, a lezárt kapuval, modell nélkül, előre rögzítve (`tools/kapu_atcsuszas.py`) | **kész** (`docs/kapu_atcsuszas.md`) |
 | M6 — mérőpad: 120 kérdéses lezárt készlet (csapdakérdésekkel), K1 a fő ágon és a kontrollágon, két modellel | **mérés kész, kézi ellenőrzés hátravan** — a kérdéssor lezárva, a protokoll jóváhagyva (okt. 16.); `qwen3.5:4b` (okt. 19.): F-1 85%, F-2 89%, K1 a modell szövegében 29% / 30% (fő ág / kontrollág), a felhasználóhoz eljut 0% / 30%; `qwen3.5:2b` (okt. 19.): F-1 44%, F-2 86%, K1 40% / 46%, eljut 0% / 46% (`docs/k1_eredmeny_qwen3.5-4b.md`, `docs/k1_eredmeny_qwen3.5-2b.md`); a kapu tévesztéseinek kézi becslése (`tools/kezi_minta.py`) hátravan |
 
 ---
@@ -719,6 +731,7 @@ tools\gep_ellenorzes.bat                     # a gép adatai (videókártya, Oll
 uv run python tools\visszajatszas.py logs\meres\MAPPA [MAPPA2 …] --reszletes   # fejlesztés: a tárolt ① válaszok a mostani kódon (optimista, nem mérés)
 uv run python tools\kezi_minta.py minta logs\meres\MAPPA       # a kézi ellenőrzés mintája a hatókörrel
 uv run python tools\kezi_minta.py kiertekel logs\meres\MAPPA   # a kitöltött minta: a kapu pontossága, K1 korrigálva
+uv run python tools\kapu_atcsuszas.py        # a második kapu véletlen átcsúszása (modell nélkül, kb. 2 perc) → docs\kapu_atcsuszas.*
 uv run python -m narrative.meres --folytat logs\meres\MAPPA    # megszakadt mérés folytatása (a mappát a mérés kiírja)
 
 # lezárt futások — okt. 9-én lefutottak; újra csak --ismetles kapcsolóval indulnak
@@ -821,6 +834,8 @@ glassbox-bi/
 │   ├── huseg_eredmeny.md             ugyanez táblázatokkal
 │   ├── stabilitas_eredmeny.json      a stabilitásmérés eredménye (rendelés-azonosítók nélkül)
 │   ├── stabilitas_eredmeny.md        ugyanez táblázatokkal
+│   ├── kapu_atcsuszas.json           a második kapu véletlen átcsúszása (kérdésenként)
+│   ├── kapu_atcsuszas.md             ugyanez táblázatokkal
 │   ├── pg_ellenorzes.json            DuckDB és PostgreSQL összevetése (a katalógus ujjlenyomatával)
 │   └── pg_ellenorzes.md              ugyanez röviden
 ├── .github/workflows/       CI: minden push lefuttatja a teljes pipeline-t (szintetikus adaton)
@@ -852,6 +867,7 @@ glassbox-bi/
     ├── test_faithfulness.py 8 teszt (maszkok, additív modellen pontos görbe és a Shapley-sorrend a legjobb, beültetés, erős jel megtalálása, kis futás, felületi táblák, a próbafutás nem írja felül a lezárt eredményt)
     ├── test_stability.py    6 teszt (a CIES kézzel számolt példán, a zaj csak a számszerű jellemzőket éri, a bootstrap-minta, kis teljes futás a felület tábláival és ábrájával és a két feltáró változattal — ugyanazok a húzások, az egész értékű jellemzők egészek maradnak —, a páros különbség olvasata, a próbafutás nem ír a docs\-ba)
     ├── test_deadline.py     4 teszt (a saját értéknél pontosan a becslés mind a négy modellnél, csak a vállalt idő változik és a logisztikus regresszió logitja egyenes, a tanult tartomány és a rácson kívüli érték, összegzés, ábra, backend)
+    ├── test_kapu_atcsuszas.py 3 teszt (a kitalált szám alakja és tartománya, a kapu a valódi értéket átengedi, a távolit nem, kis futás determinisztikusan, jelentés)
     ├── test_readme.py       2 teszt (a README parancsai PowerShellben is bemásolhatók: nincs <…> helyőrző)
     ├── test_kornyezet.py    7 teszt (a uv.lock és a requirements.lock ugyanazt rögzíti, Python 3.14 mindenhol, nincs gépfüggő útvonal a tárolóban, a két Windows-parancsfájl CRLF-es és nem hivatkozik virtuális környezetre)
     ├── test_semantic.py     99 teszt (a katalógus és a hibás katalógusok, fehérlista és írásmódok, a KAPU ① minden elutasítási kódja, SQL-őr, idézés, minden szám egyezik egy független pandas-számolással, Wilson-tartomány, kevés adat, determinizmus, a válasz minden száma visszavezethető, ábrák magyar súgóval, a Kérdezz oldal végigkattintva, PostgreSQL-összevetés)
