@@ -250,6 +250,21 @@ hibája, hogy a „mikor / melyik hónapban / hogy változott / 2017 vs 2018” 
 idősort (7 kérdés), és az évszakos, „utolsó N hónap” időszakokat rosszul fordítja. Az összevetés
 kódja (`tools/k1_v2_osszevetes.py`) a futások előtt készült, ujjlenyomata a protokollban.
 
+**Gépváltás és nagyobb modell (okt. 22., `docs/k1_v2_gepvaltas.md`, `docs/k1_9b_eredmeny.md`).**
+Ugyanaz a 4B modellfájl, kód és kérdéssor Viola asztali gépének videókártyáján (RTX 4060 Laptop,
+8 GB): a modell nyers válasza a kérdések kb. 40%-ánál más, mint a laptop processzorán, a teljes
+egyezés 48,9% helyett 57,8% (párosítva +8,9 pp, 95%: 0 – +20) — az abszolút arányok gépenként
+ennyit mozoghatnak; a fő eredmény az előre rögzítettek szerint a laptopos marad. A futás 52 helyett
+19 perc. A nagyobb modell (qwen3.5:9b) ugyanazon a gépen, a 4B-vel párosítva (előre rögzített
+kiegészítő protokoll: `docs/k1_protokoll_v2_9b.json`): teljes egyezés 57,8% → 53,3% (−4,4 pp, 95%:
+−13,3 – +4,4), F-1 75,6% → 68,9%, F-2 72,7% → 81,8% (az elvárt indokkal 54,5% → 81,8%); a K1 a fő
+ágon 46,7% → 32,6%, a kontrollágon 42,2% → 30,2% (párosítva −14 pp mindkettő, a nullát épp érintő
+intervallummal). A nagyobb modell tehát nem érti jobban a kérdéseket — a fő hibák (a „mikor / vs”
+kérdésből nem lesz idősor, az évszakos időszakok) mindkettőnél ugyanazok, vagyis a rendszer
+kialakításából, nem a modell méretéből jönnek —, a csapdákat viszont jobban utasítja el, és
+kevesebb alá nem támasztott állítást ír; a 9B szövegeinek is kb. harmadát megjelöli a kapu, tehát
+a kapu nagyobb modellnél is kell.
+
 ---
 
 ## Mi van kész
@@ -269,7 +284,7 @@ kódja (`tools/k1_v2_osszevetes.py`) a futások előtt készült, ujjlenyomata a
 | M2 — referencia-modellek: logisztikus regresszió, döntési fa, random forest (`pipeline/reference_models.py`), lezárt összevetés (`pipeline/v3_reference.py`) | **kész — lefutott okt. 9.** (`docs/v3_referencia_eredmeny.md`) |
 | M3 — SHAP-magyarázatok a négy modellre (pontos TreeSHAP, ill. lineáris SHAP, a 22 jellemzőre összevonva), additivitás-ellenőrzés, sablonos magyarázó szöveg (`xai/`) | **kész (v1)** |
 | M5 — Streamlit BI-felület: áttekintés (SQL), rendelés-magyarázat négy modellel, modell-oldal, egyezés-ellenőrzés a lezárt futással (`ui/`, `python -m ui`) | **kész (v1)** |
-| Tesztek — szivárgás (14), V-1 és adatmodell (10), abláció (6), betanítás (6), kohorsz (2), modellválasztás (8), bootstrap (6), lezárt futás (14), referencia-modellek (9), magyarázatok (12), szöveg és megjelenítés (22), felület (20), egyezési mértékek (5), kontrollkar (5), nevek és feliratok (5), a magyarázatok hűsége (8), README-parancsok (2), környezet (7), szemantikus réteg (99), nyelvi réteg (81), nyelvi réteg v4 (22), mérés és mérési kérdéssor (17), K1 v2 összevetés (3) | **kész, 383/383** (egy csak Node.js-szel fut, nélküle kihagyja) |
+| Tesztek — szivárgás (14), V-1 és adatmodell (10), abláció (6), betanítás (6), kohorsz (2), modellválasztás (8), bootstrap (6), lezárt futás (14), referencia-modellek (9), magyarázatok (12), szöveg és megjelenítés (22), felület (20), egyezési mértékek (5), kontrollkar (5), nevek és feliratok (5), a magyarázatok hűsége (8), README-parancsok (2), környezet (7), szemantikus réteg (99), nyelvi réteg (81), nyelvi réteg v4 (22), mérés és mérési kérdéssor (17), K1 v2 összevetés (3), két futás összevetése (3) | **kész, 386/386** (egy csak Node.js-szel fut, nélküle kihagyja) |
 | Tároló — MIT licenc, CI (Ubuntu + Windows), uv-környezet (`uv.lock`; pip-nek `requirements.lock`), döntési napló | **kész** |
 | M2 — 40 futásos sweep, hiperparaméter-hangolás | következő |
 | M3 — KernelSHAP-kontrollkar: mind a négy modell ugyanazzal a magyarázóval (valószínűség-tér, közös háttér, 200 rögzített teszt-rendelés), a kar saját zajával (`xai/kernel_arm.py`, `xai/agreement.py`) | **kész** (`docs/kernel_kar_eredmeny.md`) |
@@ -637,6 +652,9 @@ uv run python -m narrative.meres --modell qwen3.5:2b   # ugyanez a kisebb modell
 uv run python -m narrative.meres --protokoll docs\k1_protokoll_v2.json   # v2: a v4 az új kérdéssoron
 tools\v3_futtatas.bat                         # v2: a v3 ugyanazon (külön munkamappában, v3_kod\)
 uv run python tools\k1_v2_osszevetes.py --v4 logs\meres\MAPPA --v3 v3_kod\logs\meres\MAPPA --v4-2b logs\meres\MAPPA   # v2: összevetés → docs\k1_v2_eredmeny.md
+uv run python -m narrative.meres --protokoll docs\k1_protokoll_v2_9b.json   # kiegészítés: a qwen3.5:9b ugyanazon a kérdéssoron
+uv run python tools\k1_futas_osszevetes.py --a logs\meres\A --b logs\meres\B --cimke-a "9B (GPU)" --cimke-b "4B (GPU)" --protokoll docs\k1_protokoll_v2_9b.json --kimenet docs\k1_9b_eredmeny.md   # két futás párosítva
+tools\gep_ellenorzes.bat                     # a gép adatai (videókártya, Ollama, modellek) → logs\gep_ellenorzes.txt
 uv run python tools\kezi_minta.py minta logs\meres\MAPPA       # a kézi ellenőrzés mintája a hatókörrel
 uv run python tools\kezi_minta.py kiertekel logs\meres\MAPPA   # a kitöltött minta: a kapu pontossága, K1 korrigálva
 uv run python -m narrative.meres --folytat logs\meres\MAPPA    # megszakadt mérés folytatása (a mappát a mérés kiírja)
