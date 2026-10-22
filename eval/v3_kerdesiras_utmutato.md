@@ -12,7 +12,8 @@ amelyekről úgy gondolod, hogy a rendszer jól vagy rosszul fog rájuk válaszo
   rendszer.
 - A kérdéseket ne próbáld ki a rendszeren, és megírás után ne írd át őket. Az elírás maradhat,
   az is a mérés része.
-- A fájlt a projekt mappáján **kívül** tartsd (pl. `Dokumentumok\v3_kerdesek.txt`).
+- Csak a v5 lezárásának commitja után kezdd el (a commit ideje igazolja, hogy a kód a kérdések
+  előtt rögzült).
 
 ## Miről lehet kérdezni
 
@@ -43,8 +44,27 @@ ahogy egy kollégának írnád a chatbe: lehet laza, rövidített, ékezet nélk
    várni, mennyit késik.
 6. **Ügyvezető:** rövid, nagy képet kérő kérdések: hogy alakult, hogy állunk, mi változott.
 
-Összesen 60 kérdés: 48 megválaszolandó és 12 csillagos. A szerepek sorrendjében írd, a szerep
-nevét a csoport elé írhatod (`# Logisztikai vezető`).
+Összesen 60 kérdés: 48 megválaszolandó és 12 csillagos.
+
+A fajták keveredjenek egy szerepen belül is: egyetlen szám az egészre; egy államra, kategóriára
+vagy időszakra szűrve; rangsor (legtöbb, legkevesebb, top N); bontás (államonként, havonta);
+alakulás időben; két dolog összevetése; ezek kombinációja. Rövid és hosszabb, laza és pontos
+megfogalmazás is jó, ahogy éppen jön.
+
+## A fájl
+
+Jegyzettömbbel, a projektmappába: `eval\felhasznaloi_kerdesek_v3.txt`. Soronként
+egy kérdés; a szerep neve `#`-tel kezdődő sorban a csoport elé; a csillagos kérdés `*`-gal kezdődik:
+
+```
+# Logisztikai vezető
+(első kérdés)
+(második kérdés)
+* (kérdés, amire nincs adat)
+…
+# Kategóriamenedzser
+…
+```
 
 ## Amire NINCS adat (a csillagos kérdések)
 
@@ -55,12 +75,9 @@ csillagot (`*`): itt az a jó, ha a rendszer nem mond számot.
 
 ## Ha kész
 
-1. Számold ki a fájl ujjlenyomatát PowerShellben:
-   `Get-FileHash $HOME\Documents\v3_kerdesek.txt`
-   A `Hash` értékét küldd el; a kérdéseket még ne.
-2. A kérdéseket akkor küldd el, amikor Claude jelzi, hogy a v5 le van zárva (az ujjlenyomata a
-   protokollban). A fájl ujjlenyomata igazolja, hogy a kérdések a lezárás előtt készültek, és
-   utána nem változtak.
+Mentsd el, és szólj Claude-nak. A fájlt onnan olvassa be, az ujjlenyomatát (SHA256) a beolvasáskor
+a döntési naplóba írja, és a fájl ezután változatlan marad (mint a v2-nél); az elvárt
+értelmezések külön fájlba kerülnek, és azokat te ellenőrzöd.
 
 A korábbi kérdéssorok (v1, v2, fejlesztői próbasor) közeli átfogalmazásai a v2 szabálya szerint
 kimaradnak a mérésből.

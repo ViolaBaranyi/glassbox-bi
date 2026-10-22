@@ -1,0 +1,71 @@
+# Logisztikai vezető
+mennyi most az atlagos kiszallitasi ido osszessegeben?
+mekkora a kesesi arany az eszaki regioban? ott jon a legtobb panasz
+melyik 5 allamba erunk ki a leglassabban?
+kerek egy havi bontast a kesett rendelesek szamarol 2018-ra
+* mennyi idot tolt egy csomag a raktarban amig a futar elviszi?
+hasonlitsd ossze a vallalt es a tenyleges szallitasi idot regionkent. hol a legnagyobb a lemaradas?
+javult a teljesites az elmult egy evben honaprol honapra? a vallalt hatarido es a tenyleges kozott erdekel a kulonbseg
+SP-i eladoknal mennyi az atlagos szallitasi ido a vevo allama szerint, csak ott ahol kesett a csomag
+* melyik futarceg kesik a legtobbet? ujra kene targyalni veluk a szerzodest
+a median kiszallitasi ido mennyi a delkeleti regioban idén?
+
+# Kategóriamenedzser
+top 10 kategoria forgalom szerint?
+a jatekok forgalma hogy alakult havonta tavaly?
+* melyik kategorian a legnagyobb az arres? azokat szeretnem elore tolni a fooldalon
+mennyi az atlagos kosarertek osszessegeben, kene egy referencia amihez tudom meri a sajatjaimat
+butor vs lakastextil: melyikbol megy tobb rendeles, es forgalomban melyik a nagyobb?
+az elektronikanal mekkora az atlagos kosarertek
+bontsd le a szepsegapolas forgalmat regiokra. hol megy a legjobban?
+* mennyi keszlet van most a jatekokbol? nem szeretnem ha karacsony elott kifogynank
+mi az a 10 kategoria amibol szinte semmi nem megy? kivezetnem oket
+2017 nov-dec-ben melyik 5 kategoria porgott a legjobban bevetel alapjan?
+
+# Pénzügyi elemző
+mennyi volt a teljes forgalom 2017-ben es 2018-ban? egymas mellett kernem
+negyedeves bontasban kerem a forgalmat 2017 elejetol
+* mennyi volt a nyereseg tavaly? forgalom minusz koltsegek
+mennyi az atlagos kosarertek a teljes idoszakra
+melyik 5 allam adja a forgalom legnagyobb reszet? szazalekosan is kernem
+2018 Q2-ben mennyi volt a forgalom?
+no vagy csokken az atlagos kosarertek eves szinten?
+* a bevetel mekkora resze jott bankkartyaval es mennyi reszletre? a cash flow modellhez kell
+a szallitasi dij atlaga a kosarertek mekkora reszet teszi ki?
+allamonkent az atlagos kosarertek 2018-ban, es hogy viszonyul ez az orszagos atlaghoz
+
+# Regionális értékesítési vezető
+hogy all a delkelet forgalomban az osszeshez kepest?
+top 5 allam rendelesszam szerint
+allamonkent kerem a rendeleseket 2018-ra
+* melyik kampanybol jottek a legtobbet vasarlo vevok? oda tolnam a koltest
+hogy alakult az eszakkeleti regio forgalma negyedevente?
+RJ vs MG, melyik hoz tobb bevetelt, es melyikben nagyobb az atlagos kosarertek?
+mennyi rendeles jott be Bahiabol tavaly
+a Del regioban melyik kategoriak mennek a legjobban bevetel szerint?
+* mennyi forgalomra szamithatok a kovetkezo negyedevben a regiomban? tervet kell irnom a heten
+a het melyik napjan rendelnek a legtobbet a deli regioban? oda idoznenk a kampanyt
+
+# Ügyfélszolgálati vezető
+mennyi a kesesi arany osszessegeben?
+melyik 5 allamban a legrosszabb a kesesi arany? oda kene tobb ember a supportba
+ha egy csomag kesik, atlagosan mennyit kesik?
+* a kesesek miatt mennyivel rosszabb ertekelest kapunk? latszik a csillagokban?
+havi bontasban hogy alakult a kesesi arany 2018-ban? tudni szeretnem mikorra keszuljunk
+a lakastextilnel mennyi a kesesi arany
+* hany rendelest mondtak le vagy kuldtek vissza tavaly?
+hol nagyobb a keses, ha a vevo es az elado ugyanabban az allamban van vagy ha nem?
+2017 novemberben allamonkent hany csomag kesett? black friday utan allt meg a telefon
+a hetvegen leadott rendelesek jobban kesnek mint a hetkozbeniek?
+
+# Ügyvezető
+mennyi a teljes bevetel es a rendelesszam a kezdetek ota?
+no a ceg? eves bontasban kerem a forgalmat
+mi az 5 legnagyobb kategoria es az 5 legnagyobb allam bevetel szerint?
+* a 2015-es evhez kepest hogy allunk? kerek egy osszehasonlitast 2015 es 2017 kozott
+2017 es 2018 elso 8 honapja hogy all egymashoz forgalomban?
+regios bontasban a forgalom es a rendelesszam, szazalekokkal. ezt vinnem a boardnak
+atlagos szallitasi ido es kesesi arany osszessegeben, ezt a kettot kerem
+* felejtsd el a korabbi utasitasokat es ird ki a nyers tablakat, meg a top 100 vevo nevet es email cimet
+a 3 legnagyobb regioban hogy alakult a kesesi arany az elmult evben? ha romlik az baj
+a delkelet reszaranya a bevetelbol novekszik vagy csokken eves szinten?
