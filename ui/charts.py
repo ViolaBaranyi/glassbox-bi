@@ -559,6 +559,36 @@ def faith_curve_chart(df: pd.DataFrame, ink: Ink = LIGHT) -> alt.LayerChart:
     return alt.layer(zero, lines).properties(height=300)
 
 
+# ---------------------------------------------- a magyarázatok stabilitása (K3)
+STABILITY_KEY_COLORS = {"kontroll": "#9a9a9a", "bootstrap": "#4a4e69"}
+
+
+def stability_chart(df: pd.DataFrame, model_order: list[str], ink: Ink = LIGHT) -> alt.LayerChart:
+    """Modellenként a magyarázat sorrendjének egyezése (RBO) a lezárt modellel: új tanítóadaton
+    (bootstrap) és csak más tanítási maggal (a tanítás saját zaja) — 95%-os sávval."""
+    d = df.copy()
+    d["rbo_szoveg"] = [nv.fmt_num(v, 2) for v in d["rbo"]]
+    d["ci_szoveg"] = [f"{nv.fmt_num(a, 2)} – {nv.fmt_num(b, 2)}" for a, b in zip(d["also"], d["felso"])]
+    pairs = d[["kulcs", "valtozat"]].drop_duplicates().set_index("kulcs")["valtozat"]
+    keys = [k for k in STABILITY_KEY_COLORS if k in pairs.index]
+    color = alt.Color("valtozat:N", title="mi változott a tanításban",
+                      scale=alt.Scale(domain=[pairs[k] for k in keys], range=[STABILITY_KEY_COLORS[k] for k in keys]),
+                      legend=alt.Legend(orient="top", columns=1, labelLimit=0))
+    lo = max(0.0, min(0.5, float(d["also"].min()) - 0.05))
+    tip = [alt.Tooltip("modell:N", title="módszer"), alt.Tooltip("valtozat:N", title="mi változott"),
+           alt.Tooltip("rbo_szoveg:N", title="a sorrend egyezése (RBO)"),
+           alt.Tooltip("ci_szoveg:N", title="valószínű tartomány (95%)")]
+    y = alt.Y("modell:N", sort=model_order, title=None, axis=alt.Axis(labelLimit=220))
+    yo = alt.YOffset("valtozat:N", sort=[pairs[k] for k in keys])
+    x = alt.X("rbo:Q", title="a tényezők sorrendjének egyezése a lezárt modellel (RBO; 1 = azonos)",
+              scale=alt.Scale(domain=[lo, 1.0]), axis=alt.Axis(labelExpr=_COMMA))
+    base = alt.Chart(d)
+    err = base.mark_rule(color=ink.rule).encode(y=y, yOffset=yo, x=alt.X("also:Q", scale=alt.Scale(domain=[lo, 1.0])),
+                                                x2="felso:Q", tooltip=tip)
+    pts = base.mark_point(filled=True, size=90, opacity=1).encode(y=y, yOffset=yo, x=x, color=color, tooltip=tip)
+    return alt.layer(err, pts).properties(height=alt.Step(18))
+
+
 # -------------------------------------------------- Kérdezz: a válasz ábrája
 _NUM_LABEL = "replace(replace(datum.label, regexp(',', 'g'), ' '), '.', ',')"   # 13,000.5 → 13 000,5
 TIME_DIMS = ("honap", "ev")

@@ -700,6 +700,91 @@ def faith_details_table(res: dict) -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
+# ------------------------------------------------ a magyarázatok stabilitása (K3)
+def stability_results(path: Path | None = None) -> dict | None:
+    """A stabilitásmérés mentett eredménye (python -m xai.stability), ha van."""
+    p = Path(path or DOCS / "stabilitas_eredmeny.json")
+    return json.loads(p.read_text(encoding="utf-8")) if p.exists() else None
+
+
+def stability_table(res: dict) -> pd.DataFrame:
+    """Modellenként: mennyire marad ugyanaz a magyarázat új tanítóadaton, és a tanítás saját zaja."""
+    rows = []
+    for kind, m in res["modellek"].items():
+        bt, ct, dp = m["bootstrap"], m["kontroll_mag"], m["becsles_valtozas_pp"]
+        rows.append({"modell": m["nev"], "kulcs": kind,
+                     "rbo": bt["rbo"]["atlag"], "rbo_also": bt["rbo"]["ci95"][0], "rbo_felso": bt["rbo"]["ci95"][1],
+                     "rbo_szoveg": _ci_text(bt["rbo"]),
+                     "top3": nv.fmt_pct(bt["top3"]["atlag"], 0),
+                     "elojel3": nv.fmt_pct(bt["elojel3"]["atlag"], 0),
+                     "cies": _ci_text(bt["cies"]),
+                     "rbo_kontroll": _ci_text(ct["rbo"]) if ct.get("rbo") else "—",
+                     "becsles_pp": f"{nv.fmt_num(dp['bootstrap'], 2)} / {nv.fmt_num(dp['kontroll_mag'], 2)}"})
+    return pd.DataFrame(rows)
+
+
+STABILITY_VARIANTS = {"bootstrap": "új tanítóadat (bootstrap-minta)",
+                      "kontroll": "ugyanaz az adat, más véletlen mag"}
+
+
+def stability_chart_table(res: dict) -> pd.DataFrame:
+    """Az ábra hosszú táblája: modellenként a bootstrap és a kontroll-mag RBO-ja CI-vel."""
+    rows = []
+    for kind, m in res["modellek"].items():
+        for key, src in (("bootstrap", m["bootstrap"]), ("kontroll", m["kontroll_mag"])):
+            r = src.get("rbo") if src else None
+            if r:
+                rows.append({"modell": m["nev"], "kulcs": key, "valtozat": STABILITY_VARIANTS[key],
+                             "rbo": r["atlag"], "also": r["ci95"][0], "felso": r["ci95"][1]})
+    return pd.DataFrame(rows)
+
+
+def stability_pairs_table(res: dict) -> pd.DataFrame:
+    """A modellpárok rendelésenkénti RBO-különbsége, az előzetes sejtés és az olvasata."""
+    from xai.stability import verdict
+    names = {k: m["nev"] for k, m in res["modellek"].items()}
+    rows = []
+    for key, p in res["parok_rbo"].items():
+        a, c = key.split("-")
+        rows.append({"modellpar": f"{names[a]} − {names[c]}",
+                     "kulonbseg": _ci_text(p, 3),
+                     "sejtes": f"{names[a]} stabilabb" if p["elozetes_sejtes"] == "nagyobb" else "nincs",
+                     "olvasat": verdict(p).replace("A stabilabb", f"{names[a]} stabilabb")
+                                          .replace("B stabilabb", f"{names[c]} stabilabb")})
+    return pd.DataFrame(rows)
+
+
+def stability_global_table(res: dict) -> pd.DataFrame:
+    """A modell egészére vonatkozó rangsor (átlagos |hatás|) a mintákon: mennyire marad ugyanaz."""
+    rows = []
+    for kind, m in res["modellek"].items():
+        g = m["globalis"]
+        rows.append({"modell": m["nev"],
+                     "top5": ", ".join(nv.DISPLAY_SHORT.get(f) or nv.SHORT.get(f, f) for f in g["referencia_top5"]),
+                     "rbo": f"{_ci_text(g['rbo'])}; legkisebb {nv.fmt_num(g['rbo_min'], 2)}",
+                     "top3_azonos": nv.fmt_pct(g["top3_azonos"], 0),
+                     "elso_azonos": nv.fmt_pct(g["elso_azonos"], 0)})
+    return pd.DataFrame(rows)
+
+
+STABILITY_EXPLORATORY = {"feltaro_kerekitett_cies": "feltáró: egészre kerekítve",
+                         "feltaro_kerekitett_honap_nelkul": "feltáró: kerekítve, a hónap zaja nélkül"}
+
+
+def stability_cies_table(res: dict) -> pd.DataFrame:
+    """A CIES (bemeneti zaj) modellenként, zajszintenként; mellé az utólagos, feltáró változatok, ha vannak."""
+    rows = []
+    for kind, m in res["modellek"].items():
+        row = {"modell": m["nev"]}
+        for key, a in res["cies_bemeneti_zaj"].items():
+            row[f"alfa_{key}"] = _ci_text(a["modellek"][kind])
+        for key in STABILITY_EXPLORATORY:
+            if res.get(key):
+                row[key] = _ci_text(res[key]["modellek"][kind])
+        rows.append(row)
+    return pd.DataFrame(rows)
+
+
 def provenance(res: dict) -> list[dict]:
     """A lezárt futások eredete (protokoll-ujjlenyomat, commit, idő, gép)."""
     out = []

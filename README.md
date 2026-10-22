@@ -57,7 +57,7 @@ válaszd — a `uv sync` után ott van, és mindkettő magától felismeri.
 | 1 | Környezet | a verziók rögzítve vannak a kimenetben |
 | 2 | Adat | a valódi Olist-adat; ha még nincs meg, letölti a Kaggle-ről |
 | 3 | Tárház | 9 CSV → csillagséma DuckDB-ben, **V-1 validációval** |
-| 4 | Tesztek | 452 teszt: szivárgásvédelem, V-1, adatmodell, abláció, betanítás, kohorsz, modellválasztás, bootstrap, lezárt futás, referencia-modellek, magyarázatok, szemantikus réteg, nyelvi réteg, mérés, felület; ha bármelyik bukik, **a demó megáll** |
+| 4 | Tesztek | 458 teszt: szivárgásvédelem, V-1, adatmodell, abláció, betanítás, kohorsz, modellválasztás, bootstrap, lezárt futás, referencia-modellek, magyarázatok, szemantikus réteg, nyelvi réteg, mérés, felület; ha bármelyik bukik, **a demó megáll** |
 | 5 | Betanítás | a **lezárt v3 protokoll** szerint: LightGBM súlyozás nélkül, a fák száma bővülő ablakos CV-vel, címke-tisztítással; érintetlen, legkésőbbi időszakon mérve; a kalibráció csak diagnosztika |
 | 6 | Összegzés | rangsorolás, kalibráció, kizárt rendelések, artefaktumok helye |
 
@@ -320,12 +320,13 @@ csak 14,7% szövegét kell megjelölni (a 4B-nél 37,8%). Egy futás 8–11 perc
 | M2 — referencia-modellek: logisztikus regresszió, döntési fa, random forest (`pipeline/reference_models.py`), lezárt összevetés (`pipeline/v3_reference.py`) | **kész — lefutott okt. 9.** (`docs/v3_referencia_eredmeny.md`) |
 | M3 — SHAP-magyarázatok a négy modellre (pontos TreeSHAP, ill. lineáris SHAP, a 22 jellemzőre összevonva), additivitás-ellenőrzés, sablonos magyarázó szöveg (`xai/`) | **kész (v1)** |
 | M5 — Streamlit BI-felület: áttekintés (SQL), rendelés-magyarázat négy modellel, modell-oldal, egyezés-ellenőrzés a lezárt futással (`ui/`, `python -m ui`) | **kész (v1)** |
-| Tesztek — szivárgás (14), V-1 és adatmodell (10), abláció (6), betanítás (6), kohorsz (2), modellválasztás (8), bootstrap (6), lezárt futás (14), referencia-modellek (9), magyarázatok (12), szöveg és megjelenítés (22), felület (20), egyezési mértékek (5), kontrollkar (5), nevek és feliratok (5), a magyarázatok hűsége (8), README-parancsok (2), környezet (7), szemantikus réteg (99), nyelvi réteg (81), nyelvi réteg v4 (22), nyelvi réteg v5 (62), mérés és mérési kérdéssor (17), K1 v2 összevetés (3), két futás összevetése (3), K1 v3 összevetés (4) | **kész, 452/452** (egy csak Node.js-szel fut, nélküle kihagyja) |
+| Tesztek — szivárgás (14), V-1 és adatmodell (10), abláció (6), betanítás (6), kohorsz (2), modellválasztás (8), bootstrap (6), lezárt futás (14), referencia-modellek (9), magyarázatok (12), szöveg és megjelenítés (22), felület (20), egyezési mértékek (5), kontrollkar (5), nevek és feliratok (5), a magyarázatok hűsége (8), a magyarázatok stabilitása (6), README-parancsok (2), környezet (7), szemantikus réteg (99), nyelvi réteg (81), nyelvi réteg v4 (22), nyelvi réteg v5 (62), mérés és mérési kérdéssor (17), K1 v2 összevetés (3), két futás összevetése (3), K1 v3 összevetés (4) | **kész, 458/458** (egy csak Node.js-szel fut, nélküle kihagyja) |
 | Tároló — MIT licenc, CI (Ubuntu + Windows), uv-környezet (`uv.lock`; pip-nek `requirements.lock`), döntési napló | **kész** |
 | M2 — 40 futásos sweep, hiperparaméter-hangolás | következő |
 | M3 — KernelSHAP-kontrollkar: mind a négy modell ugyanazzal a magyarázóval (valószínűség-tér, közös háttér, 200 rögzített teszt-rendelés), a kar saját zajával (`xai/kernel_arm.py`, `xai/agreement.py`) | **kész** (`docs/kernel_kar_eredmeny.md`) |
 | M3 — a magyarázatok hűsége (K2): törlési és beszúrási görbe (interventional maszkolás, a KernelSHAP-karral és véletlen sorrenddel összevetve), beültetett jel- és zaj-jellemző, előre rögzített küszöbökkel (`xai/faithfulness.py`) | **kész** (`docs/huseg_eredmeny.md`) |
-| M3 — stabilitás (bootstrap-újratanítás, RBO, súlyozott Kendall-tau), ellenpélda | következő |
+| M3 — a magyarázatok stabilitása (K3): 20 bootstrap-újratanítás és 5 kontroll-mag, RBO, súlyozott Kendall-tau, top-3 és iránya, CIES (bemeneti zaj, α = 0,01/0,03/0,05), előre rögzített sejtéssel; utólagos, feltáró ellenőrzés a CIES-hez (`xai/stability.py`) | **kész** (`docs/stabilitas_eredmeny.md`) |
+| M3 — ellenpélda (határidő-görbe vagy DiCE, a témavezetői döntés szerint) | következő |
 | M1 — szemantikus réteg: metrikakatalógus (11 mérőszám, 8 bontás), az adatból generált fehérlista, KAPU ① indokolt elutasítással, SQL-építő szintaxisfából (sqlglot) utólagos SQL-őrrel, MetricResult a lefuttatott SQL-lel, sablonos válasz számhivatkozásokkal (`semantic/`) | **kész (v1)** |
 | M1 — a PostgreSQL-változat ellenőrzése: a valódi adaton 354 lekérdezés DuckDB-ben és PostgreSQL 17-ben, cellánként összevetve (`semantic/pg_ellenorzes.py`) | **kész — 0 eltérés** (`docs/pg_ellenorzes.md`) |
 | M5 — *Kérdezz* oldal: kérdésépítő, példakérdések, válasz + ábra + táblázat, „Próbáld ki az 1. kaput” | **kész (v1)** |
@@ -501,6 +502,27 @@ küszöböt kissé átlépi. Feltáró ellenőrzés: maga az erdő épít a zajr
 a becslése átlagosan 0,19 pp-tal mozdul, a négy közül a legtöbbet; a magyarázat 0,12 pp-t
 tulajdonít neki) → a K4-hez: a kis levélméretű erdő a véletlen ingadozást is megtanulja, és a
 magyarázat ezt jelzi. → `xai/faithfulness.py`, `docs/huseg_eredmeny.md`
+
+**A magyarázatok stabilitása (K3).** Előre rögzítve (döntési napló, a futás előtt), a valódi
+teszt-címkék nélkül. (1) **Új tanítóadat** — a tisztított tanító ablakból 20 bootstrap-minta, a
+négy modell a lezárt beállításokkal újratanítva; a felület magyarázata a kontrollkar 200
+rendelésén, rendelésenként a lezárt modellhez mérve. RBO (p = 0,9): logisztikus regresszió
+0,93 · random forest 0,86 · LightGBM 0,83 · döntési fa 0,75 (a súlyozott tau és a többi mérték
+ugyanígy rendez). Az előre rögzített sejtés (az LR a legstabilabb, a fa a legkevésbé) mind az 5
+párra teljesült; a nyitott párban az RF kissé stabilabb a LightGBM-nél (−0,028 [−0,035; −0,022]).
+A top-3 tényező iránya 99–100%-ban marad (a fánál 92%), a sorrendjük mozog (a LightGBM
+top-3-jából átlagosan 2,3 marad). Kontroll (ugyanaz az adat, más mag): LR 1,00 · fa 0,97 · RF
+0,91 · LightGBM 0,89 — a LightGBM és az RF eltérésének nagyobbik fele a tanítás véletlene; a
+fa a maggal stabil, az adattal a legkevésbé, és a becslése átlagosan 4,1 pp-t mozdul (a teszt
+késési aránya 3,6%). (2) **CIES** (Văduva és mtsai., a bemenet zaja, α = 0,03, M = 10): RF 0,96
+· LR 0,95 · fa 0,94 · LightGBM 0,87; α = 0,01 és 0,05 mellett a sorrend ugyanez. **Utólagos,
+feltáró ellenőrzés** (ugyanazok a zajos szomszédok): az egész értékű jellemzők kerekítése nem
+változtat (0,87); a LightGBM értékét a hónap kódolása húzza le — április és augusztus
+koszinusza a gépben −0,4999999999999998, illetve −0,5000000000000004, a LightGBM ezen vág, és a
+200-ból 69 augusztusi rendelés a vágáson ül. A hónap zaja nélkül a LightGBM 0,95, a négy modell
+0,94–0,97. → a K4-hez: a stabilitás nem a bonyolultsággal, hanem a modell varianciájával nő
+vagy csökken (az egyetlen fa a legkevésbé stabil, az átlagolás és a regularizáció stabilizál).
+→ `xai/stability.py`, `docs/stabilitas_eredmeny.md`
 
 **A felület nem számol fejben.** Minden szám SQL-lekérdezésből vagy a lezárt modellekből
 jön, a magyarázó szöveg sablonból készül ugyanezekből a mezőkből (ez lesz a nyelvi réteg
@@ -706,6 +728,7 @@ uv run python -m pipeline.v3_reference        # a referencia-modellek lezárt ö
 # hosszú kutatási futások (gépenként kb. fél–egy óra) — a docs\ eredményfájljait írják felül
 uv run python -m xai.kernel_arm               # KernelSHAP-kontrollkar (200 rendelés)
 uv run python -m xai.faithfulness             # a magyarázatok hűsége: törlési görbe + beültetett jellemző
+uv run python -m xai.stability                # a magyarázatok stabilitása: bootstrap-újratanítás + CIES (kb. egy óra)
 uv run python -m xai.kernel_arm --rendelesek 20 --zaj 10 --nsamples 512   # gyors próba (pár perc) → artifacts\, a docs\-ot nem írja felül
 ```
 
@@ -755,6 +778,7 @@ glassbox-bi/
 │   ├── kernel_arm.py        KernelSHAP-kontrollkar: a négy modell ugyanazzal a magyarázóval
 │   ├── agreement.py         két magyarázat egyezése: top-k, RBO, súlyozott Kendall-tau
 │   ├── faithfulness.py      a magyarázatok hűsége: törlési/beszúrási görbe, beültetett jel és zaj
+│   ├── stability.py         a magyarázatok stabilitása: bootstrap-újratanítás, kontroll-mag, CIES
 │   ├── labels.py            brazil államok (+ térképrács), magyar kategórianevek, a tényezők és modellek hétköznapi leírása
 │   └── narrative.py         rövid nevek, magyar számalak, sablonos magyarázó szöveg
 ├── semantic/
@@ -794,6 +818,8 @@ glassbox-bi/
 │   ├── kernel_kar_eredmeny.md        ugyanez táblázatokkal
 │   ├── huseg_eredmeny.json           a hűségmérés eredménye (rendelés-azonosítók nélkül)
 │   ├── huseg_eredmeny.md             ugyanez táblázatokkal
+│   ├── stabilitas_eredmeny.json      a stabilitásmérés eredménye (rendelés-azonosítók nélkül)
+│   ├── stabilitas_eredmeny.md        ugyanez táblázatokkal
 │   ├── pg_ellenorzes.json            DuckDB és PostgreSQL összevetése (a katalógus ujjlenyomatával)
 │   └── pg_ellenorzes.md              ugyanez röviden
 ├── .github/workflows/       CI: minden push lefuttatja a teljes pipeline-t (szintetikus adaton)
@@ -823,6 +849,7 @@ glassbox-bi/
     ├── test_labels.py       5 teszt (mind a 27 állam, minden valódi kategóriának van magyar neve, leírások, térképrács)
     ├── test_kernel_arm.py   5 teszt (a 21 játékos tere bitre visszaalakítható, additív modellre pontos, additivitás, nincs csendes szűkítés, a próbafutás nem írja felül a lezárt eredményt)
     ├── test_faithfulness.py 8 teszt (maszkok, additív modellen pontos görbe és a Shapley-sorrend a legjobb, beültetés, erős jel megtalálása, kis futás, felületi táblák, a próbafutás nem írja felül a lezárt eredményt)
+    ├── test_stability.py    6 teszt (a CIES kézzel számolt példán, a zaj csak a számszerű jellemzőket éri, a bootstrap-minta, kis teljes futás a felület tábláival és ábrájával és a két feltáró változattal — ugyanazok a húzások, az egész értékű jellemzők egészek maradnak —, a páros különbség olvasata, a próbafutás nem ír a docs\-ba)
     ├── test_readme.py       2 teszt (a README parancsai PowerShellben is bemásolhatók: nincs <…> helyőrző)
     ├── test_kornyezet.py    7 teszt (a uv.lock és a requirements.lock ugyanazt rögzíti, Python 3.14 mindenhol, nincs gépfüggő útvonal a tárolóban, a két Windows-parancsfájl CRLF-es és nem hivatkozik virtuális környezetre)
     ├── test_semantic.py     99 teszt (a katalógus és a hibás katalógusok, fehérlista és írásmódok, a KAPU ① minden elutasítási kódja, SQL-őr, idézés, minden szám egyezik egy független pandas-számolással, Wilson-tartomány, kevés adat, determinizmus, a válasz minden száma visszavezethető, ábrák magyar súgóval, a Kérdezz oldal végigkattintva, PostgreSQL-összevetés)

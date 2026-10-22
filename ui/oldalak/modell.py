@@ -391,6 +391,94 @@ else:
             "jellemző), a négy modell a lezárt beállításokkal tanult újra. Részletek: "
             "`docs/huseg_eredmeny.md`.")
 
+# ------------------------------------------------ a magyarázatok stabilitása (K3)
+st.subheader("Mennyire stabilak a magyarázatok?")
+sres = d.stability_results()
+if sres is None:
+    st.info("A stabilitásmérés eredménye még nincs meg. Futtatás: `uv run python -m xai.stability` "
+            "(kb. egy óra).", icon=":material/science:")
+else:
+    ss = sres["beallitasok"]
+    st.caption(
+        "Ha a modellt kicsit más adaton tanítanánk, ugyanazt mondaná-e a magyarázat? Mind a négy "
+        f"módszert {ss['bootstrap']}-szor újratanítottuk a tanulási időszak újramintázott rendelésein "
+        "(ugyanannyi rendelés, de némelyik többször, más egyszer sem), és "
+        f"{nv.fmt_num(ss['rendelesek'], 0)} teszt-rendelésen összevetettük a felület magyarázatát a "
+        "felületen futó modellével. Viszonyításként: ugyanazon az adaton, csak más véletlen "
+        "kezdőértékkel tanítva mennyit változik — ennyi a tanítás saját zaja. A rendelések tényleges "
+        "kimenetét a mérés nem használja.")
+    stab = d.stability_table(sres)
+    st.altair_chart(charts.stability_chart(d.stability_chart_table(sres), [NAMES[k] for k in KINDS],
+                                           ink=common.ink()), width="stretch")
+    order = stab.sort_values("rbo", ascending=False)
+    lg = sres["modellek"].get("lightgbm")
+    read = ["**Hogyan olvasd?** Az RBO a tényezők fontossági sorrendjének egyezése, a sorrend elejét "
+            "súlyozva (1 = azonos sorrend)."]
+    if lg:
+        bt = lg["bootstrap"]
+        read.append(
+            f"A fő modellnél (LightGBM) új tanítóadaton {nv.fmt_num(bt['rbo']['atlag'], 2)}: a 3 "
+            f"legfontosabb tényező átlagosan {nv.fmt_pct(bt['top3']['atlag'], 0)}-a ugyanaz marad, és ezek "
+            f"iránya (növeli vagy csökkenti a kockázatot) {nv.fmt_pct(bt['elojel3']['atlag'], 0)}-ban "
+            f"ugyanaz; a becslés átlagosan {nv.fmt_num(lg['becsles_valtozas_pp']['bootstrap'], 1)} "
+            "százalékpontot mozdul.")
+    if len(order) > 1:
+        read.append(f"A legstabilabb a(z) {order['modell'].iloc[0]}, a legkevésbé stabil a(z) "
+                    f"{order['modell'].iloc[-1]}.")
+    lr = sres["modellek"].get("logreg")
+    if lr and lr["kontroll_mag"].get("rbo") and lr["kontroll_mag"]["rbo"]["atlag"] > 0.999:
+        read.append("A logisztikus regresszió tanításában nincs véletlen, ezért ott a szürke pont 1-nél van.")
+    st.caption(" ".join(read))
+    with common.details("Szakmai részletek: a stabilitás mértékei, a modellpárok és a CIES"):
+        st.dataframe(stab[["modell", "rbo_szoveg", "top3", "elojel3", "cies", "rbo_kontroll", "becsles_pp"]],
+                     hide_index=True, column_config={
+            "modell": "modell",
+            "rbo_szoveg": "RBO, új tanítóadat [95% CI]",
+            "top3": st.column_config.TextColumn("közös top-3", help="A lezárt modell 3 legfontosabb "
+                                                "tényezőjéből átlagosan ennyi marad a top-3-ban."),
+            "elojel3": st.column_config.TextColumn("azonos irány (top-3)"),
+            "cies": st.column_config.TextColumn("CIES-súlyozott egyezés [95% CI]", help=(
+                "1 − Σ w·|Δ| / Σ w·|φ|, a lezárt magyarázat helyezése szerinti harmonikus súllyal: a "
+                "hatások nagyságát is nézi, nem csak a sorrendet.")),
+            "rbo_kontroll": "RBO, csak más mag [95% CI]",
+            "becsles_pp": "a becslés változása (pp): új adat / más mag"})
+        st.markdown("**A modellek egymáshoz képest** — rendelésenkénti RBO-különbség, a mérés előtt "
+                    "rögzített sejtéssel (a logisztikus regresszió a legstabilabb, a döntési fa a "
+                    "legkevésbé). A sejtés akkor teljesült, ha a különbség 95%-os tartománya 0 fölött van.")
+        st.dataframe(d.stability_pairs_table(sres), hide_index=True, column_config={
+            "modellpar": "modellpár (A − B)", "kulonbseg": "RBO-különbség [95% CI]",
+            "sejtes": "előzetes sejtés", "olvasat": "eredmény"})
+        st.markdown("**A modell egészére vonatkozó sorrend** (a rendelések átlagos |hatása|): mennyire "
+                    "marad ugyanaz a mintákon.")
+        st.dataframe(d.stability_global_table(sres), hide_index=True, column_config={
+            "modell": "modell", "top5": "a felület modelljének top-5-je",
+            "rbo": "RBO [95% CI]; legkisebb", "top3_azonos": "azonos top-3", "elso_azonos": "azonos első"})
+        cz = sres["cies_bemeneti_zaj"]
+        st.markdown(
+            "**CIES — a rendelés adatainak kis változására** (Văduva és mtsai. meghatározása): a felület "
+            "modelljei, minden rendeléshez néhány „szomszéd”, amelyben a számszerű adatok (ár, súly, "
+            "távolság…) α arányú véletlen zajt kapnak, a kategóriák változatlanok. 1 = a magyarázat nem "
+            "változik.")
+        st.dataframe(d.stability_cies_table(sres), hide_index=True, column_config={
+            "modell": "modell",
+            **{f"alfa_{k}": f"α = {nv.fmt_num(a['alpha'], 2)} (M = {a['M']})" for k, a in cz.items()},
+            **d.STABILITY_EXPLORATORY})
+        if sres.get("feltaro_kerekitett_honap_nelkul"):
+            st.caption(
+                "A két utolsó oszlop utólagos, feltáró ellenőrzés (nem előre rögzített), ugyanazokkal a zajos "
+                "szomszédokkal. A LightGBM alacsonyabb értékét főként a hónap kódolása okozza: április és augusztus "
+                "koszinusza papíron egyaránt −0,5, a gépben viszont −0,4999999999999998, illetve "
+                "−0,5000000000000004, és a LightGBM ezen a különbségen vág — az augusztusi rendelések a vágáson "
+                "ülnek, a legkisebb zaj is áttolja őket. A felület becslését ez nem változtatja (a hónap nem "
+                "„zajos”), de a mérésben valószerűtlen szomszédot ad.")
+        st.caption(
+            f"Bootstrap: {ss['bootstrap']} minta a {nv.fmt_num(ss['tanito_sorok'], 0)} tisztított tanító "
+            f"rendelésből (visszatevéssel, mag {ss['bootstrap_mag']} + i); kontroll-magok "
+            f"{', '.join(map(str, ss['kontroll_magok']))}; a lezárt beállítások; a felület magyarázata "
+            f"(saját magyarázó, százalékpont, {ss['hatter']} soros háttér) a KernelSHAP-kontrollkar "
+            "rendelésein. A beállítások a futás előtt a döntési naplóba kerültek. Részletek: "
+            "`docs/stabilitas_eredmeny.md`.")
+
 # -------------------------------------------- kontrollkar (szakmai rész)
 with common.details("Szakmai részletek: a magyarázatok ellenőrzése (KernelSHAP-kontrollkar)"):
     if kres is None:
