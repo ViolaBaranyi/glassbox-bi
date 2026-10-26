@@ -797,6 +797,103 @@ def stability_cies_table(res: dict) -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
+# ------------------------------------------------ a döntés stabilitása, a felosztás hatása, ROAR
+def _doc_json(name: str, path: Path | None = None) -> dict | None:
+    p = Path(path or DOCS / name)
+    return json.loads(p.read_text(encoding="utf-8")) if p.exists() else None
+
+
+def decision_stability_results(path: Path | None = None) -> dict | None:
+    """A döntés stabilitásának mentett eredménye (tools/dontesi_stabilitas.py), ha van."""
+    return _doc_json("dontesi_stabilitas.json", path)
+
+
+def decision_stability_table(res: dict) -> pd.DataFrame:
+    """Modellenként: mennyi marad a legkockázatosabb 10%-ból új tanítóadaton, és a tanítás saját zaja."""
+    rows = []
+    for kind, m in res["modellek"].items():
+        bt, ct = m["bootstrap"], m.get("kontroll_mag") or {}
+        a = bt["atfedes"]
+        rows.append({"modell": m["nev"], "kulcs": kind, "atfedes_ertek": a["ertek"],
+                     "atfedes": f"{nv.fmt_pct(a['ertek'], 0)} [{nv.fmt_pct(a['ci95'][0], 0)}; "
+                                f"{nv.fmt_pct(a['ci95'][1], 0)}]",
+                     "stabil_mag": nv.fmt_pct(bt["stabil_mag"], 0),
+                     "tobbertelmuseg": nv.fmt_pct(bt["tobbertelmuseg"], 0),
+                     "ui_atfedes": nv.fmt_pct(bt["ui_atfedes"]["ertek"], 0),
+                     "kontroll": nv.fmt_pct(ct["atfedes"]["ertek"], 0) if ct.get("atfedes") else "—"})
+    return pd.DataFrame(rows)
+
+
+def split_results(path: Path | None = None) -> dict | None:
+    """Az időbeli és a véletlen felosztás összevetése (tools/felosztas_osszevetes.py), ha van."""
+    return _doc_json("felosztas_osszevetes.json", path)
+
+
+SPLIT_COLUMNS = {"I": "időbeli teszt (élesben)", "II": "véletlen felosztás",
+                 "III_ben": "időn belül (véletlen 20%)", "IIIb": "időrendi, a tanulási időszak vége"}
+SPLIT_METRICS = {"pr_auc": "PR-AUC", "roc_auc": "ROC-AUC", "emeles": "hányszor jobb a vaktában rangsorolásnál",
+                 "felso10": "a legkockázatosabb 10% a késések ennyiedét fogja", "bazis": "késési arány"}
+
+
+def split_table(res: dict, kind: str = "lightgbm") -> pd.DataFrame:
+    """Egy modell mérőszámai felosztásonként (véletlennél az ismétlések átlaga)."""
+    out, s = res["eredmenyek"], res["osszegzes"]
+
+    def val(v, m):
+        x = out[v][kind][m] if v in ("I", "IIIb") else s[v][kind][m]["atlag"]
+        if m in ("felso10", "bazis"):
+            return nv.fmt_pct(x, 0 if m == "felso10" else 1)
+        if m == "emeles":
+            return nv.fmt_num(x, 1) + "×"
+        return nv.fmt_num(x, 3)
+    return pd.DataFrame([{"mutato": label, **{SPLIT_COLUMNS[v]: val(v, m) for v in SPLIT_COLUMNS}}
+                         for m, label in SPLIT_METRICS.items()])
+
+
+def roar_results(path: Path | None = None) -> dict | None:
+    """A ROAR-mérés mentett eredménye (tools/roar.py), ha van."""
+    return _doc_json("roar_eredmeny.json", path)
+
+
+def roar_table(res: dict) -> pd.DataFrame:
+    """Modellenként és k-nként: a magyarázat szerinti kivétel és a véletlen kivétel ROC-AUC-esése."""
+    rows = []
+    for kind, r in res["modellek"].items():
+        for k in res["beallitas"]["k"]:
+            t = res["osszegzes"]["tablazat"][f"{kind}|{k}|roc_auc"]
+            rows.append({"modell": r["nev"], "kulcs": kind, "k": int(k), "eses_ertek": t["legfontosabb"],
+                         "median_ertek": t["veletlen_median"], "jobb_n": t["kisebb_veletlen"],
+                         "kivett": ", ".join(nv.DISPLAY_SHORT.get(f) or nv.SHORT.get(f, f)
+                                             for f in r["k"][str(k)]["legfontosabb"]),
+                         "eses": nv.fmt_num(t["legfontosabb"], 3),
+                         "veletlen": f"{nv.fmt_num(t['veletlen_median'], 3)} ({nv.fmt_num(t['veletlen_min'], 3)} – "
+                                     f"{nv.fmt_num(t['veletlen_max'], 3)})",
+                         "jobb": f"{t['kisebb_veletlen']}/{t['n']}",
+                         "legkevesbe": nv.fmt_num(t["legkevesbe"], 3)})
+    return pd.DataFrame(rows)
+
+
+# ------------------------------------------------ gazdasági kalkulátor (A modell oldal)
+def economics_results(path: Path | None = None) -> dict | None:
+    """A gazdasági forgatókönyvek mentett eredménye (tools/gazdasagi_forgatokonyv.py), ha van."""
+    return _doc_json("gazdasagi_forgatokonyv.json", path)
+
+
+def economics_table(res: dict, c: float, e: float) -> pd.DataFrame:
+    """Kapacitásonként a nettó érték (elkerült késésnyi kár, 1000 rendelésre) adott c és e mellett:
+    e · (megjelölt és késett) − c · (megjelölt), a teszt-időszak valódi kimenetén."""
+    n = res["beallitas"]["teszt_rendelesek"]
+    cap = res["kapacitas"]
+    rows = []
+    for i, q in enumerate(res["beallitas"]["hanyadok"]):
+        g, lr, r = cap["lightgbm"][i], cap["logreg"][i], cap["veletlen"][i]
+        val = lambda x: (e * x["L"] - c * x["N"]) * 1000 / n  # noqa: E731
+        rows.append({"hanyad": q, "hanyad_szoveg": f"legkockázatosabb {nv.fmt_pct(q, 0)}",
+                     "megjelolt": int(g["N"]), "kesett": int(g["L"]), "pontossag": g["pontossag"],
+                     "lightgbm": val(g), "logreg": val(lr), "veletlen": val(r)})
+    return pd.DataFrame(rows)
+
+
 def provenance(res: dict) -> list[dict]:
     """A lezárt futások eredete (protokoll-ujjlenyomat, commit, idő, gép)."""
     out = []

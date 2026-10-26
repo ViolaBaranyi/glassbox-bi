@@ -57,7 +57,7 @@ válaszd — a `uv sync` után ott van, és mindkettő magától felismeri.
 | 1 | Környezet | a verziók rögzítve vannak a kimenetben |
 | 2 | Adat | a valódi Olist-adat; ha még nincs meg, letölti a Kaggle-ről |
 | 3 | Tárház | 9 CSV → csillagséma DuckDB-ben, **V-1 validációval** |
-| 4 | Tesztek | 465 teszt: szivárgásvédelem, V-1, adatmodell, abláció, betanítás, kohorsz, modellválasztás, bootstrap, lezárt futás, referencia-modellek, magyarázatok, szemantikus réteg, nyelvi réteg, mérés, felület; ha bármelyik bukik, **a demó megáll** |
+| 4 | Tesztek | 480 teszt: szivárgásvédelem, V-1, adatmodell, abláció, betanítás, kohorsz, modellválasztás, bootstrap, lezárt futás, referencia-modellek, magyarázatok, szemantikus réteg, nyelvi réteg, mérés, felület; ha bármelyik bukik, **a demó megáll** |
 | 5 | Betanítás | a **lezárt v3 protokoll** szerint: LightGBM súlyozás nélkül, a fák száma bővülő ablakos CV-vel, címke-tisztítással; érintetlen, legkésőbbi időszakon mérve; a kalibráció csak diagnosztika |
 | 6 | Összegzés | rangsorolás, kalibráció, kizárt rendelések, artefaktumok helye |
 
@@ -331,7 +331,7 @@ hely-kitöltés.
 | M2 — referencia-modellek: logisztikus regresszió, döntési fa, random forest (`pipeline/reference_models.py`), lezárt összevetés (`pipeline/v3_reference.py`) | **kész — lefutott okt. 9.** (`docs/v3_referencia_eredmeny.md`) |
 | M3 — SHAP-magyarázatok a négy modellre (pontos TreeSHAP, ill. lineáris SHAP, a 22 jellemzőre összevonva), additivitás-ellenőrzés, sablonos magyarázó szöveg (`xai/`) | **kész (v1)** |
 | M5 — Streamlit BI-felület: áttekintés (SQL), rendelés-magyarázat négy modellel, modell-oldal, egyezés-ellenőrzés a lezárt futással (`ui/`, `python -m ui`) | **kész (v1)** |
-| Tesztek — szivárgás (14), V-1 és adatmodell (10), abláció (6), betanítás (6), kohorsz (2), modellválasztás (8), bootstrap (6), lezárt futás (14), referencia-modellek (9), magyarázatok (12), szöveg és megjelenítés (22), felület (20), egyezési mértékek (5), kontrollkar (5), nevek és feliratok (5), a magyarázatok hűsége (8), a magyarázatok stabilitása (6), határidő-görbe (4), a kapu átcsúszása (3), README-parancsok (2), környezet (7), szemantikus réteg (99), nyelvi réteg (81), nyelvi réteg v4 (22), nyelvi réteg v5 (62), mérés és mérési kérdéssor (17), K1 v2 összevetés (3), két futás összevetése (3), K1 v3 összevetés (4) | **kész, 465/465** (egy csak Node.js-szel fut, nélküle kihagyja) |
+| Tesztek — szivárgás (14), V-1 és adatmodell (10), abláció (6), betanítás (6), kohorsz (2), modellválasztás (8), bootstrap (6), lezárt futás (14), referencia-modellek (9), magyarázatok (12), szöveg és megjelenítés (22), felület (22), egyezési mértékek (5), kontrollkar (5), nevek és feliratok (5), a magyarázatok hűsége (8), a magyarázatok stabilitása (6), határidő-görbe (4), a kapu átcsúszása (3), időbeli vagy véletlen felosztás (3), a döntés stabilitása (3), ROAR (3), gazdasági forgatókönyvek (4), README-parancsok (2), környezet (7), szemantikus réteg (99), nyelvi réteg (81), nyelvi réteg v4 (22), nyelvi réteg v5 (62), mérés és mérési kérdéssor (17), K1 v2 összevetés (3), két futás összevetése (3), K1 v3 összevetés (4) | **kész, 480/480** (egy csak Node.js-szel fut, nélküle kihagyja) |
 | Tároló — MIT licenc, CI (Ubuntu + Windows), uv-környezet (`uv.lock`; pip-nek `requirements.lock`), döntési napló | **kész** |
 | M2 — 40 futásos sweep, hiperparaméter-hangolás | következő |
 | M3 — KernelSHAP-kontrollkar: mind a négy modell ugyanazzal a magyarázóval (valószínűség-tér, közös háttér, 200 rögzített teszt-rendelés), a kar saját zajával (`xai/kernel_arm.py`, `xai/agreement.py`) | **kész** (`docs/kernel_kar_eredmeny.md`) |
@@ -343,6 +343,10 @@ hely-kitöltés.
 | M5 — *Kérdezz* oldal: kérdésépítő, példakérdések, válasz + ábra + táblázat, „Próbáld ki az 1. kaput” | **kész (v1)** |
 | M4 — nyelvi réteg: szabad szöveges kérdés → ugyanaz a gépi alak (helyi Ollama vagy OpenAI-kompatibilis API, JSON-sémához kötött kimenet, egy javító kör, ragozott szűrőértékek feloldása, időkifejezés és sorrend a kódtól), a modell fogalmazta válaszmag hely-kitöltéssel, a hatókör és a korlát a kódtól, KAPU ② (számok, csoport–érték kötés, „legmagasabb”, a tartomány szerepe, oksági állítás), sablon tartaléknak, napló időbontással; kontrollág a K1-hez; fejlesztői próbasor (`narrative/`, `eval/`) | **kész (v3)** — valódi modellel: okt. 15. (v1, 93 mp), okt. 16. fejlesztői próba (v2: 10/13, 5/6, medián 37 mp; v3: 12/13, 6/6, medián 29–32 mp) |
 | M6 — a második kapu véletlen átcsúszása: kitalált számok a valódi eredményeken, a lezárt kapuval, modell nélkül, előre rögzítve (`tools/kapu_atcsuszas.py`) | **kész** (`docs/kapu_atcsuszas.md`) |
+| M3 — a döntés stabilitása: a legkockázatosabb 10% a K3 újratanított modelljein (átfedés, stabil mag, többértelműség), előre rögzítve (`tools/dontesi_stabilitas.py`) | **kész** (`docs/dontesi_stabilitas.md`) |
+| M2 — időbeli vagy véletlen felosztás: ugyanazok a modellek véletlen és időn belüli ellenőrzésen, előre rögzítve (`tools/felosztas_osszevetes.py`) | **kész** (`docs/felosztas_osszevetes.md`) |
+| M3 — ROAR: a magyarázat szerinti fontos tényezők kivétele és újratanítás, véletlen és legkevésbé fontos készletekkel összevetve, előre rögzítve (`tools/roar.py`) | **kész** (`docs/roar_eredmeny.md`) |
+| M5 — gazdasági forgatókönyvek (kapacitás- és küszöbszabály, költség- és hatásarányok, blokk-bootstrap) és kalkulátor *A modell* oldalon (`tools/gazdasagi_forgatokonyv.py`) | **kész** (`docs/gazdasagi_forgatokonyv.md`) |
 | M6 — mérőpad: 120 kérdéses lezárt készlet (csapdakérdésekkel), K1 a fő ágon és a kontrollágon, két modellel | **mérés kész, kézi ellenőrzés hátravan** — a kérdéssor lezárva, a protokoll jóváhagyva (okt. 16.); `qwen3.5:4b` (okt. 19.): F-1 85%, F-2 89%, K1 a modell szövegében 29% / 30% (fő ág / kontrollág), a felhasználóhoz eljut 0% / 30%; `qwen3.5:2b` (okt. 19.): F-1 44%, F-2 86%, K1 40% / 46%, eljut 0% / 46% (`docs/k1_eredmeny_qwen3.5-4b.md`, `docs/k1_eredmeny_qwen3.5-2b.md`); a kapu tévesztéseinek kézi becslése (`tools/kezi_minta.py`) hátravan |
 
 ---
@@ -535,6 +539,45 @@ koszinusza a gépben −0,4999999999999998, illetve −0,5000000000000004, a Lig
 0,94–0,97. → a K4-hez: a stabilitás nem a bonyolultsággal, hanem a modell varianciájával nő
 vagy csökken (az egyetlen fa a legkevésbé stabil, az átlagolás és a regularizáció stabilizál).
 → `xai/stability.py`, `docs/stabilitas_eredmeny.md`
+
+**A döntés stabilitása (okt. 25., `docs/dontesi_stabilitas.md`).** Ugyanazokon a modelleken (20
+bootstrap + 5 kontroll-mag), a teszt mind a 18 603 rendelésén: a lezárt modell legkockázatosabb
+10%-ából (1860 rendelés) egy újratanított modellnél átlagosan ennyi marad a felső 10%-ban: LR
+87% · RF 66% · LightGBM 61% · fa 31%; a LightGBM listájának csak 5%-a marad bent mind a húsz
+modellnél, és a teszt-rendelések 31%-ának a besorolása legalább egyszer változik — miközben az
+újratanított modellek PR-AUC-ja 0,076–0,116 (a lezárt 0,098). A felület 200-as listájából 44%
+marad. Az előre rögzített sejtés (a K3 sorrendje) mind az 5 párra teljesült; a nyitott párban az
+RF stabilabb. → a Rashomon-hatás a döntés szintjén; a kockázati lista rangsor, nem végleges
+kiválasztás (a felület ki is írja). → `tools/dontesi_stabilitas.py`
+
+**Időbeli vagy véletlen felosztás (okt. 25., `docs/felosztas_osszevetes.md`).** Ugyanazok a
+modellek és beállítások, véletlen felosztással (10 ismétlés): a LightGBM PR-AUC-ja 0,279 a
+valódi, időbeli 0,098 helyett, az emelés 4,1× a 2,7× helyett, a felső 10% a késések 41%-át fogja
+a 32% helyett (a tanító időszak véletlen 20%-án ugyanígy: 0,240, miközben ugyanazok a modellek
+időn kívül 0,101-et tudnak). Az előre rögzített sejtésekből kettő részben nem teljesült (időn
+belül a ROC-AUC csak 7/10-szer jobb; a LightGBM kalibrációs eltérése az időbeli teszten +0,78 pp,
+az 1 pp-s határ alatt). Nem várt: a tanító időszak időben utolsó 20%-án (2017. dec. – 2018. febr.)
+a LightGBM ROC-AUC-ja 0,600, és ott az LR a jobb — a teszt-időszak jósága nem vihető át minden
+jövőbeli időszakra. → `tools/felosztas_osszevetes.py`
+
+**ROAR — a fontos tényezők kivétele és újratanítás (okt. 25., `docs/roar_eredmeny.md`).** A K2
+törlési görbéje a kész modellen maszkol; itt a magyarázat szerinti k legfontosabb tényező
+(k = 1, 2, 3, 5) minden rendelésnél állandó értéket kap a tanításban és a tesztben is, és a modell
+újratanul (Hooker és mtsai, 2019). Mind a négy modellnél a vállalt szállítási idő az első;
+nélküle a LightGBM ROC-AUC-ja 0,764 → 0,601 (véletlen egy tényező: ±0,005), 3 tényezőnél az esés
+LightGBM 0,183 · LR 0,278 · RF 0,246 · fa 0,069. Sejtések: R1 16/16, R3 16/16, R2 10/12 (a döntési
+fánál k = 2 és 3 nem — a fa újratanítva maga is ingadozik). → a hűség nem a maszkolás mellékterméke.
+→ `tools/roar.py`
+
+**Gazdasági forgatókönyvek (okt. 26., `docs/gazdasagi_forgatokonyv.md`).** Költségadat nincs, ezért
+az érték egysége egy elkerült késés értéke (B), a beavatkozás ára c = C/B (1–10%), hatása e (30 és
+60%); nettó érték = e · (megjelölt és késett) − c · (megjelölt), a teszt valódi kimenetén. A LightGBM
+a felső 1–20%-ban 2,7–3,5-ször annyi késést jelöl meg, mint a véletlen, a pontossága 10–12%; a
+beavatkozás csak akkor éri meg, ha c/e e alatt van (pl. e = 0,6, c = 0,02: a 20%-os kapacitás
++7,9 B / 1000 rendelés [2,3; 12,1]; e = 0,3, c = 0,05: minden kapacitás veszteséges). A becsült
+valószínűségre épülő küszöb a túlbecsült sávban előjelet fordít (e = 0,6, c = 0,10: várt +12,6,
+elért −8,8). LightGBM − LR a 10%-nál nem kimutatható. *A modell* oldalon kalkulátor: a felhasználó
+adja meg az árat és a hatást. → `tools/gazdasagi_forgatokonyv.py`
 
 **A felület nem számol fejben.** Minden szám SQL-lekérdezésből vagy a lezárt modellekből
 jön, a magyarázó szöveg sablonból készül ugyanezekből a mezőkből (ez lesz a nyelvi réteg
@@ -732,6 +775,10 @@ uv run python tools\visszajatszas.py logs\meres\MAPPA [MAPPA2 …] --reszletes  
 uv run python tools\kezi_minta.py minta logs\meres\MAPPA       # a kézi ellenőrzés mintája a hatókörrel
 uv run python tools\kezi_minta.py kiertekel logs\meres\MAPPA   # a kitöltött minta: a kapu pontossága, K1 korrigálva
 uv run python tools\kapu_atcsuszas.py        # a második kapu véletlen átcsúszása (modell nélkül, kb. 2 perc) → docs\kapu_atcsuszas.*
+uv run python tools\felosztas_osszevetes.py  # időbeli vagy véletlen felosztás (kb. 7 perc) → docs\felosztas_osszevetes.*
+uv run python tools\dontesi_stabilitas.py    # a legkockázatosabb 10% stabilitása a K3 modelljein (kb. 7 perc) → docs\dontesi_stabilitas.*
+uv run python tools\roar.py                  # ROAR: fontos tényezők kivétele és újratanítás (kb. 12 perc) → docs\roar_eredmeny.*
+uv run python tools\gazdasagi_forgatokonyv.py  # gazdasági forgatókönyvek (kb. 1 perc) → docs\gazdasagi_forgatokonyv.*
 uv run python -m narrative.meres --folytat logs\meres\MAPPA    # megszakadt mérés folytatása (a mappát a mérés kiírja)
 
 # lezárt futások — okt. 9-én lefutottak; újra csak --ismetles kapcsolóval indulnak
@@ -836,6 +883,14 @@ glassbox-bi/
 │   ├── stabilitas_eredmeny.md        ugyanez táblázatokkal
 │   ├── kapu_atcsuszas.json           a második kapu véletlen átcsúszása (kérdésenként)
 │   ├── kapu_atcsuszas.md             ugyanez táblázatokkal
+│   ├── dontesi_stabilitas.json       a legkockázatosabb 10% stabilitása (rendelés-azonosítók nélkül)
+│   ├── dontesi_stabilitas.md         ugyanez táblázatokkal
+│   ├── felosztas_osszevetes.json     időbeli vagy véletlen felosztás
+│   ├── felosztas_osszevetes.md       ugyanez táblázatokkal
+│   ├── roar_eredmeny.json            ROAR: kivétel és újratanítás (modellenként, k-nként, a véletlen készletekkel)
+│   ├── roar_eredmeny.md              ugyanez táblázatokkal
+│   ├── gazdasagi_forgatokonyv.json   gazdasági forgatókönyvek (kapacitás, küszöb, bizonytalanság)
+│   ├── gazdasagi_forgatokonyv.md     ugyanez táblázatokkal
 │   ├── pg_ellenorzes.json            DuckDB és PostgreSQL összevetése (a katalógus ujjlenyomatával)
 │   └── pg_ellenorzes.md              ugyanez röviden
 ├── .github/workflows/       CI: minden push lefuttatja a teljes pipeline-t (szintetikus adaton)
@@ -860,7 +915,7 @@ glassbox-bi/
     ├── test_reference_models.py  9 teszt (modellek, rácsok, a választás csak a tanító ablakot látja, lezárt összevetés)
     ├── test_explain.py      12 teszt (additivitás, egyezés a shap könyvtárral, oszlopcsoportok, gyorsítótár)
     ├── test_narrative.py    22 teszt (magyar számalak, hónap-visszafejtés, összevonás, sablonos szöveg, a becslés hitelessége)
-    ├── test_ui.py           20 teszt (adatréteg, becslési sávok és csoportjaik, grafikonok világos/sötét témában, térkép, magyar számalak a tengelyeken, magyar súgó minden ábrarétegen, „kevés adat” sáv, minden oldal lefut — Streamlit AppTest)
+    ├── test_ui.py           22 teszt (adatréteg, a gazdasági kalkulátor, a döntés stabilitásának, a felosztásnak és a ROAR-nak a táblái, becslési sávok és csoportjaik, grafikonok világos/sötét témában, térkép, magyar számalak a tengelyeken, magyar súgó minden ábrarétegen, „kevés adat” sáv, minden oldal lefut — Streamlit AppTest)
     ├── test_agreement.py    5 teszt (RBO a definíció szerint, top-k, előjel, súlyozott tau, bootstrap)
     ├── test_labels.py       5 teszt (mind a 27 állam, minden valódi kategóriának van magyar neve, leírások, térképrács)
     ├── test_kernel_arm.py   5 teszt (a 21 játékos tere bitre visszaalakítható, additív modellre pontos, additivitás, nincs csendes szűkítés, a próbafutás nem írja felül a lezárt eredményt)
@@ -868,6 +923,10 @@ glassbox-bi/
     ├── test_stability.py    6 teszt (a CIES kézzel számolt példán, a zaj csak a számszerű jellemzőket éri, a bootstrap-minta, kis teljes futás a felület tábláival és ábrájával és a két feltáró változattal — ugyanazok a húzások, az egész értékű jellemzők egészek maradnak —, a páros különbség olvasata, a próbafutás nem ír a docs\-ba)
     ├── test_deadline.py     4 teszt (a saját értéknél pontosan a becslés mind a négy modellnél, csak a vállalt idő változik és a logisztikus regresszió logitja egyenes, a tanult tartomány és a rácson kívüli érték, összegzés, ábra, backend)
     ├── test_kapu_atcsuszas.py 3 teszt (a kitalált szám alakja és tartománya, a kapu a valódi értéket átengedi, a távolit nem, kis futás determinisztikusan, jelentés)
+    ├── test_felosztas_osszevetes.py 3 teszt (a felső 10% és a mérőszámok kézzel számolt példán, a felosztások mérete, diszjunktsága, determinizmusa, az időrendi belső ellenőrzés csak eldőlt címkén tanul, kis futás, jelentés, a próbafutás nem ír a docs\-ba)
+    ├── test_dontesi_stabilitas.py 3 teszt (holtverseny és azonos becslés, ismert csere kézzel számolva, kis futás: a mag-független LR kontrollja pontosan 1, jelentés)
+    ├── test_gazdasagi_forgatokonyv.py 4 teszt (nettó érték és kapacitás kézzel számolva, küszöbszabály: várt és elért, heti blokk-bootstrap, kis futás, jelentés)
+    ├── test_roar.py         3 teszt (a kivétel csak a megadott oszlopokat írja át, a hónapnál mindkettőt, a kategóriák listája megmarad; determinisztikus véletlen készletek; kis futás: kivétel nélkül a lezárt modell jön vissza, összegzés, jelentés)
     ├── test_readme.py       2 teszt (a README parancsai PowerShellben is bemásolhatók: nincs <…> helyőrző)
     ├── test_kornyezet.py    7 teszt (a uv.lock és a requirements.lock ugyanazt rögzíti, Python 3.14 mindenhol, nincs gépfüggő útvonal a tárolóban, a két Windows-parancsfájl CRLF-es és nem hivatkozik virtuális környezetre)
     ├── test_semantic.py     99 teszt (a katalógus és a hibás katalógusok, fehérlista és írásmódok, a KAPU ① minden elutasítási kódja, SQL-őr, idézés, minden szám egyezik egy független pandas-számolással, Wilson-tartomány, kevés adat, determinizmus, a válasz minden száma visszavezethető, ábrák magyar súgóval, a Kérdezz oldal végigkattintva, PostgreSQL-összevetés)

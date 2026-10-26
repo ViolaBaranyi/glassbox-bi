@@ -1,0 +1,2335 @@
+{
+ "letrehozva": "2026-10-25T21:12:42+00:00",
+ "kod_ujjlenyomat": "662452282243175871fe606656666bde19a1be30467eb393b1d937973a3ddf75",
+ "beallitas": {
+  "k": [
+   1,
+   2,
+   3,
+   5
+  ],
+  "veletlen": 10,
+  "mag": 20261103,
+  "modell_mag": 42,
+  "rendelesek": 200,
+  "rendeles_mag": 20261012,
+  "hatter": 500,
+  "tanito_sorok": 50623,
+  "teszt_sorok": 18603,
+  "modellek": [
+   "lightgbm",
+   "logreg",
+   "dontesi_fa",
+   "random_forest"
+  ],
+  "allando_ertekek": {
+   "tetel_szam": 1.0,
+   "elado_szam": 1.0,
+   "kategoria_szam": 1.0,
+   "kosar_ertek": 84.99,
+   "szallitasi_dij": 16.46,
+   "dij_arany": 0.22295968534906588,
+   "tavolsag_km": 443.33000000000004,
+   "suly_g": 800.0,
+   "terfogat_cm3": 8000.0,
+   "vallalt_ido_nap": 25.0,
+   "honap_sin": -2.4492935982947064e-16,
+   "honap_cos": 0.5000000000000001,
+   "het_napja": 3.0,
+   "elado_korabbi_keses_arany": 0.01652892561983471,
+   "elado_korabbi_rendelesek": 44.0,
+   "elado_atlagos_feladas_nap": 2.8210739522417154,
+   "vevo_korabbi_rendelesek": 0.0,
+   "azonos_allam": false,
+   "unnep_kozeli": false,
+   "kategoria": "bed_bath_table",
+   "elado_allam": "SP",
+   "vevo_allam": "SP"
+  }
+ },
+ "adat": {
+  "adatforras": "valós",
+  "tarhaz_epitve": "2026-10-13 07:29:29 UTC",
+  "lightgbm_fak": 119
+ },
+ "modellek": {
+  "lightgbm": {
+   "nev": "LightGBM",
+   "rangsor": [
+    "vallalt_ido_nap",
+    "vevo_allam",
+    "elado_atlagos_feladas_nap",
+    "honap",
+    "kategoria",
+    "tavolsag_km",
+    "unnep_kozeli",
+    "szallitasi_dij",
+    "suly_g",
+    "elado_korabbi_keses_arany",
+    "elado_allam",
+    "kosar_ertek",
+    "elado_korabbi_rendelesek",
+    "het_napja",
+    "tetel_szam",
+    "dij_arany",
+    "terfogat_cm3",
+    "elado_szam",
+    "azonos_allam",
+    "vevo_korabbi_rendelesek",
+    "kategoria_szam"
+   ],
+   "alap": {
+    "pr_auc": 0.09781812227943969,
+    "roc_auc": 0.7639733727967791
+   },
+   "ujratanitva_kivetel_nelkul": {
+    "pr_auc": 0.09781812227943969,
+    "roc_auc": 0.7639733727967791
+   },
+   "egyezik_a_lezarttal": true,
+   "k3_top5_egyezik": true,
+   "k": {
+    "1": {
+     "legfontosabb": [
+      "vallalt_ido_nap"
+     ],
+     "legkevesbe": [
+      "kategoria_szam"
+     ],
+     "eses_legfontosabb": {
+      "pr_auc": 0.04958052636096793,
+      "roc_auc": 0.16326664581955697
+     },
+     "eses_legkevesbe": {
+      "pr_auc": -0.005146782106648373,
+      "roc_auc": -0.0012471750174611884
+     },
+     "eses_veletlen": [
+      {
+       "pr_auc": -0.004134240178600118,
+       "roc_auc": 0.00048532602489426147
+      },
+      {
+       "pr_auc": -0.002353727223039004,
+       "roc_auc": -0.004134317131012755
+      },
+      {
+       "pr_auc": -0.002527515319464685,
+       "roc_auc": 0.0018379814420887985
+      },
+      {
+       "pr_auc": -0.002353727223039004,
+       "roc_auc": -0.004134317131012755
+      },
+      {
+       "pr_auc": -0.0020935965806138657,
+       "roc_auc": -0.00580229338124183
+      },
+      {
+       "pr_auc": -0.0003251857513918571,
+       "roc_auc": 0.005267090314459266
+      },
+      {
+       "pr_auc": -0.0003251857513918571,
+       "roc_auc": 0.005267090314459266
+      },
+      {
+       "pr_auc": -0.010983158240158025,
+       "roc_auc": -0.0009752994946236049
+      },
+      {
+       "pr_auc": -0.007226963539356798,
+       "roc_auc": -0.0021974944960975185
+      },
+      {
+       "pr_auc": -0.00340669589446059,
+       "roc_auc": -0.004875460097038653
+      }
+     ],
+     "veletlen_keszletek": [
+      [
+       "szallitasi_dij"
+      ],
+      [
+       "kategoria"
+      ],
+      [
+       "tavolsag_km"
+      ],
+      [
+       "kategoria"
+      ],
+      [
+       "elado_korabbi_rendelesek"
+      ],
+      [
+       "suly_g"
+      ],
+      [
+       "suly_g"
+      ],
+      [
+       "vevo_allam"
+      ],
+      [
+       "kosar_ertek"
+      ],
+      [
+       "elado_allam"
+      ]
+     ]
+    },
+    "2": {
+     "legfontosabb": [
+      "vallalt_ido_nap",
+      "vevo_allam"
+     ],
+     "legkevesbe": [
+      "vevo_korabbi_rendelesek",
+      "kategoria_szam"
+     ],
+     "eses_legfontosabb": {
+      "pr_auc": 0.05353919085002801,
+      "roc_auc": 0.21093465758954288
+     },
+     "eses_legkevesbe": {
+      "pr_auc": -0.005824284690965853,
+      "roc_auc": -0.004828653688344953
+     },
+     "eses_veletlen": [
+      {
+       "pr_auc": 0.051660801357093805,
+       "roc_auc": 0.1740023263781002
+      },
+      {
+       "pr_auc": -0.0059371029800489444,
+       "roc_auc": -0.006005204142334075
+      },
+      {
+       "pr_auc": -0.007310704352621156,
+       "roc_auc": -0.005879557151621029
+      },
+      {
+       "pr_auc": -0.0037220821236775142,
+       "roc_auc": -0.0013078407705729989
+      },
+      {
+       "pr_auc": 0.047067872448956105,
+       "roc_auc": 0.15016786404763227
+      },
+      {
+       "pr_auc": -0.0050362502227276895,
+       "roc_auc": -0.0002629125935132981
+      },
+      {
+       "pr_auc": -0.0018097976923873854,
+       "roc_auc": 0.00658186075724132
+      },
+      {
+       "pr_auc": -0.0025469623396842944,
+       "roc_auc": -0.0028247335686268915
+      },
+      {
+       "pr_auc": -0.007874449538153833,
+       "roc_auc": -0.0016456934120477884
+      },
+      {
+       "pr_auc": 0.004484538231984511,
+       "roc_auc": -2.9046530225507183e-07
+      }
+     ],
+     "veletlen_keszletek": [
+      [
+       "elado_szam",
+       "vallalt_ido_nap"
+      ],
+      [
+       "elado_allam",
+       "szallitasi_dij"
+      ],
+      [
+       "kategoria",
+       "kosar_ertek"
+      ],
+      [
+       "azonos_allam",
+       "elado_szam"
+      ],
+      [
+       "vallalt_ido_nap",
+       "vevo_korabbi_rendelesek"
+      ],
+      [
+       "kategoria_szam",
+       "terfogat_cm3"
+      ],
+      [
+       "elado_atlagos_feladas_nap",
+       "tetel_szam"
+      ],
+      [
+       "azonos_allam",
+       "terfogat_cm3"
+      ],
+      [
+       "azonos_allam",
+       "vevo_allam"
+      ],
+      [
+       "elado_korabbi_rendelesek",
+       "het_napja"
+      ]
+     ]
+    },
+    "3": {
+     "legfontosabb": [
+      "vallalt_ido_nap",
+      "vevo_allam",
+      "elado_atlagos_feladas_nap"
+     ],
+     "legkevesbe": [
+      "azonos_allam",
+      "vevo_korabbi_rendelesek",
+      "kategoria_szam"
+     ],
+     "eses_legfontosabb": {
+      "pr_auc": 0.050613643126800514,
+      "roc_auc": 0.1827486515770771
+     },
+     "eses_legkevesbe": {
+      "pr_auc": -0.012437254111833454,
+      "roc_auc": -0.00920206525809264
+     },
+     "eses_veletlen": [
+      {
+       "pr_auc": 0.055550516681443,
+       "roc_auc": 0.21028509418378916
+      },
+      {
+       "pr_auc": -0.0024559601195064396,
+       "roc_auc": -0.006401896755021341
+      },
+      {
+       "pr_auc": -0.0012318539420502483,
+       "roc_auc": 0.005668762332326827
+      },
+      {
+       "pr_auc": 0.04853024550747849,
+       "roc_auc": 0.16539928356318268
+      },
+      {
+       "pr_auc": -0.006374489563534036,
+       "roc_auc": 0.0052113209764413915
+      },
+      {
+       "pr_auc": -0.0010039284388348862,
+       "roc_auc": 0.0017206749550525702
+      },
+      {
+       "pr_auc": -0.0022030941611260874,
+       "roc_auc": 0.007187771377582197
+      },
+      {
+       "pr_auc": -0.002844130450897306,
+       "roc_auc": -0.0034441715730406663
+      },
+      {
+       "pr_auc": -0.004729318526557974,
+       "roc_auc": -0.003047852415741903
+      },
+      {
+       "pr_auc": -0.01340921268518512,
+       "roc_auc": -0.0062595272619114795
+      }
+     ],
+     "veletlen_keszletek": [
+      [
+       "elado_allam",
+       "honap",
+       "vallalt_ido_nap"
+      ],
+      [
+       "kategoria",
+       "szallitasi_dij",
+       "vevo_korabbi_rendelesek"
+      ],
+      [
+       "elado_korabbi_rendelesek",
+       "honap",
+       "terfogat_cm3"
+      ],
+      [
+       "kosar_ertek",
+       "suly_g",
+       "vallalt_ido_nap"
+      ],
+      [
+       "elado_atlagos_feladas_nap",
+       "elado_szam",
+       "szallitasi_dij"
+      ],
+      [
+       "het_napja",
+       "tavolsag_km",
+       "unnep_kozeli"
+      ],
+      [
+       "dij_arany",
+       "honap",
+       "tetel_szam"
+      ],
+      [
+       "het_napja",
+       "kosar_ertek",
+       "tetel_szam"
+      ],
+      [
+       "elado_korabbi_rendelesek",
+       "szallitasi_dij",
+       "unnep_kozeli"
+      ],
+      [
+       "dij_arany",
+       "unnep_kozeli",
+       "vevo_allam"
+      ]
+     ]
+    },
+    "5": {
+     "legfontosabb": [
+      "vallalt_ido_nap",
+      "vevo_allam",
+      "elado_atlagos_feladas_nap",
+      "honap",
+      "kategoria"
+     ],
+     "legkevesbe": [
+      "terfogat_cm3",
+      "elado_szam",
+      "azonos_allam",
+      "vevo_korabbi_rendelesek",
+      "kategoria_szam"
+     ],
+     "eses_legfontosabb": {
+      "pr_auc": 0.056752050903699405,
+      "roc_auc": 0.24270106340177022
+     },
+     "eses_legkevesbe": {
+      "pr_auc": -0.004118914318859052,
+      "roc_auc": -0.0025030224989445182
+     },
+     "eses_veletlen": [
+      {
+       "pr_auc": -0.008229530041509739,
+       "roc_auc": -0.003927630320992415
+      },
+      {
+       "pr_auc": -0.010974949848251217,
+       "roc_auc": 0.022467781588682567
+      },
+      {
+       "pr_auc": 0.011810613786394614,
+       "roc_auc": 0.03292021698256009
+      },
+      {
+       "pr_auc": 0.05879499407952619,
+       "roc_auc": 0.2371620560694302
+      },
+      {
+       "pr_auc": 0.05466805924725458,
+       "roc_auc": 0.2137032483647633
+      },
+      {
+       "pr_auc": -0.0031686087620482473,
+       "roc_auc": 0.01267312561910594
+      },
+      {
+       "pr_auc": 0.057301375327297926,
+       "roc_auc": 0.2456608633359093
+      },
+      {
+       "pr_auc": -0.015843474523461798,
+       "roc_auc": -0.006611695693279351
+      },
+      {
+       "pr_auc": -0.00742744367121298,
+       "roc_auc": -0.005169618458057523
+      },
+      {
+       "pr_auc": -0.008737510251738398,
+       "roc_auc": -0.006244630541414109
+      }
+     ],
+     "veletlen_keszletek": [
+      [
+       "elado_allam",
+       "elado_korabbi_keses_arany",
+       "elado_korabbi_rendelesek",
+       "het_napja",
+       "tavolsag_km"
+      ],
+      [
+       "azonos_allam",
+       "elado_atlagos_feladas_nap",
+       "szallitasi_dij",
+       "tavolsag_km",
+       "vevo_allam"
+      ],
+      [
+       "elado_korabbi_keses_arany",
+       "het_napja",
+       "honap",
+       "kategoria",
+       "unnep_kozeli"
+      ],
+      [
+       "azonos_allam",
+       "elado_szam",
+       "honap",
+       "unnep_kozeli",
+       "vallalt_ido_nap"
+      ],
+      [
+       "elado_allam",
+       "honap",
+       "tavolsag_km",
+       "vallalt_ido_nap",
+       "vevo_korabbi_rendelesek"
+      ],
+      [
+       "dij_arany",
+       "elado_atlagos_feladas_nap",
+       "elado_korabbi_rendelesek",
+       "honap",
+       "vevo_allam"
+      ],
+      [
+       "azonos_allam",
+       "honap",
+       "kosar_ertek",
+       "vallalt_ido_nap",
+       "vevo_allam"
+      ],
+      [
+       "kategoria_szam",
+       "szallitasi_dij",
+       "terfogat_cm3",
+       "unnep_kozeli",
+       "vevo_allam"
+      ],
+      [
+       "dij_arany",
+       "elado_szam",
+       "het_napja",
+       "terfogat_cm3",
+       "vevo_korabbi_rendelesek"
+      ],
+      [
+       "dij_arany",
+       "elado_korabbi_keses_arany",
+       "elado_szam",
+       "het_napja",
+       "vevo_korabbi_rendelesek"
+      ]
+     ]
+    }
+   },
+   "ido_mp": 31.6
+  },
+  "logreg": {
+   "nev": "logisztikus regresszió",
+   "rangsor": [
+    "vallalt_ido_nap",
+    "honap",
+    "vevo_allam",
+    "tavolsag_km",
+    "azonos_allam",
+    "unnep_kozeli",
+    "elado_allam",
+    "elado_atlagos_feladas_nap",
+    "kategoria",
+    "suly_g",
+    "tetel_szam",
+    "kosar_ertek",
+    "elado_korabbi_keses_arany",
+    "elado_szam",
+    "dij_arany",
+    "terfogat_cm3",
+    "szallitasi_dij",
+    "elado_korabbi_rendelesek",
+    "het_napja",
+    "vevo_korabbi_rendelesek",
+    "kategoria_szam"
+   ],
+   "alap": {
+    "pr_auc": 0.08363246605273811,
+    "roc_auc": 0.7401138889552809
+   },
+   "ujratanitva_kivetel_nelkul": {
+    "pr_auc": 0.08363246605273811,
+    "roc_auc": 0.7401138889552809
+   },
+   "egyezik_a_lezarttal": true,
+   "k3_top5_egyezik": true,
+   "k": {
+    "1": {
+     "legfontosabb": [
+      "vallalt_ido_nap"
+     ],
+     "legkevesbe": [
+      "kategoria_szam"
+     ],
+     "eses_legfontosabb": {
+      "pr_auc": 0.04174108475526163,
+      "roc_auc": 0.18047356135025527
+     },
+     "eses_legkevesbe": {
+      "pr_auc": 9.247924646460515e-05,
+      "roc_auc": 0.0005054926158739592
+     },
+     "eses_veletlen": [
+      {
+       "pr_auc": 0.0016669444759382368,
+       "roc_auc": 0.002246292666863048
+      },
+      {
+       "pr_auc": -0.00044016381455259934,
+       "roc_auc": -0.002249695260403084
+      },
+      {
+       "pr_auc": 0.005860456932505156,
+       "roc_auc": 0.0125147390393332
+      },
+      {
+       "pr_auc": -0.00044016381455259934,
+       "roc_auc": -0.002249695260403084
+      },
+      {
+       "pr_auc": 0.0003257859294287929,
+       "roc_auc": 0.0010530612055205113
+      },
+      {
+       "pr_auc": 0.0025304400061793575,
+       "roc_auc": 0.0039006170478897984
+      },
+      {
+       "pr_auc": 0.0025304400061793575,
+       "roc_auc": 0.0039006170478897984
+      },
+      {
+       "pr_auc": 0.008670608241913638,
+       "roc_auc": 0.03140851106490217
+      },
+      {
+       "pr_auc": 0.0028279586699120896,
+       "roc_auc": 0.0012457641859933144
+      },
+      {
+       "pr_auc": 0.000937243798675963,
+       "roc_auc": 0.005549713053477401
+      }
+     ],
+     "veletlen_keszletek": [
+      [
+       "szallitasi_dij"
+      ],
+      [
+       "kategoria"
+      ],
+      [
+       "tavolsag_km"
+      ],
+      [
+       "kategoria"
+      ],
+      [
+       "elado_korabbi_rendelesek"
+      ],
+      [
+       "suly_g"
+      ],
+      [
+       "suly_g"
+      ],
+      [
+       "vevo_allam"
+      ],
+      [
+       "kosar_ertek"
+      ],
+      [
+       "elado_allam"
+      ]
+     ]
+    },
+    "2": {
+     "legfontosabb": [
+      "vallalt_ido_nap",
+      "honap"
+     ],
+     "legkevesbe": [
+      "vevo_korabbi_rendelesek",
+      "kategoria_szam"
+     ],
+     "eses_legfontosabb": {
+      "pr_auc": 0.04432953392109944,
+      "roc_auc": 0.2113295244203307
+     },
+     "eses_legkevesbe": {
+      "pr_auc": 0.0006331314602028154,
+      "roc_auc": 0.002666305493810972
+     },
+     "eses_veletlen": [
+      {
+       "pr_auc": 0.04197957200543331,
+       "roc_auc": 0.1836061881391895
+      },
+      {
+       "pr_auc": 0.0009394943832090885,
+       "roc_auc": 0.006216953347620846
+      },
+      {
+       "pr_auc": 0.0016396016186192575,
+       "roc_auc": -0.003012540134005759
+      },
+      {
+       "pr_auc": -0.00019443733436780297,
+       "roc_auc": -0.0010728958361551078
+      },
+      {
+       "pr_auc": 0.04187115327794824,
+       "roc_auc": 0.1817143461310684
+      },
+      {
+       "pr_auc": 0.0008100409463297209,
+       "roc_auc": 0.00033976141346048205
+      },
+      {
+       "pr_auc": 0.004741633279664967,
+       "roc_auc": 0.012173815764663809
+      },
+      {
+       "pr_auc": 0.0001904960236783354,
+       "roc_auc": -0.001326928490430257
+      },
+      {
+       "pr_auc": -0.000615510716435369,
+       "roc_auc": -0.002022800364359756
+      },
+      {
+       "pr_auc": 0.0007547925031854974,
+       "roc_auc": -9.045919410666237e-05
+      }
+     ],
+     "veletlen_keszletek": [
+      [
+       "elado_szam",
+       "vallalt_ido_nap"
+      ],
+      [
+       "elado_allam",
+       "szallitasi_dij"
+      ],
+      [
+       "kategoria",
+       "kosar_ertek"
+      ],
+      [
+       "azonos_allam",
+       "elado_szam"
+      ],
+      [
+       "vallalt_ido_nap",
+       "vevo_korabbi_rendelesek"
+      ],
+      [
+       "kategoria_szam",
+       "terfogat_cm3"
+      ],
+      [
+       "elado_atlagos_feladas_nap",
+       "tetel_szam"
+      ],
+      [
+       "azonos_allam",
+       "terfogat_cm3"
+      ],
+      [
+       "azonos_allam",
+       "vevo_allam"
+      ],
+      [
+       "elado_korabbi_rendelesek",
+       "het_napja"
+      ]
+     ]
+    },
+    "3": {
+     "legfontosabb": [
+      "vallalt_ido_nap",
+      "honap",
+      "vevo_allam"
+     ],
+     "legkevesbe": [
+      "het_napja",
+      "vevo_korabbi_rendelesek",
+      "kategoria_szam"
+     ],
+     "eses_legfontosabb": {
+      "pr_auc": 0.049425272755522005,
+      "roc_auc": 0.277927657873701
+     },
+     "eses_legkevesbe": {
+      "pr_auc": 0.0008501954434588649,
+      "roc_auc": 0.0024570044960707804
+     },
+     "eses_veletlen": [
+      {
+       "pr_auc": 0.044677757396636555,
+       "roc_auc": 0.21873904530860344
+      },
+      {
+       "pr_auc": 0.0012560715569830821,
+       "roc_auc": -0.0015578069106177983
+      },
+      {
+       "pr_auc": 0.0040825111637530775,
+       "roc_auc": 0.010698998940382398
+      },
+      {
+       "pr_auc": 0.04221605555406997,
+       "roc_auc": 0.17807996128014525
+      },
+      {
+       "pr_auc": 0.004876672530694945,
+       "roc_auc": 0.019003733889964236
+      },
+      {
+       "pr_auc": 0.007082738062216293,
+       "roc_auc": 0.011228558681294132
+      },
+      {
+       "pr_auc": 0.005451668096711548,
+       "roc_auc": 0.010649951799357793
+      },
+      {
+       "pr_auc": 0.0015331523068868314,
+       "roc_auc": -0.0014705013397920963
+      },
+      {
+       "pr_auc": 0.0032241926570825558,
+       "roc_auc": 0.000733466383039727
+      },
+      {
+       "pr_auc": 0.01112449143594639,
+       "roc_auc": 0.030824924777785756
+      }
+     ],
+     "veletlen_keszletek": [
+      [
+       "elado_allam",
+       "honap",
+       "vallalt_ido_nap"
+      ],
+      [
+       "kategoria",
+       "szallitasi_dij",
+       "vevo_korabbi_rendelesek"
+      ],
+      [
+       "elado_korabbi_rendelesek",
+       "honap",
+       "terfogat_cm3"
+      ],
+      [
+       "kosar_ertek",
+       "suly_g",
+       "vallalt_ido_nap"
+      ],
+      [
+       "elado_atlagos_feladas_nap",
+       "elado_szam",
+       "szallitasi_dij"
+      ],
+      [
+       "het_napja",
+       "tavolsag_km",
+       "unnep_kozeli"
+      ],
+      [
+       "dij_arany",
+       "honap",
+       "tetel_szam"
+      ],
+      [
+       "het_napja",
+       "kosar_ertek",
+       "tetel_szam"
+      ],
+      [
+       "elado_korabbi_rendelesek",
+       "szallitasi_dij",
+       "unnep_kozeli"
+      ],
+      [
+       "dij_arany",
+       "unnep_kozeli",
+       "vevo_allam"
+      ]
+     ]
+    },
+    "5": {
+     "legfontosabb": [
+      "vallalt_ido_nap",
+      "honap",
+      "vevo_allam",
+      "tavolsag_km",
+      "azonos_allam"
+     ],
+     "legkevesbe": [
+      "szallitasi_dij",
+      "elado_korabbi_rendelesek",
+      "het_napja",
+      "vevo_korabbi_rendelesek",
+      "kategoria_szam"
+     ],
+     "eses_legfontosabb": {
+      "pr_auc": 0.04489310085008624,
+      "roc_auc": 0.22656849603373774
+     },
+     "eses_legkevesbe": {
+      "pr_auc": 0.0017403460681108818,
+      "roc_auc": 0.001742542842802064
+     },
+     "eses_veletlen": [
+      {
+       "pr_auc": 0.003931000446528041,
+       "roc_auc": 0.013656143191758785
+      },
+      {
+       "pr_auc": 0.020706467370885703,
+       "roc_auc": 0.09201401337401827
+      },
+      {
+       "pr_auc": 0.01663109276631887,
+       "roc_auc": 0.03929804661254366
+      },
+      {
+       "pr_auc": 0.04558064694430163,
+       "roc_auc": 0.2156707358365798
+      },
+      {
+       "pr_auc": 0.044869278673538085,
+       "roc_auc": 0.21890012906618217
+      },
+      {
+       "pr_auc": 0.015051970554266714,
+       "roc_auc": 0.0561472748711328
+      },
+      {
+       "pr_auc": 0.045848439799505716,
+       "roc_auc": 0.22937223311052146
+      },
+      {
+       "pr_auc": 0.010481967727304947,
+       "roc_auc": 0.029183629840313752
+      },
+      {
+       "pr_auc": 0.0007444395519918406,
+       "roc_auc": 0.0048306039553738245
+      },
+      {
+       "pr_auc": 0.0002983504071673443,
+       "roc_auc": 0.004317974192074803
+      }
+     ],
+     "veletlen_keszletek": [
+      [
+       "elado_allam",
+       "elado_korabbi_keses_arany",
+       "elado_korabbi_rendelesek",
+       "het_napja",
+       "tavolsag_km"
+      ],
+      [
+       "azonos_allam",
+       "elado_atlagos_feladas_nap",
+       "szallitasi_dij",
+       "tavolsag_km",
+       "vevo_allam"
+      ],
+      [
+       "elado_korabbi_keses_arany",
+       "het_napja",
+       "honap",
+       "kategoria",
+       "unnep_kozeli"
+      ],
+      [
+       "azonos_allam",
+       "elado_szam",
+       "honap",
+       "unnep_kozeli",
+       "vallalt_ido_nap"
+      ],
+      [
+       "elado_allam",
+       "honap",
+       "tavolsag_km",
+       "vallalt_ido_nap",
+       "vevo_korabbi_rendelesek"
+      ],
+      [
+       "dij_arany",
+       "elado_atlagos_feladas_nap",
+       "elado_korabbi_rendelesek",
+       "honap",
+       "vevo_allam"
+      ],
+      [
+       "azonos_allam",
+       "honap",
+       "kosar_ertek",
+       "vallalt_ido_nap",
+       "vevo_allam"
+      ],
+      [
+       "kategoria_szam",
+       "szallitasi_dij",
+       "terfogat_cm3",
+       "unnep_kozeli",
+       "vevo_allam"
+      ],
+      [
+       "dij_arany",
+       "elado_szam",
+       "het_napja",
+       "terfogat_cm3",
+       "vevo_korabbi_rendelesek"
+      ],
+      [
+       "dij_arany",
+       "elado_korabbi_keses_arany",
+       "elado_szam",
+       "het_napja",
+       "vevo_korabbi_rendelesek"
+      ]
+     ]
+    }
+   },
+   "ido_mp": 55.8
+  },
+  "dontesi_fa": {
+   "nev": "döntési fa",
+   "rangsor": [
+    "vallalt_ido_nap",
+    "unnep_kozeli",
+    "tavolsag_km",
+    "elado_atlagos_feladas_nap",
+    "vevo_allam",
+    "honap",
+    "kosar_ertek",
+    "terfogat_cm3",
+    "elado_allam",
+    "elado_korabbi_keses_arany",
+    "elado_korabbi_rendelesek",
+    "suly_g",
+    "dij_arany",
+    "szallitasi_dij",
+    "kategoria",
+    "het_napja",
+    "tetel_szam",
+    "elado_szam",
+    "kategoria_szam",
+    "vevo_korabbi_rendelesek",
+    "azonos_allam"
+   ],
+   "alap": {
+    "pr_auc": 0.060875770067220246,
+    "roc_auc": 0.5971797727930612
+   },
+   "ujratanitva_kivetel_nelkul": {
+    "pr_auc": 0.060875770067220246,
+    "roc_auc": 0.5971797727930612
+   },
+   "egyezik_a_lezarttal": true,
+   "k3_top5_egyezik": true,
+   "k": {
+    "1": {
+     "legfontosabb": [
+      "vallalt_ido_nap"
+     ],
+     "legkevesbe": [
+      "azonos_allam"
+     ],
+     "eses_legfontosabb": {
+      "pr_auc": 0.02248739922458627,
+      "roc_auc": 0.07681267776476497
+     },
+     "eses_legkevesbe": {
+      "pr_auc": -0.0008839639581925407,
+      "roc_auc": -0.0013045211671194323
+     },
+     "eses_veletlen": [
+      {
+       "pr_auc": -0.004000062717198681,
+       "roc_auc": -0.027492789821299213
+      },
+      {
+       "pr_auc": -0.00046146483397167815,
+       "roc_auc": -0.00017498459703990665
+      },
+      {
+       "pr_auc": 0.0007326049002589,
+       "roc_auc": -0.05780334204397275
+      },
+      {
+       "pr_auc": -0.00046146483397167815,
+       "roc_auc": -0.00017498459703990665
+      },
+      {
+       "pr_auc": -0.00340361119648646,
+       "roc_auc": -0.02821857962135277
+      },
+      {
+       "pr_auc": -0.0033740707128174716,
+       "roc_auc": -0.016486229620954473
+      },
+      {
+       "pr_auc": -0.0033740707128174716,
+       "roc_auc": -0.016486229620954473
+      },
+      {
+       "pr_auc": -0.005059139657637386,
+       "roc_auc": -0.033280518442388884
+      },
+      {
+       "pr_auc": 0.002289658585567539,
+       "roc_auc": 0.03138622822672088
+      },
+      {
+       "pr_auc": -0.000882307371654685,
+       "roc_auc": -0.0012354734152877356
+      }
+     ],
+     "veletlen_keszletek": [
+      [
+       "szallitasi_dij"
+      ],
+      [
+       "kategoria"
+      ],
+      [
+       "tavolsag_km"
+      ],
+      [
+       "kategoria"
+      ],
+      [
+       "elado_korabbi_rendelesek"
+      ],
+      [
+       "suly_g"
+      ],
+      [
+       "suly_g"
+      ],
+      [
+       "vevo_allam"
+      ],
+      [
+       "kosar_ertek"
+      ],
+      [
+       "elado_allam"
+      ]
+     ]
+    },
+    "2": {
+     "legfontosabb": [
+      "vallalt_ido_nap",
+      "unnep_kozeli"
+     ],
+     "legkevesbe": [
+      "vevo_korabbi_rendelesek",
+      "azonos_allam"
+     ],
+     "eses_legfontosabb": {
+      "pr_auc": 0.016183159350398844,
+      "roc_auc": 0.024731709648892153
+     },
+     "eses_legkevesbe": {
+      "pr_auc": -0.000882307371654685,
+      "roc_auc": -0.0012354734152877356
+     },
+     "eses_veletlen": [
+      {
+       "pr_auc": 0.02249300669034835,
+       "roc_auc": 0.07695708051499006
+      },
+      {
+       "pr_auc": -0.003210217752998519,
+       "roc_auc": -0.026232419380110672
+      },
+      {
+       "pr_auc": 0.002824361809827397,
+       "roc_auc": 0.032698425976826484
+      },
+      {
+       "pr_auc": -0.000882307371654685,
+       "roc_auc": -0.0012354734152877356
+      },
+      {
+       "pr_auc": 0.02248739922458627,
+       "roc_auc": 0.07681267776476497
+      },
+      {
+       "pr_auc": -0.0009285546731802458,
+       "roc_auc": -0.0015844882233747581
+      },
+      {
+       "pr_auc": -0.028799316807477583,
+       "roc_auc": -0.08398779315418103
+      },
+      {
+       "pr_auc": -0.0009285546731802458,
+       "roc_auc": -0.0015844882233747581
+      },
+      {
+       "pr_auc": -0.005060310171465333,
+       "roc_auc": -0.033298485796080635
+      },
+      {
+       "pr_auc": -0.004268351566295299,
+       "roc_auc": -0.02916371221959302
+      }
+     ],
+     "veletlen_keszletek": [
+      [
+       "elado_szam",
+       "vallalt_ido_nap"
+      ],
+      [
+       "elado_allam",
+       "szallitasi_dij"
+      ],
+      [
+       "kategoria",
+       "kosar_ertek"
+      ],
+      [
+       "azonos_allam",
+       "elado_szam"
+      ],
+      [
+       "vallalt_ido_nap",
+       "vevo_korabbi_rendelesek"
+      ],
+      [
+       "kategoria_szam",
+       "terfogat_cm3"
+      ],
+      [
+       "elado_atlagos_feladas_nap",
+       "tetel_szam"
+      ],
+      [
+       "azonos_allam",
+       "terfogat_cm3"
+      ],
+      [
+       "azonos_allam",
+       "vevo_allam"
+      ],
+      [
+       "elado_korabbi_rendelesek",
+       "het_napja"
+      ]
+     ]
+    },
+    "3": {
+     "legfontosabb": [
+      "vallalt_ido_nap",
+      "unnep_kozeli",
+      "tavolsag_km"
+     ],
+     "legkevesbe": [
+      "kategoria_szam",
+      "vevo_korabbi_rendelesek",
+      "azonos_allam"
+     ],
+     "eses_legfontosabb": {
+      "pr_auc": 0.02038906106684959,
+      "roc_auc": 0.06919360690849308
+     },
+     "eses_legkevesbe": {
+      "pr_auc": -0.0008839639581925407,
+      "roc_auc": -0.0013045211671194323
+     },
+     "eses_veletlen": [
+      {
+       "pr_auc": 0.021547194314722344,
+       "roc_auc": 0.08140501718226745
+      },
+      {
+       "pr_auc": -0.0035408677812825765,
+       "roc_auc": -0.026194534405698078
+      },
+      {
+       "pr_auc": -0.011040265934481451,
+       "roc_auc": -0.060043119989058424
+      },
+      {
+       "pr_auc": 0.02232293849372354,
+       "roc_auc": 0.07277960853908239
+      },
+      {
+       "pr_auc": -0.028748459979147607,
+       "roc_auc": -0.08395310329809247
+      },
+      {
+       "pr_auc": -0.0029556558710159483,
+       "roc_auc": -0.019770479297624988
+      },
+      {
+       "pr_auc": -0.01070761946188021,
+       "roc_auc": -0.058595523913095304
+      },
+      {
+       "pr_auc": -0.009864068488252727,
+       "roc_auc": -0.06429586397327336
+      },
+      {
+       "pr_auc": -0.006378407108438462,
+       "roc_auc": -0.040930046660346164
+      },
+      {
+       "pr_auc": -0.0035151310512325437,
+       "roc_auc": -0.028214264136863343
+      }
+     ],
+     "veletlen_keszletek": [
+      [
+       "elado_allam",
+       "honap",
+       "vallalt_ido_nap"
+      ],
+      [
+       "kategoria",
+       "szallitasi_dij",
+       "vevo_korabbi_rendelesek"
+      ],
+      [
+       "elado_korabbi_rendelesek",
+       "honap",
+       "terfogat_cm3"
+      ],
+      [
+       "kosar_ertek",
+       "suly_g",
+       "vallalt_ido_nap"
+      ],
+      [
+       "elado_atlagos_feladas_nap",
+       "elado_szam",
+       "szallitasi_dij"
+      ],
+      [
+       "het_napja",
+       "tavolsag_km",
+       "unnep_kozeli"
+      ],
+      [
+       "dij_arany",
+       "honap",
+       "tetel_szam"
+      ],
+      [
+       "het_napja",
+       "kosar_ertek",
+       "tetel_szam"
+      ],
+      [
+       "elado_korabbi_rendelesek",
+       "szallitasi_dij",
+       "unnep_kozeli"
+      ],
+      [
+       "dij_arany",
+       "unnep_kozeli",
+       "vevo_allam"
+      ]
+     ]
+    },
+    "5": {
+     "legfontosabb": [
+      "vallalt_ido_nap",
+      "unnep_kozeli",
+      "tavolsag_km",
+      "elado_atlagos_feladas_nap",
+      "vevo_allam"
+     ],
+     "legkevesbe": [
+      "tetel_szam",
+      "elado_szam",
+      "kategoria_szam",
+      "vevo_korabbi_rendelesek",
+      "azonos_allam"
+     ],
+     "eses_legfontosabb": {
+      "pr_auc": 0.014296290781966654,
+      "roc_auc": 0.03081546390794332
+     },
+     "eses_legkevesbe": {
+      "pr_auc": 5.270120643462162e-06,
+      "roc_auc": 0.00026440641506730866
+     },
+     "eses_veletlen": [
+      {
+       "pr_auc": 0.004457544787011575,
+       "roc_auc": -0.036748051724733166
+      },
+      {
+       "pr_auc": -0.033883815736207724,
+       "roc_auc": -0.08948410208710111
+      },
+      {
+       "pr_auc": 0.005373093078474507,
+       "roc_auc": -0.05167610097968134
+      },
+      {
+       "pr_auc": 0.02540712464319292,
+       "roc_auc": 0.11071118188505663
+      },
+      {
+       "pr_auc": 0.023479866471947303,
+       "roc_auc": 0.08309058733079977
+      },
+      {
+       "pr_auc": -0.0310401121957,
+       "roc_auc": -0.11156448595276602
+      },
+      {
+       "pr_auc": 0.02244430573066778,
+       "roc_auc": 0.08935505250284825
+      },
+      {
+       "pr_auc": -0.0015867974164514437,
+       "roc_auc": -0.02202179286471162
+      },
+      {
+       "pr_auc": -0.000620127046186747,
+       "roc_auc": -0.0034399390786374884
+      },
+      {
+       "pr_auc": -0.004707666863819841,
+       "roc_auc": -0.019236728557353477
+      }
+     ],
+     "veletlen_keszletek": [
+      [
+       "elado_allam",
+       "elado_korabbi_keses_arany",
+       "elado_korabbi_rendelesek",
+       "het_napja",
+       "tavolsag_km"
+      ],
+      [
+       "azonos_allam",
+       "elado_atlagos_feladas_nap",
+       "szallitasi_dij",
+       "tavolsag_km",
+       "vevo_allam"
+      ],
+      [
+       "elado_korabbi_keses_arany",
+       "het_napja",
+       "honap",
+       "kategoria",
+       "unnep_kozeli"
+      ],
+      [
+       "azonos_allam",
+       "elado_szam",
+       "honap",
+       "unnep_kozeli",
+       "vallalt_ido_nap"
+      ],
+      [
+       "elado_allam",
+       "honap",
+       "tavolsag_km",
+       "vallalt_ido_nap",
+       "vevo_korabbi_rendelesek"
+      ],
+      [
+       "dij_arany",
+       "elado_atlagos_feladas_nap",
+       "elado_korabbi_rendelesek",
+       "honap",
+       "vevo_allam"
+      ],
+      [
+       "azonos_allam",
+       "honap",
+       "kosar_ertek",
+       "vallalt_ido_nap",
+       "vevo_allam"
+      ],
+      [
+       "kategoria_szam",
+       "szallitasi_dij",
+       "terfogat_cm3",
+       "unnep_kozeli",
+       "vevo_allam"
+      ],
+      [
+       "dij_arany",
+       "elado_szam",
+       "het_napja",
+       "terfogat_cm3",
+       "vevo_korabbi_rendelesek"
+      ],
+      [
+       "dij_arany",
+       "elado_korabbi_keses_arany",
+       "elado_szam",
+       "het_napja",
+       "vevo_korabbi_rendelesek"
+      ]
+     ]
+    }
+   },
+   "ido_mp": 46.3
+  },
+  "random_forest": {
+   "nev": "random forest",
+   "rangsor": [
+    "vallalt_ido_nap",
+    "vevo_allam",
+    "honap",
+    "unnep_kozeli",
+    "elado_atlagos_feladas_nap",
+    "tavolsag_km",
+    "elado_korabbi_rendelesek",
+    "elado_korabbi_keses_arany",
+    "szallitasi_dij",
+    "azonos_allam",
+    "suly_g",
+    "terfogat_cm3",
+    "dij_arany",
+    "kosar_ertek",
+    "kategoria",
+    "elado_allam",
+    "het_napja",
+    "tetel_szam",
+    "elado_szam",
+    "vevo_korabbi_rendelesek",
+    "kategoria_szam"
+   ],
+   "alap": {
+    "pr_auc": 0.08795629862081122,
+    "roc_auc": 0.7384681125531469
+   },
+   "ujratanitva_kivetel_nelkul": {
+    "pr_auc": 0.08795629862081122,
+    "roc_auc": 0.7384681125531469
+   },
+   "egyezik_a_lezarttal": true,
+   "k3_top5_egyezik": true,
+   "k": {
+    "1": {
+     "legfontosabb": [
+      "vallalt_ido_nap"
+     ],
+     "legkevesbe": [
+      "kategoria_szam"
+     ],
+     "eses_legfontosabb": {
+      "pr_auc": 0.04530237328176094,
+      "roc_auc": 0.20068886751064274
+     },
+     "eses_legkevesbe": {
+      "pr_auc": 0.0007770933525667323,
+      "roc_auc": -0.0008825995681860377
+     },
+     "eses_veletlen": [
+      {
+       "pr_auc": -0.0014781442470987727,
+       "roc_auc": 0.001991430111724646
+      },
+      {
+       "pr_auc": -0.005928215360544262,
+       "roc_auc": -0.00886251131984761
+      },
+      {
+       "pr_auc": -0.00025120934897199243,
+       "roc_auc": 0.00159465450895091
+      },
+      {
+       "pr_auc": -0.005928215360544262,
+       "roc_auc": -0.00886251131984761
+      },
+      {
+       "pr_auc": -0.007466495880874932,
+       "roc_auc": -0.019745416291551465
+      },
+      {
+       "pr_auc": -0.0006327183928840491,
+       "roc_auc": 0.002690289628762166
+      },
+      {
+       "pr_auc": -0.0006327183928840491,
+       "roc_auc": 0.002690289628762166
+      },
+      {
+       "pr_auc": 0.005792084685369084,
+       "roc_auc": 0.01803997001734181
+      },
+      {
+       "pr_auc": -0.001769746739317249,
+       "roc_auc": 0.0012124436663294436
+      },
+      {
+       "pr_auc": -0.00727995933194342,
+       "roc_auc": -0.010456833868453308
+      }
+     ],
+     "veletlen_keszletek": [
+      [
+       "szallitasi_dij"
+      ],
+      [
+       "kategoria"
+      ],
+      [
+       "tavolsag_km"
+      ],
+      [
+       "kategoria"
+      ],
+      [
+       "elado_korabbi_rendelesek"
+      ],
+      [
+       "suly_g"
+      ],
+      [
+       "suly_g"
+      ],
+      [
+       "vevo_allam"
+      ],
+      [
+       "kosar_ertek"
+      ],
+      [
+       "elado_allam"
+      ]
+     ]
+    },
+    "2": {
+     "legfontosabb": [
+      "vallalt_ido_nap",
+      "vevo_allam"
+     ],
+     "legkevesbe": [
+      "vevo_korabbi_rendelesek",
+      "kategoria_szam"
+     ],
+     "eses_legfontosabb": {
+      "pr_auc": 0.048538156093580184,
+      "roc_auc": 0.2142579541018349
+     },
+     "eses_legkevesbe": {
+      "pr_auc": -0.0030077951490850435,
+      "roc_auc": -0.0036020187172519647
+     },
+     "eses_veletlen": [
+      {
+       "pr_auc": 0.04624278483816175,
+       "roc_auc": 0.20727454581185556
+      },
+      {
+       "pr_auc": -0.006372047059365157,
+       "roc_auc": -0.005789056462471187
+      },
+      {
+       "pr_auc": -0.005483281629976841,
+       "roc_auc": -0.0036905691393728235
+      },
+      {
+       "pr_auc": 0.002145592177992095,
+       "roc_auc": 0.004368764124912827
+      },
+      {
+       "pr_auc": 0.04663909891027819,
+       "roc_auc": 0.20405552634304525
+      },
+      {
+       "pr_auc": 0.0009233725349251376,
+       "roc_auc": 0.00112364427394962
+      },
+      {
+       "pr_auc": -0.00042267363821379966,
+       "roc_auc": 8.892387750925046e-05
+      },
+      {
+       "pr_auc": 0.0015730079026184535,
+       "roc_auc": 0.0014602105690862954
+      },
+      {
+       "pr_auc": 0.009774721068927475,
+       "roc_auc": 0.020280660853377208
+      },
+      {
+       "pr_auc": -0.007905477416904533,
+       "roc_auc": -0.019117969743806307
+      }
+     ],
+     "veletlen_keszletek": [
+      [
+       "elado_szam",
+       "vallalt_ido_nap"
+      ],
+      [
+       "elado_allam",
+       "szallitasi_dij"
+      ],
+      [
+       "kategoria",
+       "kosar_ertek"
+      ],
+      [
+       "azonos_allam",
+       "elado_szam"
+      ],
+      [
+       "vallalt_ido_nap",
+       "vevo_korabbi_rendelesek"
+      ],
+      [
+       "kategoria_szam",
+       "terfogat_cm3"
+      ],
+      [
+       "elado_atlagos_feladas_nap",
+       "tetel_szam"
+      ],
+      [
+       "azonos_allam",
+       "terfogat_cm3"
+      ],
+      [
+       "azonos_allam",
+       "vevo_allam"
+      ],
+      [
+       "elado_korabbi_rendelesek",
+       "het_napja"
+      ]
+     ]
+    },
+    "3": {
+     "legfontosabb": [
+      "vallalt_ido_nap",
+      "vevo_allam",
+      "honap"
+     ],
+     "legkevesbe": [
+      "elado_szam",
+      "vevo_korabbi_rendelesek",
+      "kategoria_szam"
+     ],
+     "eses_legfontosabb": {
+      "pr_auc": 0.05010098711098967,
+      "roc_auc": 0.24617000751558227
+     },
+     "eses_legkevesbe": {
+      "pr_auc": 0.0052319425428780375,
+      "roc_auc": 0.009103887985956849
+     },
+     "eses_veletlen": [
+      {
+       "pr_auc": 0.049010530543908706,
+       "roc_auc": 0.22347055910089209
+      },
+      {
+       "pr_auc": -0.00823574056178493,
+       "roc_auc": -0.0072695996027097864
+      },
+      {
+       "pr_auc": -0.007038981567402264,
+       "roc_auc": -0.010388947977830298
+      },
+      {
+       "pr_auc": 0.04677644196873373,
+       "roc_auc": 0.20658854975820007
+      },
+      {
+       "pr_auc": -0.009074180880048632,
+       "roc_auc": -0.007536288245151401
+      },
+      {
+       "pr_auc": 0.003603036619106395,
+       "roc_auc": 0.008853548390523547
+      },
+      {
+       "pr_auc": 0.0014788309858988075,
+       "roc_auc": 0.0018669034871771073
+      },
+      {
+       "pr_auc": -0.0019180865854278306,
+       "roc_auc": -0.00015058551165703093
+      },
+      {
+       "pr_auc": -0.0026330491993949295,
+       "roc_auc": -0.008423742733387973
+      },
+      {
+       "pr_auc": 0.018438419530940636,
+       "roc_auc": 0.042135477664380305
+      }
+     ],
+     "veletlen_keszletek": [
+      [
+       "elado_allam",
+       "honap",
+       "vallalt_ido_nap"
+      ],
+      [
+       "kategoria",
+       "szallitasi_dij",
+       "vevo_korabbi_rendelesek"
+      ],
+      [
+       "elado_korabbi_rendelesek",
+       "honap",
+       "terfogat_cm3"
+      ],
+      [
+       "kosar_ertek",
+       "suly_g",
+       "vallalt_ido_nap"
+      ],
+      [
+       "elado_atlagos_feladas_nap",
+       "elado_szam",
+       "szallitasi_dij"
+      ],
+      [
+       "het_napja",
+       "tavolsag_km",
+       "unnep_kozeli"
+      ],
+      [
+       "dij_arany",
+       "honap",
+       "tetel_szam"
+      ],
+      [
+       "het_napja",
+       "kosar_ertek",
+       "tetel_szam"
+      ],
+      [
+       "elado_korabbi_rendelesek",
+       "szallitasi_dij",
+       "unnep_kozeli"
+      ],
+      [
+       "dij_arany",
+       "unnep_kozeli",
+       "vevo_allam"
+      ]
+     ]
+    },
+    "5": {
+     "legfontosabb": [
+      "vallalt_ido_nap",
+      "vevo_allam",
+      "honap",
+      "unnep_kozeli",
+      "elado_atlagos_feladas_nap"
+     ],
+     "legkevesbe": [
+      "het_napja",
+      "tetel_szam",
+      "elado_szam",
+      "vevo_korabbi_rendelesek",
+      "kategoria_szam"
+     ],
+     "eses_legfontosabb": {
+      "pr_auc": 0.05348980959891089,
+      "roc_auc": 0.27556198396764325
+     },
+     "eses_legkevesbe": {
+      "pr_auc": 0.0011611728224758672,
+      "roc_auc": 0.003766214603068474
+     },
+     "eses_veletlen": [
+      {
+       "pr_auc": -0.017744767139814363,
+       "roc_auc": -0.03263128699698037
+      },
+      {
+       "pr_auc": 0.0022856679596665735,
+       "roc_auc": 0.03697660642250322
+      },
+      {
+       "pr_auc": 0.019414914358469176,
+       "roc_auc": 0.029737298201306106
+      },
+      {
+       "pr_auc": 0.05229156760597006,
+       "roc_auc": 0.24777254608273513
+      },
+      {
+       "pr_auc": 0.04925418069501612,
+       "roc_auc": 0.2244351943694214
+      },
+      {
+       "pr_auc": -0.013810604882397215,
+       "roc_auc": -0.014076280503835914
+      },
+      {
+       "pr_auc": 0.049906441903039514,
+       "roc_auc": 0.23875708403376977
+      },
+      {
+       "pr_auc": -0.0004808478483463996,
+       "roc_auc": 0.012127175336143048
+      },
+      {
+       "pr_auc": -0.0017543800894506134,
+       "roc_auc": -0.003022996884884166
+      },
+      {
+       "pr_auc": -0.008783177600304407,
+       "roc_auc": -0.011681560067560492
+      }
+     ],
+     "veletlen_keszletek": [
+      [
+       "elado_allam",
+       "elado_korabbi_keses_arany",
+       "elado_korabbi_rendelesek",
+       "het_napja",
+       "tavolsag_km"
+      ],
+      [
+       "azonos_allam",
+       "elado_atlagos_feladas_nap",
+       "szallitasi_dij",
+       "tavolsag_km",
+       "vevo_allam"
+      ],
+      [
+       "elado_korabbi_keses_arany",
+       "het_napja",
+       "honap",
+       "kategoria",
+       "unnep_kozeli"
+      ],
+      [
+       "azonos_allam",
+       "elado_szam",
+       "honap",
+       "unnep_kozeli",
+       "vallalt_ido_nap"
+      ],
+      [
+       "elado_allam",
+       "honap",
+       "tavolsag_km",
+       "vallalt_ido_nap",
+       "vevo_korabbi_rendelesek"
+      ],
+      [
+       "dij_arany",
+       "elado_atlagos_feladas_nap",
+       "elado_korabbi_rendelesek",
+       "honap",
+       "vevo_allam"
+      ],
+      [
+       "azonos_allam",
+       "honap",
+       "kosar_ertek",
+       "vallalt_ido_nap",
+       "vevo_allam"
+      ],
+      [
+       "kategoria_szam",
+       "szallitasi_dij",
+       "terfogat_cm3",
+       "unnep_kozeli",
+       "vevo_allam"
+      ],
+      [
+       "dij_arany",
+       "elado_szam",
+       "het_napja",
+       "terfogat_cm3",
+       "vevo_korabbi_rendelesek"
+      ],
+      [
+       "dij_arany",
+       "elado_korabbi_keses_arany",
+       "elado_szam",
+       "het_napja",
+       "vevo_korabbi_rendelesek"
+      ]
+     ]
+    }
+   },
+   "ido_mp": 613.4
+  }
+ },
+ "osszegzes": {
+  "R1": {
+   "lightgbm|1": true,
+   "lightgbm|2": true,
+   "lightgbm|3": true,
+   "lightgbm|5": true,
+   "logreg|1": true,
+   "logreg|2": true,
+   "logreg|3": true,
+   "logreg|5": true,
+   "dontesi_fa|1": true,
+   "dontesi_fa|2": true,
+   "dontesi_fa|3": true,
+   "dontesi_fa|5": true,
+   "random_forest|1": true,
+   "random_forest|2": true,
+   "random_forest|3": true,
+   "random_forest|5": true
+  },
+  "R2": {
+   "lightgbm|1": true,
+   "lightgbm|2": true,
+   "lightgbm|3": true,
+   "logreg|1": true,
+   "logreg|2": true,
+   "logreg|3": true,
+   "dontesi_fa|1": true,
+   "dontesi_fa|2": false,
+   "dontesi_fa|3": false,
+   "random_forest|1": true,
+   "random_forest|2": true,
+   "random_forest|3": true
+  },
+  "R3": {
+   "lightgbm|1": true,
+   "lightgbm|2": true,
+   "lightgbm|3": true,
+   "lightgbm|5": true,
+   "logreg|1": true,
+   "logreg|2": true,
+   "logreg|3": true,
+   "logreg|5": true,
+   "dontesi_fa|1": true,
+   "dontesi_fa|2": true,
+   "dontesi_fa|3": true,
+   "dontesi_fa|5": true,
+   "random_forest|1": true,
+   "random_forest|2": true,
+   "random_forest|3": true,
+   "random_forest|5": true
+  },
+  "tablazat": {
+   "lightgbm|1|roc_auc": {
+    "legfontosabb": 0.16326664581955697,
+    "legkevesbe": -0.0012471750174611884,
+    "veletlen_median": -0.0015863969953605617,
+    "veletlen_min": -0.00580229338124183,
+    "veletlen_max": 0.005267090314459266,
+    "kisebb_veletlen": 10,
+    "n": 10
+   },
+   "lightgbm|1|pr_auc": {
+    "legfontosabb": 0.04958052636096793,
+    "legkevesbe": -0.005146782106648373,
+    "veletlen_median": -0.0024406212712518444,
+    "veletlen_min": -0.010983158240158025,
+    "veletlen_max": -0.0003251857513918571,
+    "kisebb_veletlen": 10,
+    "n": 10
+   },
+   "lightgbm|2|roc_auc": {
+    "legfontosabb": 0.21093465758954288,
+    "legkevesbe": -0.004828653688344953,
+    "veletlen_median": -0.0007853766820431485,
+    "veletlen_min": -0.006005204142334075,
+    "veletlen_max": 0.1740023263781002,
+    "kisebb_veletlen": 10,
+    "n": 10
+   },
+   "lightgbm|2|pr_auc": {
+    "legfontosabb": 0.05353919085002801,
+    "legkevesbe": -0.005824284690965853,
+    "veletlen_median": -0.0031345222316809043,
+    "veletlen_min": -0.007874449538153833,
+    "veletlen_max": 0.051660801357093805,
+    "kisebb_veletlen": 10,
+    "n": 10
+   },
+   "lightgbm|3|roc_auc": {
+    "legfontosabb": 0.1827486515770771,
+    "legkevesbe": -0.00920206525809264,
+    "veletlen_median": 0.003465997965746981,
+    "veletlen_min": -0.006401896755021341,
+    "veletlen_max": 0.21028509418378916,
+    "kisebb_veletlen": 9,
+    "n": 10
+   },
+   "lightgbm|3|pr_auc": {
+    "legfontosabb": 0.050613643126800514,
+    "legkevesbe": -0.012437254111833454,
+    "veletlen_median": -0.0023295271403162635,
+    "veletlen_min": -0.01340921268518512,
+    "veletlen_max": 0.055550516681443,
+    "kisebb_veletlen": 9,
+    "n": 10
+   },
+   "lightgbm|5|roc_auc": {
+    "legfontosabb": 0.24270106340177022,
+    "legkevesbe": -0.0025030224989445182,
+    "veletlen_median": 0.017570453603894254,
+    "veletlen_min": -0.006611695693279351,
+    "veletlen_max": 0.2456608633359093,
+    "kisebb_veletlen": 9,
+    "n": 10
+   },
+   "lightgbm|5|pr_auc": {
+    "legfontosabb": 0.056752050903699405,
+    "legkevesbe": -0.004118914318859052,
+    "veletlen_median": -0.005298026216630614,
+    "veletlen_min": -0.015843474523461798,
+    "veletlen_max": 0.05879499407952619,
+    "kisebb_veletlen": 8,
+    "n": 10
+   },
+   "logreg|1|roc_auc": {
+    "legfontosabb": 0.18047356135025527,
+    "legkevesbe": 0.0005054926158739592,
+    "veletlen_median": 0.003073454857376423,
+    "veletlen_min": -0.002249695260403084,
+    "veletlen_max": 0.03140851106490217,
+    "kisebb_veletlen": 10,
+    "n": 10
+   },
+   "logreg|1|pr_auc": {
+    "legfontosabb": 0.04174108475526163,
+    "legkevesbe": 9.247924646460515e-05,
+    "veletlen_median": 0.002098692241058797,
+    "veletlen_min": -0.00044016381455259934,
+    "veletlen_max": 0.008670608241913638,
+    "kisebb_veletlen": 10,
+    "n": 10
+   },
+   "logreg|2|roc_auc": {
+    "legfontosabb": 0.2113295244203307,
+    "legkevesbe": 0.002666305493810972,
+    "veletlen_median": 0.00012465110967690984,
+    "veletlen_min": -0.003012540134005759,
+    "veletlen_max": 0.1836061881391895,
+    "kisebb_veletlen": 10,
+    "n": 10
+   },
+   "logreg|2|pr_auc": {
+    "legfontosabb": 0.04432953392109944,
+    "legkevesbe": 0.0006331314602028154,
+    "veletlen_median": 0.0008747676647694047,
+    "veletlen_min": -0.000615510716435369,
+    "veletlen_max": 0.04197957200543331,
+    "kisebb_veletlen": 10,
+    "n": 10
+   },
+   "logreg|3|roc_auc": {
+    "legfontosabb": 0.277927657873701,
+    "legkevesbe": 0.0024570044960707804,
+    "veletlen_median": 0.010963778810838265,
+    "veletlen_min": -0.0015578069106177983,
+    "veletlen_max": 0.21873904530860344,
+    "kisebb_veletlen": 10,
+    "n": 10
+   },
+   "logreg|3|pr_auc": {
+    "legfontosabb": 0.049425272755522005,
+    "legkevesbe": 0.0008501954434588649,
+    "veletlen_median": 0.005164170313703247,
+    "veletlen_min": 0.0012560715569830821,
+    "veletlen_max": 0.044677757396636555,
+    "kisebb_veletlen": 10,
+    "n": 10
+   },
+   "logreg|5|roc_auc": {
+    "legfontosabb": 0.22656849603373774,
+    "legkevesbe": 0.001742542842802064,
+    "veletlen_median": 0.04772266074183823,
+    "veletlen_min": 0.004317974192074803,
+    "veletlen_max": 0.22937223311052146,
+    "kisebb_veletlen": 9,
+    "n": 10
+   },
+   "logreg|5|pr_auc": {
+    "legfontosabb": 0.04489310085008624,
+    "legkevesbe": 0.0017403460681108818,
+    "veletlen_median": 0.01584153166029279,
+    "veletlen_min": 0.0002983504071673443,
+    "veletlen_max": 0.045848439799505716,
+    "kisebb_veletlen": 8,
+    "n": 10
+   },
+   "dontesi_fa|1|roc_auc": {
+    "legfontosabb": 0.07681267776476497,
+    "legkevesbe": -0.0013045211671194323,
+    "veletlen_median": -0.016486229620954473,
+    "veletlen_min": -0.05780334204397275,
+    "veletlen_max": 0.03138622822672088,
+    "kisebb_veletlen": 10,
+    "n": 10
+   },
+   "dontesi_fa|1|pr_auc": {
+    "legfontosabb": 0.02248739922458627,
+    "legkevesbe": -0.0008839639581925407,
+    "veletlen_median": -0.0021281890422360783,
+    "veletlen_min": -0.005059139657637386,
+    "veletlen_max": 0.002289658585567539,
+    "kisebb_veletlen": 10,
+    "n": 10
+   },
+   "dontesi_fa|2|roc_auc": {
+    "legfontosabb": 0.024731709648892153,
+    "legkevesbe": -0.0012354734152877356,
+    "veletlen_median": -0.0015844882233747581,
+    "veletlen_min": -0.08398779315418103,
+    "veletlen_max": 0.07695708051499006,
+    "kisebb_veletlen": 7,
+    "n": 10
+   },
+   "dontesi_fa|2|pr_auc": {
+    "legfontosabb": 0.016183159350398844,
+    "legkevesbe": -0.000882307371654685,
+    "veletlen_median": -0.0009285546731802458,
+    "veletlen_min": -0.028799316807477583,
+    "veletlen_max": 0.02249300669034835,
+    "kisebb_veletlen": 8,
+    "n": 10
+   },
+   "dontesi_fa|3|roc_auc": {
+    "legfontosabb": 0.06919360690849308,
+    "legkevesbe": -0.0013045211671194323,
+    "veletlen_median": -0.034572155398604754,
+    "veletlen_min": -0.08395310329809247,
+    "veletlen_max": 0.08140501718226745,
+    "kisebb_veletlen": 8,
+    "n": 10
+   },
+   "dontesi_fa|3|pr_auc": {
+    "legfontosabb": 0.02038906106684959,
+    "legkevesbe": -0.0008839639581925407,
+    "veletlen_median": -0.004959637444860519,
+    "veletlen_min": -0.028748459979147607,
+    "veletlen_max": 0.02232293849372354,
+    "kisebb_veletlen": 8,
+    "n": 10
+   },
+   "dontesi_fa|5|roc_auc": {
+    "legfontosabb": 0.03081546390794332,
+    "legkevesbe": 0.00026440641506730866,
+    "veletlen_median": -0.02062926071103255,
+    "veletlen_min": -0.11156448595276602,
+    "veletlen_max": 0.11071118188505663,
+    "kisebb_veletlen": 7,
+    "n": 10
+   },
+   "dontesi_fa|5|pr_auc": {
+    "legfontosabb": 0.014296290781966654,
+    "legkevesbe": 5.270120643462162e-06,
+    "veletlen_median": 0.001918708870412414,
+    "veletlen_min": -0.033883815736207724,
+    "veletlen_max": 0.02540712464319292,
+    "kisebb_veletlen": 7,
+    "n": 10
+   },
+   "random_forest|1|roc_auc": {
+    "legfontosabb": 0.20068886751064274,
+    "legkevesbe": -0.0008825995681860377,
+    "veletlen_median": 0.0014035490876401768,
+    "veletlen_min": -0.019745416291551465,
+    "veletlen_max": 0.01803997001734181,
+    "kisebb_veletlen": 10,
+    "n": 10
+   },
+   "random_forest|1|pr_auc": {
+    "legfontosabb": 0.04530237328176094,
+    "legkevesbe": 0.0007770933525667323,
+    "veletlen_median": -0.0016239454932080108,
+    "veletlen_min": -0.007466495880874932,
+    "veletlen_max": 0.005792084685369084,
+    "kisebb_veletlen": 10,
+    "n": 10
+   },
+   "random_forest|2|roc_auc": {
+    "legfontosabb": 0.2142579541018349,
+    "legkevesbe": -0.0036020187172519647,
+    "veletlen_median": 0.0012919274215179577,
+    "veletlen_min": -0.019117969743806307,
+    "veletlen_max": 0.20727454581185556,
+    "kisebb_veletlen": 10,
+    "n": 10
+   },
+   "random_forest|2|pr_auc": {
+    "legfontosabb": 0.048538156093580184,
+    "legkevesbe": -0.0030077951490850435,
+    "veletlen_median": 0.0012481902187717955,
+    "veletlen_min": -0.007905477416904533,
+    "veletlen_max": 0.04663909891027819,
+    "kisebb_veletlen": 10,
+    "n": 10
+   },
+   "random_forest|3|roc_auc": {
+    "legfontosabb": 0.24617000751558227,
+    "legkevesbe": 0.009103887985956849,
+    "veletlen_median": 0.0008581589877600382,
+    "veletlen_min": -0.010388947977830298,
+    "veletlen_max": 0.22347055910089209,
+    "kisebb_veletlen": 10,
+    "n": 10
+   },
+   "random_forest|3|pr_auc": {
+    "legfontosabb": 0.05010098711098967,
+    "legkevesbe": 0.0052319425428780375,
+    "veletlen_median": -0.00021962779976451158,
+    "veletlen_min": -0.009074180880048632,
+    "veletlen_max": 0.049010530543908706,
+    "kisebb_veletlen": 10,
+    "n": 10
+   },
+   "random_forest|5|roc_auc": {
+    "legfontosabb": 0.27556198396764325,
+    "legkevesbe": 0.003766214603068474,
+    "veletlen_median": 0.020932236768724577,
+    "veletlen_min": -0.03263128699698037,
+    "veletlen_max": 0.24777254608273513,
+    "kisebb_veletlen": 10,
+    "n": 10
+   },
+   "random_forest|5|pr_auc": {
+    "legfontosabb": 0.05348980959891089,
+    "legkevesbe": 0.0011611728224758672,
+    "veletlen_median": 0.000902410055660087,
+    "veletlen_min": -0.017744767139814363,
+    "veletlen_max": 0.05229156760597006,
+    "kisebb_veletlen": 10,
+    "n": 10
+   }
+  },
+  "R1_teljesult": "16/16",
+  "R2_teljesult": "10/12",
+  "R3_teljesult": "16/16"
+ },
+ "ido_mp": 747.1
+}

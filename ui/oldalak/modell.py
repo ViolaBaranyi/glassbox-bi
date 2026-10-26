@@ -179,6 +179,26 @@ else:
                                         "itelet": "ítélet"})
             st.caption("„Nem kimutatható”: a 95%-os intervallum tartalmazza a 0-t. Korrekció nélküli "
                        "intervallumok (3 összevetés × 3 mutató) — a határeseteket óvatosan kell olvasni.")
+spl = d.split_results()
+if spl is not None:
+    with common.details("Miért számít, hogy időrendben mérünk?"):
+        lgs = spl["osszegzes"]["II"]["lightgbm"]["pr_auc"]["atlag"]
+        lgi = spl["eredmenyek"]["I"]["lightgbm"]["pr_auc"]
+        st.caption(
+            "A fenti számok a teszt-időszakon készültek, amely a tanulási időszak *után* következik — "
+            "ahogy élesben is: a modell a múltból jósol a jövőre. Ha a rendeléseket véletlenszerűen "
+            "osztanánk tanuló és ellenőrző részre, ugyanez a modell sokkal jobbnak látszana: a PR-AUC-ja "
+            f"{nv.fmt_num(lgs, 3)} lenne a valódi {nv.fmt_num(lgi, 3)} helyett. Ilyenkor ugyanis a modell "
+            "ugyanabból az időszakból tanul, amelyikről vizsgázik, és a nehéz időszakok (például a 2017. "
+            "novemberi akciók) mindkét részbe jutnak.")
+        st.dataframe(d.split_table(spl, "lightgbm"), hide_index=True,
+                     column_config={"mutato": "mérőszám (LightGBM)"})
+        st.caption(
+            f"Véletlen felosztásnál {spl['beallitas']['ismetlesek']} ismétlés átlaga; ugyanazok a beállítások, "
+            "ugyanakkora tanítóadat. Az utolsó oszlop: a tanulási időszak időben utolsó 20%-án, csak a korábbi "
+            "rendelésekből tanulva — ott a modell gyengébb, vagyis a teszt-időszakon mért jóság sem vihető át "
+            "minden jövőbeli időszakra. A beállítások a futás előtt a döntési naplóba kerültek. Részletek: "
+            "`docs/felosztas_osszevetes.md`.")
 
 # ------------------------------------------------------------ kalibráció
 st.subheader("Mennyire lehet hinni a becsült százaléknak?")
@@ -227,6 +247,56 @@ st.caption(
     "ugyanaz a becslés más időszakban mást jelenthet, mert a modell nem követi, ha a késések "
     "általános szintje megváltozik. A **sorrend** (melyik rendelés kockázatosabb) ezért "
     "megbízhatóbb, mint a pontos százalék.")
+
+# -------------------------------------------------- gazdasági kalkulátor
+gres = d.economics_results()
+if gres is not None:
+    st.subheader("Megéri-e beavatkozni? — egyszerű kalkulátor")
+    st.caption(
+        "Tegyük fel, hogy a legkockázatosabb rendeléseknél beavatkozunk (például előre szólunk a vevőnek, "
+        "vagy elsőbbséggel adjuk fel a csomagot). Ez pénzbe kerül, és nem minden késést előz meg. Az adatban "
+        "nincsenek költségek, ezért itt te adod meg a két arányt; a számolás a teszt-időszak rendelésein, a "
+        "valódi kimenettel történik.")
+    k1, k2 = st.columns(2)
+    c_ = k1.slider("Egy beavatkozás ára egy késés kárához képest (%)", 1, 30, 5, key="gazd_c",
+                   help="Ha egy késés (rossz értékelés, elvesztett vevő, ügyfélszolgálat) 100 egységnyi kár, "
+                        "és egy beavatkozás 5 egységbe kerül, ez 5%.") / 100
+    e_ = k2.slider("A beavatkozás a késések ennyi százalékát előzi meg", 10, 100, 50, step=5, key="gazd_e",
+                   help="Ha a beavatkozás a késő rendelések felénél megakadályozza a késést, ez 50%.") / 100
+    et = d.economics_table(gres, c_, e_)
+    st.dataframe({
+        "kiket jelölünk meg": list(et["hanyad_szoveg"]),
+        "rendelés": list(et["megjelolt"]),
+        "ebből késett (fő modell)": list(et["kesett"]),
+        "nyereség — fő modell": [nv.fmt_num(v, 1) for v in et["lightgbm"]],
+        "— logisztikus regresszió": [nv.fmt_num(v, 1) for v in et["logreg"]],
+        "— vaktában választva": [nv.fmt_num(v, 1) for v in et["veletlen"]]}, hide_index=True)
+    best = et.loc[et["lightgbm"].idxmax()]
+    need = c_ / e_
+    verdict = (f"Ilyen arányok mellett a fő modellel a **{best['hanyad_szoveg']}** megjelölése hozza a legtöbbet "
+               f"(1000 rendelésenként kb. {nv.fmt_num(best['lightgbm'], 1)} késésnyi kár takarítható meg)."
+               if best["lightgbm"] > 0 else
+               "Ilyen arányok mellett **nem éri meg beavatkozni**: a megjelölt rendelések közül túl kevés késik ahhoz, "
+               "hogy a beavatkozás ára megtérüljön.")
+    st.caption(
+        f"**Hogyan olvasd?** A nyereség egysége egy késés kára, 1000 rendelésre (negatív: veszteség). Akkor éri meg "
+        f"beavatkozni, ha a megjelölt rendelések legalább {nv.fmt_pct(need, 1)}-a késne (az ár osztva a hatással); "
+        f"a fő modell legkockázatosabb 10%-ában a késések aránya {nv.fmt_pct(float(et.loc[et['hanyad'] == 0.10, 'pontossag'].iloc[0]), 1)}. "
+        + verdict)
+    with common.details("Miért nem a becsült százalékot használjuk küszöbnek?"):
+        ex = next((r for r in gres["kuszob_szabaly"] if r["e"] == 0.6 and r["c"] == 0.10), None)
+        if ex:
+            st.markdown(
+                f"Kézenfekvő volna minden rendelést megjelölni, amelynél a becsült kockázat nagyobb, mint az ár "
+                f"osztva a hatással. Csakhogy a legkockázatosabb sávban a modell túlbecsül. Például 60%-os hatás és "
+                f"10%-os ár mellett ({nv.fmt_pct(ex['kuszob'], 1)} fölött) {nv.fmt_num(ex['N'], 0)} rendelés kerülne "
+                f"sorra, átlagosan {nv.fmt_pct(ex['becsles_atlag'], 1)}-os becsléssel — közülük valójában csak "
+                f"{nv.fmt_pct(ex['pontossag'], 1)} késett. A becslés alapján várt nyereség "
+                f"{nv.fmt_num(ex['vart_netto'], 1)} késésnyi kár lett volna, a valóságban "
+                f"{nv.fmt_num(ex['elert_netto'], 1)} lett: a nyereségből veszteség. Ezért a kalkulátor a "
+                "legkockázatosabb rendelések *valódi* késési arányával számol, nem a becsült százalékkal.")
+        st.caption("A költségek feltevések. A forgatókönyvek, a bizonytalanság (heti blokk-bootstrap) és a "
+                   "tanítóadat véletlenének hatása: `docs/gazdasagi_forgatokonyv.md`.")
 
 # -------------------------------------------------- globális magyarázat
 st.subheader("Mire figyelnek a modellek általában?")
@@ -390,6 +460,37 @@ else:
             f"„{nv.display_name(s_['beultetett']['zaj_helye'])}” helyére került (a két leggyengébb valódi "
             "jellemző), a négy modell a lezárt beállításokkal tanult újra. Részletek: "
             "`docs/huseg_eredmeny.md`.")
+    rres = d.roar_results()
+    if rres is not None:
+        st.markdown("**És ha a fontos tényezőket tényleg elvesszük, és újratanítjuk a modellt?**")
+        rtab = d.roar_table(rres)
+        r3 = rtab[(rtab["kulcs"] == "lightgbm") & (rtab["k"] == 3)]
+        if len(r3):
+            r3 = r3.iloc[0]
+            st.caption(
+                "A fenti próba a kész modellen „vesz ki” tényezőket, ezért felmerül, hogy a modell csak a "
+                "számára szokatlan bemenettől romlik el. Itt a tényezőt minden rendelésnél ugyanarra az értékre "
+                "állítjuk, a modellt pedig nélküle újratanítjuk. A fő modellnél (LightGBM) a magyarázat szerinti "
+                f"3 legfontosabb tényező ({r3['kivett']}) elvétele után a ROC-AUC esése {nv.fmt_num(r3['eses_ertek'], 3)}, "
+                f"3 véletlenül választott tényezőé után átlagosan (medián) {nv.fmt_num(r3['median_ertek'], 3)}; "
+                f"a magyarázat szerinti kivétel a 10 véletlen készletből {r3['jobb_n']} esetében ront többet.")
+        with common.details("Szakmai részletek: eltávolítás és újratanítás (ROAR)"):
+            st.dataframe(rtab[["modell", "k", "kivett", "eses", "veletlen", "jobb", "legkevesbe"]], hide_index=True,
+                         column_config={
+                             "modell": "modell", "k": "hány tényezőt",
+                             "kivett": "a magyarázat szerinti legfontosabbak",
+                             "eses": st.column_config.TextColumn(
+                                 "ROC-AUC esése", help="A lezárt modell ROC-AUC-ja mínusz az újratanítotté (pozitív: romlott)."),
+                             "veletlen": "véletlen készlet: medián (legkisebb – legnagyobb)",
+                             "jobb": "hány véletlennél ront többet",
+                             "legkevesbe": "a legkevésbé fontosak kivétele"})
+            rb = rres["beallitas"]
+            st.caption(
+                f"Hooker és mtsai (2019) eljárásának táblázatos változata. A kivett tényező a tanításban és a tesztben "
+                "is a tanulási időszak mediánját (kategóriánál a leggyakoribb értéket) kapja; újratanítás a lezárt "
+                f"beállításokkal, mérés a teszt-időszak {nv.fmt_num(rb['teszt_sorok'], 0)} rendelésén; "
+                f"{rb['veletlen']} véletlen készlet tényezőszámonként, mind a négy modellnél ugyanazok. A sejtést a "
+                "futás előtt rögzítettük. Részletek: `docs/roar_eredmeny.md`.")
 
 # ------------------------------------------------ a magyarázatok stabilitása (K3)
 st.subheader("Mennyire stabilak a magyarázatok?")
@@ -478,6 +579,46 @@ else:
             f"(saját magyarázó, százalékpont, {ss['hatter']} soros háttér) a KernelSHAP-kontrollkar "
             "rendelésein. A beállítások a futás előtt a döntési naplóba kerültek. Részletek: "
             "`docs/stabilitas_eredmeny.md`.")
+    dres = d.decision_stability_results()
+    if dres is not None:
+        st.markdown("**És a döntés?** Mennyire marad ugyanaz a legkockázatosabb 10%?")
+        lgd = dres["modellek"].get("lightgbm")
+        if lgd:
+            bt = lgd["bootstrap"]
+            st.caption(
+                "Ha a fő modellt (LightGBM) kicsit más adaton tanítanánk, a mostani legkockázatosabb 10%-ából "
+                f"átlagosan {nv.fmt_pct(bt['atfedes']['ertek'], 0)} maradna a legkockázatosabb 10%-ban, és a "
+                f"teszt-rendelések {nv.fmt_pct(bt['tobbertelmuseg'], 0)}-ának a besorolása legalább egyszer "
+                "megváltozna — miközben az újratanított modellek összességében ugyanolyan jók. A rendelések "
+                "sorrendje nagy vonalakban ugyanaz marad, de hogy pontosan melyik rendelés kerül a listára, az a "
+                "tanítóadat véletlenjén is múlik (a 200-as listának is csak "
+                f"{nv.fmt_pct(bt['ui_atfedes']['ertek'], 0)}-a marad). A kockázati listát ezért rangsorként "
+                "érdemes olvasni, nem végleges kiválasztásként.")
+        with common.details("Szakmai részletek: a döntés stabilitása modellenként"):
+            st.dataframe(d.decision_stability_table(dres)[
+                ["modell", "atfedes", "stabil_mag", "tobbertelmuseg", "ui_atfedes", "kontroll"]],
+                hide_index=True, column_config={
+                    "modell": "modell",
+                    "atfedes": st.column_config.TextColumn(
+                        "a felső 10% átfedése [95% CI]",
+                        help="A lezárt modell legkockázatosabb 10%-ából átlagosan ennyi marad a felső 10%-ban egy "
+                             "újratanított modellnél."),
+                    "stabil_mag": st.column_config.TextColumn(
+                        "stabil mag", help="A lezárt felső 10%-nak az a része, amely MINDEN újratanított modellnél "
+                                           "bent marad."),
+                    "tobbertelmuseg": st.column_config.TextColumn(
+                        "többértelműség", help="A teszt-rendelések hányada, amelyek besorolása (felső 10% vagy sem) "
+                                               "legalább egy újratanított modellnél eltér."),
+                    "ui_atfedes": "a 200-as lista átfedése",
+                    "kontroll": "átfedés, csak más mag"})
+            ds_ = dres["beallitas"]
+            st.caption(
+                f"Ugyanazok a modellek, mint fent ({ds_['bootstrap']} bootstrap-minta, "
+                f"{len(ds_['kontroll_magok'])} kontroll-mag); a teszt-időszak mind a "
+                f"{nv.fmt_num(ds_['teszt_rendelesek'], 0)} rendelése, a felső 10% = {nv.fmt_num(ds_['felso_n'], 0)} "
+                "rendelés. Rokon fogalom: prediktív többértelműség (Marx, Calmon és Ustun, 2020). A sejtést "
+                "(ugyanaz a sorrend, mint a magyarázatnál) a futás előtt rögzítettük. Részletek: "
+                "`docs/dontesi_stabilitas.md`.")
 
 # -------------------------------------------- kontrollkar (szakmai rész)
 with common.details("Szakmai részletek: a magyarázatok ellenőrzése (KernelSHAP-kontrollkar)"):

@@ -90,6 +90,12 @@ c2.text_input("…vagy írd be egy rendelés azonosítóját", key="kulcs_be", o
 c3.button("Véletlen rendelés", on_click=_random, icon=":material/casino:", width="stretch",
           help="Egy véletlenszerűen kiválasztott rendelés a teszt-időszakból — a legtöbb rendelés "
                "kis kockázatú.")
+_dres = d.decision_stability_results()
+if _dres is not None and "lightgbm" in _dres["modellek"]:
+    _ui = _dres["modellek"]["lightgbm"]["bootstrap"]["ui_atfedes"]["ertek"]
+    st.caption(f"A lista a becslés sorrendje, nem végleges kiválasztás: ha a modellt kicsit más adaton "
+               f"tanítanánk, a 200 rendelésből átlagosan kb. {nv.fmt_pct(_ui, 0)} maradna a listán (részletek: "
+               "*A modell* oldal, „Mennyire stabilak a magyarázatok?”).")
 
 with st.expander(f"A teljes kockázati lista — a teszt-időszak mind a {nv.fmt_num(len(rt), 0)} "
                  "rendelése, a legkockázatosabbtól kezdve (kattints egy sorra a kiválasztáshoz)"):

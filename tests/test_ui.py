@@ -222,6 +222,32 @@ def test_lezart_eredmenyek_tablai():
     assert be.results_table({"referencia": None}) is None
 
 
+def test_a_dontes_a_felosztas_es_a_roar_tablai(tmp_path):
+    ds = be.decision_stability_results()
+    tab = be.decision_stability_table(ds)
+    assert list(tab["kulcs"]) == list(KINDS) and (tab["atfedes_ertek"].between(0, 1)).all()
+    lr = tab.set_index("kulcs")
+    assert lr.loc["logreg", "atfedes_ertek"] > lr.loc["dontesi_fa", "atfedes_ertek"]
+    sp = be.split_table(be.split_results(), "lightgbm")
+    assert list(sp.columns) == ["mutato", *be.SPLIT_COLUMNS.values()] and len(sp) == len(be.SPLIT_METRICS)
+    assert sp.iloc[0][be.SPLIT_COLUMNS["I"]] == "0,098"                # a lezárt teszt PR-AUC-ja
+    rr = be.roar_results()
+    rt = be.roar_table(rr)
+    assert len(rt) == len(KINDS) * len(rr["beallitas"]["k"]) and set(rt["kulcs"]) == set(KINDS)
+    for f in (be.decision_stability_results, be.split_results, be.roar_results):
+        assert f(tmp_path / "nincs.json") is None
+
+
+def test_gazdasagi_kalkulator_tabla():
+    res = be.economics_results()
+    tab = be.economics_table(res, c=0.02, e=0.6)
+    n = res["beallitas"]["teszt_rendelesek"]
+    g = res["kapacitas"]["lightgbm"][3]                                 # a 10%-os sor
+    assert tab.loc[3, "lightgbm"] == pytest.approx((0.6 * g["L"] - 0.02 * g["N"]) * 1000 / n)
+    assert (tab["lightgbm"] > tab["veletlen"]).all()                    # a modell minden kapacitásnál jobb
+    assert (be.economics_table(res, c=0.30, e=0.1)["lightgbm"] < 0).all()   # drága beavatkozás: veszteség
+
+
 def test_paros_itelet_iranya():
     fake = {"referencia": {"modellek": {"x": {"nev": "X", "paros_lightgbm_minusz_referencia": {
         "pr_auc": {"kulonbseg": -0.02, "ci95": [-0.03, -0.01]},
