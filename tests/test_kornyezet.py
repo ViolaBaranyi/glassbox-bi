@@ -21,6 +21,7 @@ from __future__ import annotations
 import pytest
 
 import re
+import sys
 import tomllib
 from pathlib import Path
 
@@ -82,15 +83,35 @@ TEXT_SUFFIXES = {".py", ".md", ".toml", ".txt", ".bat", ".yml", ".yaml", ".cff",
 MACHINE_PATH = re.compile(r"(?<![\w/])[A-Za-z]:[\\/]+(?=[\w.%$-])|/(?:home|Users|root|tmp)/\w")
 
 
+def _nested_checkouts() -> set:
+    """A tároló mappájában lévő külön munkamappák (git worktree, pl. a mérésekhez készült v3_kod/,
+    v4_kod/): saját .git-jük van, a .gitignore kizárja őket, és saját virtuális környezetük lehet —
+    nem a tároló részei."""
+    return {p.name for p in ROOT.iterdir() if p.is_dir() and p.name != ".git" and (p / ".git").exists()}
+
+
 def _tracked_text_files():
+    nested = _nested_checkouts()
     for path in ROOT.rglob("*"):
         rel = path.relative_to(ROOT)
-        top = rel.parts[0]
-        if (any(part in SKIP_DIRS for part in rel.parts) or top.startswith((".venv", "venv"))
-                or rel.parts[:2] == ("data", "raw") or not path.is_file()):
+        dirs = rel.parts[:-1] if path.is_file() else rel.parts
+        if (any(part in SKIP_DIRS or part.startswith((".venv", "venv")) for part in dirs)
+                or rel.parts[0] in nested or rel.parts[:2] == ("data", "raw") or not path.is_file()):
             continue
         if path.suffix in TEXT_SUFFIXES or path.name in TEXT_SUFFIXES:
             yield rel, path
+
+
+def test_a_kulon_munkamappa_es_a_virtualis_kornyezet_kimarad(tmp_path, monkeypatch):
+    (tmp_path / "v3_kod" / ".venv").mkdir(parents=True)
+    (tmp_path / "v3_kod" / ".git").write_text("gitdir: valahol", encoding="utf-8")
+    (tmp_path / "v3_kod" / "a.py").write_text("x = 1", encoding="utf-8")
+    (tmp_path / "v3_kod" / ".venv" / "pyvenv.cfg").write_text("home = x", encoding="utf-8")
+    (tmp_path / "pkg" / ".venv-1").mkdir(parents=True)
+    (tmp_path / "pkg" / ".venv-1" / "b.py").write_text("y = 2", encoding="utf-8")
+    (tmp_path / "pkg" / "c.py").write_text("z = 3", encoding="utf-8")
+    monkeypatch.setattr(sys.modules[__name__], "ROOT", tmp_path)
+    assert [str(rel) for rel, _ in _tracked_text_files()] == [str(Path("pkg") / "c.py")]
 
 
 def test_nincs_gepfuggo_utvonal_a_taroloban():
