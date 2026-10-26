@@ -1,0 +1,290 @@
+{
+ "futasok": [
+  {
+   "futas": "20261016_1426_qwen3.5-4b",
+   "modell": "qwen3.5:4b",
+   "kerdessor": "eval/meresi_kerdessor.toml",
+   "kerdesek": 130,
+   "verzio": "v3",
+   "kitoltetlen": 0,
+   "agak": {
+    "jelolo": {
+     "megjelolt_arany": 0.2896551724137931,
+     "pontossag": {
+      "k": 9,
+      "n": 10,
+      "arany": 0.9,
+      "ci95": [
+       0.5958499732047615,
+       0.9821237869049271
+      ]
+     },
+     "kihagyas": {
+      "k": 4,
+      "n": 20,
+      "arany": 0.2,
+      "ci95": [
+       0.08065766257979806,
+       0.41601743225189364
+      ]
+     },
+     "k1_korrigalt": 0.4027586206896552,
+     "eljut_fedetlen": {
+      "becsles": 0.14206896551724138,
+      "ci95": [
+       0.057294753418753105,
+       0.29551583118582786
+      ]
+     }
+    },
+    "szabad": {
+     "megjelolt_arany": 0.296551724137931,
+     "pontossag": {
+      "k": 6,
+      "n": 10,
+      "arany": 0.6,
+      "ci95": [
+       0.31267376973365824,
+       0.8318196702937638
+      ]
+     },
+     "kihagyas": {
+      "k": 6,
+      "n": 20,
+      "arany": 0.3,
+      "ci95": [
+       0.1454772448676043,
+       0.5189728183535235
+      ]
+     },
+     "k1_korrigalt": 0.3889655172413793
+    }
+   }
+  },
+  {
+   "futas": "20261019_0910_qwen3.5-2b",
+   "modell": "qwen3.5:2b",
+   "kerdessor": "eval/meresi_kerdessor.toml",
+   "kerdesek": 130,
+   "verzio": "v3",
+   "kitoltetlen": 0,
+   "agak": {
+    "jelolo": {
+     "megjelolt_arany": 0.39748953974895396,
+     "pontossag": {
+      "k": 6,
+      "n": 10,
+      "arany": 0.6,
+      "ci95": [
+       0.31267376973365824,
+       0.8318196702937638
+      ]
+     },
+     "kihagyas": {
+      "k": 6,
+      "n": 20,
+      "arany": 0.3,
+      "ci95": [
+       0.1454772448676043,
+       0.5189728183535235
+      ]
+     },
+     "k1_korrigalt": 0.4192468619246862,
+     "eljut_fedetlen": {
+      "becsles": 0.18075313807531382,
+      "ci95": [
+       0.0876515617612344,
+       0.312686551643964
+      ]
+     }
+    },
+    "szabad": {
+     "megjelolt_arany": 0.4560669456066946,
+     "pontossag": {
+      "k": 3,
+      "n": 10,
+      "arany": 0.3,
+      "ci95": [
+       0.10779126740630099,
+       0.6032218525388546
+      ]
+     },
+     "kihagyas": {
+      "k": 12,
+      "n": 20,
+      "arany": 0.6,
+      "ci95": [
+       0.3865815007622531,
+       0.781193467627183
+      ]
+     },
+     "k1_korrigalt": 0.4631799163179916
+    }
+   }
+  },
+  {
+   "futas": "20261020_1300_qwen3.5-4b",
+   "modell": "qwen3.5:4b",
+   "kerdessor": "eval/meresi_kerdessor_v2.toml",
+   "kerdesek": 56,
+   "verzio": "v4",
+   "kitoltetlen": 0,
+   "agak": {
+    "jelolo": {
+     "megjelolt_arany": 0.36363636363636365,
+     "pontossag": {
+      "k": 8,
+      "n": 10,
+      "arany": 0.8,
+      "ci95": [
+       0.49016247153664183,
+       0.9433178485456247
+      ]
+     },
+     "kihagyas": {
+      "k": 3,
+      "n": 20,
+      "arany": 0.15,
+      "ci95": [
+       0.052368745896216595,
+       0.36041886474075696
+      ]
+     },
+     "k1_korrigalt": 0.3863636363636364,
+     "eljut_fedetlen": {
+      "becsles": 0.09545454545454546,
+      "ci95": [
+       0.033325565570319654,
+       0.2293574593804817
+      ]
+     }
+    },
+    "szabad": {
+     "megjelolt_arany": 0.36363636363636365,
+     "pontossag": {
+      "k": 5,
+      "n": 10,
+      "arany": 0.5,
+      "ci95": [
+       0.236593090512564,
+       0.7634069094874361
+      ]
+     },
+     "kihagyas": {
+      "k": 4,
+      "n": 20,
+      "arany": 0.2,
+      "ci95": [
+       0.08065766257979806,
+       0.41601743225189364
+      ]
+     },
+     "k1_korrigalt": 0.3090909090909091
+    }
+   }
+  },
+  {
+   "futas": "20261020_1404_qwen3.5-2b",
+   "modell": "qwen3.5:2b",
+   "kerdessor": "eval/meresi_kerdessor_v2.toml",
+   "kerdesek": 56,
+   "verzio": "v4",
+   "kitoltetlen": 0,
+   "agak": {
+    "jelolo": {
+     "megjelolt_arany": 0.6,
+     "pontossag": {
+      "k": 9,
+      "n": 10,
+      "arany": 0.9,
+      "ci95": [
+       0.5958499732047615,
+       0.9821237869049271
+      ]
+     },
+     "kihagyas": {
+      "k": 3,
+      "n": 12,
+      "arany": 0.25,
+      "ci95": [
+       0.08894166839405471,
+       0.5323053349335657
+      ]
+     },
+     "k1_korrigalt": 0.64,
+     "eljut_fedetlen": {
+      "becsles": 0.10000000000000002,
+      "ci95": [
+       0.03557666735762188,
+       0.2129221339734263
+      ]
+     }
+    },
+    "szabad": {
+     "megjelolt_arany": 0.5333333333333333,
+     "pontossag": {
+      "k": 8,
+      "n": 10,
+      "arany": 0.8,
+      "ci95": [
+       0.49016247153664183,
+       0.9433178485456247
+      ]
+     },
+     "kihagyas": {
+      "k": 6,
+      "n": 14,
+      "arany": 0.42857142857142855,
+      "ci95": [
+       0.21380798904474121,
+       0.6740935542034926
+      ]
+     },
+     "k1_korrigalt": 0.6266666666666667
+    }
+   }
+  },
+  {
+   "futas": "20261022_1902_qwen3.5-4b",
+   "modell": "qwen3.5:4b",
+   "kerdessor": "eval/meresi_kerdessor_v3.toml",
+   "kerdesek": 50,
+   "verzio": "v5",
+   "kitoltetlen": 59,
+   "agak": {
+    "jelolo": {
+     "megjelolt_arany": 0.3783783783783784,
+     "pontossag": {
+      "k": 0,
+      "n": 0,
+      "arany": null,
+      "ci95": null
+     },
+     "kihagyas": {
+      "k": 0,
+      "n": 0,
+      "arany": null,
+      "ci95": null
+     },
+     "k1_korrigalt": null
+    },
+    "szabad": {
+     "megjelolt_arany": 0.24324324324324326,
+     "pontossag": {
+      "k": 0,
+      "n": 0,
+      "arany": null,
+      "ci95": null
+     },
+     "kihagyas": {
+      "k": 0,
+      "n": 0,
+      "arany": null,
+      "ci95": null
+     },
+     "k1_korrigalt": null
+    }
+   }
+  }
+ ]
+}

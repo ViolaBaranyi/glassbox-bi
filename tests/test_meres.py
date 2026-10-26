@@ -373,6 +373,10 @@ def test_a_meres_vegig_es_folytatas(cat, synth_db, tmp_path, monkeypatch, capsys
     spec.loader.exec_module(km)
     key_before = (run / "kezi_ellenorzes_kulcs.csv").read_bytes()
     assert km.sample(run) == 12 and (run / "kezi_ellenorzes_kulcs.csv").read_bytes() == key_before
+    (run / "kezi_ellenorzes_kulcs.csv").write_text("kod;id\nA001;mas\n", encoding="utf-8-sig")
+    with pytest.raises(SystemExit, match="kulcs"):
+        km.sample(run)                                             # más kulcsot nem ír felül
+    (run / "kezi_ellenorzes_kulcs.csv").write_bytes(key_before)
     rows = list(csv.reader((run / "kezi_ellenorzes.csv").open(encoding="utf-8-sig", newline=""), delimiter=";"))
     assert all(r[2].startswith("HATÓKÖR") for r in rows[1:]) and (run / "kezi_ellenorzes_utmutato.txt").exists()
     key = {r[0]: r for r in csv.reader((run / "kezi_ellenorzes_kulcs.csv").open(encoding="utf-8-sig", newline=""), delimiter=";")}
@@ -385,6 +389,27 @@ def test_a_meres_vegig_es_folytatas(cat, synth_db, tmp_path, monkeypatch, capsys
     out = km.evaluate(run)
     assert out["kitoltetlen"] == [] and out["agak"]["szabad"]["pontossag"] == 1.0
     assert out["agak"]["szabad"]["k1_korrigalt"] == 1.0 and out["agak"]["jelolo"]["k1_korrigalt"] == 0.0
+    total = km.summarize(run.parent)["futasok"]
+    assert len(total) == 1 and total[0]["agak"]["jelolo"]["eljut_fedetlen"]["becsles"] == 0.0
+    assert "eljut, nem látott" in km.report({"futasok": total})
+
+
+def test_a_kezi_minta_a_futas_sajat_protokolljabol(tmp_path):
+    """A v2/v3 futás mintájának magja a saját protokolljából jön; ismeretlen protokollal nem készül minta."""
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("kezi_minta", ROOT / "tools" / "kezi_minta.py")
+    km = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(km)
+    pfile = ROOT / "docs" / "k1_protokoll_v3.json"
+    head = {"protokoll": {"fajl": "docs/k1_protokoll_v3.json", "sha256": meres.sha256_text(pfile), "verzio": 3}}
+    (tmp_path / "fej.json").write_text(json.dumps(head), encoding="utf-8")
+    assert km.run_protocol(tmp_path)["kezi_ellenorzes"]["mag"] == 20261024
+    head["protokoll"]["sha256"] = "0" * 64
+    (tmp_path / "fej.json").write_text(json.dumps(head), encoding="utf-8")
+    with pytest.raises(SystemExit, match="nem található"):
+        km.run_protocol(tmp_path)
+    with pytest.raises(SystemExit, match="Nincs ilyen mérés"):
+        km.run_protocol(tmp_path / "nincs_ilyen")                   # a mappa nincs ezen a gépen
 
 
 def test_lezaratlan_kerdessoron_nem_mer(tmp_path, monkeypatch, capsys):

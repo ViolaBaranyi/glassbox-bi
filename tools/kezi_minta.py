@@ -3,12 +3,16 @@ A K1 kézi ellenőrzése (protokoll: kezi_ellenorzes) — a mérés mappájábó
 
     uv run python tools/kezi_minta.py minta logs\\meres\\MAPPA       # a minta újra, a hatókörrel együtt
     uv run python tools/kezi_minta.py kiertekel logs\\meres\\MAPPA   # a kitöltött minta kiértékelése
+    uv run python tools/kezi_minta.py osszesit                      # minden kiértékelt minta → docs/k1_kezi_ellenorzes.*
 
 A minta UGYANAZ, mint amit a mérés a végén kiírt (ugyanaz a mag, ugyanazok a kódok, a kulcs
 is ugyanaz) — csak az „eredmeny” oszlop elejére kerül a válasz hatóköre (időszak, szűrő), mert
 a modellnek mutatott rövid nézetből az időszak hiányzik, és enélkül nem dönthető el, igaz-e
 egy „nincs szűrés” vagy „2017-ben” kezdetű mondat. (A mérőprogram ezért nem változott: a
-folyamatban lévő mérések folytathatók maradnak.)
+folyamatban lévő mérések folytathatók maradnak.) A mintavétel magja a futás SAJÁT protokolljából
+jön (fej.json, ujjlenyomattal ellenőrizve) — 2026. okt. 26-ig az eszköz mindig az első protokollt
+töltötte be, így a v2/v3 futásokra más magú mintát írt volna; és a meglévő kulcsot sem írja felül
+eltérő kulccsal.
 
 A kiértékelés a kitöltött mintából becsli, milyen gyakran téved a 2. kapu: a megjelölt
 szövegek közül mennyi tényleg hibás (találati pontosság), és a meg nem jelöltek közül mennyi
@@ -66,8 +70,23 @@ def scope(spec: dict | None, cat) -> str:
     return f"HATÓKÖR (a válasz elején a rendszer írja ki): időszak: {period}; szűrő: {filters}\n\n"
 
 
+def run_protocol(run: Path) -> dict:
+    """A futás saját protokollja: a fej.json (vagy az összegzés) szerinti fájl, ha az ujjlenyomata egyezik."""
+    head = run / "fej.json" if (run / "fej.json").exists() else run / "osszegzes.json"
+    if not head.exists():
+        have = sorted(d.name for d in run.parent.glob("*") if d.is_dir()) if run.parent.is_dir() else []
+        raise SystemExit(f"Nincs ilyen mérés ezen a gépen: {run} (nincs benne fej.json / osszegzes.json). "
+                         f"A {run.parent} mappában ezek vannak: {', '.join(have) or '—'}")
+    rec = json.loads(head.read_text(encoding="utf-8")).get("protokoll") or {}
+    for cand in (ROOT / rec.get("fajl", ""), meres.PROTOKOLL):
+        if cand.is_file() and meres.sha256_text(cand) == rec.get("sha256"):
+            return meres.load_protocol(cand)[0]
+    raise SystemExit(f"A futás protokollja ({rec.get('fajl')}, {str(rec.get('sha256'))[:8]}…) nem található "
+                     "változatlanul a tárolóban — a minta így nem állítható elő újra ugyanúgy.")
+
+
 def _units(run: Path) -> tuple[list[dict], dict]:
-    protocol, _ = meres.load_protocol()
+    protocol = run_protocol(run)
     units = [r for r in meres.latest_rows(meres.read_rows(run)) if not r["hiba"]]
     return units, protocol
 
@@ -91,6 +110,11 @@ def sample(run: Path) -> int:
     target = run / "kezi_ellenorzes.csv"
     if target.exists() and _filled(target):
         raise SystemExit(f"A {target} már ki van töltve — nem írom felül.")
+    old_key = run / "kezi_ellenorzes_kulcs.csv"
+    if old_key.exists():
+        old = list(csv.reader(old_key.open(encoding="utf-8-sig", newline=""), delimiter=";"))
+        if old != key:
+            raise SystemExit(f"A meglévő kulcs ({old_key}) más mintát ír le, mint ami most készülne — nem írom felül.")
     with target.open("w", encoding="utf-8-sig", newline="") as f:
         csv.writer(f, delimiter=";").writerows(out)
     with (run / "kezi_ellenorzes_kulcs.csv").open("w", encoding="utf-8-sig", newline="") as f:
@@ -135,8 +159,72 @@ def evaluate(run: Path) -> dict:
     return out
 
 
+def _share(k: int, n: int) -> dict:
+    ci = meres.wilson(k, n)
+    return {"k": k, "n": n, "arany": k / n if n else None, "ci95": list(ci) if ci else None}
+
+
+def summarize(meres_dir: Path) -> dict:
+    """Minden futás, amelynek van kiértékelt kézi mintája: a kapu pontossága, kihagyása (Wilson-intervallummal),
+    a K1 korrigált becslése és — a fő ágon — a felhasználóhoz eljutó, a kapu által nem látott hibák becslése:
+    (1 − megjelölt arány) × kihagyás (a megjelölt arány minden szövegen mért, ezért rögzítettnek vesszük)."""
+    runs = []
+    for res in sorted(meres_dir.glob("*/kezi_ellenorzes_eredmeny.json")):
+        run = res.parent
+        out = json.loads(res.read_text(encoding="utf-8"))
+        head = json.loads((run / "osszegzes.json").read_text(encoding="utf-8"))
+        item = {"futas": run.name, "modell": head["modell"], "kerdessor": head["kerdessor"]["fajl"],
+                "kerdesek": head["kerdessor"]["kerdesek"], "verzio": head["kod"].get("verzio", "v3"),
+                "kitoltetlen": len(out["kitoltetlen"]), "agak": {}}
+        for ag, v in out["agak"].items():
+            hit, miss = v["megjeloltbol_valoban_hibas"], v["meg_nem_jeloltbol_megis_hibas"]
+            row = {"megjelolt_arany": v["megjelolt_arany"], "pontossag": _share(*hit), "kihagyas": _share(*miss),
+                   "k1_korrigalt": v["k1_korrigalt"]}
+            if ag == "jelolo" and v["megjelolt_arany"] is not None and miss[1]:
+                free = 1 - v["megjelolt_arany"]
+                lo, hi = row["kihagyas"]["ci95"]
+                row["eljut_fedetlen"] = {"becsles": free * miss[0] / miss[1], "ci95": [free * lo, free * hi]}
+            item["agak"][ag] = row
+        runs.append(item)
+    return {"futasok": runs}
+
+
+def report(res: dict) -> str:
+    pct = lambda x: "—" if x is None else f"{100 * x:.1f}%".replace(".", ",")
+    ci = lambda c: "—" if not c else f"[{pct(c[0])}; {pct(c[1])}]"
+    lines = ["# A K1 kézi ellenőrzése — összesítés", "",
+             "A vak kézi minták kiértékelése (`tools/kezi_minta.py osszesit`). A minta rétegzett: ágonként (legfeljebb) 20 olyan "
+             "szöveg, amelyet a 2. kapu nem jelölt meg, és 10, amelyet megjelölt. **Pontosság**: a megjelöltekből "
+             "mennyi valóban hibás; **kihagyás**: a meg nem jelöltekből mennyi mégis az (95%-os Wilson-intervallum). "
+             "**K1 korrigálva** = megjelölt arány × pontosság + (1 − megjelölt arány) × kihagyás. A fő ágon a "
+             "megjelölt szöveg helyett a sablon jut el a felhasználóhoz, ezért ott a **felhasználóhoz eljutó, a kapu "
+             "által nem látott hiba** becslése (1 − megjelölt arány) × kihagyás; ez utólag (a minták egy részének "
+             "kiértékelése után) meghatározott, származtatott mennyiség, nem a protokoll fő mutatója.", ""]
+    for r in res["futasok"]:
+        lines += [f"## {r['futas']} — {r['modell']}, {r['verzio']}, {r['kerdessor']} ({r['kerdesek']} kérdés)", ""]
+        if r["kitoltetlen"]:
+            lines += [f"**Kitöltetlen sor: {r['kitoltetlen']}** — a becslés még nem végleges.", ""]
+        lines += ["| ág | megjelölt arány | pontosság | kihagyás | K1 korrigálva | eljut, nem látott |",
+                  "|---|---|---|---|---|---|"]
+        for ag, v in r["agak"].items():
+            p, m = v["pontossag"], v["kihagyas"]
+            e = v.get("eljut_fedetlen")
+            lines.append(f"| {meres.AG_NEV[ag]} | {pct(v['megjelolt_arany'])} | {p['k']}/{p['n']} {ci(p['ci95'])} | "
+                         f"{m['k']}/{m['n']} {ci(m['ci95'])} | {pct(v['k1_korrigalt'])} | "
+                         f"{(pct(e['becsles']) + ' ' + ci(e['ci95'])) if e else '— (nincs kapu)'} |")
+        lines.append("")
+    return "\n".join(lines)
+
+
 def main(argv: list[str] | None = None) -> None:
     args = argv if argv is not None else sys.argv[1:]
+    if args[:1] == ["osszesit"]:
+        res = summarize(Path(args[1]) if len(args) > 1 else ROOT / "logs" / "meres")
+        (ROOT / "docs" / "k1_kezi_ellenorzes.json").write_text(json.dumps(res, ensure_ascii=False, indent=1),
+                                                               encoding="utf-8")
+        (ROOT / "docs" / "k1_kezi_ellenorzes.md").write_text(report(res), encoding="utf-8")
+        print(f"{len(res['futasok'])} kiértékelt minta → docs/k1_kezi_ellenorzes.md")
+        return
     if len(args) != 2 or args[0] not in ("minta", "kiertekel"):
         raise SystemExit(__doc__)
     run = Path(args[1])

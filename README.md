@@ -57,7 +57,7 @@ válaszd — a `uv sync` után ott van, és mindkettő magától felismeri.
 | 1 | Környezet | a verziók rögzítve vannak a kimenetben |
 | 2 | Adat | a valódi Olist-adat; ha még nincs meg, letölti a Kaggle-ről |
 | 3 | Tárház | 9 CSV → csillagséma DuckDB-ben, **V-1 validációval** |
-| 4 | Tesztek | 481 teszt: szivárgásvédelem, V-1, adatmodell, abláció, betanítás, kohorsz, modellválasztás, bootstrap, lezárt futás, referencia-modellek, magyarázatok, szemantikus réteg, nyelvi réteg, mérés, felület; ha bármelyik bukik, **a demó megáll** |
+| 4 | Tesztek | 482 teszt: szivárgásvédelem, V-1, adatmodell, abláció, betanítás, kohorsz, modellválasztás, bootstrap, lezárt futás, referencia-modellek, magyarázatok, szemantikus réteg, nyelvi réteg, mérés, felület; ha bármelyik bukik, **a demó megáll** |
 | 5 | Betanítás | a **lezárt v3 protokoll** szerint: LightGBM súlyozás nélkül, a fák száma bővülő ablakos CV-vel, címke-tisztítással; érintetlen, legkésőbbi időszakon mérve; a kalibráció csak diagnosztika |
 | 6 | Összegzés | rangsorolás, kalibráció, kizárt rendelések, artefaktumok helye |
 
@@ -331,7 +331,7 @@ hely-kitöltés.
 | M2 — referencia-modellek: logisztikus regresszió, döntési fa, random forest (`pipeline/reference_models.py`), lezárt összevetés (`pipeline/v3_reference.py`) | **kész — lefutott okt. 9.** (`docs/v3_referencia_eredmeny.md`) |
 | M3 — SHAP-magyarázatok a négy modellre (pontos TreeSHAP, ill. lineáris SHAP, a 22 jellemzőre összevonva), additivitás-ellenőrzés, sablonos magyarázó szöveg (`xai/`) | **kész (v1)** |
 | M5 — Streamlit BI-felület: áttekintés (SQL), rendelés-magyarázat négy modellel, modell-oldal, egyezés-ellenőrzés a lezárt futással (`ui/`, `python -m ui`) | **kész (v1)** |
-| Tesztek — szivárgás (14), V-1 és adatmodell (10), abláció (6), betanítás (6), kohorsz (2), modellválasztás (8), bootstrap (6), lezárt futás (14), referencia-modellek (9), magyarázatok (12), szöveg és megjelenítés (22), felület (22), egyezési mértékek (5), kontrollkar (5), nevek és feliratok (5), a magyarázatok hűsége (8), a magyarázatok stabilitása (6), határidő-görbe (4), a kapu átcsúszása (3), időbeli vagy véletlen felosztás (3), a döntés stabilitása (3), ROAR (3), gazdasági forgatókönyvek (4), README-parancsok (2), környezet (8), szemantikus réteg (99), nyelvi réteg (81), nyelvi réteg v4 (22), nyelvi réteg v5 (62), mérés és mérési kérdéssor (17), K1 v2 összevetés (3), két futás összevetése (3), K1 v3 összevetés (4) | **kész, 481/481** (egy csak Node.js-szel fut, nélküle kihagyja) |
+| Tesztek — szivárgás (14), V-1 és adatmodell (10), abláció (6), betanítás (6), kohorsz (2), modellválasztás (8), bootstrap (6), lezárt futás (14), referencia-modellek (9), magyarázatok (12), szöveg és megjelenítés (22), felület (22), egyezési mértékek (5), kontrollkar (5), nevek és feliratok (5), a magyarázatok hűsége (8), a magyarázatok stabilitása (6), határidő-görbe (4), a kapu átcsúszása (3), időbeli vagy véletlen felosztás (3), a döntés stabilitása (3), ROAR (3), gazdasági forgatókönyvek (4), README-parancsok (2), környezet (8), szemantikus réteg (99), nyelvi réteg (81), nyelvi réteg v4 (22), nyelvi réteg v5 (62), mérés és mérési kérdéssor (18), K1 v2 összevetés (3), két futás összevetése (3), K1 v3 összevetés (4) | **kész, 482/482** (egy csak Node.js-szel fut, nélküle kihagyja) |
 | Tároló — MIT licenc, CI (Ubuntu + Windows), uv-környezet (`uv.lock`; pip-nek `requirements.lock`), döntési napló | **kész** |
 | M2 — 40 futásos sweep, hiperparaméter-hangolás | következő |
 | M3 — KernelSHAP-kontrollkar: mind a négy modell ugyanazzal a magyarázóval (valószínűség-tér, közös háttér, 200 rögzített teszt-rendelés), a kar saját zajával (`xai/kernel_arm.py`, `xai/agreement.py`) | **kész** (`docs/kernel_kar_eredmeny.md`) |
@@ -347,7 +347,7 @@ hely-kitöltés.
 | M2 — időbeli vagy véletlen felosztás: ugyanazok a modellek véletlen és időn belüli ellenőrzésen, előre rögzítve (`tools/felosztas_osszevetes.py`) | **kész** (`docs/felosztas_osszevetes.md`) |
 | M3 — ROAR: a magyarázat szerinti fontos tényezők kivétele és újratanítás, véletlen és legkevésbé fontos készletekkel összevetve, előre rögzítve (`tools/roar.py`) | **kész** (`docs/roar_eredmeny.md`) |
 | M5 — gazdasági forgatókönyvek (kapacitás- és küszöbszabály, költség- és hatásarányok, blokk-bootstrap) és kalkulátor *A modell* oldalon (`tools/gazdasagi_forgatokonyv.py`) | **kész** (`docs/gazdasagi_forgatokonyv.md`) |
-| M6 — mérőpad: 120 kérdéses lezárt készlet (csapdakérdésekkel), K1 a fő ágon és a kontrollágon, két modellel | **mérés kész, kézi ellenőrzés hátravan** — a kérdéssor lezárva, a protokoll jóváhagyva (okt. 16.); `qwen3.5:4b` (okt. 19.): F-1 85%, F-2 89%, K1 a modell szövegében 29% / 30% (fő ág / kontrollág), a felhasználóhoz eljut 0% / 30%; `qwen3.5:2b` (okt. 19.): F-1 44%, F-2 86%, K1 40% / 46%, eljut 0% / 46% (`docs/k1_eredmeny_qwen3.5-4b.md`, `docs/k1_eredmeny_qwen3.5-2b.md`); a kapu tévesztéseinek kézi becslése (`tools/kezi_minta.py`) hátravan |
+| M6 — mérőpad: 120 kérdéses lezárt készlet (csapdakérdésekkel), K1 a fő ágon és a kontrollágon, két modellel | **mérés kész, kézi ellenőrzés hátravan** — a kérdéssor lezárva, a protokoll jóváhagyva (okt. 16.); `qwen3.5:4b` (okt. 19.): F-1 85%, F-2 89%, K1 a modell szövegében 29% / 30% (fő ág / kontrollág), a felhasználóhoz eljut 0% / 30%; `qwen3.5:2b` (okt. 19.): F-1 44%, F-2 86%, K1 40% / 46%, eljut 0% / 46% (`docs/k1_eredmeny_qwen3.5-4b.md`, `docs/k1_eredmeny_qwen3.5-2b.md`); a kapu tévesztéseinek kézi becslése folyamatban (`tools/kezi_minta.py`; a kiértékelt minták összesítése: `docs/k1_kezi_ellenorzes.md`) |
 
 ---
 
@@ -774,6 +774,7 @@ tools\gep_ellenorzes.bat                     # a gép adatai (videókártya, Oll
 uv run python tools\visszajatszas.py logs\meres\MAPPA [MAPPA2 …] --reszletes   # fejlesztés: a tárolt ① válaszok a mostani kódon (optimista, nem mérés)
 uv run python tools\kezi_minta.py minta logs\meres\MAPPA       # a kézi ellenőrzés mintája a hatókörrel
 uv run python tools\kezi_minta.py kiertekel logs\meres\MAPPA   # a kitöltött minta: a kapu pontossága, K1 korrigálva
+uv run python tools\kezi_minta.py osszesit                    # minden kiértékelt minta → docs\k1_kezi_ellenorzes.md
 uv run python tools\kapu_atcsuszas.py        # a második kapu véletlen átcsúszása (modell nélkül, kb. 2 perc) → docs\kapu_atcsuszas.*
 uv run python tools\felosztas_osszevetes.py  # időbeli vagy véletlen felosztás (kb. 7 perc) → docs\felosztas_osszevetes.*
 uv run python tools\dontesi_stabilitas.py    # a legkockázatosabb 10% stabilitása a K3 modelljein (kb. 7 perc) → docs\dontesi_stabilitas.*
