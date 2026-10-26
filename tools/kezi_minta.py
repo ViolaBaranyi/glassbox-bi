@@ -211,7 +211,7 @@ def report(res: dict) -> str:
             e = v.get("eljut_fedetlen")
             lines.append(f"| {meres.AG_NEV[ag]} | {pct(v['megjelolt_arany'])} | {p['k']}/{p['n']} {ci(p['ci95'])} | "
                          f"{m['k']}/{m['n']} {ci(m['ci95'])} | {pct(v['k1_korrigalt'])} | "
-                         f"{(pct(e['becsles']) + ' ' + ci(e['ci95'])) if e else '— (nincs kapu)'} |")
+                         f"{(pct(e['becsles']) + ' ' + ci(e['ci95'])) if e else ('— (nincs kapu)' if ag == 'szabad' else '— (nincs kitöltött adat)')} |")
         lines.append("")
     return "\n".join(lines)
 

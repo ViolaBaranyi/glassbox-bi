@@ -7,7 +7,7 @@ A vak kézi minták kiértékelése (`tools/kezi_minta.py osszesit`). A minta r�
 | ág | megjelölt arány | pontosság | kihagyás | K1 korrigálva | eljut, nem látott |
 |---|---|---|---|---|---|
 | fő ág (jelölők) | 29,0% | 9/10 [59,6%; 98,2%] | 4/20 [8,1%; 41,6%] | 40,3% | 14,2% [5,7%; 29,6%] |
-| kontrollág (szabad) | 29,7% | 6/10 [31,3%; 83,2%] | 6/20 [14,5%; 51,9%] | 38,9% | — (nincs kapu) |
+| kontrollág (szabad) | 29,7% | 9/10 [59,6%; 98,2%] | 6/20 [14,5%; 51,9%] | 47,8% | — (nincs kapu) |
 
 ## 20261019_0910_qwen3.5-2b — qwen3.5:2b, v3, eval/meresi_kerdessor.toml (130 kérdés)
 
@@ -32,9 +32,7 @@ A vak kézi minták kiértékelése (`tools/kezi_minta.py osszesit`). A minta r�
 
 ## 20261022_1902_qwen3.5-4b — qwen3.5:4b, v5, eval/meresi_kerdessor_v3.toml (50 kérdés)
 
-**Kitöltetlen sor: 59** — a becslés még nem végleges.
-
 | ág | megjelölt arány | pontosság | kihagyás | K1 korrigálva | eljut, nem látott |
 |---|---|---|---|---|---|
-| fő ág (jelölők) | 37,8% | 0/0 — | 0/0 — | — | — (nincs kapu) |
-| kontrollág (szabad) | 24,3% | 0/0 — | 0/0 — | — | — (nincs kapu) |
+| fő ág (jelölők) | 37,8% | 9/10 [59,6%; 98,2%] | 3/20 [5,2%; 36,0%] | 43,4% | 9,3% [3,3%; 22,4%] |
+| kontrollág (szabad) | 24,3% | 8/9 [56,5%; 98,0%] | 3/20 [5,2%; 36,0%] | 33,0% | — (nincs kapu) |
