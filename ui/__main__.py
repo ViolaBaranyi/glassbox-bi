@@ -27,6 +27,7 @@ def main() -> None:
     sys.argv = ["streamlit", "run", str(ROOT / "ui" / "app.py"),
                 "--server.address=localhost",
                 "--browser.gatherUsageStats=false",
+                "--server.showEmailPrompt=false",   # tiszta gépen az első indítás ne álljon meg egy e-mail-kérdésnél
                 "--client.toolbarMode=minimal",
                 *sys.argv[1:]]
     sys.exit(stcli.main())

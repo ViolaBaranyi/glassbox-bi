@@ -15,23 +15,65 @@ Ez a tároló a megvalósítás; a teljes rendszerterv külön dokumentum.
 
 ## Gyorsindítás
 
-A környezetet a **[uv](https://docs.astral.sh/uv/)** kezeli. A rögzített változatokból
-(`uv.lock`) maga állítja elő a Python 3.14-et és a csomagokat, és minden `uv run` előtt
-ellenőrzi, hogy a környezet egyezik-e a rögzítettel — ha nem (hiányzik, elavult, más
-Pythonnal készült), helyrehozza. Aktiválni nem kell semmit.
+**Egy parancs, bármely gépen.** A parancsfájl telepíti a [uv](https://docs.astral.sh/uv/)-t,
+ha még nincs; a uv a rögzített változatokból (`uv.lock`) előállítja a Python 3.14-et és a
+csomagokat; az `inditas.py` pedig előkészíti, ami hiányzik (adat, tárház, modellek), és
+megnyitja a felületet a böngészőben (**http://localhost:8501**).
+
+| Gép | Parancs (a projekt mappájában) |
+|---|---|
+| Windows | `indit_felulet.bat` — dupla kattintás is jó |
+| macOS, Linux | `sh indit_felulet.sh` — terminálban |
+| bármelyik, ha a uv már megvan | `uv run python inditas.py` |
+
+Kapcsolók, mindhárom formánál ugyanazok (pl. `sh indit_felulet.sh --ellenorzes`):
+
+| Kapcsoló | Mit csinál |
+|---|---|
+| `--ellenorzes` | csak megnézi, mi van meg és mi hiányzik; adatot nem tölt le, a tárházhoz és a modellekhez nem nyúl |
+| `--szintetikus` | internet nélkül: generált, Olist-alakú adattal (nem a valóság, csak a gépezet kipróbálására) |
+| `--modell` | ha fut az Ollama, de a nyelvi modell nincs letöltve, kérdés nélkül letölti (kb. 3,4 GB) |
+| `--tesztek` | indítás előtt lefuttatja a teljes tesztsort is (néhány perc) |
+| `--port 8502` | másik port (ha a megadott foglalt, magától a következő szabadot keresi) |
+| `--nincs-bongeszo` | nem nyitja meg a böngészőt (pl. távoli gépen) |
+| `--ujraepites` | a tárházat akkor is újraépíti, ha rendben van |
+
+Az első indítás a letöltésekkel együtt néhány perc; utána fél percen belül nyílik a felület.
+Leállítás: Ctrl+C a terminálban, vagy zárd be az ablakot.
+
+### Mi kell a futtatáshoz
+
+| Mi | Kötelező? | Méret, forrás | Ki telepíti |
+|---|---|---|---|
+| Gép | igen | Windows 10/11 (x64); macOS 12 vagy újabb (Apple Silicon és Intel); Linux (x64). Linux ARM-on a csomagok elérhetők, de nem próbáltuk; Windows ARM-on nem fut. | — |
+| Szabad hely | igen | kb. 1,2 GB (környezet 0,65 GB, a uv saját Pythonja 0,1 GB, adat 0,12 GB, tárház és modellek 0,06 GB) | — |
+| uv | igen | kb. 60 MB, a felhasználó saját mappájába (rendszergazda nem kell) | a parancsfájl |
+| Python 3.14 és a csomagok | igen | a `uv.lock` szerint, pontos változatokkal; a gép saját Pythonjához nem nyúl | a uv |
+| libomp (csak macOS) | igen | a LightGBM-hez: `brew install libomp` ([Homebrew](https://brew.sh)) | kézzel, egyszer |
+| libgomp (csak Linux) | igen | az asztali disztribúciókon általában megvan; ha nincs: `sudo apt install libgomp1` | kézzel, egyszer |
+| Olist-adat | igen | kb. 45 MB letöltés a Kaggle-ről, Kaggle-fiók nélkül ([Az adat](#az-adat)) | az indító |
+| Internet | az első indításkor | a uv, a Python, a csomagok és az adat letöltéséhez; utána nem kell | — |
+| Böngésző | igen | bármelyik mai böngésző | — |
+| Ollama és a `qwen3.5:4b` | **nem** | 3,4 GB, 8 GB RAM ajánlott; csak a *Kérdezz* oldal szabad szöveges füléhez ([Szabad szöveges kérdés](#szabad-szöveges-kérdés-helyi-nyelvi-modell)) | kézzel: https://ollama.com/download, utána `--modell` |
+
+Git sem kell: a tároló ZIP-ként is letölthető (GitHub: *Code → Download ZIP*).
+
+### Lépésenként, kézzel
+
+Az indító ugyanezt csinálja; így is futtatható, ha a uv már megvan:
 
 ```bash
-powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"   # egyszer, gépenként; utána új ablak
+powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"   # Windowson egyszer; utána új ablak
 uv sync                              # Python 3.14 + a rögzített csomagok
-uv run demo.py
-uv run python -m ui                  # a BI-felület a böngészőben (Windowson: indit_felulet.bat)
+uv run demo.py                       # adat, tárház, tesztek, betanítás, összegzés
+uv run python -m ui                  # a BI-felület a böngészőben
 ```
 
-(Linuxon a uv telepítése: `curl -LsSf https://astral.sh/uv/install.sh | sh`.)
+(macOS-en és Linuxon a uv telepítése: `curl -LsSf https://astral.sh/uv/install.sh | sh`.)
 
-Windowson egy dupla kattintás is elég: a **`frissit.bat`** telepíti a uv-t, ha még nincs,
-lefuttatja a `uv sync`-et és a teljes tesztsort, a kimenetet pedig a `logs\frissites.log`-ba
-írja. Egy `git pull` után is ezt érdemes futtatni; utána a felület: `indit_felulet.bat`.
+Windowson a **`frissit.bat`** (dupla kattintás) telepíti a uv-t, ha még nincs, lefuttatja a
+`uv sync`-et és a teljes tesztsort, a kimenetet pedig a `logs\frissites.log`-ba írja. Egy
+`git pull` után is ezt érdemes futtatni; utána a felület: `indit_felulet.bat`.
 
 A környezet a `.venv` mappába kerül. **Ne szerkeszd, ne másold, ne commitold** (a
 `.gitignore` kizárja): gépenként épül, és mint minden Python-környezet, az adott gép
@@ -57,7 +99,7 @@ válaszd — a `uv sync` után ott van, és mindkettő magától felismeri.
 | 1 | Környezet | a verziók rögzítve vannak a kimenetben |
 | 2 | Adat | a valódi Olist-adat; ha még nincs meg, letölti a Kaggle-ről |
 | 3 | Tárház | 9 CSV → csillagséma DuckDB-ben, **V-1 validációval** |
-| 4 | Tesztek | 482 teszt: szivárgásvédelem, V-1, adatmodell, abláció, betanítás, kohorsz, modellválasztás, bootstrap, lezárt futás, referencia-modellek, magyarázatok, szemantikus réteg, nyelvi réteg, mérés, felület; ha bármelyik bukik, **a demó megáll** |
+| 4 | Tesztek | 489 teszt: szivárgásvédelem, V-1, adatmodell, abláció, betanítás, kohorsz, modellválasztás, bootstrap, lezárt futás, referencia-modellek, magyarázatok, szemantikus réteg, nyelvi réteg, mérés, felület; ha bármelyik bukik, **a demó megáll** |
 | 5 | Betanítás | a **lezárt v3 protokoll** szerint: LightGBM súlyozás nélkül, a fák száma bővülő ablakos CV-vel, címke-tisztítással; érintetlen, legkésőbbi időszakon mérve; a kalibráció csak diagnosztika |
 | 6 | Összegzés | rangsorolás, kalibráció, kizárt rendelések, artefaktumok helye |
 
@@ -69,7 +111,7 @@ ilyenkor minden lépésben jelzi, hogy a számok csak a gépezet működését m
 ## A BI-felület
 
 ```bash
-uv run python -m ui                 # Windowson dupla kattintással is: indit_felulet.bat
+uv run python -m ui                 # vagy az indítóval: indit_felulet.bat / sh indit_felulet.sh
 ```
 
 A böngészőben nyílik meg: **http://localhost:8501**. Csak ezen a gépen érhető el (a
@@ -331,7 +373,7 @@ hely-kitöltés.
 | M2 — referencia-modellek: logisztikus regresszió, döntési fa, random forest (`pipeline/reference_models.py`), lezárt összevetés (`pipeline/v3_reference.py`) | **kész — lefutott okt. 9.** (`docs/v3_referencia_eredmeny.md`) |
 | M3 — SHAP-magyarázatok a négy modellre (pontos TreeSHAP, ill. lineáris SHAP, a 22 jellemzőre összevonva), additivitás-ellenőrzés, sablonos magyarázó szöveg (`xai/`) | **kész (v1)** |
 | M5 — Streamlit BI-felület: áttekintés (SQL), rendelés-magyarázat négy modellel, modell-oldal, egyezés-ellenőrzés a lezárt futással (`ui/`, `python -m ui`) | **kész (v1)** |
-| Tesztek — szivárgás (14), V-1 és adatmodell (10), abláció (6), betanítás (6), kohorsz (2), modellválasztás (8), bootstrap (6), lezárt futás (14), referencia-modellek (9), magyarázatok (12), szöveg és megjelenítés (22), felület (22), egyezési mértékek (5), kontrollkar (5), nevek és feliratok (5), a magyarázatok hűsége (8), a magyarázatok stabilitása (6), határidő-görbe (4), a kapu átcsúszása (3), időbeli vagy véletlen felosztás (3), a döntés stabilitása (3), ROAR (3), gazdasági forgatókönyvek (4), README-parancsok (2), környezet (8), szemantikus réteg (99), nyelvi réteg (81), nyelvi réteg v4 (22), nyelvi réteg v5 (62), mérés és mérési kérdéssor (18), K1 v2 összevetés (3), két futás összevetése (3), K1 v3 összevetés (4) | **kész, 482/482** (egy csak Node.js-szel fut, nélküle kihagyja) |
+| Tesztek — szivárgás (14), V-1 és adatmodell (10), abláció (6), betanítás (6), kohorsz (2), modellválasztás (8), bootstrap (6), lezárt futás (14), referencia-modellek (9), magyarázatok (12), szöveg és megjelenítés (22), felület (22), egyezési mértékek (5), kontrollkar (5), nevek és feliratok (5), a magyarázatok hűsége (8), a magyarázatok stabilitása (6), határidő-görbe (4), a kapu átcsúszása (3), időbeli vagy véletlen felosztás (3), a döntés stabilitása (3), ROAR (3), gazdasági forgatókönyvek (4), README-parancsok (2), környezet (8), szemantikus réteg (99), nyelvi réteg (81), nyelvi réteg v4 (22), nyelvi réteg v5 (62), mérés és mérési kérdéssor (18), K1 v2 összevetés (3), két futás összevetése (3), K1 v3 összevetés (4), indító (7) | **kész, 489/489** (egy csak Node.js-szel fut, nélküle kihagyja) |
 | Tároló — MIT licenc, CI (Ubuntu + Windows), uv-környezet (`uv.lock`; pip-nek `requirements.lock`), döntési napló | **kész** |
 | M2 — 40 futásos sweep, hiperparaméter-hangolás | következő |
 | M3 — KernelSHAP-kontrollkar: mind a négy modell ugyanazzal a magyarázóval (valószínűség-tér, közös háttér, 200 rögzített teszt-rendelés), a kar saját zajával (`xai/kernel_arm.py`, `xai/agreement.py`) | **kész** (`docs/kernel_kar_eredmeny.md`) |
@@ -724,7 +766,8 @@ felület forrásai.
 
 ```bash
 uv run python -m pytest -q                    # tesztek (néhány perc)
-uv run python -m ui                           # a BI-felület (http://localhost:8501; Windowson: indit_felulet.bat)
+uv run python -m ui                           # a BI-felület (http://localhost:8501)
+uv run python inditas.py --ellenorzes         # mi van meg a futtatáshoz, és mi hiányzik
 
 uv run python -m data.fetch_olist             # valódi adat letöltése (ha még nincs meg)
 uv run python -m data.build_warehouse         # tárház + V-1
@@ -815,7 +858,9 @@ A legutóbbi futás artefaktumainak mappanevét az `artifacts\LATEST.txt` tartal
 ```
 glassbox-bi/
 ├── demo.py                  teljes pipeline egy paranccsal
-├── indit_felulet.bat        a BI-felület indítása Windowson (dupla kattintással)
+├── inditas.py               indító bármely gépen: előkészíti, ami hiányzik, és megnyitja a felületet
+├── indit_felulet.bat        az indító Windowson (dupla kattintással; a uv-t is telepíti)
+├── indit_felulet.sh         az indító macOS-en és Linuxon: sh indit_felulet.sh
 ├── frissit.bat              uv (ha kell) + uv sync + tesztek Windowson; napló: logs\frissites.log
 ├── data/
 │   ├── fetch_olist.py       a valódi Olist-adat letöltése (kagglehub)
@@ -959,7 +1004,7 @@ A GitHubon **Private** tárolóként kezdd, üres inicializálással (ne kérj R
 Az első push után a `.github/workflows/tests.yml` minden feltöltésnél lefuttatja a
 teljes pipeline-t Python 3.14-en, Ubuntun és Windowson, **szintetikus adaton**
 (`python demo.py --synthetic`), mert a valódi adat nem kerülhet a tárolóba:
-adatgenerálás, tárházépítés V-1 validációval, 160 teszt, betanítás, kohorsz-jelentés.
+adatgenerálás, tárházépítés V-1 validációval, a teljes tesztsor, betanítás, kohorsz-jelentés.
 A csomagokat a `requirements.lock` rögzíti (a `uv.lock` pip-nek exportált párja,
 ugyanazokkal a változatokkal). Ha egy teszt
 elbukik, a futás pirosra vált, és a GitHub e-mailt küld. Ez a szivárgásvédelem
@@ -1040,7 +1085,11 @@ a dolgozatban hivatkozni kell rá.
 A munkára való hivatkozás adatait a `CITATION.cff` tartalmazza; a GitHub ebből
 „Cite this repository" gombot tesz a tároló oldalára.
 
-## Hibaelhárítás (Windows)
+## Hibaelhárítás
+
+Először az indító ellenőrző módja: `indit_felulet.bat --ellenorzes` (macOS, Linux: `sh indit_felulet.sh --ellenorzes`) sorra veszi, mi van meg és mi hiányzik.
+
+### Windows
 
 **„Importing the numpy C-extensions failed” (az üzenetben `cp313`), „No module named
 '_duckdb'”, „No module named streamlit”** — a parancs nem a rögzített környezetben fut,
@@ -1073,3 +1122,23 @@ program foglalja a portot: `uv run python -m ui --server.port 8502`.
 **„Az Olist adathalmaz letöltése nem sikerült"** — nincs internet, vagy a hálózat
 (pl. egyetemi proxy) nem engedi a Kaggle-t. A hibaüzenet leírja a kézi letöltést;
 lásd [Az adat](#az-adat).
+
+### macOS, Linux
+
+**„Library not loaded: @rpath/libomp.dylib”** (macOS) — a LightGBM-hez kell az OpenMP:
+`brew install libomp` (ha nincs Homebrew: https://brew.sh). Az indító ezt fel is ismeri, és
+ugyanezt írja ki.
+
+**„libgomp.so.1: cannot open shared object file”** (Linux) — `sudo apt install libgomp1`
+(Fedorán: `sudo dnf install libgomp`).
+
+**„Permission denied”** a `./indit_felulet.sh`-ra — futtasd így: `sh indit_felulet.sh` (ehhez
+nem kell futtatási jog).
+
+**„$'\r': command not found”** — a parancsfájl Windowsos sorvégekkel került a gépre (pl.
+OneDrive-on vagy pendrive-on át másolva). Gittel klónozva ez nem fordul elő
+(`.gitattributes`); másolat esetén: `sed -i.bak 's/\r$//' indit_felulet.sh`.
+
+**„curl: … 403” vagy a uv telepítése nem sikerül** — a hálózat nem engedi az astral.sh-t; a
+kézi telepítés: https://docs.astral.sh/uv/getting-started/installation/ (pl. `brew install uv`
+vagy `pipx install uv`), utána `uv run python inditas.py`.

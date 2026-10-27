@@ -126,7 +126,7 @@ def test_nincs_gepfuggo_utvonal_a_taroloban():
     assert not found, "gépfüggő útvonal a tárolóban:\n" + "\n".join(found)
 
 
-@pytest.mark.parametrize("name,command", [("indit_felulet.bat", "uv run python -m ui"),
+@pytest.mark.parametrize("name,command", [("indit_felulet.bat", "uv run python inditas.py"),
                                           ("frissit.bat", "uv run python -m pytest")])
 def test_az_indito_nem_hivatkozik_virtualis_kornyezetre(name, command):
     bat = (ROOT / name).read_bytes()

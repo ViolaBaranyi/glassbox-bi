@@ -2,3 +2,5 @@
 * text=auto
 # A Windows-parancsfájl mindig CRLF-fel (a cmd.exe LF-fel hibázhat).
 *.bat text eol=crlf
+# A macOS/Linux-parancsfájl mindig LF-fel (CRLF-fel a sh hibázik, pl. OneDrive-os másolás után is).
+*.sh text eol=lf
