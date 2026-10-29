@@ -5,6 +5,7 @@ import re
 import streamlit as st
 
 from pipeline.features import BOOLEAN_FEATURES, CATEGORICAL_FEATURES
+from semantic.spec import az
 from ui import backend as d
 from ui import charts, common
 from xai import labels
@@ -524,8 +525,8 @@ else:
             f"ugyanaz; a becslés átlagosan {nv.fmt_num(lg['becsles_valtozas_pp']['bootstrap'], 1)} "
             "százalékpontot mozdul.")
     if len(order) > 1:
-        read.append(f"A legstabilabb a(z) {order['modell'].iloc[0]}, a legkevésbé stabil a(z) "
-                    f"{order['modell'].iloc[-1]}.")
+        first, last = order["modell"].iloc[0], order["modell"].iloc[-1]
+        read.append(f"A legstabilabb {az(first)} {first}, a legkevésbé stabil {az(last)} {last}.")
     lr = sres["modellek"].get("logreg")
     if lr and lr["kontroll_mag"].get("rbo") and lr["kontroll_mag"]["rbo"]["atlag"] > 0.999:
         read.append("A logisztikus regresszió tanításában nincs véletlen, ezért ott a szürke pont 1-nél van.")
@@ -675,7 +676,11 @@ with common.details("Szakmai részletek: honnan jönnek a számok? (eredet)"):
             "git": "commit", "idopont_utc": "időpont (UTC)", "gep": "gép",
             "tiszta_munkapeldany": st.column_config.CheckboxColumn("tiszta munkapéldány")})
         st.caption("A teljes eredmény és a protokoll: docs/v3_lezart_eredmeny.md, "
-                   "docs/v3_referencia_eredmeny.md, docs/v3_protokoll.md, docs/dontesi_naplo.md.")
+                   "docs/v3_referencia_eredmeny.md, docs/v3_protokoll.md, docs/dontesi_naplo.md. "
+                   "A kiegészítő mérések: docs/kernel_kar_eredmeny.md, docs/huseg_eredmeny.md, "
+                   "docs/roar_eredmeny.md, docs/stabilitas_eredmeny.md, docs/dontesi_stabilitas.md, "
+                   "docs/felosztas_osszevetes.md, docs/gazdasagi_forgatokonyv.md; a nyelvi réteg: "
+                   "docs/k1_*.md, docs/kapu_atcsuszas.md és docs/k1_kezi_ellenorzes.md.")
     info = common.bundle().info
     st.caption(f"A felület modelljei: LightGBM {info['lightgbm_fak']} fa; logisztikus regresszió "
                f"C = {nv.fmt_num(info['referencia']['logreg'], 1)}; döntési fa mélység "

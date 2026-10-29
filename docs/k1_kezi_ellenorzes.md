@@ -13,8 +13,8 @@ A vak kézi minták kiértékelése (`tools/kezi_minta.py osszesit`). A minta r�
 
 | ág | megjelölt arány | pontosság | kihagyás | K1 korrigálva | eljut, nem látott |
 |---|---|---|---|---|---|
-| fő ág (jelölők) | 39,7% | 6/10 [31,3%; 83,2%] | 6/20 [14,5%; 51,9%] | 41,9% | 18,1% [8,8%; 31,3%] |
-| kontrollág (szabad) | 45,6% | 3/10 [10,8%; 60,3%] | 12/20 [38,7%; 78,1%] | 46,3% | — (nincs kapu) |
+| fő ág (jelölők) | 39,7% | 8/10 [49,0%; 94,3%] | 14/20 [48,1%; 85,5%] | 74,0% | 42,2% [29,0%; 51,5%] |
+| kontrollág (szabad) | 45,6% | 9/10 [59,6%; 98,2%] | 8/20 [21,9%; 61,3%] | 62,8% | — (nincs kapu) |
 
 ## 20261020_1300_qwen3.5-4b — qwen3.5:4b, v4, eval/meresi_kerdessor_v2.toml (56 kérdés)
 

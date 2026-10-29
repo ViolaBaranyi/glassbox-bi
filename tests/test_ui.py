@@ -478,6 +478,11 @@ def test_a_felulet_minden_oldala_lefut(app_env, synth_bundle):
 
     at.switch_page("oldalak/kerdezz.py").run()
     _ok(at)
+    at.toggle(key="kerdezz_bemutato").set_value(True).run()      # bemutató mód: rögzített válaszok
+    _ok(at)
+    at.selectbox(key="kerdezz_bemutato_kerdes").select("k301").run()
+    _ok(at)
+    assert any("Bemutató mód" in i.value for i in at.info)
 
     at.switch_page("oldalak/sugo.py").run()
     _ok(at)

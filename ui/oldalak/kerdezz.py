@@ -8,7 +8,7 @@ import streamlit as st
 
 from semantic.catalog import value_label
 from ui import backend as d
-from ui import charts, common
+from ui import bemutato, charts, common
 from xai import narrative as nv
 
 common.page_header("Kérdezz", "Kérdések a rendelésekről és a késésekről — minden szám az adatbázisból, "
@@ -21,6 +21,7 @@ K_METRIC, K_DIM, K_RANGE, K_ORDER, K_LIMIT = ("kerdezz_metrika", "kerdezz_bontas
                                               "kerdezz_rendezes", "kerdezz_limit")
 K_GATE = "kerdezz_kapu_json"
 K_FREE, K_FREE_ASKED = "kerdezz_szabad", "kerdezz_szabad_kerdes"
+K_DEMO, K_DEMO_Q = "kerdezz_bemutato", "kerdezz_bemutato_kerdes"
 TIME_LIKE = ("honap", "ev", "het_napja")
 ORDER_NAMES = {"ertek_csokkeno": "a legnagyobb elöl", "ertek_novekvo": "a legkisebb elöl",
                "bontas": "a bontás sorrendjében"}
@@ -191,7 +192,9 @@ def show_free_answer(fa) -> None:
                    f"A szöveget a nyelvi modell ({t.modell}) fogalmazta, a számokat a gép illesztette be")
             gate2 = (f" · **2. kapu: átment** — a szöveg minden száma ({t.verdict.szamok}) "
                      "visszavezethető az eredményre"
-                     + (", és minden érték a saját csoportja mellett áll" if fa.eredmeny.bontas else ""))
+                     + (", és minden érték a saját csoportja mellett áll" if fa.eredmeny.bontas else "")
+                     + " (a számok közötti viszonyokat, például egy trendet vagy a ki nem írt sorokra tett "
+                     "állítást a kapu csak részben ellenőrzi — ezeket a táblázatban nézd meg)")
         show_answer(t.szoveg, f":material/verified: {who}. **1. kapu: elfogadva**{gate2}.", fa.eredmeny)
         if t.sablon and t.verdict:
             st.warning(f"A nyelvi modell szövege nem ment át a 2. kapun ({'; '.join(t.verdict.problemak)}), "
@@ -256,22 +259,57 @@ common.intro(
     "számokat a modell sem írja le: a helyükre jelölőt tesz, és a gép illeszti be az értékeket. "
     "Utána a **2. kapu** ellenőrzi, hogy a szöveg minden száma visszavezethető-e az eredményre; ha "
     "nem, a sablonos válasz látszik.\n\n"
+    "**Amit a kapu nem fog meg mindig:** a számok közötti viszonyokat. A mérések vak kézi ellenőrzése "
+    "szerint az alapbeállítású modellel (qwen3.5:4b) a válaszok kb. 9–14%-ában jutott el a "
+    "felhasználóhoz olyan állítás, amelyet az eredmény nem támaszt alá — jellemzően helyes számokhoz "
+    "kötött hamis viszony (például egy nagyság szerint rendezett listából kiolvasott „csökkenés”, vagy "
+    "a ki nem írt sorokra tett állítás). Kapu nélkül a modell szövegeinek 31–48%-ában volt ilyen. A "
+    "legkisebb modellel (qwen3.5:2b) az első változatban a válaszok 42%-ában, mert gyakran "
+    "félreértette a kérdést. Döntés előtt ezért a táblázatot és az ábrát nézd: azok a lekérdezés "
+    "közvetlen eredményei.\n\n"
     "**Kevés adat:** ha egy csoportban kevés rendelés van (aránynál 100-nál, átlagnál 30-nál "
     "kevesebb), az értéke a véletlentől erősen ingadozik — ezért a szöveg és az ábra nem épít "
     "rá, a táblázat jelölve mutatja.")
 
 tab_free, tab_builder = st.tabs([":material/forum: Szabad szöveggel", ":material/tune: Kérdésépítővel"])
 
+def show_demo(meta: dict) -> None:
+    recs = {r["id"]: r for r in meta["valaszok"]}
+    st.caption("A kérdéseket a szerző írta a harmadik méréshez, a mért kód lezárása után. A nyelvi modell "
+               f"válaszát a mérés rögzítette ({bemutato.source_line(meta)}); minden más — az 1. kapu, a "
+               "lekérdezés, a számok beillesztése és a 2. kapu — most fut le. A csapdakérdésekre a helyes "
+               "válasz az indokolt elutasítás.")
+    rid = st.selectbox("Kérdés a mérésből", list(recs), index=None, key=K_DEMO_Q,
+                       format_func=lambda i: bemutato.label(recs[i]),
+                       placeholder=f"Válassz a {len(recs)} rögzített kérdés közül…")
+    if rid:
+        free = common.ask_recorded(rid)
+        st.info("**Bemutató mód:** a nyelvi modell (" + meta.get("modell", "") + ") szövegét a mérés "
+                "rögzítette; az ellenőrzés és a számok most készültek.", icon=":material/replay:")
+        st.markdown(f"**A kérdés:** {recs[rid]['kerdes']}")
+        show_free_answer(free)
+
+
 # ------------------------------------------------------ szabad szöveges kérdés
 with tab_free:
     llm_ok, llm_msg = common.llm_status()
+    recorded = common.recorded()
     if not llm_ok:
         st.info("**A szabad szöveges kérdéshez helyi nyelvi modell kell, és most nem érhető el.** "
-                f"{llm_msg}\n\nAddig a **Kérdésépítővel** fülön ugyanígy kérdezhetsz. A beállítás a "
-                "`configs/llm.toml`-ban van; a részletek a README-ben („Szabad szöveges kérdés”).",
-                icon=":material/info:")
-    else:
-        common.warm_llm()                     # betöltés a háttérben, amíg a kérdés készül
+                f"{llm_msg}\n\nAddig a **Kérdésépítővel** fülön ugyanígy kérdezhetsz"
+                + (", itt pedig a bemutató módban a mérés rögzített válaszait nézheted meg" if recorded["valaszok"]
+                   else "") +
+                ". A beállítás a `configs/llm.toml`-ban van; a részletek a README-ben („Szabad szöveges "
+                "kérdés”).", icon=":material/info:")
+    demo = bool(recorded["valaszok"]) and st.toggle(
+        "Bemutató mód: a mérés rögzített modellválaszai, azonnal, nyelvi modell nélkül",
+        value=not llm_ok, key=K_DEMO,
+        help="A nyelvi modell két hívása helyett a harmadik mérés rögzített kimenete jön; az 1. kapu, "
+             "a lekérdezés, a számok beillesztése és a 2. kapu most fut le, a mostani kóddal és adattal.")
+    if demo:
+        show_demo(recorded)
+    elif llm_ok:
+        common.warm_llm()                    # betöltés a háttérben, amíg a kérdés készül
         st.caption(f"Nyelvi modell: **{llm_msg}**. Egy kérdés a gép teljesítményétől függően néhány "
                    "másodperctől egy percig is tarthat (videókártya nélkül a hosszabb).")
         st.markdown("###### Példák")

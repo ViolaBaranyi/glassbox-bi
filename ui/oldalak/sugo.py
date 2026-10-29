@@ -190,7 +190,9 @@ with tabs[1]:
         ("2. kapu", "ellenőrző lépés a nyelvi modell szövegén: minden szám visszavezethető-e az "
                     "eredményre, minden érték a saját csoportja mellett áll-e, a „legmagasabb” "
                     "tényleg az-e, és nincs-e benne ok-okozati állítás. Ha nem megy át, a "
-                    "rögzített sablon szövege látszik."),
+                    "rögzített sablon szövege látszik. A mérések szerint a számok eredetét jól, a "
+                    "számok közötti egyéb viszonyokat (például egy trendet vagy a ki nem írt sorokra "
+                    "tett állítást) csak részben fogja meg."),
     ])
     section("Egyéb", [
         ("Olist", "brazil online piactér, amelyen keresztül sok kisebb bolt árul; a rendelési "
@@ -300,6 +302,11 @@ with tabs[5]:
         "megmondja, mire vonatkozik (hány rendelés, melyik időszak, milyen szűrés), és a „Hogyan "
         "értette a nyelvi modell a kérdést?” részben látszik az értelmezése; a kérdésépítőbe át is "
         "veheted, és ott javíthatod. A számokat sosem a modell adja, hanem a lekérdezés.\n"
+        "- **A modell szövege a számok viszonyában tévedhet.** A 2. kapu a számok eredetét "
+        "ellenőrzi; a mérések vak kézi ellenőrzése szerint az alapbeállítású modellel a válaszok kb. "
+        "9–14%-ában jutott el a felhasználóhoz olyan állítás, amelyet az eredmény nem támaszt alá "
+        "(kapu nélkül a modell szövegeinek 31–48%-ában; a legkisebb modell első változatával 42%). "
+        "Döntés előtt a táblázatot és az ábrát nézd.\n"
         "- **A szabad szöveges kérdés lassú lehet.** A modell a saját gépeden fut; videókártya "
         "nélkül egy kérdés fél–egy perc is lehet. A kérdésépítő azonnal válaszol.\n"
         "- **Csak az kérdezhető, ami az adatban van.** Haszon, vásárlói értékelés, fizetés, "

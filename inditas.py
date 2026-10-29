@@ -21,8 +21,8 @@ Lépések:
      --szintetikus.
   3. Tárház: DuckDB. Csak akkor épül újra, ha hiányzik, vagy az adat újabb nála.
   4. Modellek: a négy modell egyszeri betanítása (kb. fél perc), utána gyorsítótárból.
-  5. Nyelvi modell (nem kötelező): Ollama és a qwen3.5:4b. Nélküle a szabad szöveges kérdés
-     nem válaszol, de minden más oldal működik.
+  5. Nyelvi modell (nem kötelező): Ollama és a qwen3.5:4b. Nélküle a szabad szöveges fülön a
+     bemutató mód a mérés rögzített válaszait mutatja; minden más oldal működik.
   6. Felület: szabad portot keres (8501-től), és megnyitja a böngészőben.
 
 A fájl eleje szándékosan csak a Python saját könyvtárát használja, hogy régebbi Pythonnal is
@@ -241,9 +241,19 @@ def ask_yes(question: str) -> bool:
 
 # ------------------------------------------------------------------- port
 def port_free(port: int, host: str = "localhost") -> bool:
+    """Szabad-e a port? Két próba kell: ha valaki figyel rajta, a kapcsolódás sikerül; de egy
+    olyan program, amely figyel, de nem fogad (vagy betelt a várakozási sora), Windowson
+    visszautasítja a kapcsolódást — ezért a lefoglalást is megpróbáljuk."""
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         s.settimeout(0.3)
-        return s.connect_ex((host, port)) != 0
+        if s.connect_ex((host, port)) == 0:
+            return False
+    try:
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            s.bind((host, port))
+    except OSError:
+        return False
+    return True
 
 
 def find_free_port(start: int = 8501, tries: int = 20) -> int | None:
@@ -375,7 +385,8 @@ def main(argv: list[str] | None = None) -> int:
                 ok, msg, _ = llm_status()
                 say(f"   {'rendben' if ok else 'nincs'}: {msg}")
         if not ok:
-            say("   Nélküle a Kérdésépítő és minden más oldal működik; csak a szabad szöveges kérdés nem.")
+            say("   Nélküle is működik minden oldal; a szabad szöveges fülön a bemutató mód a mérés "
+                "rögzített válaszait mutatja.")
 
     # tesztek (kérésre)
     if args.tesztek and not check:

@@ -972,6 +972,21 @@ def ask_free(question: str, path: Path | None = None, cat=None, wl=None):
         con.close()
 
 
+def ask_recorded(rec_id: str, path: Path | None = None, cat=None, wl=None):
+    """Bemutató mód: egy rögzített kérdés a szabad szöveges úton, a mérés rögzített modellválaszával
+    (ui/bemutato.py) — minden más (1. kapu, lekérdezés, behelyettesítés, 2. kapu) most fut le."""
+    from ui import bemutato
+    meta = bemutato.load()
+    rec = next(r for r in meta["valaszok"] if r["id"] == rec_id)
+    cat = cat or semantic_catalog()
+    wl = wl or semantic_whitelist(path)
+    con = connect(path or db_path(), read_only=True)
+    try:
+        return bemutato.ask(rec, meta, cat, wl, con)
+    finally:
+        con.close()
+
+
 def pg_check(path: Path | None = None) -> dict | None:
     """A PostgreSQL-változat ellenőrzésének mentett eredménye (python -m semantic.pg_ellenorzes)."""
     p = Path(path or DOCS / "pg_ellenorzes.json")

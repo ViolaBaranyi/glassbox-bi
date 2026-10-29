@@ -1,0 +1,1988 @@
+{
+ "leiras": "A Kérdezz oldal bemutató módja: egy lezárt K1-futás rögzített modellválaszai (tools/bemutato_export.py).",
+ "futas": "20261022_1902_qwen3.5-4b",
+ "modell": "qwen3.5:4b",
+ "digest": "d8b0f5e9760cd1682034f292d7ef72ec46f432149be0df7574bf2d6e92e38c04",
+ "kezdes": "2026-10-22T19:02:29",
+ "kod": {
+  "commit": "98a4bc5ccd2825bd29b5f2c91279e5dcae62bc17",
+  "nem_commitolt_valtozas": false,
+  "verzio": "v5",
+  "ujjlenyomat": "9295c1cdc88d360b3221863dc84bf8035856701d6e9ed35704f67e6e2f00004c"
+ },
+ "kerdessor": {
+  "fajl": "eval/meresi_kerdessor_v3.toml",
+  "sha256": "4ceea2657461afdb9419f317807947fe5ccc7018d03120bd671716a5f0a8a9aa",
+  "kerdesek": 50
+ },
+ "valaszok": [
+  {
+   "id": "k301",
+   "kerdes": "mennyi most az atlagos kiszallitasi ido osszessegeben?",
+   "tipus": "osszesito",
+   "csapda": null,
+   "urlap": {
+    "metrika": "atlagos_szallitasi_ido",
+    "kert": "átlagos szállítási idő",
+    "bontas": [],
+    "szuro": [],
+    "idoablak": {
+     "tol": "",
+     "ig": ""
+    },
+    "rendezes": "ertek_csokkeno",
+    "limit": 10
+   },
+   "modell_szoveg": "Az átlagos szállítási idő az összesített adatok alapján 12,6 nap ({O}).",
+   "rogzitett": {
+    "kapu1": "elfogadva",
+    "spec": {
+     "metrika": "atlagos_szallitasi_ido",
+     "bontas": [],
+     "szuro": {},
+     "rendezes": "ertek_csokkeno",
+     "limit": 10
+    },
+    "itelet": "helyes",
+    "sablon": false,
+    "mag": "Az átlagos szállítási idő az összesített adatok alapján 12,6 nap (12,6 nap).",
+    "problemak": []
+   }
+  },
+  {
+   "id": "k302",
+   "kerdes": "mekkora a kesesi arany az eszaki regioban? ott jon a legtobb panasz",
+   "tipus": "szures",
+   "csapda": null,
+   "urlap": {
+    "metrika": "kesesi_arany",
+    "kert": "késési arány",
+    "bontas": [
+     "vevo_regio"
+    ],
+    "szuro": [
+     {
+      "dimenzio": "vevo_regio",
+      "ertekek": [
+       "Észak"
+      ]
+     }
+    ],
+    "idoablak": {
+     "tol": "",
+     "ig": ""
+    },
+    "rendezes": "ertek_csokkeno",
+    "limit": 10
+   },
+   "modell_szoveg": "Az Észak régióban a késési arány ({S1}). Az összesített értéknek ({O}) ez az értéke feleli meg, míg a 95%-os tartománya {S1_A} és {S1_F} között van.",
+   "rogzitett": {
+    "kapu1": "elfogadva",
+    "spec": {
+     "metrika": "kesesi_arany",
+     "bontas": [],
+     "szuro": {
+      "vevo_regio": [
+       "N"
+      ]
+     },
+     "rendezes": "ertek_csokkeno",
+     "limit": 10
+    },
+    "itelet": "helyes",
+    "sablon": true,
+    "mag": "Az Észak régióban a késési arány ({S1}). Az összesített értéknek (8,6%) ez az értéke feleli meg, míg a 95%-os tartománya {S1_A} és {S1_F} között van.",
+    "problemak": [
+     "ismeretlen jelölő: {S1}, {S1_A}, {S1_F}"
+    ]
+   }
+  },
+  {
+   "id": "k303",
+   "kerdes": "melyik 5 allamba erunk ki a leglassabban?",
+   "tipus": "rangsor",
+   "csapda": null,
+   "urlap": {
+    "metrika": "atlagos_szallitasi_ido",
+    "kert": "szállítási idő",
+    "bontas": [
+     "vevo_allam"
+    ],
+    "szuro": [],
+    "idoablak": {
+     "tol": "",
+     "ig": ""
+    },
+    "rendezes": "ertek_novekvo",
+    "limit": 5
+   },
+   "modell_szoveg": "A leglassabban Roraimában ({S1}) érünk ki, ahol az átlagos szállítási idő 29,4 nap. Ez az érték a második helyen lévő Amapá ({S2}) és a harmadik helyen lévő Amazonas ({S3}) államoknál is jelentősen nagyobb.",
+   "rogzitett": {
+    "kapu1": "elfogadva",
+    "spec": {
+     "metrika": "atlagos_szallitasi_ido",
+     "bontas": [
+      "vevo_allam"
+     ],
+     "szuro": {},
+     "rendezes": "ertek_csokkeno",
+     "limit": 5
+    },
+    "itelet": "helyes",
+    "sablon": false,
+    "mag": "A leglassabban Roraimában (29,4 nap) érünk ki, ahol az átlagos szállítási idő 29,4 nap. Ez az érték a második helyen lévő Amapá (27,2 nap) és a harmadik helyen lévő Amazonas (26,4 nap) államoknál is jelentősen nagyobb.",
+    "problemak": []
+   }
+  },
+  {
+   "id": "k304",
+   "kerdes": "kerek egy havi bontast a kesett rendelesek szamarol 2018-ra",
+   "tipus": "idosor",
+   "csapda": null,
+   "urlap": {
+    "metrika": "kesett_rendelesek",
+    "kert": "késett rendelések száma",
+    "bontas": [
+     "honap"
+    ],
+    "szuro": [],
+    "idoablak": {
+     "tol": "2017-10-01",
+     "ig": "2018-09-30"
+    },
+    "rendezes": "ertek_csokkeno",
+    "limit": 10
+   },
+   "modell_szoveg": "A késett rendelések száma 2018-ban a márciusban ({S3}) volt a legnagyobb, míg júniusban ({S6}) a legkisebb. A hónapok közötti különbséget az összesített érték ({O}) és a csúcs-határérték aránya mutatja.",
+   "rogzitett": {
+    "kapu1": "elfogadva",
+    "spec": {
+     "metrika": "kesett_rendelesek",
+     "bontas": [
+      "honap"
+     ],
+     "szuro": {},
+     "idoablak": {
+      "tol": "2018-01-01"
+     },
+     "rendezes": "bontas",
+     "limit": 100
+    },
+    "itelet": "helyes",
+    "sablon": false,
+    "mag": "A késett rendelések száma 2018-ban a márciusban (1 328) volt a legnagyobb, míg júniusban (71) a legkisebb. A hónapok közötti különbséget az összesített érték (4 078) és a csúcs-határérték aránya mutatja.",
+    "problemak": []
+   }
+  },
+  {
+   "id": "k305",
+   "kerdes": "mennyi idot tolt egy csomag a raktarban amig a futar elviszi?",
+   "tipus": "csapda",
+   "csapda": "katalogus_kivul",
+   "urlap": {
+    "metrika": "nem_elerheto",
+    "kert": "raktári tartózkodási idő",
+    "bontas": [],
+    "szuro": [],
+    "idoablak": {
+     "tol": "",
+     "ig": ""
+    },
+    "rendezes": "ertek_csokkeno",
+    "limit": 10
+   },
+   "modell_szoveg": null,
+   "rogzitett": {
+    "kapu1": "nem_elerheto",
+    "spec": null,
+    "itelet": "helyes elutasítás",
+    "sablon": null,
+    "mag": null,
+    "problemak": []
+   }
+  },
+  {
+   "id": "k306",
+   "kerdes": "hasonlitsd ossze a vallalt es a tenyleges szallitasi idot regionkent. hol a legnagyobb a lemaradas?",
+   "tipus": "kombinalt",
+   "csapda": null,
+   "urlap": {
+    "metrika": "atlagos_szallitasi_ido",
+    "kert": "szállítási idő",
+    "bontas": [
+     "vevo_regio"
+    ],
+    "szuro": [],
+    "idoablak": {
+     "tol": "",
+     "ig": ""
+    },
+    "rendezes": "ertek_csokkeno",
+    "limit": 10
+   },
+   "modell_szoveg": "A legnagyobb lemaradás az Észak régióban tapasztalható ({S1}). Az itt mért átlagos szállítási idő az összesített értéknél ({O}) 1,8-szerese, míg a Délkeleten ez aránytalanul gyorsabb ({S5}).",
+   "rogzitett": {
+    "kapu1": "elfogadva",
+    "spec": {
+     "metrika": "atlagos_szallitasi_ido",
+     "bontas": [
+      "vevo_regio"
+     ],
+     "szuro": {},
+     "rendezes": "ertek_csokkeno",
+     "limit": 10
+    },
+    "itelet": "helyes",
+    "sablon": true,
+    "mag": "A legnagyobb lemaradás az Észak régióban tapasztalható (22,6 nap). Az itt mért átlagos szállítási idő az összesített értéknél (12,6 nap) 1,8-szerese, míg a Délkeleten ez aránytalanul gyorsabb (10,8 nap).",
+    "problemak": [
+     "a(z) 1,8 „Észak” értéke, de „Délkelet” mellett áll"
+    ]
+   }
+  },
+  {
+   "id": "k307",
+   "kerdes": "javult a teljesites az elmult egy evben honaprol honapra? a vallalt hatarido es a tenyleges kozott erdekel a kulonbseg",
+   "tipus": "idosor",
+   "csapda": null,
+   "urlap": {
+    "metrika": "atlagos_keses",
+    "kert": "átlagos késés",
+    "bontas": [
+     "honap"
+    ],
+    "szuro": [],
+    "idoablak": {
+     "tol": "2017-09-01",
+     "ig": "2018-08-31"
+    },
+    "rendezes": "ertek_novekvo",
+    "limit": 10
+   },
+   "modell_szoveg": "Javult a teljesítmény, mivel az átlagos szállítási idő csökkenett az év végén ({S12}). A legrosszabb hónapok decemberben és júniusban voltak ({S4}, {S10}), míg a legjobb augusztusban volt ({S12}).",
+   "rogzitett": {
+    "kapu1": "elfogadva",
+    "spec": {
+     "metrika": "atlagos_vallalt_ido",
+     "bontas": [
+      "honap"
+     ],
+     "szuro": {},
+     "idoablak": {
+      "tol": "2017-09-01"
+     },
+     "rendezes": "bontas",
+     "limit": 100
+    },
+    "itelet": "helyes",
+    "sablon": true,
+    "mag": "Javult a teljesítmény, mivel az átlagos szállítási idő csökkenett az év végén (15,8 nap). A legrosszabb hónapok decemberben és júniusban voltak (28,3 nap, 28,4 nap), míg a legjobb augusztusban volt (15,8 nap).",
+    "problemak": [
+     "a(z) {S4} „2017. december” értéke, de „2018. június” mellett áll"
+    ]
+   }
+  },
+  {
+   "id": "k308",
+   "kerdes": "SP-i eladoknal mennyi az atlagos szallitasi ido a vevo allama szerint, csak ott ahol kesett a csomag",
+   "tipus": "kombinalt",
+   "csapda": null,
+   "urlap": {
+    "metrika": "atlagos_szallitasi_ido",
+    "kert": "átlagos szállítási idő",
+    "bontas": [
+     "vevo_allam"
+    ],
+    "szuro": [
+     {
+      "dimenzio": "elado_allam",
+      "ertekek": [
+       "SP"
+      ]
+     },
+     {
+      "dimenzio": "kesett",
+      "ertekek": [
+       "késett"
+      ]
+     }
+    ],
+    "idoablak": {
+     "tol": "",
+     "ig": ""
+    },
+    "rendezes": "ertek_csokkeno",
+    "limit": 10
+   },
+   "modell_szoveg": "A São Paulo ({S1}) államban a császárt szállítási idő az összesített értéknek ({O}) megegyezik. Az adatok nem tartalmaznak további kategóriákra bontást vagy időbeli változást.",
+   "rogzitett": {
+    "kapu1": "elfogadva",
+    "spec": {
+     "metrika": "atlagos_szallitasi_ido",
+     "bontas": [],
+     "szuro": {
+      "elado_allam": [
+       "SP"
+      ]
+     },
+     "rendezes": "ertek_csokkeno",
+     "limit": 10
+    },
+    "itelet": "hibás értelmezés",
+    "sablon": true,
+    "mag": "A São Paulo ({S1}) államban a császárt szállítási idő az összesített értéknek (12,4 nap) megegyezik. Az adatok nem tartalmaznak további kategóriákra bontást vagy időbeli változást.",
+    "problemak": [
+     "ismeretlen jelölő: {S1}"
+    ]
+   }
+  },
+  {
+   "id": "k310",
+   "kerdes": "a median kiszallitasi ido mennyi a delkeleti regioban idén?",
+   "tipus": "kombinalt",
+   "csapda": null,
+   "urlap": {
+    "metrika": "median_szallitasi_ido",
+    "kert": "szállítási idő mediánja",
+    "bontas": [
+     "vevo_regio"
+    ],
+    "szuro": [
+     {
+      "dimenzio": "vevo_regio",
+      "ertekek": [
+       "Délkelet"
+      ]
+     }
+    ],
+    "idoablak": {
+     "tol": "2018-01-01",
+     "ig": "2018-12-31"
+    },
+    "rendezes": "ertek_csokkeno",
+    "limit": 10
+   },
+   "modell_szoveg": "A Délkelet régióban idén a szállítási idő mediánja {O} nap volt. A válasz nem tartalmazza az időbeli bontást vagy a csoportos értékeket.",
+   "rogzitett": {
+    "kapu1": "elfogadva",
+    "spec": {
+     "metrika": "median_szallitasi_ido",
+     "bontas": [],
+     "szuro": {
+      "vevo_regio": [
+       "SE"
+      ]
+     },
+     "idoablak": {
+      "tol": "2018-01-01"
+     },
+     "rendezes": "ertek_csokkeno",
+     "limit": 10
+    },
+    "itelet": "helyes",
+    "sablon": false,
+    "mag": "A Délkelet régióban idén a szállítási idő mediánja 8,0 nap volt. A válasz nem tartalmazza az időbeli bontást vagy a csoportos értékeket.",
+    "problemak": []
+   }
+  },
+  {
+   "id": "k311",
+   "kerdes": "top 10 kategoria forgalom szerint?",
+   "tipus": "rangsor",
+   "csapda": null,
+   "urlap": {
+    "metrika": "forgalom",
+    "kert": "forgalom",
+    "bontas": [
+     "kategoria"
+    ],
+    "szuro": [],
+    "idoablak": {
+     "tol": "",
+     "ig": ""
+    },
+    "rendezes": "ertek_csokkeno",
+    "limit": 10
+   },
+   "modell_szoveg": "Az egészség és szépségápolás ({S1}) kategória vezeti a forgalomban a 2016. szeptember 15. és 2018. augusztus 29. közötti időszakban, ahol az összesített érték {O} 9,3%-a. Ezután következik az órák és ajándékok ({S2}), a lakástextil ({S3}) és a sport és szabadidő ({S4}) kategóriák.",
+   "rogzitett": {
+    "kapu1": "elfogadva",
+    "spec": {
+     "metrika": "forgalom",
+     "bontas": [
+      "kategoria"
+     ],
+     "szuro": {},
+     "rendezes": "ertek_csokkeno",
+     "limit": 10
+    },
+    "itelet": "helyes",
+    "sablon": false,
+    "mag": "Az egészség és szépségápolás (1 233 813 BRL) kategória vezeti a forgalomban a 2016. szeptember 15. és 2018. augusztus 29. közötti időszakban, ahol az összesített érték 13 220 249 BRL 9,3%-a. Ezután következik az órák és ajándékok (1 166 874 BRL), a lakástextil (1 024 244 BRL) és a sport és szabadidő (954 347 BRL) kategóriák.",
+    "problemak": []
+   }
+  },
+  {
+   "id": "k314",
+   "kerdes": "mennyi az atlagos kosarertek osszessegeben, kene egy referencia amihez tudom meri a sajatjaimat",
+   "tipus": "osszesito",
+   "csapda": null,
+   "urlap": {
+    "metrika": "forgalom",
+    "kert": "átlagos kosárérték összessége",
+    "bontas": [],
+    "szuro": [],
+    "idoablak": {
+     "tol": "",
+     "ig": ""
+    },
+    "rendezes": "ertek_csokkeno",
+    "limit": 10
+   },
+   "modell_szoveg": "Az átlagos kosárérték összességében 137,04 BRL ({O}).",
+   "rogzitett": {
+    "kapu1": "elfogadva",
+    "spec": {
+     "metrika": "atlagos_kosarertek",
+     "bontas": [],
+     "szuro": {},
+     "rendezes": "ertek_csokkeno",
+     "limit": 10
+    },
+    "itelet": "helyes",
+    "sablon": false,
+    "mag": "Az átlagos kosárérték összességében 137,04 BRL (137,04 BRL).",
+    "problemak": []
+   }
+  },
+  {
+   "id": "k315",
+   "kerdes": "butor vs lakastextil: melyikbol megy tobb rendeles, es forgalomban melyik a nagyobb?",
+   "tipus": "kombinalt",
+   "csapda": null,
+   "urlap": {
+    "metrika": "rendelesek_szama",
+    "kert": "rendelések száma",
+    "bontas": [
+     "kategoria"
+    ],
+    "szuro": [],
+    "idoablak": {
+     "tol": "",
+     "ig": ""
+    },
+    "rendezes": "ertek_csokkeno",
+    "limit": 10
+   },
+   "modell_szoveg": "A lakástextil kategóriában ( { S1 } ) a legtöbb rendelés megy el, amelynek aránya meghaladja az összesített adatot ({ O } ) 9,5 %-át. A második helyen az egészség és szépségápolás ({ S2 }), míg a harmadikban a sport és szabadidő kategória ({ S3 }) áll.",
+   "rogzitett": {
+    "kapu1": "elfogadva",
+    "spec": {
+     "metrika": "rendelesek_szama",
+     "bontas": [
+      "kategoria"
+     ],
+     "szuro": {},
+     "rendezes": "ertek_csokkeno",
+     "limit": 10
+    },
+    "itelet": "hibás értelmezés",
+    "sablon": true,
+    "mag": "A lakástextil kategóriában ( { S1 } ) a legtöbb rendelés megy el, amelynek aránya meghaladja az összesített adatot ({ O } ) 9,5 %-át. A második helyen az egészség és szépségápolás ({ S2 }), míg a harmadikban a sport és szabadidő kategória ({ S3 }) áll.",
+    "problemak": [
+     "vissza nem vezethető szám: 1, 2, 3"
+    ]
+   }
+  },
+  {
+   "id": "k317",
+   "kerdes": "bontsd le a szepsegapolas forgalmat regiokra. hol megy a legjobban?",
+   "tipus": "kombinalt",
+   "csapda": null,
+   "urlap": {
+    "metrika": "forgalom",
+    "kert": "forgalom",
+    "bontas": [
+     "vevo_regio"
+    ],
+    "szuro": [
+     {
+      "dimenzio": "kategoria",
+      "ertekek": [
+       "szepsegapolas"
+      ]
+     }
+    ],
+    "idoablak": {
+     "tol": "",
+     "ig": ""
+    },
+    "rendezes": "ertek_csokkeno",
+    "limit": 10
+   },
+   "modell_szoveg": "A Délkelet ({S1}) régióban megy a legjobban az egészség és szépségápolás forgalom. Az Északkelet ({S2}) és a Dél ({S3}) régiók követik ezt a sorrendet, míg az Észak ({S5}) a legalacsonyabb értéket mutatja.",
+   "rogzitett": {
+    "kapu1": "elfogadva",
+    "spec": {
+     "metrika": "forgalom",
+     "bontas": [
+      "vevo_regio"
+     ],
+     "szuro": {
+      "kategoria": [
+       "health_beauty"
+      ]
+     },
+     "rendezes": "ertek_csokkeno",
+     "limit": 10
+    },
+    "itelet": "helyes",
+    "sablon": false,
+    "mag": "A Délkelet (768 603 BRL) régióban megy a legjobban az egészség és szépségápolás forgalom. Az Északkelet (195 801 BRL) és a Dél (143 852 BRL) régiók követik ezt a sorrendet, míg az Észak (41 564 BRL) a legalacsonyabb értéket mutatja.",
+    "problemak": []
+   }
+  },
+  {
+   "id": "k318",
+   "kerdes": "mennyi keszlet van most a jatekokbol? nem szeretnem ha karacsony elott kifogynank",
+   "tipus": "csapda",
+   "csapda": "nincs_adat",
+   "urlap": {
+    "metrika": "nem_elerheto",
+    "kert": "készlet",
+    "bontas": [],
+    "szuro": [],
+    "idoablak": {
+     "tol": "",
+     "ig": ""
+    },
+    "rendezes": "ertek_csokkeno",
+    "limit": 10
+   },
+   "modell_szoveg": null,
+   "rogzitett": {
+    "kapu1": "nem_elerheto",
+    "spec": null,
+    "itelet": "helyes elutasítás",
+    "sablon": null,
+    "mag": null,
+    "problemak": []
+   }
+  },
+  {
+   "id": "k319",
+   "kerdes": "mi az a 10 kategoria amibol szinte semmi nem megy? kivezetnem oket",
+   "tipus": "rangsor",
+   "csapda": null,
+   "urlap": {
+    "metrika": "forgalom",
+    "kert": "forgalom",
+    "bontas": [
+     "kategoria"
+    ],
+    "szuro": [],
+    "idoablak": {
+     "tol": "",
+     "ig": ""
+    },
+    "rendezes": "ertek_csokkeno",
+    "limit": 10
+   },
+   "modell_szoveg": "A legkisebb forgalmú kategória a biztonság és szolgáltatások ({S11}), amelynek értéke elhanyagolhatóan alacsony. Az utolsó helyezett kategóriák az autós termékek ({S9}) és a trendi ajándéktárgyak ({S8}), amelyek az összes forgalom 4,4%-át és 4,6%-át teszik ki. A legnagyobb eladások az egészség és szépségápolás ({S1}) kategóriában történtek, amely az adatbázis 9,3%-át adja.",
+   "rogzitett": {
+    "kapu1": "elfogadva",
+    "spec": {
+     "metrika": "forgalom",
+     "bontas": [
+      "kategoria"
+     ],
+     "szuro": {},
+     "rendezes": "ertek_csokkeno",
+     "limit": 10
+    },
+    "itelet": "hibás értelmezés",
+    "sablon": true,
+    "mag": "A legkisebb forgalmú kategória a biztonság és szolgáltatások (283 BRL), amelynek értéke elhanyagolhatóan alacsony. Az utolsó helyezett kategóriák az autós termékek (579 247 BRL) és a trendi ajándéktárgyak (610 373 BRL), amelyek az összes forgalom 4,4%-át és 4,6%-át teszik ki. A legnagyobb eladások az egészség és szépségápolás (1 233 813 BRL) kategóriában történtek, amely az adatbázis 9,3%-át adja.",
+    "problemak": [
+     "a(z) 4,4 „autós termékek” értéke, de „trendi ajándéktárgyak” mellett áll"
+    ]
+   }
+  },
+  {
+   "id": "k320",
+   "kerdes": "2017 nov-dec-ben melyik 5 kategoria porgott a legjobban bevetel alapjan?",
+   "tipus": "kombinalt",
+   "csapda": null,
+   "urlap": {
+    "metrika": "forgalom",
+    "kert": "forgalom",
+    "bontas": [
+     "kategoria"
+    ],
+    "szuro": [],
+    "idoablak": {
+     "tol": "2017-11-01",
+     "ig": "2017-12-31"
+    },
+    "rendezes": "ertek_csokkeno",
+    "limit": 5
+   },
+   "modell_szoveg": "A legjobban bevételt hozó kategória a órák és ajándékok ({S1}), amelynek értéke az összeg több mint 9%-át teszi ki. Ezután következik az egészség és szépségápolás ({S2}) kategória, majd a lakástextil ({S3}).",
+   "rogzitett": {
+    "kapu1": "elfogadva",
+    "spec": {
+     "metrika": "forgalom",
+     "bontas": [
+      "kategoria"
+     ],
+     "szuro": {},
+     "idoablak": {
+      "tol": "2017-11-01",
+      "ig": "2017-12-31"
+     },
+     "rendezes": "ertek_csokkeno",
+     "limit": 5
+    },
+    "itelet": "helyes",
+    "sablon": true,
+    "mag": "A legjobban bevételt hozó kategória a órák és ajándékok (165 311 BRL), amelynek értéke az összeg több mint 9%-át teszi ki. Ezután következik az egészség és szépségápolás (138 928 BRL) kategória, majd a lakástextil (137 845 BRL).",
+    "problemak": [
+     "vissza nem vezethető szám: 9"
+    ]
+   }
+  },
+  {
+   "id": "k321",
+   "kerdes": "mennyi volt a teljes forgalom 2017-ben es 2018-ban? egymas mellett kernem",
+   "tipus": "idoszak",
+   "csapda": null,
+   "urlap": {
+    "metrika": "forgalom",
+    "kert": "forgalom",
+    "bontas": [],
+    "szuro": [],
+    "idoablak": {
+     "tol": "2017-01-01",
+     "ig": "2018-12-31"
+    },
+    "rendezes": "ertek_csokkeno",
+    "limit": 10
+   },
+   "modell_szoveg": "A teljes forgalom 2017-ben {S1}, 2018-ban {S2} volt. A két év közötti különbség {O}-től {S1_N} és {S2_N}-ig terjed, ahol az összesített érték {O} a 45,2%-a {S1_X} és 54,8%-a {S2_X}.",
+   "rogzitett": {
+    "kapu1": "elfogadva",
+    "spec": {
+     "metrika": "forgalom",
+     "bontas": [
+      "ev"
+     ],
+     "szuro": {},
+     "idoablak": {
+      "tol": "2017-01-01"
+     },
+     "rendezes": "bontas",
+     "limit": 100
+    },
+    "itelet": "helyes",
+    "sablon": false,
+    "mag": "A teljes forgalom 2017-ben 5 962 606 BRL, 2018-ban 7 217 172 BRL volt. A két év közötti különbség 13 179 778 BRL-től 43 426 és 52 777-ig terjed, ahol az összesített érték 13 179 778 BRL a 45,2%-a 45,2% és 54,8%-a 54,8%.",
+    "problemak": []
+   }
+  },
+  {
+   "id": "k322",
+   "kerdes": "negyedeves bontasban kerem a forgalmat 2017 elejetol",
+   "tipus": "idosor",
+   "csapda": null,
+   "urlap": {
+    "metrika": "forgalom",
+    "kert": "forgalom",
+    "bontas": [
+     "honap"
+    ],
+    "szuro": [],
+    "idoablak": {
+     "tol": "2017-01-01",
+     "ig": ""
+    },
+    "rendezes": "ertek_csokkeno",
+    "limit": 10
+   },
+   "modell_szoveg": "A forgalom növekvő tendenciát mutat a megadott időszakban, ahol a legmagasabb értéket 2017 novemberében ({S11}) érték el. Az átlaghoz képest ez az érték {S11_X}%-kal magasabb, míg a legalacsonyabb forgalom 2017 januárjában ({S1}) történt meg.",
+   "rogzitett": {
+    "kapu1": "elfogadva",
+    "spec": {
+     "metrika": "forgalom",
+     "bontas": [
+      "honap"
+     ],
+     "szuro": {},
+     "idoablak": {
+      "tol": "2017-01-01"
+     },
+     "rendezes": "bontas",
+     "limit": 100
+    },
+    "itelet": "helyes",
+    "sablon": true,
+    "mag": "A forgalom növekvő tendenciát mutat a megadott időszakban, ahol a legmagasabb értéket 2017 novemberében (987 648 BRL) érték el. Az átlaghoz képest ez az érték 7,5%-kal magasabb, míg a legalacsonyabb forgalom 2017 januárjában (111 798 BRL) történt meg.",
+    "problemak": [
+     "a(z) {S11_X} „2017. november” értéke, de „2017. január” mellett áll"
+    ]
+   }
+  },
+  {
+   "id": "k325",
+   "kerdes": "melyik 5 allam adja a forgalom legnagyobb reszet? szazalekosan is kernem",
+   "tipus": "rangsor",
+   "csapda": null,
+   "urlap": {
+    "metrika": "forgalom",
+    "kert": "forgalom",
+    "bontas": [],
+    "szuro": [
+     {
+      "dimenzio": "vevo_allam",
+      "ertekek": []
+     }
+    ],
+    "idoablak": {
+     "tol": "",
+     "ig": ""
+    },
+    "rendezes": "ertek_csokkeno",
+    "limit": 5
+   },
+   "modell_szoveg": "A legnagyobb forgalom részt Brazíliában ({S1}) kapják meg, ahol az értékek a legmagasabbak. A második helyen Argentína ({S2}) áll, míg a harmadik pozícióban Uruguay ({S3}) található.",
+   "rogzitett": {
+    "kapu1": "elfogadva",
+    "spec": {
+     "metrika": "forgalom",
+     "bontas": [],
+     "szuro": {},
+     "rendezes": "ertek_csokkeno",
+     "limit": 5
+    },
+    "itelet": "hibás értelmezés",
+    "sablon": true,
+    "mag": "A legnagyobb forgalom részt Brazíliában ({S1}) kapják meg, ahol az értékek a legmagasabbak. A második helyen Argentína ({S2}) áll, míg a harmadik pozícióban Uruguay ({S3}) található.",
+    "problemak": [
+     "ismeretlen jelölő: {S1}, {S2}, {S3}"
+    ]
+   }
+  },
+  {
+   "id": "k328",
+   "kerdes": "a bevetel mekkora resze jott bankkartyaval es mennyi reszletre? a cash flow modellhez kell",
+   "tipus": "csapda",
+   "csapda": "nincs_adat",
+   "urlap": {
+    "metrika": "nem_elerheto",
+    "kert": "bevetel aránya bankkártya és készpénz szerint",
+    "bontas": [],
+    "szuro": [],
+    "idoablak": {
+     "tol": "",
+     "ig": ""
+    },
+    "rendezes": "ertek_csokkeno",
+    "limit": 10
+   },
+   "modell_szoveg": null,
+   "rogzitett": {
+    "kapu1": "nem_elerheto",
+    "spec": null,
+    "itelet": "helyes elutasítás",
+    "sablon": null,
+    "mag": null,
+    "problemak": []
+   }
+  },
+  {
+   "id": "k329",
+   "kerdes": "a szallitasi dij atlaga a kosarertek mekkora reszet teszi ki?",
+   "tipus": "kombinalt",
+   "csapda": null,
+   "urlap": {
+    "metrika": "nem_elerheto",
+    "kert": "haszonkulcs",
+    "bontas": [],
+    "szuro": [],
+    "idoablak": {
+     "tol": "",
+     "ig": ""
+    },
+    "rendezes": "ertek_csokkeno",
+    "limit": 10
+   },
+   "modell_szoveg": null,
+   "rogzitett": {
+    "kapu1": "nem_elerheto",
+    "spec": null,
+    "itelet": "téves elutasítás",
+    "sablon": null,
+    "mag": null,
+    "problemak": []
+   }
+  },
+  {
+   "id": "k330",
+   "kerdes": "allamonkent az atlagos kosarertek 2018-ban, es hogy viszonyul ez az orszagos atlaghoz",
+   "tipus": "kombinalt",
+   "csapda": null,
+   "urlap": {
+    "metrika": "atlagos_kosarertek",
+    "kert": "átlagos kosárérték",
+    "bontas": [
+     "elado_allam"
+    ],
+    "szuro": [],
+    "idoablak": {
+     "tol": "2018-01-01",
+     "ig": "2018-12-31"
+    },
+    "rendezes": "ertek_csokkeno",
+    "limit": 10
+   },
+   "modell_szoveg": "Maranhãoban a legkisebb az átlagos kosárérték ({S11}), amely az országos átlag ({O}) alatti 0,7-szeresét teszi ki. Az összesített érték {O} alapján a legnagyobb értéket Bahia állama ({S1}) mutatja meg, ami az átlaghoz képest 2,8-szerese.",
+   "rogzitett": {
+    "kapu1": "elfogadva",
+    "spec": {
+     "metrika": "atlagos_kosarertek",
+     "bontas": [
+      "elado_allam"
+     ],
+     "szuro": {},
+     "idoablak": {
+      "tol": "2018-01-01"
+     },
+     "rendezes": "ertek_csokkeno",
+     "limit": 10
+    },
+    "itelet": "hibás értelmezés",
+    "sablon": false,
+    "mag": "Maranhãoban a legkisebb az átlagos kosárérték (92,86 BRL), amely az országos átlag (136,75 BRL) alatti 0,7-szeresét teszi ki. Az összesített érték 136,75 BRL alapján a legnagyobb értéket Bahia állama (386,39 BRL) mutatja meg, ami az átlaghoz képest 2,8-szerese.",
+    "problemak": []
+   }
+  },
+  {
+   "id": "k331",
+   "kerdes": "hogy all a delkelet forgalomban az osszeshez kepest?",
+   "tipus": "kombinalt",
+   "csapda": null,
+   "urlap": {
+    "metrika": "forgalom",
+    "kert": "forgalom",
+    "bontas": [],
+    "szuro": [],
+    "idoablak": {
+     "tol": "",
+     "ig": ""
+    },
+    "rendezes": "ertek_csokkeno",
+    "limit": 10
+   },
+   "modell_szoveg": "A Délkelet régióban ({S1}) a forgalom az összesített értéknek ({O}) felel meg, mivel ez az egyetlen szűrt adat. Az eredményt 2016. szeptember 15-től 2018. augusztus 29-ig vettük figyelembe, és a mérőszám a szállítási díj nélkül számolt kosárérték-összeg volt.",
+   "rogzitett": {
+    "kapu1": "elfogadva",
+    "spec": {
+     "metrika": "forgalom",
+     "bontas": [],
+     "szuro": {
+      "vevo_regio": [
+       "SE"
+      ]
+     },
+     "rendezes": "ertek_csokkeno",
+     "limit": 10
+    },
+    "itelet": "hibás értelmezés",
+    "sablon": true,
+    "mag": "A Délkelet régióban ({S1}) a forgalom az összesített értéknek (8 647 339 BRL) felel meg, mivel ez az egyetlen szűrt adat. Az eredményt 2016. szeptember 15-től 2018. augusztus 29-ig vettük figyelembe, és a mérőszám a szállítási díj nélkül számolt kosárérték-összeg volt.",
+    "problemak": [
+     "ismeretlen jelölő: {S1}"
+    ]
+   }
+  },
+  {
+   "id": "k332",
+   "kerdes": "top 5 allam rendelesszam szerint",
+   "tipus": "rangsor",
+   "csapda": null,
+   "urlap": {
+    "metrika": "rendelesek_szama",
+    "kert": "rendelések száma",
+    "bontas": [
+     "vevo_allam"
+    ],
+    "szuro": [],
+    "idoablak": {
+     "tol": "",
+     "ig": ""
+    },
+    "rendezes": "ertek_csokkeno",
+    "limit": 5
+   },
+   "modell_szoveg": "A São Paulo államban ({S1}) érkeznek a legtöbb rendelés, amelynek aránya meghaladja az összesített értéket ({O}). A Rio de Janeiro ({S2}), Minas Gerais ({S3}) és Rio Grande do Sul ({S4}) államok követik ezt a sorrendet. Az adatbázisból kihagyott {KIHAGY} csoportok után Roraima ({S6}) rendelkezik a legkisebb számmal.",
+   "rogzitett": {
+    "kapu1": "elfogadva",
+    "spec": {
+     "metrika": "rendelesek_szama",
+     "bontas": [
+      "vevo_allam"
+     ],
+     "szuro": {},
+     "rendezes": "ertek_csokkeno",
+     "limit": 5
+    },
+    "itelet": "helyes",
+    "sablon": false,
+    "mag": "A São Paulo államban (40 494) érkeznek a legtöbb rendelés, amelynek aránya meghaladja az összesített értéket (96 470). A Rio de Janeiro (12 350), Minas Gerais (11 354) és Rio Grande do Sul (5 344) államok követik ezt a sorrendet. Az adatbázisból kihagyott 21 csoportok után Roraima (41) rendelkezik a legkisebb számmal.",
+    "problemak": []
+   }
+  },
+  {
+   "id": "k333",
+   "kerdes": "allamonkent kerem a rendeleseket 2018-ra",
+   "tipus": "kombinalt",
+   "csapda": null,
+   "urlap": {
+    "metrika": "rendelesek_szama",
+    "kert": "rendelések száma",
+    "bontas": [
+     "vevo_allam"
+    ],
+    "szuro": [],
+    "idoablak": {
+     "tol": "2018-01-01",
+     "ig": "2018-12-31"
+    },
+    "rendezes": "ertek_csokkeno",
+    "limit": 10
+   },
+   "modell_szoveg": "2018. január 1. és augusztus 29. között a São Paulo államban (SP) érkezett a legtöbb rendelés ({S1}), amely az összesített {O} érték {S1_X}-át teszi ki.",
+   "rogzitett": {
+    "kapu1": "elfogadva",
+    "spec": {
+     "metrika": "rendelesek_szama",
+     "bontas": [
+      "vevo_allam"
+     ],
+     "szuro": {},
+     "idoablak": {
+      "tol": "2018-01-01"
+     },
+     "rendezes": "ertek_csokkeno",
+     "limit": 10
+    },
+    "itelet": "helyes",
+    "sablon": false,
+    "mag": "2018. január 1. és augusztus 29. között a São Paulo államban (SP) érkezett a legtöbb rendelés (23 329), amely az összesített 52 777 érték 44,2%-át teszi ki.",
+    "problemak": []
+   }
+  },
+  {
+   "id": "k334",
+   "kerdes": "melyik kampanybol jottek a legtobbet vasarlo vevok? oda tolnam a koltest",
+   "tipus": "csapda",
+   "csapda": "nincs_adat",
+   "urlap": {
+    "metrika": "nem_elerheto",
+    "kert": "kampányok száma",
+    "bontas": [],
+    "szuro": [],
+    "idoablak": {
+     "tol": "",
+     "ig": ""
+    },
+    "rendezes": "ertek_csokkeno",
+    "limit": 10
+   },
+   "modell_szoveg": null,
+   "rogzitett": {
+    "kapu1": "ismeretlen_metrika",
+    "spec": null,
+    "itelet": "helyes elutasítás",
+    "sablon": null,
+    "mag": null,
+    "problemak": []
+   }
+  },
+  {
+   "id": "k335",
+   "kerdes": "hogy alakult az eszakkeleti regio forgalma negyedevente?",
+   "tipus": "idosor",
+   "csapda": null,
+   "urlap": {
+    "metrika": "forgalom",
+    "kert": "forgalom",
+    "bontas": [
+     "vevo_regio"
+    ],
+    "szuro": [
+     {
+      "dimenzio": "vevo_regio",
+      "ertekek": [
+       "Délkelet"
+      ]
+     }
+    ],
+    "idoablak": {
+     "tol": "2018-04-01",
+     "ig": "2018-06-30"
+    },
+    "rendezes": "ertek_csokkeno",
+    "limit": 10
+   },
+   "modell_szoveg": "Az Északkeleti régió forgalma 2018. április és június között ingadozott, ahol a legnagyobb érték júniusban ({S3}) alakult ki.",
+   "rogzitett": {
+    "kapu1": "elfogadva",
+    "spec": {
+     "metrika": "forgalom",
+     "bontas": [
+      "honap"
+     ],
+     "szuro": {
+      "vevo_regio": [
+       "NE"
+      ]
+     },
+     "idoablak": {
+      "tol": "2018-04-01",
+      "ig": "2018-06-30"
+     },
+     "rendezes": "bontas",
+     "limit": 100
+    },
+    "itelet": "hibás értelmezés",
+    "sablon": false,
+    "mag": "Az Északkeleti régió forgalma 2018. április és június között ingadozott, ahol a legnagyobb érték júniusban (102 441 BRL) alakult ki.",
+    "problemak": []
+   }
+  },
+  {
+   "id": "k336",
+   "kerdes": "RJ vs MG, melyik hoz tobb bevetelt, es melyikben nagyobb az atlagos kosarertek?",
+   "tipus": "kombinalt",
+   "csapda": null,
+   "urlap": {
+    "metrika": "forgalom",
+    "kert": "bevétel",
+    "bontas": [
+     "vevo_allam"
+    ],
+    "szuro": [],
+    "idoablak": {
+     "tol": "",
+     "ig": ""
+    },
+    "rendezes": "ertek_csokkeno",
+    "limit": 2
+   },
+   "modell_szoveg": "A São Paulo ({S1}) államban a legnagyobb forgalom, amely az összesített értéknek ({O}) kb. 38%-át teszi ki. Utána a Rio de Janeiro ({S2}) államba kerül a sor, míg Roraima ({S3}) már csak elhanyagolható mértékben járul hozzá a teljes összeghez.",
+   "rogzitett": {
+    "kapu1": "elfogadva",
+    "spec": {
+     "metrika": "forgalom",
+     "bontas": [
+      "vevo_allam"
+     ],
+     "szuro": {},
+     "rendezes": "ertek_csokkeno",
+     "limit": 2
+    },
+    "itelet": "hibás értelmezés",
+    "sablon": false,
+    "mag": "A São Paulo (5 066 563 BRL) államban a legnagyobb forgalom, amely az összesített értéknek (13 220 249 BRL) kb. 38%-át teszi ki. Utána a Rio de Janeiro (1 759 651 BRL) államba kerül a sor, míg Roraima (7 057 BRL) már csak elhanyagolható mértékben járul hozzá a teljes összeghez.",
+    "problemak": []
+   }
+  },
+  {
+   "id": "k337",
+   "kerdes": "mennyi rendeles jott be Bahiabol tavaly",
+   "tipus": "kombinalt",
+   "csapda": null,
+   "urlap": {
+    "metrika": "rendelesek_szama",
+    "kert": "rendelések száma",
+    "bontas": [],
+    "szuro": [
+     {
+      "dimenzio": "vevo_allam",
+      "ertekek": [
+       "BA"
+      ]
+     },
+     {
+      "dimenzio": "kategoria",
+      "ertekek": []
+     }
+    ],
+    "idoablak": {
+     "tol": "2017-09-01",
+     "ig": "2017-12-31"
+    },
+    "rendezes": "ertek_csokkeno",
+    "limit": 10
+   },
+   "modell_szoveg": "Tavaly Bahia-ból összesen {O} rendelés jött be.",
+   "rogzitett": {
+    "kapu1": "elfogadva",
+    "spec": {
+     "metrika": "rendelesek_szama",
+     "bontas": [],
+     "szuro": {
+      "elado_allam": [
+       "BA"
+      ]
+     },
+     "idoablak": {
+      "tol": "2017-01-01",
+      "ig": "2017-12-31"
+     },
+     "rendezes": "ertek_csokkeno",
+     "limit": 10
+    },
+    "itelet": "hibás értelmezés",
+    "sablon": false,
+    "mag": "Tavaly Bahia-ból összesen 357 rendelés jött be.",
+    "problemak": []
+   }
+  },
+  {
+   "id": "k338",
+   "kerdes": "a Del regioban melyik kategoriak mennek a legjobban bevetel szerint?",
+   "tipus": "kombinalt",
+   "csapda": null,
+   "urlap": {
+    "metrika": "forgalom",
+    "kert": "bevétel",
+    "bontas": [
+     "kategoria"
+    ],
+    "szuro": [
+     {
+      "dimenzio": "vevo_regio",
+      "ertekek": [
+       "Dél"
+      ]
+     }
+    ],
+    "idoablak": {
+     "tol": "",
+     "ig": ""
+    },
+    "rendezes": "ertek_csokkeno",
+    "limit": 10
+   },
+   "modell_szoveg": "A Dél régiójában a sport és szabadidő kategória mennek a legjobban bevetel szerint ({S1}). Az egészség és szépségápolás ({S2}) és az órák és ajándékok ({S3}) kategóriák követik ezt a sorrendet.",
+   "rogzitett": {
+    "kapu1": "elfogadva",
+    "spec": {
+     "metrika": "forgalom",
+     "bontas": [
+      "kategoria"
+     ],
+     "szuro": {
+      "vevo_regio": [
+       "S"
+      ]
+     },
+     "rendezes": "ertek_csokkeno",
+     "limit": 10
+    },
+    "itelet": "helyes",
+    "sablon": false,
+    "mag": "A Dél régiójában a sport és szabadidő kategória mennek a legjobban bevetel szerint (150 443 BRL). Az egészség és szépségápolás (143 852 BRL) és az órák és ajándékok (138 326 BRL) kategóriák követik ezt a sorrendet.",
+    "problemak": []
+   }
+  },
+  {
+   "id": "k339",
+   "kerdes": "mennyi forgalomra szamithatok a kovetkezo negyedevben a regiomban? tervet kell irnom a heten",
+   "tipus": "csapda",
+   "csapda": "jovo",
+   "urlap": {
+    "metrika": "forgalom",
+    "kert": "forgalom",
+    "bontas": [],
+    "szuro": [
+     {
+      "dimenzio": "vevo_regio",
+      "ertekek": []
+     },
+     {
+      "dimenzio": "kategoria",
+      "ertekek": []
+     }
+    ],
+    "idoablak": {
+     "tol": "",
+     "ig": ""
+    },
+    "rendezes": "ertek_csokkeno",
+    "limit": 10
+   },
+   "modell_szoveg": null,
+   "rogzitett": {
+    "kapu1": "nem_elerheto",
+    "spec": null,
+    "itelet": "helyes elutasítás",
+    "sablon": null,
+    "mag": null,
+    "problemak": []
+   }
+  },
+  {
+   "id": "k340",
+   "kerdes": "a het melyik napjan rendelnek a legtobbet a deli regioban? oda idoznenk a kampanyt",
+   "tipus": "kombinalt",
+   "csapda": null,
+   "urlap": {
+    "metrika": "rendelesek_szama",
+    "kert": "rendelések száma",
+    "bontas": [
+     "vevo_regio"
+    ],
+    "szuro": [
+     {
+      "dimenzio": "het_napja",
+      "ertekek": [
+       "hétfő",
+       "kedd",
+       "szerda",
+       "csütörtök",
+       "péntek",
+       "szombat",
+       "vasárnap"
+      ]
+     }
+    ],
+    "idoablak": {
+     "tol": "",
+     "ig": ""
+    },
+    "rendezes": "ertek_csokkeno",
+    "limit": 10
+   },
+   "modell_szoveg": "A Délkelet régióban rendelnek a legtöbbet ({S1}). Az adatok alapján a Dél ({S2}) és az Északkelet ({S3}) régiók követik ezt a sorrendet.",
+   "rogzitett": {
+    "kapu1": "elfogadva",
+    "spec": {
+     "metrika": "rendelesek_szama",
+     "bontas": [
+      "vevo_regio"
+     ],
+     "szuro": {},
+     "rendezes": "ertek_csokkeno",
+     "limit": 10
+    },
+    "itelet": "hibás értelmezés",
+    "sablon": false,
+    "mag": "A Délkelet régióban rendelnek a legtöbbet (66 193). Az adatok alapján a Dél (13 813) és az Északkelet (9 044) régiók követik ezt a sorrendet.",
+    "problemak": []
+   }
+  },
+  {
+   "id": "k341",
+   "kerdes": "mennyi a kesesi arany osszessegeben?",
+   "tipus": "osszesito",
+   "csapda": null,
+   "urlap": {
+    "metrika": "kesesi_arany",
+    "kert": "késési arány",
+    "bontas": [],
+    "szuro": [],
+    "idoablak": {
+     "tol": "",
+     "ig": ""
+    },
+    "rendezes": "ertek_csokkeno",
+    "limit": 10
+   },
+   "modell_szoveg": "A késési arány összesített értéke ({O}). A becslés bizonytalansága {O_A} és {O_F} között van.",
+   "rogzitett": {
+    "kapu1": "elfogadva",
+    "spec": {
+     "metrika": "kesesi_arany",
+     "bontas": [],
+     "szuro": {},
+     "rendezes": "ertek_csokkeno",
+     "limit": 10
+    },
+    "itelet": "helyes",
+    "sablon": false,
+    "mag": "A késési arány összesített értéke (6,8%). A becslés bizonytalansága 6,6% és 6,9% között van.",
+    "problemak": []
+   }
+  },
+  {
+   "id": "k342",
+   "kerdes": "melyik 5 allamban a legrosszabb a kesesi arany? oda kene tobb ember a supportba",
+   "tipus": "rangsor",
+   "csapda": null,
+   "urlap": {
+    "metrika": "kesesi_arany",
+    "kert": "késési arány",
+    "bontas": [
+     "vevo_allam"
+    ],
+    "szuro": [],
+    "idoablak": {
+     "tol": "",
+     "ig": ""
+    },
+    "rendezes": "ertek_csokkeno",
+    "limit": 5
+   },
+   "modell_szoveg": "Az Alagoas államban a legrosszabb a késési arány ({S1}), ahol a supportba irányuló igények várhatóan a legnagyobbak. Az összesített értékhez képest ez az arány {S1_X} szerese, míg a sor végén szereplő Amazonasban ({S6}) a késés csak 0,4-szerese az átlagnak.",
+   "rogzitett": {
+    "kapu1": "elfogadva",
+    "spec": {
+     "metrika": "kesesi_arany",
+     "bontas": [
+      "vevo_allam"
+     ],
+     "szuro": {},
+     "rendezes": "ertek_csokkeno",
+     "limit": 5
+    },
+    "itelet": "helyes",
+    "sablon": true,
+    "mag": "Az Alagoas államban a legrosszabb a késési arány (21,4%), ahol a supportba irányuló igények várhatóan a legnagyobbak. Az összesített értékhez képest ez az arány 3,2 szerese, míg a sor végén szereplő Amazonasban (2,8%) a késés csak 0,4-szerese az átlagnak.",
+    "problemak": [
+     "a(z) {S1_X} „Alagoas (AL)” értéke, de „Amazonas (AM)” mellett áll"
+    ]
+   }
+  },
+  {
+   "id": "k343",
+   "kerdes": "ha egy csomag kesik, atlagosan mennyit kesik?",
+   "tipus": "osszesito",
+   "csapda": null,
+   "urlap": {
+    "metrika": "atlagos_keses",
+    "kert": "átlagos késés",
+    "bontas": [],
+    "szuro": [
+     {
+      "dimenzio": "kesett",
+      "ertekek": [
+       "kesett"
+      ]
+     }
+    ],
+    "idoablak": {
+     "tol": "",
+     "ig": ""
+    },
+    "rendezes": "ertek_csokkeno",
+    "limit": 10
+   },
+   "modell_szoveg": "A csomagok átlagos késése 10,6 nap ({O}).",
+   "rogzitett": {
+    "kapu1": "elfogadva",
+    "spec": {
+     "metrika": "atlagos_keses",
+     "bontas": [],
+     "szuro": {},
+     "rendezes": "ertek_csokkeno",
+     "limit": 10
+    },
+    "itelet": "helyes",
+    "sablon": false,
+    "mag": "A csomagok átlagos késése 10,6 nap (10,6 nap).",
+    "problemak": []
+   }
+  },
+  {
+   "id": "k344",
+   "kerdes": "a kesesek miatt mennyivel rosszabb ertekelest kapunk? latszik a csillagokban?",
+   "tipus": "csapda",
+   "csapda": "nincs_adat",
+   "urlap": {
+    "metrika": "nem_elerheto",
+    "kert": "értékelés",
+    "bontas": [],
+    "szuro": [],
+    "idoablak": {
+     "tol": "",
+     "ig": ""
+    },
+    "rendezes": "ertek_csokkeno",
+    "limit": 10
+   },
+   "modell_szoveg": null,
+   "rogzitett": {
+    "kapu1": "nem_elerheto",
+    "spec": null,
+    "itelet": "helyes elutasítás",
+    "sablon": null,
+    "mag": null,
+    "problemak": []
+   }
+  },
+  {
+   "id": "k346",
+   "kerdes": "a lakastextilnel mennyi a kesesi arany",
+   "tipus": "szures",
+   "csapda": null,
+   "urlap": {
+    "metrika": "kesesi_arany",
+    "kert": "késési arány",
+    "bontas": [],
+    "szuro": [
+     {
+      "dimenzio": "kategoria",
+      "ertekek": [
+       "lakastextil"
+      ]
+     }
+    ],
+    "idoablak": {
+     "tol": "",
+     "ig": ""
+    },
+    "rendezes": "ertek_csokkeno",
+    "limit": 10
+   },
+   "modell_szoveg": "A lakástextilnél a késési arány az összesített érték ({O}) 7,5%, 95%-os tartománya pedig {O_A} és {O_F} között van.",
+   "rogzitett": {
+    "kapu1": "elfogadva",
+    "spec": {
+     "metrika": "kesesi_arany",
+     "bontas": [],
+     "szuro": {
+      "kategoria": [
+       "bed_bath_table"
+      ]
+     },
+     "rendezes": "ertek_csokkeno",
+     "limit": 10
+    },
+    "itelet": "helyes",
+    "sablon": false,
+    "mag": "A lakástextilnél a késési arány az összesített érték (7,5%) 7,5%, 95%-os tartománya pedig 7,0% és 8,0% között van.",
+    "problemak": []
+   }
+  },
+  {
+   "id": "k347",
+   "kerdes": "hany rendelest mondtak le vagy kuldtek vissza tavaly?",
+   "tipus": "csapda",
+   "csapda": "nincs_adat",
+   "urlap": {
+    "metrika": "nem_elerheto",
+    "kert": "mondott le vagy küldött vissza rendelések száma",
+    "bontas": [],
+    "szuro": [],
+    "idoablak": {
+     "tol": "2017-01-01",
+     "ig": "2017-12-31"
+    },
+    "rendezes": "ertek_csokkeno",
+    "limit": 10
+   },
+   "modell_szoveg": "Tavalyi évben 43 426 ({O}) rendelést mondtak le vagy küldtek vissza. Az eredmény az összesített adatokra vonatkozik, mivel nincs szűrés alkalmazva.",
+   "rogzitett": {
+    "kapu1": "elfogadva",
+    "spec": {
+     "metrika": "rendelesek_szama",
+     "bontas": [],
+     "szuro": {},
+     "idoablak": {
+      "tol": "2017-01-01",
+      "ig": "2017-12-31"
+     },
+     "rendezes": "ertek_csokkeno",
+     "limit": 10
+    },
+    "itelet": "hiányzó elutasítás",
+    "sablon": false,
+    "mag": "Tavalyi évben 43 426 (43 426) rendelést mondtak le vagy küldtek vissza. Az eredmény az összesített adatokra vonatkozik, mivel nincs szűrés alkalmazva.",
+    "problemak": []
+   }
+  },
+  {
+   "id": "k348",
+   "kerdes": "hol nagyobb a keses, ha a vevo es az elado ugyanabban az allamban van vagy ha nem?",
+   "tipus": "csapda",
+   "csapda": "korlat",
+   "urlap": {
+    "metrika": "kesesi_arany",
+    "kert": "késési arány",
+    "bontas": [
+     "vevo_allam"
+    ],
+    "szuro": [],
+    "idoablak": {
+     "tol": "",
+     "ig": ""
+    },
+    "rendezes": "ertek_csokkeno",
+    "limit": 10
+   },
+   "modell_szoveg": "A vevő és az eladó ugyanabban az államban lévő rendeléseknél nagyobb a késési arány ({S1}). Az utolsó helyezett az Amazonas ({S11}), amelynek értéke az összesített érték {S11_X}-szerese.",
+   "rogzitett": {
+    "kapu1": "elfogadva",
+    "spec": {
+     "metrika": "kesesi_arany",
+     "bontas": [
+      "vevo_allam"
+     ],
+     "szuro": {},
+     "rendezes": "ertek_csokkeno",
+     "limit": 10
+    },
+    "itelet": "hiányzó elutasítás",
+    "sablon": false,
+    "mag": "A vevő és az eladó ugyanabban az államban lévő rendeléseknél nagyobb a késési arány (21,4%). Az utolsó helyezett az Amazonas (2,8%), amelynek értéke az összesített érték 0,4-szerese.",
+    "problemak": []
+   }
+  },
+  {
+   "id": "k349",
+   "kerdes": "2017 novemberben allamonkent hany csomag kesett? black friday utan allt meg a telefon",
+   "tipus": "kombinalt",
+   "csapda": null,
+   "urlap": {
+    "metrika": "kesett_rendelesek",
+    "kert": "késett csomagok száma",
+    "bontas": [
+     "vevo_allam"
+    ],
+    "szuro": [
+     {
+      "dimenzio": "kategoria",
+      "ertekek": [
+       "telefon"
+      ]
+     }
+    ],
+    "idoablak": {
+     "tol": "2017-11-01",
+     "ig": "2017-11-30"
+    },
+    "rendezes": "ertek_csokkeno",
+    "limit": 10
+   },
+   "modell_szoveg": "2017 novemberében telefonok és tartozékok kategóriában allamonkent vevő állapota szerint 44 csomag késett ({O}). A Rio de Janeiro ({S1}) és São Paulo ({S2}) állomásokon a legtöbbet, 9-9 csomagot kaptak meg késve, míg az összesített érték {S1_X} = {S2_X}-szerese. Az eredmény nem tartalmaz időbeli bontást vagy becslési tartományt.",
+   "rogzitett": {
+    "kapu1": "elfogadva",
+    "spec": {
+     "metrika": "kesett_rendelesek",
+     "bontas": [
+      "vevo_allam"
+     ],
+     "szuro": {
+      "kategoria": [
+       "telephony"
+      ]
+     },
+     "idoablak": {
+      "tol": "2017-11-01",
+      "ig": "2017-11-30"
+     },
+     "rendezes": "ertek_csokkeno",
+     "limit": 10
+    },
+    "itelet": "hibás értelmezés",
+    "sablon": true,
+    "mag": "2017 novemberében telefonok és tartozékok kategóriában allamonkent vevő állapota szerint 44 csomag késett (44). A Rio de Janeiro (9) és São Paulo (9) állomásokon a legtöbbet, 9-9 csomagot kaptak meg késve, míg az összesített érték 20,5% = 20,5%-szerese. Az eredmény nem tartalmaz időbeli bontást vagy becslési tartományt.",
+    "problemak": [
+     "vissza nem vezethető szám: 44, 9, 9",
+     "a(z) {S1_X} „Rio de Janeiro (RJ)” értéke, de „São Paulo (SP)” mellett áll"
+    ]
+   }
+  },
+  {
+   "id": "k350",
+   "kerdes": "a hetvegen leadott rendelesek jobban kesnek mint a hetkozbeniek?",
+   "tipus": "kombinalt",
+   "csapda": null,
+   "urlap": {
+    "metrika": "atlagos_keses",
+    "kert": "átlagos késés",
+    "bontas": [],
+    "szuro": [
+     {
+      "dimenzio": "het_napja",
+      "ertekek": [
+       "hétfő"
+      ]
+     },
+     {
+      "dimenzio": "het_napja",
+      "ertekek": [
+       "vasárnap"
+      ]
+     }
+    ],
+    "idoablak": {
+     "tol": "",
+     "ig": ""
+    },
+    "rendezes": "ertek_csokkeno",
+    "limit": 10
+   },
+   "modell_szoveg": "A vasárnap leadott rendelések jobban késnek ({S1}), mint a hétközbeniek ({S2}). A hétvégi csúcs 10,6 nap, míg a hétközi mélypont 9,8 nap.",
+   "rogzitett": {
+    "kapu1": "elfogadva",
+    "spec": {
+     "metrika": "atlagos_keses",
+     "bontas": [],
+     "szuro": {
+      "het_napja": [
+       "7"
+      ]
+     },
+     "rendezes": "ertek_csokkeno",
+     "limit": 10
+    },
+    "itelet": "hibás értelmezés",
+    "sablon": true,
+    "mag": "A vasárnap leadott rendelések jobban késnek ({S1}), mint a hétközbeniek ({S2}). A hétvégi csúcs 10,6 nap, míg a hétközi mélypont 9,8 nap.",
+    "problemak": [
+     "ismeretlen jelölő: {S1}, {S2}",
+     "vissza nem vezethető szám: 10,6, 9,8"
+    ]
+   }
+  },
+  {
+   "id": "k351",
+   "kerdes": "mennyi a teljes bevetel es a rendelesszam a kezdetek ota?",
+   "tipus": "osszesito",
+   "csapda": null,
+   "urlap": {
+    "metrika": "forgalom",
+    "kert": "teljes bevetel",
+    "bontas": [],
+    "szuro": [],
+    "idoablak": {
+     "tol": "",
+     "ig": ""
+    },
+    "rendezes": "ertek_csokkeno",
+    "limit": 10
+   },
+   "modell_szoveg": "A teljes bevetel az adatok kezdete óta {O} BRL.",
+   "rogzitett": {
+    "kapu1": "elfogadva",
+    "spec": {
+     "metrika": "forgalom",
+     "bontas": [],
+     "szuro": {},
+     "rendezes": "ertek_csokkeno",
+     "limit": 10
+    },
+    "itelet": "helyes",
+    "sablon": false,
+    "mag": "A teljes bevetel az adatok kezdete óta 13 220 249 BRL.",
+    "problemak": []
+   }
+  },
+  {
+   "id": "k352",
+   "kerdes": "no a ceg? eves bontasban kerem a forgalmat",
+   "tipus": "idosor",
+   "csapda": null,
+   "urlap": {
+    "metrika": "forgalom",
+    "kert": "forgalom",
+    "bontas": [
+     "ev"
+    ],
+    "szuro": [],
+    "idoablak": {
+     "tol": "2017-09-01",
+     "ig": "2018-08-30"
+    },
+    "rendezes": "ertek_csokkeno",
+    "limit": 10
+   },
+   "modell_szoveg": "A forgalom legnagyobb része 2018-ban ({S3}) alakult ki, amely az összes forgalom {S3_X}-át tette ki. Ezt követi a 2017-es év ({S2}), ami az adatok {S2_X}-ét adta, míg 2016 ({S1}) csak az {S1_N} rendelésből származó {S1_X}-át jelentette.",
+   "rogzitett": {
+    "kapu1": "elfogadva",
+    "spec": {
+     "metrika": "forgalom",
+     "bontas": [
+      "ev"
+     ],
+     "szuro": {},
+     "rendezes": "bontas",
+     "limit": 100
+    },
+    "itelet": "helyes",
+    "sablon": false,
+    "mag": "A forgalom legnagyobb része 2018-ban (7 217 172 BRL) alakult ki, amely az összes forgalom 54,6%-át tette ki. Ezt követi a 2017-es év (5 962 606 BRL), ami az adatok 45,1%-ét adta, míg 2016 (40 471 BRL) csak az 267 rendelésből származó 0,3%-át jelentette.",
+    "problemak": []
+   }
+  },
+  {
+   "id": "k353",
+   "kerdes": "mi az 5 legnagyobb kategoria es az 5 legnagyobb allam bevetel szerint?",
+   "tipus": "rangsor",
+   "csapda": null,
+   "urlap": {
+    "metrika": "forgalom",
+    "kert": "bevetel",
+    "bontas": [
+     "kategoria"
+    ],
+    "szuro": [],
+    "idoablak": {
+     "tol": "",
+     "ig": ""
+    },
+    "rendezes": "ertek_csokkeno",
+    "limit": 10
+   },
+   "modell_szoveg": null,
+   "rogzitett": {
+    "kapu1": "tul_sok_bontas",
+    "spec": null,
+    "itelet": "téves elutasítás",
+    "sablon": null,
+    "mag": null,
+    "problemak": []
+   }
+  },
+  {
+   "id": "k354",
+   "kerdes": "a 2015-es evhez kepest hogy allunk? kerek egy osszehasonlitast 2015 es 2017 kozott",
+   "tipus": "csapda",
+   "csapda": "adaton_kivul",
+   "urlap": {
+    "metrika": "forgalom",
+    "kert": "forgalom",
+    "bontas": [],
+    "szuro": [],
+    "idoablak": {
+     "tol": "2015-09-01",
+     "ig": "2015-08-31"
+    },
+    "rendezes": "ertek_csokkeno",
+    "limit": 10
+   },
+   "modell_szoveg": "A forgalom 2017-ben ({S2}) jelentősen meghaladta a 2016-os értéket ({S1}). A két év összehasonlítása során a 2017-es adatok az összesített értéknek ({O}) közelítőleg 99,3%-át teszik ki.",
+   "rogzitett": {
+    "kapu1": "elfogadva",
+    "spec": {
+     "metrika": "forgalom",
+     "bontas": [
+      "ev"
+     ],
+     "szuro": {},
+     "idoablak": {
+      "ig": "2017-12-31"
+     },
+     "rendezes": "bontas",
+     "limit": 100
+    },
+    "itelet": "hiányzó elutasítás",
+    "sablon": false,
+    "mag": "A forgalom 2017-ben (5 962 606 BRL) jelentősen meghaladta a 2016-os értéket (40 471 BRL). A két év összehasonlítása során a 2017-es adatok az összesített értéknek (6 003 077 BRL) közelítőleg 99,3%-át teszik ki.",
+    "problemak": []
+   }
+  },
+  {
+   "id": "k355",
+   "kerdes": "2017 es 2018 elso 8 honapja hogy all egymashoz forgalomban?",
+   "tipus": "idoszak",
+   "csapda": null,
+   "urlap": {
+    "metrika": "forgalom",
+    "kert": "forgalom",
+    "bontas": [],
+    "szuro": [],
+    "idoablak": {
+     "tol": "2017-01-01",
+     "ig": "2018-06-30"
+    },
+    "rendezes": "ertek_csokkeno",
+    "limit": 10
+   },
+   "modell_szoveg": "A forgalom 2018-ban volt nagyobb ({S2}), mint 2017-ben ({S1}). Az évjátszintilag a 2018-as adatok az összes forgalom {S2_X}%-át teszik ki, míg a 2017-esek {S1_X}%-át.",
+   "rogzitett": {
+    "kapu1": "elfogadva",
+    "spec": {
+     "metrika": "forgalom",
+     "bontas": [
+      "ev"
+     ],
+     "szuro": {},
+     "idoablak": {
+      "tol": "2017-01-01"
+     },
+     "rendezes": "bontas",
+     "limit": 100
+    },
+    "itelet": "helyes",
+    "sablon": false,
+    "mag": "A forgalom 2018-ban volt nagyobb (7 217 172 BRL), mint 2017-ben (5 962 606 BRL). Az évjátszintilag a 2018-as adatok az összes forgalom 54,8%-át teszik ki, míg a 2017-esek 45,2%-át.",
+    "problemak": []
+   }
+  },
+  {
+   "id": "k356",
+   "kerdes": "regios bontasban a forgalom es a rendelesszam, szazalekokkal. ezt vinnem a boardnak",
+   "tipus": "kombinalt",
+   "csapda": null,
+   "urlap": {
+    "metrika": "forgalom",
+    "kert": "forgalom",
+    "bontas": [
+     "vevo_regio"
+    ],
+    "szuro": [],
+    "idoablak": {
+     "tol": "",
+     "ig": ""
+    },
+    "rendezes": "ertek_csokkeno",
+    "limit": 10
+   },
+   "modell_szoveg": "A Délkelet régióban ({S1}) a legnagyobb forgalom és rendelésszám tapasztalható. A többi régió ({S2}, {S3}, {S4}, {S5}) értékei jelentősen alacsonyabbak, ahol az Északban ({S5}) csak 2,5%-ot tesznek ki az összeggel.",
+   "rogzitett": {
+    "kapu1": "elfogadva",
+    "spec": {
+     "metrika": "forgalom",
+     "bontas": [
+      "vevo_regio"
+     ],
+     "szuro": {},
+     "rendezes": "ertek_csokkeno",
+     "limit": 10
+    },
+    "itelet": "helyes",
+    "sablon": true,
+    "mag": "A Délkelet régióban (8 647 339 BRL) a legnagyobb forgalom és rendelésszám tapasztalható. A többi régió (1 901 794 BRL, 1 497 084 BRL, 846 957 BRL, 327 075 BRL) értékei jelentősen alacsonyabbak, ahol az Északban (327 075 BRL) csak 2,5%-ot tesznek ki az összeggel.",
+    "problemak": [
+     "a(z) {S2} „Dél” értéke, de „Észak” mellett áll",
+     "a(z) {S3} „Északkelet” értéke, de „Észak” mellett áll",
+     "a(z) {S4} „Közép-Nyugat” értéke, de „Észak” mellett áll"
+    ]
+   }
+  },
+  {
+   "id": "k357",
+   "kerdes": "atlagos szallitasi ido es kesesi arany osszessegeben, ezt a kettot kerem",
+   "tipus": "osszesito",
+   "csapda": null,
+   "urlap": {
+    "metrika": "atlagos_szallitasi_ido",
+    "kert": "átlagos szállítási idő",
+    "bontas": [],
+    "szuro": [],
+    "idoablak": {
+     "tol": "",
+     "ig": ""
+    },
+    "rendezes": "ertek_csokkeno",
+    "limit": 10
+   },
+   "modell_szoveg": "Az átlagos szállítási idő az összesített értéket ({O}) 12,6 napnak adja meg. A válaszban nincs további csoport vagy idősor adat, így a részletes összehasonlítás nem lehetséges.",
+   "rogzitett": {
+    "kapu1": "elfogadva",
+    "spec": {
+     "metrika": "atlagos_szallitasi_ido",
+     "bontas": [],
+     "szuro": {},
+     "rendezes": "ertek_csokkeno",
+     "limit": 10
+    },
+    "itelet": "helyes",
+    "sablon": false,
+    "mag": "Az átlagos szállítási idő az összesített értéket (12,6 nap) 12,6 napnak adja meg. A válaszban nincs további csoport vagy idősor adat, így a részletes összehasonlítás nem lehetséges.",
+    "problemak": []
+   }
+  },
+  {
+   "id": "k359",
+   "kerdes": "a 3 legnagyobb regioban hogy alakult a kesesi arany az elmult evben? ha romlik az baj",
+   "tipus": "csapda",
+   "csapda": "korlat",
+   "urlap": {
+    "metrika": "kesesi_arany",
+    "kert": "késési arány",
+    "bontas": [
+     "vevo_regio"
+    ],
+    "szuro": [],
+    "idoablak": {
+     "tol": "2017-09-01",
+     "ig": "2018-08-30"
+    },
+    "rendezes": "ertek_csokkeno",
+    "limit": 3
+   },
+   "modell_szoveg": "Az elmúlt évben a késési arány a három vizsgált régióban is romlott az átlaghoz képest. Az Északkelet ({S1}) mutatja a legrosszabb eredményt, míg Délkeleten és Délért az átlag alatt lévő értékek találhatók.",
+   "rogzitett": {
+    "kapu1": "elfogadva",
+    "spec": {
+     "metrika": "kesesi_arany",
+     "bontas": [
+      "vevo_regio"
+     ],
+     "szuro": {
+      "vevo_regio": [
+       "NE",
+       "SE",
+       "S"
+      ]
+     },
+     "idoablak": {
+      "tol": "2017-09-01"
+     },
+     "rendezes": "ertek_csokkeno",
+     "limit": 3
+    },
+    "itelet": "hiányzó elutasítás",
+    "sablon": false,
+    "mag": "Az elmúlt évben a késési arány a három vizsgált régióban is romlott az átlaghoz képest. Az Északkelet (14,4%) mutatja a legrosszabb eredményt, míg Délkeleten és Délért az átlag alatt lévő értékek találhatók.",
+    "problemak": []
+   }
+  },
+  {
+   "id": "k360",
+   "kerdes": "a delkelet reszaranya a bevetelbol novekszik vagy csokken eves szinten?",
+   "tipus": "csapda",
+   "csapda": "korlat",
+   "urlap": {
+    "metrika": "nem_elerheto",
+    "kert": "reszarány a bevételekből",
+    "bontas": [
+     "ev"
+    ],
+    "szuro": [],
+    "idoablak": {
+     "tol": "2017-01-01",
+     "ig": "2018-12-31"
+    },
+    "rendezes": "ertek_csokkeno",
+    "limit": 10
+   },
+   "modell_szoveg": "A Délkelet régióban a bevételek évenként növekednek. A csúcsérték 2018-ban ({S3}) volt, míg a mélypontot 2016-ban ({S1}) érte el.",
+   "rogzitett": {
+    "kapu1": "elfogadva",
+    "spec": {
+     "metrika": "forgalom",
+     "bontas": [
+      "ev"
+     ],
+     "szuro": {
+      "vevo_regio": [
+       "SE"
+      ]
+     },
+     "rendezes": "bontas",
+     "limit": 100
+    },
+    "itelet": "hiányzó elutasítás",
+    "sablon": false,
+    "mag": "A Délkelet régióban a bevételek évenként növekednek. A csúcsérték 2018-ban (4 785 513 BRL) volt, míg a mélypontot 2016-ban (25 398 BRL) érte el.",
+    "problemak": []
+   }
+  }
+ ]
+}

@@ -29,6 +29,11 @@ def test_a_foglalt_portot_atugorja():
         assert not inditas.port_free(busy)
         free = inditas.find_free_port(busy, tries=5)
         assert free is not None and free != busy
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:   # foglalt, de a kapcsolódást
+        s.bind(("localhost", 0))                                    # visszautasítja (mint Windowson
+        busy = s.getsockname()[1]                                   # a betelt várakozási sorú figyelő)
+        assert not inditas.port_free(busy)
+        assert inditas.find_free_port(busy, tries=5) != busy
 
 
 def test_a_projekt_kornyezetet_felismeri(tmp_path):

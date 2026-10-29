@@ -54,7 +54,7 @@ Leállítás: Ctrl+C a terminálban, vagy zárd be az ablakot.
 | Olist-adat | igen | kb. 45 MB letöltés a Kaggle-ről, Kaggle-fiók nélkül ([Az adat](#az-adat)) | az indító |
 | Internet | az első indításkor | a uv, a Python, a csomagok és az adat letöltéséhez; utána nem kell | — |
 | Böngésző | igen | bármelyik mai böngésző | — |
-| Ollama és a `qwen3.5:4b` | **nem** | 3,4 GB, 8 GB RAM ajánlott; csak a *Kérdezz* oldal szabad szöveges füléhez ([Szabad szöveges kérdés](#szabad-szöveges-kérdés-helyi-nyelvi-modell)) | kézzel: https://ollama.com/download, utána `--modell` |
+| Ollama és a `qwen3.5:4b` | **nem** | 3,4 GB, 8 GB RAM ajánlott; csak a *Kérdezz* oldal szabad szöveges füléhez; nélküle a bemutató mód a mérés rögzített válaszait mutatja ([Szabad szöveges kérdés](#szabad-szöveges-kérdés-helyi-nyelvi-modell)) | kézzel: https://ollama.com/download, utána `--modell` |
 
 Git sem kell: a tároló ZIP-ként is letölthető (GitHub: *Code → Download ZIP*).
 
@@ -99,7 +99,7 @@ válaszd — a `uv sync` után ott van, és mindkettő magától felismeri.
 | 1 | Környezet | a verziók rögzítve vannak a kimenetben |
 | 2 | Adat | a valódi Olist-adat; ha még nincs meg, letölti a Kaggle-ről |
 | 3 | Tárház | 9 CSV → csillagséma DuckDB-ben, **V-1 validációval** |
-| 4 | Tesztek | 489 teszt: szivárgásvédelem, V-1, adatmodell, abláció, betanítás, kohorsz, modellválasztás, bootstrap, lezárt futás, referencia-modellek, magyarázatok, szemantikus réteg, nyelvi réteg, mérés, felület; ha bármelyik bukik, **a demó megáll** |
+| 4 | Tesztek | 493 teszt: szivárgásvédelem, V-1, adatmodell, abláció, betanítás, kohorsz, modellválasztás, bootstrap, lezárt futás, referencia-modellek, magyarázatok, szemantikus réteg, nyelvi réteg, mérés, felület; ha bármelyik bukik, **a demó megáll** |
 | 5 | Betanítás | a **lezárt v3 protokoll** szerint: LightGBM súlyozás nélkül, a fák száma bővülő ablakos CV-vel, címke-tisztítással; érintetlen, legkésőbbi időszakon mérve; a kalibráció csak diagnosztika |
 | 6 | Összegzés | rangsorolás, kalibráció, kizárt rendelések, artefaktumok helye |
 
@@ -186,6 +186,15 @@ hagyja el a gépet, és internet nélkül is működik:
 
 3. Indítsd újra a felületet. Ha a modell nem érhető el, a fül megmondja, mi hiányzik — a
    **Kérdésépítővel** fül addig is működik.
+
+**Nyelvi modell nélkül: bemutató mód.** A *Szabad szöveggel* fülön a „Bemutató mód” kapcsolóval
+a harmadik mérés 50 kérdése közül lehet választani. A nyelvi modell két hívása helyett a mérés
+rögzített kimenete jön (`docs/bemutato_valaszok.json`, a `tools/bemutato_export.py` írja egy
+lezárt futásból), minden más — az 1. kapu, a lekérdezés, a számok beillesztése és a 2. kapu —
+most fut le, a mostani kóddal és adattal. Ha nincs modell, a kapcsoló alapból be van kapcsolva;
+egy kérdés kb. 1 mp. A valódi adaton mind az 50 kérdés ugyanazt az ítéletet, lekérdezést és
+szöveget adja, mint a mérésben; ha a nyelvi réteg kódja változik, egy teszt jelez (akkor új
+mérésből kell újra exportálni).
 
 Mi történik egy kérdéssel (rendszerterv 14.):
 
@@ -373,7 +382,7 @@ hely-kitöltés.
 | M2 — referencia-modellek: logisztikus regresszió, döntési fa, random forest (`pipeline/reference_models.py`), lezárt összevetés (`pipeline/v3_reference.py`) | **kész — lefutott okt. 9.** (`docs/v3_referencia_eredmeny.md`) |
 | M3 — SHAP-magyarázatok a négy modellre (pontos TreeSHAP, ill. lineáris SHAP, a 22 jellemzőre összevonva), additivitás-ellenőrzés, sablonos magyarázó szöveg (`xai/`) | **kész (v1)** |
 | M5 — Streamlit BI-felület: áttekintés (SQL), rendelés-magyarázat négy modellel, modell-oldal, egyezés-ellenőrzés a lezárt futással (`ui/`, `python -m ui`) | **kész (v1)** |
-| Tesztek — szivárgás (14), V-1 és adatmodell (10), abláció (6), betanítás (6), kohorsz (2), modellválasztás (8), bootstrap (6), lezárt futás (14), referencia-modellek (9), magyarázatok (12), szöveg és megjelenítés (22), felület (22), egyezési mértékek (5), kontrollkar (5), nevek és feliratok (5), a magyarázatok hűsége (8), a magyarázatok stabilitása (6), határidő-görbe (4), a kapu átcsúszása (3), időbeli vagy véletlen felosztás (3), a döntés stabilitása (3), ROAR (3), gazdasági forgatókönyvek (4), README-parancsok (2), környezet (8), szemantikus réteg (99), nyelvi réteg (81), nyelvi réteg v4 (22), nyelvi réteg v5 (62), mérés és mérési kérdéssor (18), K1 v2 összevetés (3), két futás összevetése (3), K1 v3 összevetés (4), indító (7) | **kész, 489/489** (egy csak Node.js-szel fut, nélküle kihagyja) |
+| Tesztek — szivárgás (14), V-1 és adatmodell (10), abláció (6), betanítás (6), kohorsz (2), modellválasztás (8), bootstrap (6), lezárt futás (14), referencia-modellek (9), magyarázatok (12), szöveg és megjelenítés (22), felület (22), egyezési mértékek (5), kontrollkar (5), nevek és feliratok (5), a magyarázatok hűsége (8), a magyarázatok stabilitása (6), határidő-görbe (4), a kapu átcsúszása (3), időbeli vagy véletlen felosztás (3), a döntés stabilitása (3), ROAR (3), gazdasági forgatókönyvek (4), README-parancsok (2), környezet (8), szemantikus réteg (99), nyelvi réteg (81), nyelvi réteg v4 (22), nyelvi réteg v5 (62), mérés és mérési kérdéssor (18), K1 v2 összevetés (3), két futás összevetése (3), K1 v3 összevetés (4), indító (7), bemutató mód (4) | **kész, 493/493** (egy csak Node.js-szel fut, nélküle kihagyja) |
 | Tároló — MIT licenc, CI (Ubuntu + Windows), uv-környezet (`uv.lock`; pip-nek `requirements.lock`), döntési napló | **kész** |
 | M2 — 40 futásos sweep, hiperparaméter-hangolás | következő |
 | M3 — KernelSHAP-kontrollkar: mind a négy modell ugyanazzal a magyarázóval (valószínűség-tér, közös háttér, 200 rögzített teszt-rendelés), a kar saját zajával (`xai/kernel_arm.py`, `xai/agreement.py`) | **kész** (`docs/kernel_kar_eredmeny.md`) |
@@ -389,7 +398,7 @@ hely-kitöltés.
 | M2 — időbeli vagy véletlen felosztás: ugyanazok a modellek véletlen és időn belüli ellenőrzésen, előre rögzítve (`tools/felosztas_osszevetes.py`) | **kész** (`docs/felosztas_osszevetes.md`) |
 | M3 — ROAR: a magyarázat szerinti fontos tényezők kivétele és újratanítás, véletlen és legkevésbé fontos készletekkel összevetve, előre rögzítve (`tools/roar.py`) | **kész** (`docs/roar_eredmeny.md`) |
 | M5 — gazdasági forgatókönyvek (kapacitás- és küszöbszabály, költség- és hatásarányok, blokk-bootstrap) és kalkulátor *A modell* oldalon (`tools/gazdasagi_forgatokonyv.py`) | **kész** (`docs/gazdasagi_forgatokonyv.md`) |
-| M6 — mérőpad: 120 kérdéses lezárt készlet (csapdakérdésekkel), K1 a fő ágon és a kontrollágon, két modellel | **kész, a kézi ellenőrzéssel együtt** — a kérdéssor lezárva, a protokoll jóváhagyva (okt. 16.); `qwen3.5:4b` (okt. 19.): F-1 85%, F-2 89%, K1 a modell szövegében 29% / 30% (fő ág / kontrollág), a felhasználóhoz eljut 0% / 30%; `qwen3.5:2b` (okt. 19.): F-1 44%, F-2 86%, K1 40% / 46%, eljut 0% / 46% (`docs/k1_eredmeny_qwen3.5-4b.md`, `docs/k1_eredmeny_qwen3.5-2b.md`); a kapu tévesztéseinek vak kézi becslése mindhárom mérésen (5 minta, 46–60 szöveg; `docs/k1_kezi_ellenorzes.md`): a fő ágon a felhasználóhoz eljutó, a kapu által nem látott hiba 4B 14,2% / 9,5% / 9,3%, 2B 18,1% / 10,0% — kapu nélkül 31–63%; a kapu a hibás szövegek arányát kb. harmadára csökkenti, nem nullára |
+| M6 — mérőpad: 120 kérdéses lezárt készlet (csapdakérdésekkel), K1 a fő ágon és a kontrollágon, két modellel | **kész, a kézi ellenőrzéssel együtt** — a kérdéssor lezárva, a protokoll jóváhagyva (okt. 16.); `qwen3.5:4b` (okt. 19.): F-1 85%, F-2 89%, K1 a modell szövegében 29% / 30% (fő ág / kontrollág), a felhasználóhoz eljut 0% / 30%; `qwen3.5:2b` (okt. 19.): F-1 44%, F-2 86%, K1 40% / 46%, eljut 0% / 46% (`docs/k1_eredmeny_qwen3.5-4b.md`, `docs/k1_eredmeny_qwen3.5-2b.md`); a kapu tévesztéseinek vak kézi becslése mindhárom mérésen (5 minta, 46–60 szöveg; `docs/k1_kezi_ellenorzes.md`): a fő ágon a felhasználóhoz eljutó, a kapu által nem látott hiba 4B 14,2% / 9,5% / 9,3%, 2B 42,2% / 10,0% — kapu nélkül 31–63%; a 4B-nél és a későbbi változatoknál a kapu a hibás szövegek arányát kb. harmadára csökkenti, az első mérés 2B-jénél csak kb. kétharmadára (a kis modell félreérti a kérdést, és a szövege hamis hatókört állít), nullára sehol (a 2B első mintája 2026. okt. 29-én javítva — döntési napló) |
 
 ---
 

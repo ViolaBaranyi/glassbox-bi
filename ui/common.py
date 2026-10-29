@@ -122,6 +122,24 @@ def _ask_free(path: str, stamp: str, version: int, llm: str, question: str):
     return d.ask_free(question, Path(path), _semantic_catalog(version), _semantic_whitelist(path, stamp, version))
 
 
+@st.cache_data(show_spinner=False, max_entries=64)
+def _ask_recorded(path: str, stamp: str, version: int, rec_id: str):
+    return d.ask_recorded(rec_id, Path(path), _semantic_catalog(version),
+                          _semantic_whitelist(path, stamp, version))
+
+
+@st.cache_data(show_spinner=False)
+def recorded() -> dict:
+    """A bemutató mód rögzített modellválaszai (docs/bemutato_valaszok.json)."""
+    from ui import bemutato
+    return bemutato.load()
+
+
+def ask_recorded(rec_id: str):
+    """Bemutató mód: a rögzített kérdés végig a szabad szöveges úton (gyorsítótárazva)."""
+    return _ask_recorded(*_key()[:2], _catalog_version(), rec_id)
+
+
 def _llm_key() -> str:
     """A nyelvi beállítás ujjlenyomata a gyorsítótárhoz: modell + a promptok változata és ideje
     (ha a prompt változik, a régi válasz ne jöjjön vissza a gyorsítótárból)."""

@@ -235,7 +235,8 @@ MODEL_PLAIN = {
               "ugyanannyit",
     "dontesi_fa": "egyetlen „ha–akkor” kérdéssor (pl. ha a vállalt idő rövid és a vevő messze "
                   "van, akkor…)",
-    "random_forest": "sok független döntési fa, amelyek „megszavazzák” a kockázatot",
+    "random_forest": "(magyarul véletlen erdő) sok független döntési fa, amelyek „megszavazzák” a "
+                     "kockázatot",
 }
 
 # ------------------------------------------------------------ az időszakok
