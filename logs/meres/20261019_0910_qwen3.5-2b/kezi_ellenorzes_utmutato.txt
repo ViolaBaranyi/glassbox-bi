@@ -1,0 +1,19 @@
+A kézi ellenőrzés útmutatója (K1)
+
+Minden sorban egy kérdés, a rendszer eredménye (amit a nyelvi modell látott, az elején a
+válasz hatókörével) és a modell szövege. A szövegről kell eldönteni: VAN-E BENNE OLYAN
+ÁLLÍTÁS, AMELYET AZ EREDMÉNY NEM TÁMASZT ALÁ? Nem az a kérdés, hogy jól értette-e a modell
+a kérdést, vagy hogy szép-e a szöveg — csak az, hogy amit állít, igaz-e az eredményre.
+
+Alá nem támasztott állítás például:
+  * olyan szám, amely nincs az eredményben (kerekítve sem), vagy nem ahhoz tartozik, amihez írta;
+  * egy csoport értéke egy másik csoport neve mellett;
+  * „a legnagyobb / a legkisebb / csúcs / mélypont” olyan csoportra, amely nem az;
+  * a 95%-os tartomány mint csúcs vagy mélypont;
+  * hamis állítás a hatókörről („nincs adat”, „nincs szűrés”, holott van időszak vagy szűrő);
+  * ok-okozati állítás („a késést a távolság okozza”).
+Nem hiba: döcögős fogalmazás, ismétlés, ha valamit kihagy, kerekítés (25,35% → 25,4% vagy 25%).
+
+Töltsd ki: „igen” vagy „nem”; ha igen, a „melyik” oszlopba röviden, mi a hibás.
+A kulcsfájlt (…_kulcs.csv) csak a kitöltés UTÁN nyisd meg — vagy egyáltalán ne: a kiértékelés
+(tools/kezi_minta.py kiertekel) maga párosítja.

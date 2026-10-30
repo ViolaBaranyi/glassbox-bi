@@ -1,0 +1,33 @@
+{
+ "kitoltetlen": [],
+ "agak": {
+  "jelolo": {
+   "megjelolt_arany": 0.6,
+   "megjeloltbol_valoban_hibas": [
+    9,
+    10
+   ],
+   "meg_nem_jeloltbol_megis_hibas": [
+    3,
+    12
+   ],
+   "pontossag": 0.9,
+   "kihagyas": 0.25,
+   "k1_korrigalt": 0.64
+  },
+  "szabad": {
+   "megjelolt_arany": 0.5333333333333333,
+   "megjeloltbol_valoban_hibas": [
+    8,
+    10
+   ],
+   "meg_nem_jeloltbol_megis_hibas": [
+    6,
+    14
+   ],
+   "pontossag": 0.8,
+   "kihagyas": 0.42857142857142855,
+   "k1_korrigalt": 0.6266666666666667
+  }
+ }
+}

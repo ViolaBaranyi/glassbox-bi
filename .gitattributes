@@ -4,3 +4,5 @@
 *.bat text eol=crlf
 # A macOS/Linux-parancsfájl mindig LF-fel (CRLF-fel a sh hibázik, pl. OneDrive-os másolás után is).
 *.sh text eol=lf
+# A mérési naplók bájtra úgy maradnak, ahogy a mérés (Windowson) írta: nincs sorvég-átalakítás.
+logs/meres/** -text

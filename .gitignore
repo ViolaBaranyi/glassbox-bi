@@ -4,7 +4,9 @@ data/*.duckdb
 
 # Futásonkénti kimenetek
 artifacts/
-logs/
+logs/*
+# … kivéve a K1 mérések naplóit: a dolgozat nyelvi rétegre vonatkozó számai ezekből számolhatók újra
+!logs/meres/
 
 # Titkok (a nyelvi réteg kulcsai is ide kerülnek majd)
 .env

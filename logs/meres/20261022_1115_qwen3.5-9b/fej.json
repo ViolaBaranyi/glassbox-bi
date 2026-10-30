@@ -1,0 +1,45 @@
+{
+ "kezdes": "2026-10-22T11:15:34",
+ "modell": "qwen3.5:9b",
+ "digest": "56671c2ab9385f9cfcb404638e32cd62d88e3501d44822208363c010179a3c90",
+ "szolgaltato": "ollama",
+ "kontextus": 4096,
+ "tartas": "30m",
+ "homerseklet": {
+  "to_spec": 0.0,
+  "to_text": 0.2,
+  "to_text_szabad": 0.2
+ },
+ "protokoll": {
+  "fajl": "docs/k1_protokoll_v2_9b.json",
+  "sha256": "c5e8d37d12a367f26ba5d73a4f3a0ed8cd3db53a36d277f36204ce4d68a739d5",
+  "verzio": "2-9b"
+ },
+ "kerdessor": {
+  "fajl": "eval/meresi_kerdessor_v2.toml",
+  "sha256": "1c41464d69438a9ceb47fcdb25c3dcf48fed676eb63cbb92e82101d1c08e5dd9",
+  "kerdesek": 56
+ },
+ "promptok": {
+  "to_spec": {
+   "fajl": "prompts/to_spec.v3.md",
+   "sha256": "9266f32853112f0de53840f4cb4838baf7e84fc738ad0316c53ff3000ab54518"
+  },
+  "to_text": {
+   "fajl": "prompts/to_text.v3.md",
+   "sha256": "401ad3d593d22826719c545965681449cc60213acb87cd2185f557d0f5e01e08"
+  },
+  "to_text_szabad": {
+   "fajl": "prompts/to_text_szabad.v3.md",
+   "sha256": "4070fbfeeb31b74388d9599f2dc354159a35dae58ed4922375d90b1941bbfffe"
+  }
+ },
+ "ismetles": 1,
+ "csak_ertelmezes": false,
+ "kod": {
+  "commit": "c81ccaa6e7a1b9039830afde5e230150d933c800",
+  "nem_commitolt_valtozas": false,
+  "verzio": "v4",
+  "ujjlenyomat": "7a3a5e94fe9efe50a28464f086712d3aa25121ca27d88c4897de97a1e17ce2a5"
+ }
+}

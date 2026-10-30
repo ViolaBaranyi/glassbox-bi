@@ -1,0 +1,47 @@
+﻿kod;id;ismetles;ag;a_kapu_talalt;problemak
+A001;k242;1;szabad;nem;
+A002;k239;1;szabad;igen;a 95%-os tartomány határa ({O_A}) nem tartományként szerepel
+A003;k201;1;jelolo;nem;
+A004;k216;1;szabad;igen;"„2018. augusztus” nem a legkisebb érték (az: „2018. február”) | állítás a szűrésről (a hatókört a rendszer írja; a modell tagadta a szűrést)"
+A005;k236;1;jelolo;igen;vissza nem vezethető szám: 5 | „Rio de Janeiro (RJ)” nem a legnagyobb érték (az: „São Paulo (SP)”) | „Rio de Janeiro (RJ)” nem a legkisebb érték (az: „Roraima (RR)”)
+A006;k212;1;szabad;nem;
+A007;k205;1;szabad;nem;
+A008;k222;1;jelolo;nem;
+A009;k213;1;jelolo;nem;
+A010;k240;1;jelolo;nem;
+A011;k237;1;szabad;nem;
+A012;k242;1;jelolo;igen;ismeretlen jelölő: {S1}
+A013;k247;1;szabad;igen;„2017. június” nem a legnagyobb érték (az: „2017. április”)
+A014;k245;1;jelolo;nem;
+A015;k218;1;szabad;igen;a(z) 411 „2017. december” értéke, de „2017. november” mellett áll
+A016;k213;1;szabad;nem;
+A017;k228;1;jelolo;igen;vissza nem vezethető szám: 3 | „Északkelet” nem a legnagyobb érték (az: „Délkelet”) | „Északkelet” nem a legkisebb érték (az: „Észak”)
+A018;k204;1;jelolo;nem;
+A019;k226;1;szabad;nem;
+A020;k217;1;jelolo;igen;ismeretlen jelölő: {S1}
+A021;k233;1;jelolo;nem;
+A022;k205;1;jelolo;igen;a(z) 9,5 „lakáskomfort (párnák, takarók)” értéke, de „hangtechnika” mellett áll | „elektronika” nem a legnagyobb érték (az: „hangtechnika”)
+A023;k206;1;jelolo;igen;vissza nem vezethető szám: 16, 23 306 | „Amapá (AP)” nem a legnagyobb érték (az: „São Paulo (SP)”)
+A024;k202;1;szabad;igen;vissza nem vezethető szám: 123
+A025;k222;1;szabad;nem;
+A026;k221;1;szabad;nem;
+A027;k225;1;jelolo;nem;
+A028;k210;1;jelolo;igen;vissza nem vezethető szám: 2
+A029;k225;1;szabad;nem;
+A030;k240;1;szabad;nem;
+A031;k202;1;jelolo;igen;vissza nem vezethető szám: 1253
+A032;k216;1;jelolo;nem;
+A033;k226;1;jelolo;nem;
+A034;k201;1;szabad;igen;"állítás a szűrésről (a hatókört a rendszer írja; a modell tagadta a szűrést)"
+A035;k247;1;jelolo;igen;„2017. június” nem a legnagyobb érték (az: „2017. április”) | „2017. október” nem a legkisebb érték (az: „2017. június”)
+A036;k211;1;szabad;nem;
+A037;k227;1;szabad;igen;vissza nem vezethető szám: 5
+A038;k217;1;szabad;nem;
+A039;k228;1;szabad;igen;vissza nem vezethető szám: 3 076 | „Dél” nem a legnagyobb érték (az: „Délkelet”)
+A040;k204;1;szabad;nem;
+A041;k233;1;szabad;igen;„2017. március” nem a legnagyobb érték (az: „2016. október”)
+A042;k220;1;szabad;igen;„vasárnap” nem a legkisebb érték (az: „szombat”)
+A043;k212;1;jelolo;nem;
+A044;k238;1;jelolo;igen;a(z) 15,2 „2017. november” értéke, de „2017. december” mellett áll | „2017. január” nem a legkisebb érték (az: „2017. augusztus”)
+A045;k245;1;szabad;nem;
+A046;k211;1;jelolo;nem;

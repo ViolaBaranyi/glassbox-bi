@@ -7,7 +7,8 @@ A felület Kérdezz oldala ezekből Ollama nélkül, azonnal válaszol (ui/bemut
 két hívása helyett a rögzített kimenetet kapja (az ① űrlapot és a fő ág ② szövegét), minden más
 — értékfeloldás, kódbeli javítások, 1. kapu, lekérdezés, behelyettesítés, 2. kapu — élőben fut.
 A fájlba a futás azonosítói és a rögzített ítéletek is bekerülnek, hogy a visszajátszás
-egyezése ellenőrizhető legyen. A mérési naplók (logs/) nem részei a tárolónak; ez a kivonat igen.
+egyezése ellenőrizhető legyen. A teljes mérési napló a logs/meres/ mappában van; a felület ezt a
+kivonatot olvassa.
 """
 
 from __future__ import annotations

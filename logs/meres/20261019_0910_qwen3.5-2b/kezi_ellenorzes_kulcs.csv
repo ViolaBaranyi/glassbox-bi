@@ -1,0 +1,61 @@
+﻿kod;id;ismetles;ag;a_kapu_talalt;problemak
+A001;k078;1;jelolo;igen;"állítás a szűrésről (a hatókört a rendszer írja; a modell tagadta a szűrést)"
+A002;k081;3;jelolo;igen;"állítás a szűrésről (a hatókört a rendszer írja; a modell tagadta a szűrést)"
+A003;k078;2;szabad;nem;
+A004;k033;3;szabad;nem;
+A005;k109;3;jelolo;nem;
+A006;k002;1;szabad;nem;
+A007;k051;2;szabad;igen;"állítás a szűrésről (a hatókört a rendszer írja; a modell tagadta a szűrést)"
+A008;k024;1;szabad;igen;vissza nem vezethető szám: 27 333
+A009;k056;3;szabad;nem;
+A010;k104;2;szabad;igen;a(z) 2,8 „2018. március” értéke, de „2018. február” mellett áll
+A011;k048;1;szabad;nem;
+A012;k019;1;jelolo;igen;ismeretlen jelölő: {S1}, {S1_N}
+A013;k091;3;jelolo;nem;
+A014;k128;2;jelolo;igen;ismeretlen jelölő: {S1}
+A015;k033;2;szabad;nem;
+A016;k110;1;szabad;nem;
+A017;k067;3;szabad;nem;
+A018;k086;1;szabad;nem;
+A019;k099;1;szabad;nem;
+A020;k121;3;jelolo;nem;
+A021;k031;1;jelolo;igen;"állítás a szűrésről (a hatókört a rendszer írja; a modell tagadta a szűrést)"
+A022;k103;3;jelolo;nem;
+A023;k107;3;szabad;nem;
+A024;k001;2;szabad;nem;
+A025;k126;1;jelolo;nem;
+A026;k067;2;jelolo;nem;
+A027;k062;3;szabad;nem;
+A028;k003;3;jelolo;nem;
+A029;k021;1;jelolo;nem;
+A030;k055;3;jelolo;nem;
+A031;k038;3;szabad;igen;"vissza nem vezethető szám: 0 | állítás a szűrésről (a hatókört a rendszer írja; a modell tagadta a szűrést)"
+A032;k026;3;jelolo;nem;
+A033;k027;1;jelolo;nem;
+A034;k084;3;szabad;igen;"állítás a szűrésről (a hatókört a rendszer írja; a modell tagadta a szűrést)"
+A035;k126;2;szabad;igen;„São Paulo (SP)” nem a legnagyobb érték (az: „Amazonas (AM)”) | „Amazonas (AM)” nem a legkisebb érték (az: „São Paulo (SP)”)
+A036;k031;3;szabad;igen;"állítás a szűrésről (a hatókört a rendszer írja; a modell tagadta a szűrést)"
+A037;k049;1;szabad;nem;
+A038;k046;1;jelolo;nem;
+A039;k029;1;szabad;nem;
+A040;k110;1;jelolo;nem;
+A041;k088;1;szabad;igen;vissza nem vezethető szám: 10 670
+A042;k109;2;jelolo;nem;
+A043;k057;2;szabad;nem;
+A044;k118;2;jelolo;igen;vissza nem vezethető szám: 2015
+A045;k059;1;szabad;nem;
+A046;k005;2;szabad;igen;"állítás a szűrésről (a hatókört a rendszer írja; a modell tagadta a szűrést)"
+A047;k040;3;jelolo;nem;
+A048;k059;2;szabad;nem;
+A049;k062;1;jelolo;igen;ismeretlen jelölő: {S1}
+A050;k123;2;jelolo;nem;
+A051;k092;2;jelolo;nem;
+A052;k021;1;szabad;nem;
+A053;k085;2;jelolo;igen;„Rio de Janeiro (RJ)” nem a legnagyobb érték (az: „São Paulo (SP)”)
+A054;k128;1;jelolo;igen;ismeretlen jelölő: {S1}
+A055;k036;3;szabad;nem;
+A056;k041;3;szabad;igen;„2018. június” nem a legnagyobb érték (az: „2018. február”)
+A057;k123;1;jelolo;nem;
+A058;k027;2;jelolo;nem;
+A059;k016;1;jelolo;nem;
+A060;k084;2;jelolo;igen;a 95%-os tartomány határa ({O_F}) nem tartományként szerepel

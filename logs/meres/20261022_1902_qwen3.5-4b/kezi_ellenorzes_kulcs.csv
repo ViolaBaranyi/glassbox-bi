@@ -1,0 +1,60 @@
+﻿kod;id;ismetles;ag;a_kapu_talalt;problemak
+A001;k352;1;szabad;igen;vissza nem vezethető szám: 55 | a(z) 5 962 606 „2017” értéke, de „2016” mellett áll
+A002;k306;1;szabad;igen;vissza nem vezethető szám: 35 479
+A003;k336;1;szabad;nem;
+A004;k331;1;szabad;nem;
+A005;k340;1;szabad;nem;
+A006;k322;1;szabad;nem;
+A007;k325;1;szabad;nem;
+A008;k354;1;jelolo;nem;
+A009;k306;1;jelolo;igen;a(z) 1,8 „Észak” értéke, de „Délkelet” mellett áll
+A010;k337;1;jelolo;nem;
+A011;k320;1;szabad;nem;
+A012;k321;1;szabad;nem;
+A013;k301;1;jelolo;nem;
+A014;k333;1;jelolo;nem;
+A015;k307;1;szabad;igen;„2017. december” nem a legnagyobb érték (az: „2018. június”)
+A016;k330;1;jelolo;nem;
+A017;k338;1;szabad;nem;
+A018;k310;1;szabad;nem;
+A019;k350;1;szabad;nem;
+A020;k314;1;jelolo;nem;
+A021;k314;1;szabad;nem;
+A022;k348;1;jelolo;nem;
+A023;k303;1;jelolo;nem;
+A024;k311;1;szabad;igen;vissza nem vezethető szám: 10
+A025;k360;1;szabad;nem;
+A026;k349;1;szabad;nem;
+A027;k357;1;jelolo;nem;
+A028;k338;1;jelolo;nem;
+A029;k350;1;jelolo;igen;ismeretlen jelölő: {S1}, {S2} | vissza nem vezethető szám: 10,6, 9,8
+A030;k341;1;jelolo;nem;
+A031;k352;1;jelolo;nem;
+A032;k356;1;szabad;igen;vissza nem vezethető szám: 65 478
+A033;k357;1;szabad;nem;
+A034;k302;1;szabad;igen;vissza nem vezethető szám: 8,2
+A035;k343;1;jelolo;nem;
+A036;k322;1;jelolo;igen;a(z) {S11_X} „2017. november” értéke, de „2017. január” mellett áll
+A037;k325;1;jelolo;igen;ismeretlen jelölő: {S1}, {S2}, {S3}
+A038;k359;1;jelolo;nem;
+A039;k332;1;jelolo;nem;
+A040;k354;1;szabad;nem;
+A041;k356;1;jelolo;igen;a(z) {S2} „Dél” értéke, de „Észak” mellett áll | a(z) {S3} „Északkelet” értéke, de „Észak” mellett áll | a(z) {S4} „Közép-Nyugat” értéke, de „Észak” mellett áll
+A042;k304;1;szabad;nem;
+A043;k317;1;szabad;igen;a(z) 83 992 „Közép-Nyugat” értéke, de „Észak” mellett áll
+A044;k346;1;jelolo;nem;
+A045;k340;1;jelolo;nem;
+A046;k319;1;jelolo;igen;a(z) 4,4 „autós termékek” értéke, de „trendi ajándéktárgyak” mellett áll
+A047;k315;1;jelolo;igen;vissza nem vezethető szám: 1, 2, 3
+A048;k348;1;szabad;nem;
+A049;k355;1;jelolo;nem;
+A050;k332;1;szabad;igen;vissza nem vezethető szám: 5
+A051;k307;1;jelolo;igen;a(z) {S4} „2017. december” értéke, de „2018. június” mellett áll
+A052;k304;1;jelolo;nem;
+A053;k303;1;szabad;nem;
+A054;k317;1;jelolo;nem;
+A055;k351;1;szabad;nem;
+A056;k331;1;jelolo;igen;ismeretlen jelölő: {S1}
+A057;k349;1;jelolo;igen;vissza nem vezethető szám: 44, 9, 9 | a(z) {S1_X} „Rio de Janeiro (RJ)” értéke, de „São Paulo (SP)” mellett áll
+A058;k335;1;szabad;igen;„2018. április” nem a legnagyobb érték (az: „2018. június”)
+A059;k359;1;szabad;nem;

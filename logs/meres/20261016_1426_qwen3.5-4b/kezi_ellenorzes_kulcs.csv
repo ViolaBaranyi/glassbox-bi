@@ -1,0 +1,61 @@
+﻿kod;id;ismetles;ag;a_kapu_talalt;problemak
+A001;k035;1;jelolo;igen;"állítás a szűrésről (a hatókört a rendszer írja; a modell tagadta a szűrést)"
+A002;k064;1;jelolo;igen;ismeretlen jelölő: {S1}, {S2} | vissza nem vezethető szám: 23,6, 9,4
+A003;k122;1;szabad;nem;
+A004;k048;1;szabad;igen;a(z) 8,6 „lakástextil (ágy, fürdő, asztal)” értéke, de „bútorok és lakásdekoráció” mellett áll | a(z) 7,2 „órák és ajándékok” értéke, de „bútorok és lakásdekoráció” mellett áll | a(z) 1,4 „lakástextil (ágy, fürdő, asztal)” értéke, de „bútorok és lakásdekoráció” mellett áll | „bútorok és lakásdekoráció” nem a legnagyobb érték (az: „lakástextil (ágy, fürdő, asztal)”)
+A005;k084;3;jelolo;nem;
+A006;k019;1;jelolo;nem;
+A007;k003;3;szabad;nem;
+A008;k089;2;jelolo;igen;ismeretlen jelölő: {S1}
+A009;k123;3;szabad;nem;
+A010;k019;2;jelolo;nem;
+A011;k020;3;szabad;nem;
+A012;k002;3;szabad;nem;
+A013;k011;3;szabad;nem;
+A014;k021;2;szabad;nem;
+A015;k041;2;szabad;nem;
+A016;k039;1;jelolo;nem;
+A017;k046;3;szabad;nem;
+A018;k126;1;szabad;nem;
+A019;k058;1;jelolo;nem;
+A020;k031;3;szabad;igen;"állítás a szűrésről (a hatókört a rendszer írja; a modell tagadta a szűrést)"
+A021;k086;1;jelolo;nem;
+A022;k063;1;jelolo;igen;vissza nem vezethető szám: 255 684
+A023;k039;1;szabad;nem;
+A024;k051;3;jelolo;igen;a(z) {S1} „2017. január” értéke, de „2017. február” mellett áll | „2017. december” nem a legnagyobb érték (az: „2017. november”)
+A025;k058;2;szabad;igen;vissza nem vezethető szám: 2,2
+A026;k058;3;jelolo;nem;
+A027;k003;2;jelolo;nem;
+A028;k103;1;jelolo;nem;
+A029;k049;1;szabad;igen;vissza nem vezethető szám: 46 | „Rio Grande do Norte (RN)” nem a legnagyobb érték (az: „Pará (PA)”)
+A030;k092;3;jelolo;nem;
+A031;k086;3;szabad;nem;
+A032;k089;2;szabad;nem;
+A033;k091;1;szabad;nem;
+A034;k121;1;jelolo;nem;
+A035;k097;2;szabad;igen;vissza nem vezethető szám: 6
+A036;k127;1;jelolo;nem;
+A037;k043;3;jelolo;igen;ismeretlen jelölő: {S1_N}, {S1}, {S1_N}, {S1}
+A038;k064;2;jelolo;nem;
+A039;k012;1;szabad;nem;
+A040;k026;2;szabad;igen;vissza nem vezethető szám: 542, 1 379, 245
+A041;k017;1;szabad;nem;
+A042;k010;2;szabad;igen;vissza nem vezethető szám: 0,4
+A043;k030;3;jelolo;nem;
+A044;k051;2;szabad;igen;a(z) 18,5 „2017. december” értéke, de „2017. január” mellett áll | „2017. december” nem a legnagyobb érték (az: „2017. november”)
+A045;k088;3;jelolo;igen;ismeretlen jelölő: {S1}, {S1_N}, {S2}
+A046;k064;3;jelolo;nem;
+A047;k014;2;jelolo;nem;
+A048;k060;2;szabad;nem;
+A049;k059;2;jelolo;igen;„2018” nem a legnagyobb érték (az: „2017”)
+A050;k078;3;jelolo;igen;a(z) {S4} „Közép-Nyugat” értéke, de „Északkelet” mellett áll | a(z) {S5} „Észak” értéke, de „Északkelet” mellett áll
+A051;k030;1;szabad;nem;
+A052;k051;3;szabad;igen;a(z) 18,5 „2017. december” értéke, de „2017. január” mellett áll | „2017. december” nem a legnagyobb érték (az: „2017. november”)
+A053;k062;3;jelolo;nem;
+A054;k049;2;jelolo;nem;
+A055;k097;3;szabad;igen;vissza nem vezethető szám: 6
+A056;k052;3;jelolo;igen;a(z) {S4} „Közép-Nyugat” értéke, de „Északkelet” mellett áll | a(z) {S5} „Észak” értéke, de „Északkelet” mellett áll
+A057;k062;1;jelolo;nem;
+A058;k054;3;jelolo;nem;
+A059;k108;2;szabad;nem;
+A060;k019;2;szabad;nem;

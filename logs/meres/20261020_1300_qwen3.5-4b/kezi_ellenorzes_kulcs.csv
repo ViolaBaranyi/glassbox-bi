@@ -1,0 +1,61 @@
+﻿kod;id;ismetles;ag;a_kapu_talalt;problemak
+A001;k245;1;jelolo;nem;
+A002;k202;1;szabad;nem;
+A003;k208;1;jelolo;igen;vissza nem vezethető szám: 1
+A004;k240;1;jelolo;nem;
+A005;k209;1;szabad;igen;vissza nem vezethető szám: 5 | a(z) 48,61 „konyhai, étkezőhöz, mosókonyhába és kertbe való bútorok” értéke, de „hálószobabútorok” mellett áll | a(z) 47,13 „jelzőberendezések és biztonságtechnika” értéke, de „hálószobabútorok” mellett áll
+A006;k204;1;szabad;nem;
+A007;k221;1;jelolo;igen;ismeretlen jelölő: {S1_N}, {S2}
+A008;k242;1;szabad;igen;vissza nem vezethető szám: 2017, 13,6, 12,5
+A009;k234;1;jelolo;nem;
+A010;k220;1;szabad;igen;a(z) 16,6 „hétfő” értéke, de „szerda” mellett áll | a(z) 13,2 „péntek” értéke, de „szombat” mellett áll
+A011;k243;1;szabad;nem;
+A012;k240;1;szabad;igen;vissza nem vezethető szám: 1, 2
+A013;k202;1;jelolo;nem;
+A014;k215;1;jelolo;nem;
+A015;k208;1;szabad;nem;
+A016;k228;1;szabad;igen;vissza nem vezethető szám: 5 286
+A017;k231;1;jelolo;igen;ismeretlen jelölő: {S1}, {S1_X}, {S2}
+A018;k246;1;szabad;nem;
+A019;k232;1;jelolo;nem;
+A020;k211;1;jelolo;nem;
+A021;k248;1;szabad;igen;vissza nem vezethető szám: 2017, 46,82, 1,3, 15,59, 31,23
+A022;k207;1;szabad;nem;
+A023;k206;1;szabad;nem;
+A024;k218;1;jelolo;nem;
+A025;k231;1;szabad;nem;
+A026;k221;1;szabad;nem;
+A027;k216;1;jelolo;igen;a(z) {S3} „2018. március” értéke, de „2018. április” mellett áll | a(z) {S6} „2018. június” értéke, de „2018. augusztus” mellett áll | „2018. április” nem a legnagyobb érték (az: „2018. május”) | „2018. augusztus” nem a legkisebb érték (az: „2018. február”)
+A028;k239;1;jelolo;igen;ismeretlen jelölő: {S1}, {S2}, {S3}
+A029;k229;1;szabad;nem;
+A030;k235;1;jelolo;nem;
+A031;k213;1;szabad;nem;
+A032;k229;1;jelolo;igen;a(z) {S11} „egészség és szépségápolás” értéke, de „számítógépek” mellett áll | „egészség és szépségápolás” nem a legkisebb érték (az: „biztonság és szolgáltatások”)
+A033;k228;1;jelolo;nem;
+A034;k237;1;jelolo;nem;
+A035;k216;1;szabad;nem;
+A036;k260;1;jelolo;igen;ismeretlen jelölő: {S1}, {S2}, {S3}
+A037;k230;1;szabad;nem;
+A038;k225;1;jelolo;nem;
+A039;k235;1;szabad;nem;
+A040;k222;1;jelolo;nem;
+A041;k246;1;jelolo;nem;
+A042;k219;1;jelolo;nem;
+A043;k241;1;szabad;nem;
+A044;k226;1;szabad;nem;
+A045;k260;1;szabad;igen;vissza nem vezethető szám: 13,5, 12,9, 7,4, 8,0
+A046;k236;1;jelolo;nem;
+A047;k241;1;jelolo;igen;ismeretlen jelölő: {S1}
+A048;k205;1;jelolo;igen;a(z) {S2} „lakáskomfort (párnák, takarók)” értéke, de „fehérnemű és strandruházat” mellett áll
+A049;k224;1;szabad;nem;
+A050;k203;1;szabad;nem;
+A051;k224;1;jelolo;nem;
+A052;k226;1;jelolo;nem;
+A053;k227;1;szabad;igen;vissza nem vezethető szám: 5
+A054;k243;1;jelolo;nem;
+A055;k238;1;szabad;igen;„2017. május” nem a legnagyobb érték (az: „2017. december”)
+A056;k214;1;szabad;nem;
+A057;k219;1;szabad;nem;
+A058;k218;1;szabad;igen;„2017. december” nem a legnagyobb érték (az: „2017. november”)
+A059;k217;1;jelolo;nem;
+A060;k238;1;jelolo;igen;a(z) {S11} „2017. november” értéke, de „2017. december” mellett áll

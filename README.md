@@ -85,7 +85,7 @@ kapcsoló alapból be van kapcsolva.
 | Kell-e a bonyolult modell? | a logisztikus regresszió nem kimutathatóan rosszabb (PR-AUC 0,084) | `docs/v3_referencia_eredmeny.md` |
 | Hű-e a magyarázat a modellhez? (K2) | igen: a törlési próbán 100%-ban jobb a véletlennél, a KernelSHAP-pal egyenértékű, a beültetett jelet mind a négy modellnél megtalálja | `docs/huseg_eredmeny.md`, `docs/roar_eredmeny.md` |
 | Stabil-e a magyarázat? (K3) | az iránya igen (92–100%), a sorrendje közepesen (RBO 0,75–0,93) | `docs/stabilitas_eredmeny.md` |
-| Véd-e a kapu? (K1) | a kapu által felismert hibás szöveg nem jut el a felhasználóhoz; a kapu által nem látott hibákkal együtt a fő modellnél a válaszok kb. 9–14%-a alátámasztatlan (kapu nélkül 31–48%), a legkisebb modell első változatánál 42% | `docs/k1_kezi_ellenorzes.md` |
+| Véd-e a kapu? (K1) | a kapu által felismert hibás szöveg nem jut el a felhasználóhoz; a kapu által nem látott hibákkal együtt a fő modellnél a válaszok kb. 9–14%-a alátámasztatlan (kapu nélkül 31–48%), a legkisebb modell első változatánál 42% | `docs/k1_kezi_ellenorzes.md`, a nyers naplók: `logs/meres/` |
 
 A mérések előre rögzített protokoll szerint készültek; minden módszertani döntés, és hogy a
 döntés látta-e már a teszthalmazt, a `docs/dontesi_naplo.md`-ben van.
@@ -123,7 +123,8 @@ A futás determinisztikus. A `uv run demo.py` összegzésében a valódi adaton 
 (Windowson és Linuxon is így jön ki): 96 470 rendelés, 22 jellemző, 119 fa, PR-AUC 0,098,
 ROC-AUC 0,764. Generált adaton (`--synthetic`): 38 857 rendelés, 50 fa, PR-AUC 0,202,
 ROC-AUC 0,726. A felületen *A modell* oldal tetején zöld jelzés mutatja, hogy a felület
-modelljei a lezárt futáséi.
+modelljei a lezárt futáséi. A nyelvi réteg méréseinek (K1) eredményei a `logs/meres/` naplóiból
+modell nélkül újraszámolhatók; a parancsok a `logs/meres/README.md`-ben vannak.
 
 ## A tároló felépítése
 
@@ -136,6 +137,7 @@ narrative/   nyelvi réteg: kérdés → gépi alak, eredmény → szöveg, 2. k
 ui/          Streamlit-felület
 tools/       az előre rögzített mérések és elemzések futtatói
 docs/        protokollok, eredmények, döntési napló
+logs/meres/  a nyelvi réteg méréseinek nyers naplói és kézi ellenőrzése (K1)
 eval/        a fejlesztői és a lezárt mérési kérdéssorok
 tests/       automatikus tesztek
 ```
