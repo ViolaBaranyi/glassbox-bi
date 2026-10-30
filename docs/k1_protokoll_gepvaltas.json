@@ -1,0 +1,443 @@
+{
+ "nev": "Üvegdoboz BI — K1 géphatás: mindhárom mérés konfigurációi két videókártyás gépen, gépenként háromszor, rögzített seeddel",
+ "verzio": "gep-2",
+ "allapot": "jovahagyva",
+ "jovahagyas": {
+  "ki": "Baranyi Viola",
+  "mikor": "2026-10-30"
+ },
+ "elozo_verzio": "gep-1 (2026-10-30, nem commitolt vázlat): gépenként egy új futás, a laptop korábbi futásai viszonyítási alapként. Egyetlen új futás sem indult vele; a szerző előbb a gépenkénti három futást kérte, aztán a laptop kihagyását.",
+ "elozmeny": "docs/k1_v2_gepvaltas.md: ugyanaz a 4B modellfájl, kód és kérdéssor a laptop processzorán és a violapc videókártyáján — az 56 kérdésből 12-nél más lett az ① értelmezés (44/56 azonos), a teljes egyezés +8,9 pp (0,0 – +20,0). A seed (20261015, configs/llm.toml) minden hívásnál ugyanaz, mégsem határoz meg mindent: az 1. mérés futásaiban (ugyanaz a gép, ugyanaz a seed, minden kérdés háromszor) az ① értelmezés az ismétlések közt 126–130/130 kérdésen azonos (4B: 126, 126, 130; 2B: 128, 128, 130), a modell nyers szövege a 4B-nél csak a fő ágon 47/100, a kontrollágon 62/100 kérdésen azonos mindhárom ismétlésben. Ezért a gépek közti eltérést az ugyanazon a gépen mért ismétlés-ingadozáshoz kell mérni: ez a protokoll minden konfigurációt gépenként háromszor futtat. Mindhárom mérés eredményeinek ismeretében, de az új futások előtt írtuk; a szerző döntése 2026-10-30: a géphatás-összevetésben csak a két videókártyás gép számít — a szerző gépe (violapc) és egy RTX A4000-es gép, gépenként minden konfiguráció háromszor; a laptop futásai nem részei.",
+ "gepek": {
+  "violapc": {
+   "osztaly": "videokartya",
+   "uj_futas": true,
+   "leiras": "a szerző gépe — NVIDIA GeForce RTX 4060 Laptop GPU (8 GB), AMD Ryzen 7 7735HS: a 2. mérés videókártyás és a 3. mérés korábbi futásai; minden konfiguráció háromszor újra"
+  }
+ },
+ "kimarad": {
+  "laptop": "A szerző munkahelyi laptopja: a futásai nem részei a géphatás-összevetésnek (a szerző döntése, 2026-10-30); az ott elkezdett 9B-futást leállította, nem használjuk. A futtató ezen a néven nem indul."
+ },
+ "tovabbi_gepek": "Tervezett: egy NVIDIA RTX A4000-es gép (a felvételkor kap nevet). Bármelyik gép felvehető: tools\\gepvaltas.bat felvesz GÉP → docs/gepvaltas_gepek/GÉP.json (gépnév, processzor, videókártya és illesztőprogram, ollama-változat, modellfájlok, a tárház ujjlenyomata), commitolva az első futása előtt. A violapc is így kerül a nyilvántartásba. Felvett gép nem hagyható ki: ami elkészült rajta, a jelentésbe kerül, ami nem, az hiányzóként látszik.",
+ "ismetles_futas": {
+  "szam": 3,
+  "szabaly": "Minden új futást végző gépen minden konfigurációból pontosan 3 teljes új futás, ugyanazzal a seeddel. Körökben futnak (előbb mind a tíz konfiguráció egyszer, aztán másodszor, aztán harmadszor), hogy az ismétlések ne közvetlenül egymás után, ugyanabban a modell-állapotban fussanak, és egy félbehagyott sor után is teljes készlet legyen. A sorszám (#1–#3) az első indítás sorrendje. Egyik futás sem hagyható ki; ha 3-nál több teljes futás illik egy helyre, az eszköz nem választ, hanem hibát jelez. A violapc korábbi (közölt) futásai külön szerepelnek, nem számítanak a 3-ba."
+ },
+ "gep_azonositas": {
+  "kuszob_ms": 8000,
+  "szabaly": "A régi kódok fejléce nem rögzíti a gépet. A violapc korábbi futásait a protokoll név szerint rendeli a géphez (parok[].korabbi), és az összevető eszköz az ① hívás mediánidejével ellenőrzi az osztályt (8 másodperc alatt videókártya, fölötte processzor; eddig videókártyán 3,4–4,8 s, processzoron 13,6–32,5 s). Az új futások a logs/meres/<gép>/ mappába kerülnek, mellettük a futtató gep.json-ja (a gép, a pár, minden indítás gépneve és ideje, az ollama-változat, az `ollama ps` a futás után); a futtató csak azon a gépen indul, amelynek a gépneve a felvételkori."
+ },
+ "kodok": {
+  "v3": {
+   "commit": "f5db16915e45a111ac7b1c4adb6665c505b8352d",
+   "mappa": "v3_kod"
+  },
+  "v4": {
+   "commit": "e8c8bdda8f6ee6b193dd1154512fb63fbd2c50da",
+   "mappa": "v4_kod"
+  },
+  "v5": {
+   "mappa": ".",
+   "megjegyzes": "a projekt mappája; a mérőprogram csak a docs/k1_protokoll_v3.json kód-ujjlenyomatával indul"
+  }
+ },
+ "tarhaz": {
+  "ujjlenyomat": "4c52bcaa899fea926d49d4b13e4e3b0c7086812660ebf497d9b6caa559b2ec07",
+  "szabaly": "A tárház tartalmának ujjlenyomata (tools/gepvaltas_futtat.py, tarhaz_ujjlenyomat: minden tábla oszlopai és rendezett sorai, az építés ideje nélkül); a laptop két tárházán (data/ és v3_kod/data/, 2026-10-15-i építés) és egy 2026-10-13-i építésen ugyanez. A futtató enélkül nem indul, mert más tárházon a lekérdezések eredménye térne el, és az géphatásnak látszana. A violapc korábbi futásainál a tárház ujjlenyomatát nem rögzítettük; a felvételkor kiderül."
+ },
+ "modellfajlok": {
+  "qwen3.5:2b": "0689d44085e0",
+  "qwen3.5:4b": "d8b0f5e9760c",
+  "qwen3.5:9b": "56671c2ab938",
+  "szabaly": "Minden gépen ugyanaz a modellfájl kell (az `ollama list` azonosítója); a futtató más fájllal nem indul."
+ },
+ "parok": [
+  {
+   "id": "m1-4b",
+   "meres": 1,
+   "modell": "qwen3.5:4b",
+   "kod": {
+    "verzio": "v3",
+    "ujjlenyomat": "db97e252c99023464139716f3634c781426f21fc3e8e5ce04c225ed81e792728"
+   },
+   "kerdessor": {
+    "fajl": "eval/meresi_kerdessor.toml",
+    "sha256": "ce87d85fd44038c96f107f6474b4c6cdf1a5978afb88b3bfa6629784a69bc01f"
+   },
+   "ismetles": 3,
+   "futas_protokoll": {
+    "fajl": "docs/k1_protokoll.json",
+    "sha256": "7663856c9d3fdf65755d58a8718964f5aee7ac24ad6d57193cd67159e9cd79a6"
+   },
+   "bootstrap": {
+    "B": 2000,
+    "mag": 20261016
+   },
+   "korabbi": {
+    "violapc": null
+   }
+  },
+  {
+   "id": "m1-2b",
+   "meres": 1,
+   "modell": "qwen3.5:2b",
+   "kod": {
+    "verzio": "v3",
+    "ujjlenyomat": "db97e252c99023464139716f3634c781426f21fc3e8e5ce04c225ed81e792728"
+   },
+   "kerdessor": {
+    "fajl": "eval/meresi_kerdessor.toml",
+    "sha256": "ce87d85fd44038c96f107f6474b4c6cdf1a5978afb88b3bfa6629784a69bc01f"
+   },
+   "ismetles": 3,
+   "futas_protokoll": {
+    "fajl": "docs/k1_protokoll.json",
+    "sha256": "7663856c9d3fdf65755d58a8718964f5aee7ac24ad6d57193cd67159e9cd79a6"
+   },
+   "bootstrap": {
+    "B": 2000,
+    "mag": 20261016
+   },
+   "korabbi": {
+    "violapc": null
+   }
+  },
+  {
+   "id": "m1-9b",
+   "meres": 1,
+   "modell": "qwen3.5:9b",
+   "kod": {
+    "verzio": "v3",
+    "ujjlenyomat": "db97e252c99023464139716f3634c781426f21fc3e8e5ce04c225ed81e792728"
+   },
+   "kerdessor": {
+    "fajl": "eval/meresi_kerdessor.toml",
+    "sha256": "ce87d85fd44038c96f107f6474b4c6cdf1a5978afb88b3bfa6629784a69bc01f"
+   },
+   "ismetles": 3,
+   "futas_protokoll": {
+    "fajl": "docs/k1_protokoll_v1_9b.json",
+    "sha256": "ff0dd6b79df38c89991cfee2bf4ddd8ed69bea6e420d53e02e9fb38374a8b1e6"
+   },
+   "bootstrap": {
+    "B": 2000,
+    "mag": 20261016
+   },
+   "korabbi": {
+    "violapc": null
+   }
+  },
+  {
+   "id": "m2-v4-4b",
+   "meres": 2,
+   "modell": "qwen3.5:4b",
+   "kod": {
+    "verzio": "v4",
+    "ujjlenyomat": "7a3a5e94fe9efe50a28464f086712d3aa25121ca27d88c4897de97a1e17ce2a5"
+   },
+   "kerdessor": {
+    "fajl": "eval/meresi_kerdessor_v2.toml",
+    "sha256": "1c41464d69438a9ceb47fcdb25c3dcf48fed676eb63cbb92e82101d1c08e5dd9"
+   },
+   "ismetles": 1,
+   "futas_protokoll": {
+    "fajl": "docs/k1_protokoll_v2.json",
+    "sha256": "04ceaec1b26cb199d88f343f7d18c80a41c189399979d483cbc63450fd0c903b"
+   },
+   "bootstrap": {
+    "B": 2000,
+    "mag": 20261020
+   },
+   "korabbi": {
+    "violapc": "20261022_1040_qwen3.5-4b"
+   }
+  },
+  {
+   "id": "m2-v3-4b",
+   "meres": 2,
+   "modell": "qwen3.5:4b",
+   "kod": {
+    "verzio": "v3",
+    "ujjlenyomat": "db97e252c99023464139716f3634c781426f21fc3e8e5ce04c225ed81e792728"
+   },
+   "kerdessor": {
+    "fajl": "eval/meresi_kerdessor_v2.toml",
+    "sha256": "1c41464d69438a9ceb47fcdb25c3dcf48fed676eb63cbb92e82101d1c08e5dd9"
+   },
+   "ismetles": 1,
+   "futas_protokoll": {
+    "fajl": "docs/k1_protokoll_v2.json (a v3 munkamappában docs/k1_protokoll.json néven)",
+    "sha256": "04ceaec1b26cb199d88f343f7d18c80a41c189399979d483cbc63450fd0c903b"
+   },
+   "bootstrap": {
+    "B": 2000,
+    "mag": 20261020
+   },
+   "korabbi": {
+    "violapc": null
+   }
+  },
+  {
+   "id": "m2-v4-2b",
+   "meres": 2,
+   "modell": "qwen3.5:2b",
+   "kod": {
+    "verzio": "v4",
+    "ujjlenyomat": "7a3a5e94fe9efe50a28464f086712d3aa25121ca27d88c4897de97a1e17ce2a5"
+   },
+   "kerdessor": {
+    "fajl": "eval/meresi_kerdessor_v2.toml",
+    "sha256": "1c41464d69438a9ceb47fcdb25c3dcf48fed676eb63cbb92e82101d1c08e5dd9"
+   },
+   "ismetles": 1,
+   "futas_protokoll": {
+    "fajl": "docs/k1_protokoll_v2.json",
+    "sha256": "04ceaec1b26cb199d88f343f7d18c80a41c189399979d483cbc63450fd0c903b"
+   },
+   "bootstrap": {
+    "B": 2000,
+    "mag": 20261020
+   },
+   "korabbi": {
+    "violapc": null
+   }
+  },
+  {
+   "id": "m2-v4-9b",
+   "meres": 2,
+   "modell": "qwen3.5:9b",
+   "kod": {
+    "verzio": "v4",
+    "ujjlenyomat": "7a3a5e94fe9efe50a28464f086712d3aa25121ca27d88c4897de97a1e17ce2a5"
+   },
+   "kerdessor": {
+    "fajl": "eval/meresi_kerdessor_v2.toml",
+    "sha256": "1c41464d69438a9ceb47fcdb25c3dcf48fed676eb63cbb92e82101d1c08e5dd9"
+   },
+   "ismetles": 1,
+   "futas_protokoll": {
+    "fajl": "docs/k1_protokoll_v2_9b.json",
+    "sha256": "c5e8d37d12a367f26ba5d73a4f3a0ed8cd3db53a36d277f36204ce4d68a739d5"
+   },
+   "bootstrap": {
+    "B": 2000,
+    "mag": 20261020
+   },
+   "korabbi": {
+    "violapc": "20261022_1115_qwen3.5-9b"
+   }
+  },
+  {
+   "id": "m3-v5-4b",
+   "meres": 3,
+   "modell": "qwen3.5:4b",
+   "kod": {
+    "verzio": "v5",
+    "ujjlenyomat": "9295c1cdc88d360b3221863dc84bf8035856701d6e9ed35704f67e6e2f00004c"
+   },
+   "kerdessor": {
+    "fajl": "eval/meresi_kerdessor_v3.toml",
+    "sha256": "4ceea2657461afdb9419f317807947fe5ccc7018d03120bd671716a5f0a8a9aa"
+   },
+   "ismetles": 1,
+   "futas_protokoll": {
+    "fajl": "docs/k1_protokoll_v3.json",
+    "sha256": "c704d15f619c565904bb9fa1cbb254c10da36c1e18ef0cbeed3466af99782d62"
+   },
+   "bootstrap": {
+    "B": 2000,
+    "mag": 20261023
+   },
+   "korabbi": {
+    "violapc": "20261022_1902_qwen3.5-4b"
+   }
+  },
+  {
+   "id": "m3-v4-4b",
+   "meres": 3,
+   "modell": "qwen3.5:4b",
+   "kod": {
+    "verzio": "v4",
+    "ujjlenyomat": "7a3a5e94fe9efe50a28464f086712d3aa25121ca27d88c4897de97a1e17ce2a5"
+   },
+   "kerdessor": {
+    "fajl": "eval/meresi_kerdessor_v3.toml",
+    "sha256": "4ceea2657461afdb9419f317807947fe5ccc7018d03120bd671716a5f0a8a9aa"
+   },
+   "ismetles": 1,
+   "futas_protokoll": {
+    "fajl": "docs/k1_protokoll_v3.json (a v4 futás származtatott változata, tools/v4_protokoll.py)",
+    "sha256": "6e2ecd029ca708f93041dd147d9ce059dc27d7fa941714f8615c9f7a75ab9c7a"
+   },
+   "bootstrap": {
+    "B": 2000,
+    "mag": 20261023
+   },
+   "korabbi": {
+    "violapc": "20261022_1911_qwen3.5-4b"
+   }
+  },
+  {
+   "id": "m3-v5-9b",
+   "meres": 3,
+   "modell": "qwen3.5:9b",
+   "kod": {
+    "verzio": "v5",
+    "ujjlenyomat": "9295c1cdc88d360b3221863dc84bf8035856701d6e9ed35704f67e6e2f00004c"
+   },
+   "kerdessor": {
+    "fajl": "eval/meresi_kerdessor_v3.toml",
+    "sha256": "4ceea2657461afdb9419f317807947fe5ccc7018d03120bd671716a5f0a8a9aa"
+   },
+   "ismetles": 1,
+   "futas_protokoll": {
+    "fajl": "docs/k1_protokoll_v3.json",
+    "sha256": "c704d15f619c565904bb9fa1cbb254c10da36c1e18ef0cbeed3466af99782d62"
+   },
+   "bootstrap": {
+    "B": 2000,
+    "mag": 20261023
+   },
+   "korabbi": {
+    "violapc": "20261022_1919_qwen3.5-9b"
+   }
+  }
+ ],
+ "futtatas": {
+  "felvetel": "tools\\gepvaltas.bat felvesz GÉP — egyszer, a gép első futása előtt; utána git add + commit + push",
+  "futas": "tools\\gepvaltas.bat GÉP — a gépen még hiányzó futások, körökben; félbeszakadás után ugyanez folytat",
+  "allapot": "tools\\gepvaltas.bat GÉP --allapot",
+  "becsles": "videókártyán egy kör (mind a tíz konfiguráció egyszer) kb. 6–8 óra, a három kör kb. 18–24 óra gépenként"
+ },
+ "kovetkeztetesek": [
+  {
+   "id": "K-a",
+   "meres": 1,
+   "leiras": "2B − 4B (v3 kód)",
+   "a": "m1-2b",
+   "b": "m1-4b",
+   "mutato": "teljes egyezés (A − B), kérdésenként párosítva",
+   "bootstrap": {
+    "B": 2000,
+    "mag": 20261016
+   }
+  },
+  {
+   "id": "K-b",
+   "meres": 1,
+   "leiras": "9B − 4B (v3 kód)",
+   "a": "m1-9b",
+   "b": "m1-4b",
+   "mutato": "teljes egyezés (A − B), kérdésenként párosítva",
+   "bootstrap": {
+    "B": 2000,
+    "mag": 20261016
+   }
+  },
+  {
+   "id": "K-c",
+   "meres": 1,
+   "leiras": "K1 a modell szövegében: kontrollág − fő ág, modellenként (4B, 2B, 9B)",
+   "futasok": [
+    "m1-4b",
+    "m1-2b",
+    "m1-9b"
+   ],
+   "mutato": "a futás saját összesítése (osszegzes.json, K1_paros)",
+   "kozolt": "laptop: 4B +0,7 pp (−10,0 – +11,0), 2B +5,8 pp (−6,6 – +18,5) (a laptopon; ebben az összevetésben nem szerepel)"
+  },
+  {
+   "id": "K-d",
+   "meres": 2,
+   "leiras": "v4 − v3 kód (4B)",
+   "a": "m2-v4-4b",
+   "b": "m2-v3-4b",
+   "mutato": "teljes egyezés (A − B), kérdésenként párosítva",
+   "bootstrap": {
+    "B": 2000,
+    "mag": 20261020
+   },
+   "kozolt": "laptop: +8,9 pp (−2,2 – +20,0), docs/k1_v2_eredmeny.md (a laptopon; ebben az összevetésben nem szerepel)"
+  },
+  {
+   "id": "K-e",
+   "meres": 2,
+   "leiras": "9B − 4B (v4 kód)",
+   "a": "m2-v4-9b",
+   "b": "m2-v4-4b",
+   "mutato": "teljes egyezés (A − B), kérdésenként párosítva",
+   "bootstrap": {
+    "B": 2000,
+    "mag": 20261022
+   },
+   "kozolt": "violapc: −4,4 pp (−13,3 – +4,4), docs/k1_9b_eredmeny.md"
+  },
+  {
+   "id": "K-f",
+   "meres": 2,
+   "leiras": "2B − 4B (v4 kód)",
+   "a": "m2-v4-2b",
+   "b": "m2-v4-4b",
+   "mutato": "teljes egyezés (A − B), kérdésenként párosítva",
+   "bootstrap": {
+    "B": 2000,
+    "mag": 20261020
+   }
+  },
+  {
+   "id": "K-g",
+   "meres": 3,
+   "leiras": "v5 − v4 kód (4B)",
+   "a": "m3-v5-4b",
+   "b": "m3-v4-4b",
+   "mutato": "teljes egyezés (A − B), kérdésenként párosítva",
+   "bootstrap": {
+    "B": 2000,
+    "mag": 20261023
+   },
+   "kozolt": "violapc: +5,1 pp (−5,1 – +15,4), docs/k1_v3_eredmeny.md"
+  },
+  {
+   "id": "K-h",
+   "meres": 3,
+   "leiras": "9B − 4B (v5 kód)",
+   "a": "m3-v5-9b",
+   "b": "m3-v5-4b",
+   "mutato": "teljes egyezés (A − B), kérdésenként párosítva",
+   "bootstrap": {
+    "B": 2000,
+    "mag": 20261023
+   }
+  }
+ ],
+ "mutatok": {
+  "fo": "Az azonos ① értelmezések aránya, kérdésenként párosítva, háromféle összevetésben: (1) ismételhetőség — ugyanaz a gép, egymás utáni futások (#1–#2, #1–#3, #2–#3); (2) a korábbi, közölt futás megismétlése ugyanazon a gépen (korábbi – #i); (3) gépek között — azonos sorszám a két gépen (#i – #i, korábbi – korábbi), és ahol az egyik gépnek csak korábbi futása van, az a másik gép minden új futásával. Mindháromban a teljes egyezés különbsége is (B − A), 95%-os bootstrap-intervallummal, a mérés saját protokolljának beállításával. Összesítve mindhárom fajtára az azonos ① értelmezések aránya (Wilson, 95%): a géphatás az, amennyivel a gépek közti egyezés az ugyanazon a gépen mértnél kisebb.",
+  "masodlagos": [
+   "a modell nyers szövegének betűre azonos aránya ágonként (fő ág, kontrollág) ugyanígy",
+   "F-1 és F-2 ugyanígy, párosítva",
+   "K1 ágonként: a modell szövegének megjelölt aránya",
+   "az ① hívás mediánideje és a modell helye (`ollama ps`: videókártya / processzor) futásonként"
+  ],
+  "kovetkeztetes_szabaly": "A „kovetkeztetesek” listája a dolgozat mérésenkénti összevetései (a modellek és a kódváltozatok összevetése ugyanazon a gépen, ugyanazzal a seeddel). Mindegyiket külön minden készleten számoljuk (gép × korábbi / #1 / #2 / #3; a készlet ugyanazon sorszámú futásai); a következtetés a géptől és az ismétléstől független, ha legalább két készleten van eredmény, és mindegyiken ugyanaz a különbség előjele és az intervallum ítélete (tartalmazza-e a 0-t).",
+  "hipotezis": "Nincs irányított előrejelzés. A korábbi adatokban ugyanazon a gépen (processzoron) az ismétlések közt 97–100%, a laptop és a violapc között 79% (44/56) volt az azonos ① értelmezés; két videókártya között nincs előzetes adat. A dolgozat állítása, hogy a mérésenkénti következtetések nem a géptől és nem az ismétléstől függnek — ezt méri a következtetések táblája."
+ },
+ "statisztika": {
+  "intervallum": "Wilson, 95%",
+  "paros_osszevetes": "kérdésenként párosítva (az ismétléses futásokból a napló utolsó ismétlése), bootstrap a kérdések újramintavételével"
+ },
+ "szabalyok": [
+  "Minden új futást végző gépen minden konfigurációból pontosan 3 teljes új futás (ismetles_futas). A megszakadt futást a futtató folytatja (--folytat), nem kezd újat; ha mégis több teljes futás lenne, mint 3, az eszköz nem választ, hanem hibát jelez, és a döntés a naplóba kerül.",
+  "Egy gépen egyszerre egy mérés fut (a futtató ellenőrzi), hogy a párhuzamos terhelés ne hasson a számolásra; közben a gépen ne fusson videókártyát igénylő program.",
+  "A meglévő futások (logs/meres/) változatlanok; az újak a logs/meres/<gép>/ mappába kerülnek, változatlanul, a gep.json-nal.",
+  "Csak a két videókártyás gép (violapc és az RTX A4000-es gép) adatai számítanak; a laptop futásai nem részei ennek az összevetésnek, a félbehagyott 9B-futása sem (kimarad).",
+  "A kézi ellenőrzés nem része ennek az összevetésnek.",
+  "Seedet nem választunk és nem váltunk: minden futás, minden modell és minden ismétlés a rögzített seeddel (20261015) megy."
+ ],
+ "elemzes": {
+  "eszkoz": "tools/k1_gepvaltas.py",
+  "sha256": "5eeb58298a61026ff5b76b967f8ad438da108e99ad41f4b11c2675618088182a",
+  "parancs": "uv run python tools/k1_gepvaltas.py",
+  "kimenet": "docs/k1_gepvaltas_eredmeny.md és .json",
+  "futtato": "tools/gepvaltas_futtat.py (az ujjlenyomata minden gep.json-ban)"
+ }
+}

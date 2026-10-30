@@ -35,6 +35,14 @@ modell nélkül újraszámolhatók (lásd lent). A mappa neve a futás kezdete �
 naplót onnan, változatlanul másoltuk ide. Melyik kód futott, a `fej.json` commitja és
 ujjlenyomata mutatja.
 
+**Géphatás (`docs/k1_protokoll_gepvaltas.json`).** Csak a két videókártyás gép számít (a szerző gépe,
+violapc, és egy RTX A4000-es gép); a laptop futásai nem. Az új futások (gépenként minden konfiguráció
+háromszor, ugyanazzal a seeddel) gépenként külön mappába kerülnek
+(`logs/meres/<gép>/`, a gépek leírása: `docs/gepvaltas_gepek/`), mindegyik mellett a futtató
+`gep.json`-ja: melyik gépen és párra, minden indítás ideje és gépneve, az ollama változata, és az
+`ollama ps` a futás után (a modell a videókártyán vagy a processzoron volt-e). A futtató:
+`tools\gepvaltas.bat <gép>`; az összevetés: `uv run python tools/k1_gepvaltas.py`.
+
 A kézi minták összesítése: `docs/k1_kezi_ellenorzes.md`. A harmadik mérés 4B-futásából készül
 a felület bemutató módja is (`docs/bemutato_valaszok.json`).
 
