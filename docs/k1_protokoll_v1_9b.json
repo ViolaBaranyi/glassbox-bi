@@ -1,0 +1,106 @@
+{
+ "nev": "Üvegdoboz BI — K1 mérés v1, kiegészítés: a nagyobb modell (qwen3.5:9b) az első lezárt kérdéssoron, ugyanazzal a kóddal, beállítással és géppel",
+ "verzio": "1-9b",
+ "allapot": "jovahagyva",
+ "jovahagyas": {
+  "ki": "Baranyi Viola",
+  "mikor": "2026-10-30"
+ },
+ "elozmeny": "docs/k1_protokoll.json (jóváhagyva 2026-10-16; eredmény: docs/k1_eredmeny_qwen3.5-4b.md és docs/k1_eredmeny_qwen3.5-2b.md). Az első mérés a 4B-t és a 2B-t vetette össze a v3 kóddal; ez a kiegészítés a kérdéssort, a kódot, a beállításokat és a gépet rögzíti, és csak a modell méretét növeli. Mindhárom mérés és a 9B két korábbi futásának (docs/k1_9b_eredmeny.md, docs/k1_v3_eredmeny.md) ismeretében, de a 9B e kérdéssoron futó bármely futása előtt írtuk.",
+ "kerdessor": {
+  "fajl": "eval/meresi_kerdessor.toml",
+  "sha256": "ce87d85fd44038c96f107f6474b4c6cdf1a5978afb88b3bfa6629784a69bc01f",
+  "lezarva": "2026-10-16T14:25:52",
+  "kerdesek": 130,
+  "megvalaszolando": 102,
+  "csapda": 28,
+  "szerzok": {
+   "claude": 80,
+   "viola": 50
+  },
+  "szabaly": "Ugyanaz a lezárt kérdéssor, mint az első mérésben (SHA256 ce87d85fd44038c96f107f6474b4c6cdf1a5978afb88b3bfa6629784a69bc01f): a v3 kód munkamappájában a commit szerinti fájl fut, változatlanul. A v3 kód ezt a kérdéssort a lezárás előtt nem látta; a v4 és a v5 már igen (a hangolás optimizmusa, docs/k1_v2_eredmeny.md), ezért ez a kiegészítés a v3 kóddal fut."
+ },
+ "kod": {
+  "verzio": "v3",
+  "commit": "f5db16915e45a111ac7b1c4adb6665c505b8352d",
+  "ujjlenyomat": "db97e252c99023464139716f3634c781426f21fc3e8e5ce04c225ed81e792728",
+  "szabaly": "A v3 kód külön munkamappában fut (git worktree: v3_kod, tools/v1_9b_futtatas.bat), változatlanul; a munkamappába csak ez a protokoll kerül docs/k1_protokoll.json néven (a v3 mérőprogram ezt olvassa) és a tárház másolata. A futtató csak commitolt protokollal indul."
+ },
+ "gep": {
+  "nev": "a szerző laptopja — ugyanaz a gép, mint az első mérés 4B és 2B futásánál",
+  "futtatas": "processzoron (Ollama), ahogy az első mérésben",
+  "megjegyzes": "A 9B (kb. 6,6 GB) a processzoron lassú: becslés 8–10 óra a 390 egységre. Megszakítás után a --folytat kapcsolóval folytatható; a mérőprogram ellenőrzi, hogy a fejléc (modell, beállítások, protokoll, kérdéssor, kód) nem változott."
+ },
+ "modellek": [
+  {
+   "nev": "qwen3.5:9b",
+   "szerep": "a kiegészítés modellje",
+   "lenyomat": "56671c2ab9385f9cfcb404638e32cd62d88e3501d44822208363c010179a3c90",
+   "megjegyzes": "Ugyanaz a modellfájl legyen, mint a korábbi 9B-futásokban; ha más, a futás érvényes, de az eltérést a jelentés és a dolgozat közli."
+  }
+ ],
+ "alap": {
+  "futas": "20261016_1426_qwen3.5-4b — az első mérés 4B-futása (ugyanaz a kód, kérdéssor, gép és beállítás)",
+  "indok": "csak a modell más; a gépváltás okozta eltolódás (docs/k1_v2_gepvaltas.md) itt nem lép fel"
+ },
+ "futasok": [
+  {
+   "kod": "v3",
+   "modell": "qwen3.5:9b",
+   "parancs": "tools\\v1_9b_futtatas.bat"
+  }
+ ],
+ "beallitasok": {
+  "ismetles": 3,
+  "promptok": {
+   "to_spec": "to_spec.v3",
+   "to_text": "to_text.v3",
+   "to_text_szabad": "to_text_szabad.v3"
+  },
+  "kontextus": 4096,
+  "homerseklet": {
+   "to_spec": 0.0,
+   "to_text": 0.2
+  },
+  "kod": "A v3 kód, ahogy az első mérésben futott (commit f5db16915e45a111ac7b1c4adb6665c505b8352d, ujjlenyomat db97e252…); a 9B miatt semmi nem változik."
+ },
+ "agak": {
+  "fo": "jelolo — a modell jelölőket ír ({S1} …), a számokat a kód illeszti be; a 2. kapun elakadó szöveg helyett a sablonos válasz látszik",
+  "kontroll": "szabad — a modell maga írja le a számokat, a 2. kapu csak mér (rendszerterv 01.: „LLM a dashboard fölött”)",
+  "parositas": "Egy kérdés egy ismétlésében az ① hívás egyszer fut; az elfogadott kérdés ugyanazon eredményéből készül a fő és a kontrollág szövege. A két ág sorrendje ismétlésenként váltakozik (páratlan: fő ág elöl)."
+ },
+ "mutatok": {
+  "leiro": "A mérőprogram saját jelentése (jelentes.md) ugyanazokkal a mutatókkal, mint az első mérés 4B és 2B futásáé: F-1, teljes egyezés, F-2 (az elvárt indokkal is), K1 ágonként a modell szövegében és a felhasználóhoz eljutó szövegben, sablonra váltás, idő — a három ismétlés együtt, Wilson-intervallummal.",
+  "fo_osszevetes": "Teljes egyezés a megválaszolandó kérdéseken: 9B − 4B, kérdésenként párosítva, 95%-os bootstrap-intervallummal. Az összevető eszköz kérdésenként a napló utolsó ismétlését párosítja; az első mérésben a három ismétlés szinte azonos volt (a gépi alak a 4B-nél 126/130, a 2B-nél 128/130 kérdésnél mindháromszor ugyanaz).",
+  "masodlagos": [
+   "F-1 és F-2 (bármilyen és az elvárt indokkal), 9B − 4B, párosítva",
+   "kérdésenként az azonos ① értelmezés és az azonos ítélet száma",
+   "K1 ágonként: a modell szövegének megjelölt aránya, a felhasználóhoz jutó megjelölt szöveg, a sablonra váltás; a megjelölt arány különbsége párosítva",
+   "kérdéstípusonként a helyes értelmezés / helyes elutasítás",
+   "idő: az ① és a ② mediánja, az összes idő"
+  ],
+  "hipotezis": "Nincs irányított előrejelzés. A 2. mérésben a 9B nem értette jobban a kérdéseket a 4B-nél (−4,4 pp, nem kimutatható), a 3.-ban leíró jelleggel 64,1% volt. A K1-et mindkét irányban jelentjük; a dolgozat állítása (a kapu a modelltől függetlenül véd) akkor is áll, ha a 9B kevesebb megjelölt szöveget ír."
+ },
+ "statisztika": {
+  "intervallum": "Wilson, 95% — az összes ismétlés együtt, és ismétlésenként átlag ± szórás",
+  "paros_osszevetes": "K1_fo: kérdésenként a három ismétlés átlaga ágonként; a két ág különbségének átlaga a kérdéseken, 95%-os bootstrap-intervallummal (a kérdések újramintavételével).",
+  "bootstrap": {
+   "B": 2000,
+   "mag": 20261016
+  }
+ },
+ "kezi_ellenorzes": {
+  "cel": "Mint az első mérésben; a mérőprogram a futás végén a mintát (és külön fájlban a kulcsot) ugyanazzal a maggal kiírja.",
+  "minta": "Modellenként 60 szöveg: 20 a fő ágon átment, 20 a kontrollágon, ahol a kapu nem talált hibát, 10–10 a két ágon, ahol talált. Véletlen sorrend, az ág és a kapu ítélete rejtve (a kulcs külön fájlban).",
+  "ki": "Baranyi Viola — a kitöltés nem része ennek a kiegészítésnek; ha elkészül, külön, jelölt eredményként kerül a dolgozatba.",
+  "mag": 20261017
+ },
+ "elemzes": {
+  "eszkoz": "tools/k1_futas_osszevetes.py",
+  "sha256": "47631bf7565619050dce79b2dff03a8126aaca3ba7e4c3e0a8667b2d5012cf8d",
+  "parancs": "uv run python tools/k1_futas_osszevetes.py --a logs/meres/MAPPA_9B --b logs/meres/20261016_1426_qwen3.5-4b --cimke-a \"9B\" --cimke-b \"4B\" --protokoll docs/k1_protokoll_v1_9b.json --kimenet docs/k1_v1_9b_eredmeny.md --cim \"K1 v1 kiegészítés: a qwen3.5:9b és a qwen3.5:4b az első lezárt kérdéssoron, ugyanazzal a kóddal és géppel\""
+ },
+ "elteresek_az_elso_meresetol": [
+  "Csak a modell: qwen3.5:9b. Minden más (kérdéssor, kód, beállítások, ágak, gép) az első mérésé."
+ ]
+}

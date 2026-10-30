@@ -48,3 +48,26 @@ def test_az_elso_meres_jelentesei_a_futasok_sajat_jelentesei():
     for model, run in (("4b", "20261016_1426_qwen3.5-4b"), ("2b", "20261019_0910_qwen3.5-2b")):
         doc = (ROOT / "docs" / f"k1_eredmeny_qwen3.5-{model}.md").read_text(encoding="utf-8")
         assert _norm(doc) == _norm((MERES / run / "jelentes.md").read_text(encoding="utf-8"))
+
+
+def test_a_9b_kiegeszites_az_elso_meres_feltetelein_fut():
+    """docs/k1_protokoll_v1_9b.json: csak a modell más, minden más az első mérésé (kérdéssor, beállítások,
+    ágak, statisztika, kézi minta magja, és a kód — a 4B-futás fejléce szerint); az összevető eszköz rögzítve."""
+    import sys
+    sys.path.insert(0, str(ROOT))
+    from narrative import meres
+
+    v1 = json.loads((ROOT / "docs" / "k1_protokoll.json").read_text(encoding="utf-8"))
+    p9 = json.loads((ROOT / "docs" / "k1_protokoll_v1_9b.json").read_text(encoding="utf-8"))
+    assert p9["allapot"] == "jovahagyva" and [m["nev"] for m in p9["modellek"]] == ["qwen3.5:9b"]
+    for key in ("fajl", "sha256", "kerdesek", "megvalaszolando", "csapda", "szerzok"):
+        assert p9["kerdessor"][key] == v1["kerdessor"][key], key
+    assert {k: v for k, v in p9["beallitasok"].items() if k != "kod"} == \
+           {k: v for k, v in v1["beallitasok"].items() if k != "kod"}
+    assert p9["agak"] == v1["agak"] and p9["statisztika"] == v1["statisztika"]
+    assert p9["kezi_ellenorzes"]["mag"] == v1["kezi_ellenorzes"]["mag"]
+    head4b = json.loads((MERES / "20261016_1426_qwen3.5-4b" / "fej.json").read_text(encoding="utf-8"))
+    assert p9["kod"]["ujjlenyomat"] == head4b["kod"]["ujjlenyomat"] and p9["kod"]["commit"] == head4b["kod"]["commit"]
+    assert p9["elemzes"]["sha256"] == meres.sha256_text(ROOT / p9["elemzes"]["eszkoz"])
+    bat = (ROOT / "tools" / "v1_9b_futtatas.bat").read_bytes().replace(b"\r\n", b"\n").decode("ascii")
+    assert head4b["kod"]["commit"] in bat and "docs\\k1_protokoll_v1_9b.json" in bat and "--modell qwen3.5:9b" in bat
