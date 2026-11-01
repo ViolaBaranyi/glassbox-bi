@@ -1,0 +1,19 @@
+{
+ "gep": "violapc",
+ "felveve": "2026-11-01T19:31:38",
+ "gepnev": "VIOLAPC",
+ "rendszer": "Windows-11-10.0.26200-SP0",
+ "processzor": "AMD Ryzen 7 7735HS with Radeon Graphics",
+ "memoria_gb": 23.2,
+ "videokartyak": [
+  "NVIDIA GeForce RTX 4060 Laptop GPU, 610.62, 8188 MiB"
+ ],
+ "egyeb_kijelzo": "AMD Radeon(TM) Graphics; NVIDIA GeForce RTX 4060 Laptop GPU",
+ "osztaly": "videokartya",
+ "ollama": "ollama version is 0.40.13",
+ "modellek": {
+  "qwen3.5:9b": "56671c2ab938",
+  "qwen3.5:4b": "d8b0f5e9760c"
+ },
+ "tarhaz": "4c52bcaa899fea926d49d4b13e4e3b0c7086812660ebf497d9b6caa559b2ec07"
+}
