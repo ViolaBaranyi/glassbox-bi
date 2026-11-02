@@ -1,0 +1,50 @@
+﻿kod;id;ismetles;ag;a_kapu_talalt;problemak
+A001;k202;1;szabad;igen;vissza nem vezethető szám: 123
+A002;k230;1;szabad;igen;„2017. július” nem a legkisebb érték (az: „2017. augusztus”)
+A003;k242;1;jelolo;igen;ismeretlen jelölő: {S1}
+A004;k237;1;jelolo;igen;ismeretlen jelölő: {S1}
+A005;k228;1;jelolo;igen;vissza nem vezethető szám: 3 | „Északkelet” nem a legnagyobb érték (az: „Délkelet”) | „Északkelet” nem a legkisebb érték (az: „Észak”)
+A006;k228;1;szabad;igen;vissza nem vezethető szám: 3 084 | „Dél” nem a legnagyobb érték (az: „Délkelet”)
+A007;k227;1;jelolo;igen;vissza nem vezethető szám: 5
+A008;k216;1;jelolo;nem;
+A009;k206;1;jelolo;igen;vissza nem vezethető szám: 27, 39
+A010;k201;1;jelolo;nem;
+A011;k236;1;jelolo;igen;„Roraima (RR)” nem a legnagyobb érték (az: „São Paulo (SP)”)
+A012;k211;1;jelolo;nem;
+A013;k233;1;jelolo;nem;
+A014;k206;1;szabad;nem;
+A015;k235;1;szabad;nem;
+A016;k226;1;jelolo;nem;
+A017;k222;1;jelolo;nem;
+A018;k242;1;szabad;nem;
+A019;k221;1;szabad;nem;
+A020;k213;1;szabad;nem;
+A021;k202;1;jelolo;igen;vissza nem vezethető szám: 125,3
+A022;k236;1;szabad;igen;vissza nem vezethető szám: 17,8 | „Rio Grande do Sul (RS)” nem a legkisebb érték (az: „Roraima (RR)”)
+A023;k238;1;szabad;igen;„2017. október” nem a legnagyobb érték (az: „2017. december”)
+A024;k210;1;szabad;igen;vissza nem vezethető szám: 2
+A025;k230;1;jelolo;igen;vissza nem vezethető szám: 1 | a(z) {S2} „2017. február” értéke, de „2017. január” mellett áll | a(z) {S3} „2017. március” értéke, de „2017. január” mellett áll | a(z) {S4} „2017. április” értéke, de „2017. január” mellett áll | a(z) {S5} „2017. május” értéke, de „2017. január” mellett áll | a(z) {S6} „2017. június” értéke, de „2017. január” mellett áll | a(z) {S7} „2017. július” értéke, de „2017. január” mellett áll | a(z) {S8} „2017. augusztus” értéke, de „2017. január” mellett áll | a(z) {S9} „2017. szeptember” értéke, de „2017. január” mellett áll
+A026;k227;1;szabad;igen;vissza nem vezethető szám: 5
+A027;k237;1;szabad;nem;
+A028;k213;1;jelolo;nem;
+A029;k233;1;szabad;nem;
+A030;k219;1;jelolo;nem;
+A031;k212;1;szabad;nem;
+A032;k235;1;jelolo;nem;
+A033;k218;1;jelolo;nem;
+A034;k240;1;szabad;nem;
+A035;k222;1;szabad;nem;
+A036;k240;1;jelolo;nem;
+A037;k220;1;jelolo;nem;
+A038;k220;1;szabad;igen;a(z) 13,2 „péntek” értéke, de „vasárnap” mellett áll
+A039;k226;1;szabad;nem;
+A040;k217;1;szabad;nem;
+A041;k219;1;szabad;igen;a(z) 22,97 „2017. október” értéke, de „2017. november” mellett áll | „2017. november” nem a legnagyobb érték (az: „2017. október”)
+A042;k211;1;szabad;nem;
+A043;k216;1;szabad;igen;„2018. augusztus” nem a legkisebb érték (az: „2018. február”)
+A044;k212;1;jelolo;nem;
+A045;k238;1;jelolo;igen;„2017. január” nem a legkisebb érték (az: „2017. augusztus”)
+A046;k217;1;jelolo;nem;
+A047;k225;1;jelolo;nem;
+A048;k210;1;jelolo;igen;vissza nem vezethető szám: 2
+A049;k201;1;szabad;nem;

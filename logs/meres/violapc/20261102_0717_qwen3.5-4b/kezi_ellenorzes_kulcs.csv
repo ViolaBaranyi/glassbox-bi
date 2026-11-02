@@ -1,0 +1,60 @@
+﻿kod;id;ismetles;ag;a_kapu_talalt;problemak
+A001;k352;1;szabad;igen;a(z) 5 962 606 „2017” értéke, de „2016” mellett áll
+A002;k308;1;szabad;igen;vissza nem vezethető szám: 37,5
+A003;k330;1;szabad;nem;
+A004;k355;1;szabad;nem;
+A005;k317;1;szabad;nem;
+A006;k349;1;szabad;nem;
+A007;k360;1;szabad;nem;
+A008;k355;1;jelolo;nem;
+A009;k320;1;jelolo;igen;a(z) 9,6 „órák és ajándékok” értéke, de „sport és szabadidő” mellett áll
+A010;k340;1;jelolo;nem;
+A011;k359;1;szabad;nem;
+A012;k303;1;szabad;nem;
+A013;k301;1;jelolo;nem;
+A014;k332;1;jelolo;nem;
+A015;k311;1;szabad;igen;vissza nem vezethető szám: 10
+A016;k330;1;jelolo;nem;
+A017;k351;1;szabad;nem;
+A018;k338;1;szabad;nem;
+A019;k347;1;szabad;nem;
+A020;k315;1;jelolo;nem;
+A021;k335;1;szabad;nem;
+A022;k351;1;jelolo;nem;
+A023;k303;1;jelolo;nem;
+A024;k322;1;szabad;igen;vissza nem vezethető szám: 29
+A025;k320;1;szabad;nem;
+A026;k306;1;szabad;nem;
+A027;k357;1;jelolo;nem;
+A028;k341;1;jelolo;nem;
+A029;k322;1;jelolo;igen;vissza nem vezethető szám: 7 | a(z) {S1} „2017. január” értéke, de „2017. november” mellett áll | „2017. november” nem a legkisebb érték (az: „2017. január”)
+A030;k343;1;jelolo;nem;
+A031;k354;1;jelolo;nem;
+A032;k307;1;szabad;igen;„2017. december” nem a legnagyobb érték (az: „2018. június”)
+A033;k321;1;szabad;nem;
+A034;k356;1;szabad;igen;a(z) 13 813 „Dél” értéke, de „Északkelet” mellett áll | a(z) 9 044 „Északkelet” értéke, de „Közép-Nyugat” mellett áll
+A035;k346;1;jelolo;nem;
+A036;k333;1;jelolo;igen;vissza nem vezethető szám: 22
+A037;k307;1;jelolo;igen;„2017. december” nem a legnagyobb érték (az: „2018. június”)
+A038;k359;1;jelolo;nem;
+A039;k331;1;jelolo;nem;
+A040;k341;1;szabad;nem;
+A041;k310;1;jelolo;igen;ismeretlen jelölő: {S1_N}
+A042;k302;1;szabad;nem;
+A043;k332;1;szabad;igen;vissza nem vezethető szám: 5
+A044;k347;1;jelolo;nem;
+A045;k342;1;jelolo;nem;
+A046;k350;1;jelolo;igen;ismeretlen jelölő: {S1}, {S2}
+A047;k306;1;jelolo;igen;a(z) 1,8 „Észak” értéke, de „Délkelet” mellett áll
+A048;k310;1;szabad;nem;
+A049;k356;1;jelolo;nem;
+A050;k333;1;szabad;igen;vissza nem vezethető szám: 6
+A051;k349;1;jelolo;igen;vissza nem vezethető szám: 44, 9, 6
+A052;k304;1;jelolo;nem;
+A053;k354;1;szabad;nem;
+A054;k317;1;jelolo;nem;
+A055;k350;1;szabad;nem;
+A056;k302;1;jelolo;igen;ismeretlen jelölő: {S1}
+A057;k325;1;jelolo;igen;ismeretlen jelölő: {S1}, {S1_X}
+A058;k340;1;szabad;igen;vissza nem vezethető szám: 28,5
+A059;k319;1;szabad;nem;

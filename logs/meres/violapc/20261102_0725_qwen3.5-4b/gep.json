@@ -1,0 +1,40 @@
+{
+ "gep": "violapc",
+ "par": "m3-v4-4b",
+ "gepnev": "VIOLAPC",
+ "rendszer": "Windows-11-10.0.26200-SP0",
+ "processzor": "AMD Ryzen 7 7735HS with Radeon Graphics",
+ "memoria_gb": 23.2,
+ "videokartyak": [
+  "NVIDIA GeForce RTX 4060 Laptop GPU, 610.62, 8188 MiB"
+ ],
+ "egyeb_kijelzo": "AMD Radeon(TM) Graphics; NVIDIA GeForce RTX 4060 Laptop GPU",
+ "osztaly": "videokartya",
+ "ollama": "ollama version is 0.40.13",
+ "modellfajl": "d8b0f5e9760c",
+ "tarhaz": "4c52bcaa899fea926d49d4b13e4e3b0c7086812660ebf497d9b6caa559b2ec07",
+ "kod_mappa": "v4_kod",
+ "parancs": [
+  "uv",
+  "run",
+  "python",
+  "-m",
+  "narrative.meres",
+  "--protokoll",
+  "docs/k1_protokoll_v3.json",
+  "--modell",
+  "qwen3.5:4b"
+ ],
+ "futtato": "a51861d3f067347ccd641f99b1810f1e14b796e208b98cc68713201300cf8f29",
+ "inditasok": [
+  {
+   "azon": "18e426598f349778",
+   "kezdes": "2026-11-02T07:25:17",
+   "gepnev": "VIOLAPC",
+   "folytatas": false,
+   "vege": "2026-11-02T07:33:11",
+   "kilepes": 0
+  }
+ ],
+ "ollama_ps_utana": "NAME          ID              SIZE      PROCESSOR    CONTEXT    RUNNER      UNTIL               \nqwen3.5:4b    d8b0f5e9760c    3.1 GB    100% GPU     4096       llamacpp    29 minutes from now"
+}

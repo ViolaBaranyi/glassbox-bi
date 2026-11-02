@@ -1,0 +1,61 @@
+﻿kod;id;ismetles;ag;a_kapu_talalt;problemak
+A001;k246;1;szabad;nem;
+A002;k202;1;szabad;nem;
+A003;k207;1;szabad;nem;
+A004;k213;1;szabad;nem;
+A005;k216;1;jelolo;igen;„2018. január” nem a legnagyobb érték (az: „2018. május”) | „2018. augusztus” nem a legkisebb érték (az: „2018. február”)
+A006;k205;1;jelolo;igen;a(z) {S2} „lakáskomfort (párnák, takarók)” értéke, de „fehérnemű és strandruházat” mellett áll
+A007;k233;1;jelolo;igen;vissza nem vezethető szám: 18 | „2018. május” nem a legnagyobb érték (az: „2017. november”)
+A008;k215;1;szabad;nem;
+A009;k244;1;szabad;nem;
+A010;k230;1;jelolo;nem;
+A011;k214;1;jelolo;nem;
+A012;k260;1;jelolo;nem;
+A013;k210;1;jelolo;nem;
+A014;k231;1;jelolo;igen;„Észak” nem a legkisebb érték (az: „Délkelet”)
+A015;k201;1;szabad;nem;
+A016;k240;1;jelolo;igen;vissza nem vezethető szám: 1, 2
+A017;k260;1;szabad;nem;
+A018;k230;1;szabad;nem;
+A019;k226;1;jelolo;nem;
+A020;k227;1;jelolo;igen;vissza nem vezethető szám: 5
+A021;k205;1;szabad;igen;a(z) 9,5 „lakáskomfort (párnák, takarók)” értéke, de „hangtechnika” mellett áll
+A022;k241;1;szabad;igen;a felsorolásban a csoportnevek és az értékek sorrendje nem egyezik | „Rio de Janeiro (RJ)” nem a legnagyobb érték (az: „Ceará (CE)”)
+A023;k229;1;jelolo;nem;
+A024;k222;1;jelolo;nem;
+A025;k210;1;szabad;nem;
+A026;k208;1;szabad;nem;
+A027;k213;1;jelolo;nem;
+A028;k226;1;szabad;nem;
+A029;k239;1;szabad;nem;
+A030;k208;1;jelolo;nem;
+A031;k247;1;szabad;igen;a(z) 587 „2017. június” értéke, de „2017. december” mellett áll
+A032;k236;1;szabad;nem;
+A033;k218;1;szabad;nem;
+A034;k221;1;szabad;nem;
+A035;k238;1;jelolo;igen;a(z) {S5} „2017. május” értéke, de „2017. június” mellett áll | a(z) {S11} „2017. november” értéke, de „2017. december” mellett áll | „2017. május” nem a legkisebb érték (az: „2017. augusztus”)
+A036;k222;1;szabad;nem;
+A037;k227;1;szabad;igen;vissza nem vezethető szám: 5
+A038;k231;1;szabad;igen;„Dél” nem a legnagyobb érték (az: „Észak”)
+A039;k237;1;jelolo;nem;
+A040;k215;1;jelolo;nem;
+A041;k207;1;jelolo;nem;
+A042;k212;1;jelolo;nem;
+A043;k204;1;jelolo;nem;
+A044;k206;1;szabad;nem;
+A045;k219;1;szabad;igen;a(z) 22,39 „2017. február” értéke, de „2017. január” mellett áll | „2017. december” nem a legkisebb érték (az: „2017. január”)
+A046;k217;1;jelolo;igen;„2017” nem a legnagyobb érték (az: „2016”)
+A047;k209;1;jelolo;igen;vissza nem vezethető szám: 5
+A048;k233;1;szabad;igen;a(z) 973 534 „2018. április” értéke, de „2018. május” mellett áll
+A049;k218;1;jelolo;igen;„2018. június” nem a legkisebb érték (az: „2017. január”)
+A050;k225;1;szabad;igen;vissza nem vezethető szám: 5 | „Santa Catarina (SC)” nem a legnagyobb érték (az: „Amazonas (AM)”)
+A051;k242;1;szabad;nem;
+A052;k229;1;szabad;nem;
+A053;k238;1;szabad;igen;a(z) 15,2 „2017. november” értéke, de „2017. december” mellett áll | „2017. május” nem a legkisebb érték (az: „2017. augusztus”)
+A054;k242;1;jelolo;nem;
+A055;k211;1;jelolo;nem;
+A056;k220;1;jelolo;nem;
+A057;k206;1;jelolo;nem;
+A058;k240;1;szabad;igen;vissza nem vezethető szám: 2
+A059;k224;1;jelolo;nem;
+A060;k201;1;jelolo;nem;

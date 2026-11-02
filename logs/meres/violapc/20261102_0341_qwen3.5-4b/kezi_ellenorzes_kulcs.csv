@@ -1,0 +1,61 @@
+﻿kod;id;ismetles;ag;a_kapu_talalt;problemak
+A001;k046;2;jelolo;igen;a(z) {S4} „2017. december” értéke, de „2018. június” mellett áll
+A002;k091;2;jelolo;igen;vissza nem vezethető szám: 3
+A003;k020;2;szabad;nem;
+A004;k007;2;szabad;igen;a(z) 1 024 244 „lakástextil (ágy, fürdő, asztal)” értéke, de „órák és ajándékok” mellett áll
+A005;k083;3;jelolo;nem;
+A006;k021;1;jelolo;nem;
+A007;k014;1;szabad;nem;
+A008;k078;2;jelolo;igen;vissza nem vezethető szám: 65 | a(z) {S4} „Közép-Nyugat” értéke, de „Északkelet” mellett áll
+A009;k054;2;szabad;nem;
+A010;k021;2;jelolo;nem;
+A011;k024;2;szabad;nem;
+A012;k046;3;szabad;nem;
+A013;k046;2;szabad;nem;
+A014;k025;1;szabad;nem;
+A015;k004;2;szabad;nem;
+A016;k040;1;jelolo;nem;
+A017;k086;3;szabad;nem;
+A018;k092;2;szabad;nem;
+A019;k059;2;jelolo;nem;
+A020;k084;3;szabad;igen;a(z) 5,9 „Dél” értéke, de „Északkelet” mellett áll
+A021;k085;1;jelolo;nem;
+A022;k081;2;jelolo;igen;"állítás a szűrésről (a hatókört a rendszer írja; a modell tagadta a szűrést)"
+A023;k043;3;szabad;nem;
+A024;k063;2;jelolo;igen;vissza nem vezethető szám: 255 684
+A025;k045;2;szabad;igen;vissza nem vezethető szám: 235
+A026;k060;1;jelolo;nem;
+A027;k003;3;jelolo;nem;
+A028;k103;1;jelolo;nem;
+A029;k035;2;szabad;igen;"állítás a szűrésről (a hatókört a rendszer írja; a modell tagadta a szűrést)"
+A030;k090;3;jelolo;nem;
+A031;k091;3;szabad;nem;
+A032;k051;3;szabad;nem;
+A033;k093;2;szabad;nem;
+A034;k118;3;jelolo;nem;
+A035;k122;2;szabad;igen;a(z) 187 278 „lakástextil (ágy, fürdő, asztal)” értéke, de „órák és ajándékok” mellett áll
+A036;k127;2;jelolo;nem;
+A037;k047;1;jelolo;igen;a(z) 7,9 „órák és ajándékok” értéke, de „sport és szabadidő” mellett áll
+A038;k064;2;jelolo;nem;
+A039;k015;2;szabad;nem;
+A040;k088;2;szabad;igen;a(z) 11 632 „vasárnap” értéke, de „szombat” mellett áll | „vasárnap” nem a legnagyobb érték (az: „hétfő”)
+A041;k002;2;szabad;nem;
+A042;k130;3;szabad;igen;vissza nem vezethető szám: 17
+A043;k030;3;jelolo;nem;
+A044;k045;1;szabad;igen;a(z) 9,8 „2017. november” értéke, de „2017. szeptember” mellett áll
+A045;k040;2;jelolo;igen;„2017” nem a legnagyobb érték (az: „2018”)
+A046;k064;3;jelolo;nem;
+A047;k014;2;jelolo;nem;
+A048;k062;1;szabad;nem;
+A049;k033;1;jelolo;igen;"állítás a szűrésről (a hatókört a rendszer írja; a modell tagadta a szűrést)"
+A050;k084;2;jelolo;igen;oksági állítás: okozati
+A051;k033;1;szabad;nem;
+A052;k011;3;szabad;igen;a(z) 777 „DVD- és Blu-ray-lemezek” értéke, de „kerti szerszámok” mellett áll
+A053;k064;1;jelolo;nem;
+A054;k052;2;jelolo;nem;
+A055;k016;2;szabad;igen;a(z) 1,6 „Észak” értéke, de „Északkelet” mellett áll
+A056;k047;3;jelolo;igen;a(z) 7,9 „órák és ajándékok” értéke, de „sport és szabadidő” mellett áll
+A057;k062;2;jelolo;nem;
+A058;k056;1;jelolo;nem;
+A059;k121;3;szabad;nem;
+A060;k023;1;szabad;nem;

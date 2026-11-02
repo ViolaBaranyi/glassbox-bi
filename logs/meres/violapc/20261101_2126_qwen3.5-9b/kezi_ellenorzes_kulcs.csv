@@ -1,0 +1,61 @@
+﻿kod;id;ismetles;ag;a_kapu_talalt;problemak
+A001;k063;3;szabad;nem;
+A002;k093;2;szabad;igen;„2017. december” nem a legnagyobb érték (az: „2017. november”)
+A003;k107;2;szabad;nem;
+A004;k093;3;szabad;igen;„2017. december” nem a legnagyobb érték (az: „2017. november”)
+A005;k031;2;szabad;nem;
+A006;k082;1;szabad;nem;
+A007;k121;1;szabad;nem;
+A008;k092;3;jelolo;nem;
+A009;k049;2;jelolo;igen;a(z) {S1_X} „Roraima (RR)” értéke, de „Amapá (AP)” mellett áll
+A010;k118;1;szabad;igen;"állítás a szűrésről (a hatókört a rendszer írja; a modell tagadta a szűrést)"
+A011;k089;2;szabad;nem;
+A012;k046;2;jelolo;igen;„2017. december” nem a legnagyobb érték (az: „2018. június”)
+A013;k004;1;szabad;nem;
+A014;k083;2;szabad;igen;a(z) 1 024 244 „lakástextil (ágy, fürdő, asztal)” értéke, de „órák és ajándékok” mellett áll | „számítógép-tartozékok” nem a legnagyobb érték (az: „egészség és szépségápolás”)
+A015;k012;2;szabad;igen;a(z) 7,3 „São Paulo (SP)” értéke, de „Rio de Janeiro (RJ)” mellett áll
+A016;k019;1;jelolo;nem;
+A017;k086;1;szabad;nem;
+A018;k106;3;jelolo;nem;
+A019;k089;3;szabad;nem;
+A020;k060;1;jelolo;nem;
+A021;k017;2;szabad;nem;
+A022;k034;1;szabad;nem;
+A023;k032;2;jelolo;nem;
+A024;k094;1;szabad;igen;„2017” nem a legnagyobb érték (az: „2016”) | „2017” nem a legkisebb érték (az: „2018”)
+A025;k057;1;jelolo;nem;
+A026;k002;3;szabad;nem;
+A027;k085;1;jelolo;nem;
+A028;k059;3;jelolo;nem;
+A029;k039;3;szabad;igen;„2017. december” nem a legkisebb érték (az: „2017. január”)
+A030;k052;1;jelolo;nem;
+A031;k003;2;jelolo;nem;
+A032;k125;1;jelolo;igen;a(z) {S3} „2017. június” értéke, de „2017. február” mellett áll
+A033;k039;3;jelolo;igen;a(z) {S13} „2017. december” értéke, de „2018. február” mellett áll | „2018. február” nem a legkisebb érték (az: „2017. január”)
+A034;k128;1;szabad;nem;
+A035;k092;2;szabad;nem;
+A036;k057;3;jelolo;nem;
+A037;k035;1;szabad;nem;
+A038;k110;3;jelolo;nem;
+A039;k128;2;jelolo;igen;vissza nem vezethető szám: 3
+A040;k101;2;jelolo;nem;
+A041;k017;3;szabad;nem;
+A042;k042;2;jelolo;igen;a(z) {S3} „2018” értéke, de „2017” mellett áll | „2017” nem a legnagyobb érték (az: „2016”)
+A043;k064;2;szabad;nem;
+A044;k126;2;szabad;igen;„Bahia (BA)” nem a legkisebb érték (az: „São Paulo (SP)”)
+A045;k028;1;jelolo;nem;
+A046;k050;3;szabad;nem;
+A047;k045;3;jelolo;igen;a(z) {S3} „2018. március” értéke, de „2018. január” mellett áll | a(z) {S4} „2018. április” értéke, de „2018. január” mellett áll
+A048;k057;2;jelolo;nem;
+A049;k013;1;jelolo;nem;
+A050;k026;3;szabad;nem;
+A051;k045;2;jelolo;igen;a(z) {S3} „2018. március” értéke, de „2018. január” mellett áll | a(z) {S4} „2018. április” értéke, de „2018. január” mellett áll
+A052;k055;1;jelolo;igen;a(z) {S1_X} „São Paulo (SP)” értéke, de „Rondônia (RO)” mellett áll
+A053;k062;2;szabad;nem;
+A054;k042;3;szabad;igen;a(z) 137,30 „2017” értéke, de „2018” mellett áll
+A055;k127;3;jelolo;nem;
+A056;k017;3;jelolo;nem;
+A057;k094;3;szabad;igen;„2017” nem a legnagyobb érték (az: „2016”) | „2017” nem a legkisebb érték (az: „2018”)
+A058;k118;2;jelolo;igen;vissza nem vezethető szám: 2015
+A059;k062;3;jelolo;nem;
+A060;k047;1;jelolo;nem;

@@ -1,0 +1,61 @@
+﻿kod;id;ismetles;ag;a_kapu_talalt;problemak
+A001;k339;1;jelolo;nem;
+A002;k333;1;szabad;igen;vissza nem vezethető szám: 6
+A003;k349;1;szabad;nem;
+A004;k354;1;szabad;igen;vissza nem vezethető szám: 2015
+A005;k332;1;szabad;igen;vissza nem vezethető szám: 5
+A006;k340;1;szabad;igen;vissza nem vezethető szám: 28,5
+A007;k319;1;szabad;nem;
+A008;k306;1;szabad;nem;
+A009;k359;1;szabad;nem;
+A010;k307;1;jelolo;igen;„2018. február” nem a legnagyobb érték (az: „2018. június”)
+A011;k308;1;jelolo;igen;ismeretlen jelölő: {S1}
+A012;k353;1;jelolo;nem;
+A013;k338;1;szabad;nem;
+A014;k348;1;szabad;nem;
+A015;k350;1;szabad;nem;
+A016;k330;1;szabad;nem;
+A017;k302;1;jelolo;nem;
+A018;k341;1;jelolo;nem;
+A019;k355;1;szabad;nem;
+A020;k321;1;jelolo;nem;
+A021;k302;1;szabad;nem;
+A022;k322;1;szabad;igen;vissza nem vezethető szám: 29
+A023;k321;1;szabad;nem;
+A024;k307;1;szabad;igen;a(z) 12,6 „2018. február” értéke, de „2018. augusztus” mellett áll | a felsorolásban a csoportnevek és az értékek sorrendje nem egyezik | „2018. augusztus” nem a legnagyobb érték (az: „2018. június”) | „2017. szeptember” nem a legkisebb érték (az: „2018. augusztus”)
+A025;k341;1;szabad;nem;
+A026;k357;1;jelolo;nem;
+A027;k314;1;jelolo;nem;
+A028;k315;1;jelolo;nem;
+A029;k310;1;szabad;nem;
+A030;k348;1;jelolo;nem;
+A031;k346;1;szabad;nem;
+A032;k359;1;jelolo;nem;
+A033;k340;1;jelolo;nem;
+A034;k301;1;jelolo;nem;
+A035;k310;1;jelolo;igen;ismeretlen jelölő: {S1_N}
+A036;k352;1;jelolo;nem;
+A037;k355;1;jelolo;igen;vissza nem vezethető szám: 8
+A038;k337;1;szabad;igen;vissza nem vezethető szám: 306, 289
+A039;k320;1;szabad;nem;
+A040;k350;1;jelolo;igen;ismeretlen jelölő: {S1}, {S2}
+A041;k356;1;jelolo;nem;
+A042;k308;1;szabad;igen;vissza nem vezethető szám: 10
+A043;k322;1;jelolo;igen;vissza nem vezethető szám: 7 | a(z) {S1} „2017. január” értéke, de „2017. november” mellett áll | „2017. november” nem a legkisebb érték (az: „2017. január”)
+A044;k346;1;jelolo;nem;
+A045;k330;1;jelolo;nem;
+A046;k317;1;szabad;nem;
+A047;k354;1;jelolo;igen;vissza nem vezethető szám: 2015
+A048;k353;1;szabad;nem;
+A049;k356;1;szabad;igen;a(z) 13 813 „Dél” értéke, de „Északkelet” mellett áll | a(z) 9 044 „Északkelet” értéke, de „Közép-Nyugat” mellett áll
+A050;k343;1;jelolo;nem;
+A051;k338;1;jelolo;nem;
+A052;k304;1;jelolo;igen;vissza nem vezethető szám: 71
+A053;k352;1;szabad;igen;a(z) 5 962 606 „2017” értéke, de „2016” mellett áll
+A054;k320;1;jelolo;igen;a(z) 9,6 „órák és ajándékok” értéke, de „sport és szabadidő” mellett áll
+A055;k335;1;szabad;nem;
+A056;k332;1;jelolo;nem;
+A057;k303;1;szabad;nem;
+A058;k317;1;jelolo;igen;vissza nem vezethető szám: 10
+A059;k303;1;jelolo;nem;
+A060;k339;1;szabad;nem;

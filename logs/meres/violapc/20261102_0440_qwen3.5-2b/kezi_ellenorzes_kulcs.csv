@@ -1,0 +1,61 @@
+﻿kod;id;ismetles;ag;a_kapu_talalt;problemak
+A001;k081;1;jelolo;igen;"állítás a szűrésről (a hatókört a rendszer írja; a modell tagadta a szűrést)"
+A002;k018;1;jelolo;nem;
+A003;k067;1;szabad;nem;
+A004;k025;1;szabad;igen;vissza nem vezethető szám: 6,0
+A005;k067;2;jelolo;nem;
+A006;k060;2;szabad;nem;
+A007;k045;2;szabad;nem;
+A008;k029;2;jelolo;nem;
+A009;k056;1;szabad;nem;
+A010;k028;3;jelolo;nem;
+A011;k016;2;szabad;nem;
+A012;k040;3;szabad;igen;"állítás a szűrésről (a hatókört a rendszer írja; a modell tagadta a szűrést)"
+A013;k003;2;jelolo;nem;
+A014;k123;1;szabad;nem;
+A015;k105;2;szabad;igen;"vissza nem vezethető szám: 1 | állítás a szűrésről (a hatókört a rendszer írja; a modell tagadta a szűrést)"
+A016;k028;1;szabad;nem;
+A017;k123;2;jelolo;nem;
+A018;k019;1;szabad;igen;vissza nem vezethető szám: 612,40, 8,0
+A019;k032;3;szabad;nem;
+A020;k081;2;szabad;igen;"állítás a szűrésről (a hatókört a rendszer írja; a modell tagadta a szűrést)"
+A021;k036;3;jelolo;nem;
+A022;k084;1;szabad;nem;
+A023;k055;3;szabad;nem;
+A024;k092;1;jelolo;nem;
+A025;k090;1;szabad;nem;
+A026;k007;3;jelolo;igen;ismeretlen jelölő: {S1}
+A027;k093;2;szabad;nem;
+A028;k090;1;jelolo;nem;
+A029;k027;2;jelolo;nem;
+A030;k014;2;szabad;nem;
+A031;k040;1;szabad;igen;"állítás a szűrésről (a hatókört a rendszer írja; a modell tagadta a szűrést)"
+A032;k086;2;szabad;nem;
+A033;k084;3;jelolo;igen;a 95%-os tartomány határa ({O_F}) nem tartományként szerepel
+A034;k078;1;szabad;nem;
+A035;k023;1;jelolo;nem;
+A036;k082;1;jelolo;igen;"vissza nem vezethető szám: 3 | állítás a szűrésről (a hatókört a rendszer írja; a modell tagadta a szűrést)"
+A037;k025;2;jelolo;igen;vissza nem vezethető szám: 6,0
+A038;k100;1;jelolo;igen;"„2018. április” nem a legkisebb érték (az: „2018. február”) | állítás a szűrésről (a hatókört a rendszer írja; a modell tagadta a szűrést)"
+A039;k032;2;jelolo;igen;ismeretlen jelölő: {S1}, {S1_X}
+A040;k121;2;jelolo;nem;
+A041;k029;1;jelolo;nem;
+A042;k051;3;jelolo;nem;
+A043;k025;2;szabad;igen;vissza nem vezethető szám: 6,0
+A044;k100;2;jelolo;igen;"„2018. április” nem a legkisebb érték (az: „2018. február”) | állítás a szűrésről (a hatókört a rendszer írja; a modell tagadta a szűrést)"
+A045;k053;3;szabad;igen;vissza nem vezethető szám: 13,0 | a(z) 13,0 „Minas Gerais (MG)” értéke, de „Szövetségi Kerület – Brasília (DF)” mellett áll
+A046;k001;2;szabad;nem;
+A047;k104;2;jelolo;nem;
+A048;k002;1;szabad;nem;
+A049;k123;3;jelolo;nem;
+A050;k108;1;jelolo;nem;
+A051;k123;1;jelolo;nem;
+A052;k060;3;szabad;nem;
+A053;k100;2;szabad;igen;"a(z) 977 545 „2018. május” értéke, de „2018. április” mellett áll | „2018. január” nem a legkisebb érték (az: „2018. február”) | állítás a szűrésről (a hatókört a rendszer írja; a modell tagadta a szűrést)"
+A054;k118;2;szabad;igen;vissza nem vezethető szám: 2015, 80 942
+A055;k050;1;jelolo;igen;vissza nem vezethető szám: 5
+A056;k030;3;szabad;nem;
+A057;k046;1;jelolo;nem;
+A058;k042;2;jelolo;nem;
+A059;k078;3;szabad;nem;
+A060;k118;3;jelolo;igen;vissza nem vezethető szám: 2015

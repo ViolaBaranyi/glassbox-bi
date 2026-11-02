@@ -1,0 +1,61 @@
+﻿kod;id;ismetles;ag;a_kapu_talalt;problemak
+A001;k237;1;szabad;nem;
+A002;k218;1;szabad;nem;
+A003;k247;1;szabad;igen;„2017. február” nem a legnagyobb érték (az: „2017. április”) | „2017. december” nem a legkisebb érték (az: „2017. június”)
+A004;k228;1;jelolo;igen;vissza nem vezethető szám: 3, 5 276 | a(z) 1,9 „Észak” értéke, de „Délkelet” mellett áll | a(z) 5,9 „Közép-Nyugat” értéke, de „Délkelet” mellett áll | a(z) 10,1 „Északkelet” értéke, de „Délkelet” mellett áll
+A005;k237;1;jelolo;nem;
+A006;k242;1;szabad;igen;vissza nem vezethető szám: 2017, 13,6
+A007;k246;1;szabad;igen;vissza nem vezethető szám: 2
+A008;k204;1;jelolo;nem;
+A009;k244;1;szabad;igen;vissza nem vezethető szám: 15,68, 19,04
+A010;k243;1;jelolo;nem;
+A011;k232;1;szabad;nem;
+A012;k207;1;jelolo;nem;
+A013;k223;1;szabad;nem;
+A014;k217;1;jelolo;nem;
+A015;k202;1;szabad;nem;
+A016;k201;1;szabad;nem;
+A017;k229;1;szabad;nem;
+A018;k232;1;jelolo;nem;
+A019;k211;1;szabad;nem;
+A020;k227;1;szabad;igen;vissza nem vezethető szám: 5
+A021;k223;1;jelolo;igen;ismeretlen jelölő: {S1}
+A022;k212;1;szabad;nem;
+A023;k230;1;jelolo;nem;
+A024;k241;1;szabad;igen;a(z) 261 880 „São Paulo (SP)” értéke, de „Rio Grande do Sul (RS)” mellett áll | „Rio de Janeiro (RJ)” nem a legnagyobb érték (az: „São Paulo (SP)”) | „Rio Grande do Sul (RS)” nem a legkisebb érték (az: „Acre (AC)”)
+A025;k213;1;jelolo;nem;
+A026;k221;1;jelolo;nem;
+A027;k231;1;szabad;nem;
+A028;k220;1;szabad;nem;
+A029;k206;1;jelolo;nem;
+A030;k233;1;szabad;nem;
+A031;k222;1;szabad;nem;
+A032;k235;1;szabad;nem;
+A033;k211;1;jelolo;nem;
+A034;k214;1;szabad;igen;vissza nem vezethető szám: 2 187 260, 1 409 080
+A035;k238;1;szabad;igen;„2017. január” nem a legnagyobb érték (az: „2017. december”)
+A036;k248;1;szabad;igen;vissza nem vezethető szám: 40,67, 12,82, 27,85
+A037;k203;1;jelolo;nem;
+A038;k218;1;jelolo;nem;
+A039;k238;1;jelolo;igen;a(z) {S11} „2017. november” értéke, de „2017. december” mellett áll
+A040;k210;1;jelolo;igen;"vissza nem vezethető szám: 2 | állítás a szűrésről (a hatókört a rendszer írja; a modell tagadta a szűrést)"
+A041;k204;1;szabad;nem;
+A042;k208;1;szabad;igen;a(z) 9,3 „lakástextil (ágy, fürdő, asztal)” értéke, de „egészség és szépségápolás” mellett áll
+A043;k231;1;jelolo;nem;
+A044;k224;1;szabad;nem;
+A045;k208;1;jelolo;nem;
+A046;k209;1;jelolo;igen;a(z) {S4} „konyhai, étkezőhöz, mosókonyhába és kertbe való bútorok” értéke, de „hálószobabútorok” mellett áll | a(z) {S5} „jelzőberendezések és biztonságtechnika” értéke, de „hálószobabútorok” mellett áll
+A047;k235;1;jelolo;nem;
+A048;k229;1;jelolo;nem;
+A049;k213;1;szabad;nem;
+A050;k221;1;szabad;nem;
+A051;k205;1;jelolo;igen;vissza nem vezethető szám: 10 | a(z) {S2} „lakáskomfort (párnák, takarók)” értéke, de „hangtechnika” értékére utal („ez …”)
+A052;k242;1;jelolo;igen;ismeretlen jelölő: {S1_N}, {S1} | vissza nem vezethető szám: 2017
+A053;k225;1;jelolo;igen;a(z) {S2} „Amapá (AP)” értéke, de „São Paulo (SP)” mellett áll | a(z) {S3} „Pará (PA)” értéke, de „São Paulo (SP)” mellett áll | a(z) {S4} „Alagoas (AL)” értéke, de „São Paulo (SP)” mellett áll | a(z) {S5} „Ceará (CE)” értéke, de „São Paulo (SP)” mellett áll
+A054;k222;1;jelolo;nem;
+A055;k234;1;jelolo;igen;„egészség és szépségápolás” nem a legkisebb érték (az: „matracok és kárpitos bútorok”)
+A056;k220;1;jelolo;igen;vissza nem vezethető szám: 6,4
+A057;k243;1;szabad;nem;
+A058;k206;1;szabad;nem;
+A059;k212;1;jelolo;nem;
+A060;k236;1;jelolo;nem;

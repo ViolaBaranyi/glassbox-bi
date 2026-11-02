@@ -1,0 +1,54 @@
+﻿kod;id;ismetles;ag;a_kapu_talalt;problemak
+A001;k310;1;szabad;nem;
+A002;k349;1;szabad;nem;
+A003;k320;1;szabad;nem;
+A004;k338;1;szabad;nem;
+A005;k359;1;szabad;nem;
+A006;k307;1;szabad;igen;„2017. december” nem a legnagyobb érték (az: „2018. június”)
+A007;k325;1;jelolo;nem;
+A008;k355;1;jelolo;igen;„2018. május” nem a legnagyobb érték (az: „2017. november”)
+A009;k302;1;jelolo;nem;
+A010;k321;1;szabad;nem;
+A011;k342;1;szabad;nem;
+A012;k321;1;jelolo;igen;„2018. június” nem a legkisebb érték (az: „2017. január”)
+A013;k347;1;jelolo;nem;
+A014;k304;1;szabad;nem;
+A015;k317;1;szabad;nem;
+A016;k303;1;szabad;nem;
+A017;k350;1;szabad;nem;
+A018;k332;1;szabad;igen;vissza nem vezethető szám: 5
+A019;k303;1;jelolo;nem;
+A020;k319;1;jelolo;igen;a(z) {S4} „lakáskomfort (2. csoport)” értéke, de „CD-k, DVD-k, musicalek” mellett áll
+A021;k333;1;szabad;nem;
+A022;k360;1;jelolo;nem;
+A023;k343;1;jelolo;nem;
+A024;k307;1;jelolo;igen;„2017. december” nem a legnagyobb érték (az: „2018. június”)
+A025;k336;1;jelolo;nem;
+A026;k315;1;jelolo;nem;
+A027;k319;1;szabad;igen;a(z) 734 „lakáskomfort (2. csoport)” értéke, de „CD-k, DVD-k, musicalek” mellett áll | „CD-k, DVD-k, musicalek” nem a legkisebb érték (az: „biztonság és szolgáltatások”)
+A028;k320;1;jelolo;nem;
+A029;k348;1;szabad;nem;
+A030;k330;1;jelolo;nem;
+A031;k311;1;jelolo;nem;
+A032;k337;1;jelolo;nem;
+A033;k306;1;jelolo;igen;a(z) {S2} „Északkelet” értéke, de „Észak” mellett áll
+A034;k331;1;jelolo;nem;
+A035;k322;1;jelolo;nem;
+A036;k322;1;szabad;nem;
+A037;k340;1;szabad;nem;
+A038;k308;1;szabad;nem;
+A039;k317;1;jelolo;igen;a(z) {S1_X} „Délkelet” értéke, de „Dél” mellett áll | „Dél” nem a legnagyobb érték (az: „Délkelet”)
+A040;k338;1;jelolo;nem;
+A041;k346;1;jelolo;nem;
+A042;k337;1;szabad;nem;
+A043;k350;1;jelolo;nem;
+A044;k355;1;szabad;igen;vissza nem vezethető szám: 8
+A045;k359;1;jelolo;igen;„Délkelet” nem a legnagyobb érték (az: „Északkelet”)
+A046;k304;1;jelolo;nem;
+A047;k346;1;szabad;nem;
+A048;k314;1;jelolo;nem;
+A049;k335;1;szabad;nem;
+A050;k340;1;jelolo;igen;ismeretlen jelölő: {S1}
+A051;k315;1;szabad;igen;a(z) 59,7 „lakástextil (ágy, fürdő, asztal)” értéke, de „bútorok és lakásdekoráció” mellett áll
+A052;k330;1;szabad;nem;
+A053;k342;1;jelolo;nem;

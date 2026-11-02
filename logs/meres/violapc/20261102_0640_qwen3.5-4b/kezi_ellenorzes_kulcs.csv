@@ -1,0 +1,61 @@
+﻿kod;id;ismetles;ag;a_kapu_talalt;problemak
+A001;k221;1;szabad;nem;
+A002;k241;1;jelolo;igen;„Rio de Janeiro (RJ)” nem a legnagyobb érték (az: „São Paulo (SP)”)
+A003;k222;1;szabad;nem;
+A004;k201;1;jelolo;nem;
+A005;k246;1;jelolo;nem;
+A006;k219;1;jelolo;igen;„2017. december” nem a legkisebb érték (az: „2017. január”)
+A007;k234;1;jelolo;nem;
+A008;k207;1;szabad;nem;
+A009;k241;1;szabad;igen;vissza nem vezethető szám: 82 330 | „Rio de Janeiro (RJ)” nem a legnagyobb érték (az: „São Paulo (SP)”)
+A010;k244;1;szabad;nem;
+A011;k232;1;jelolo;nem;
+A012;k213;1;szabad;nem;
+A013;k239;1;szabad;igen;a 95%-os tartomány határa ({O_A}) nem tartományként szerepel
+A014;k208;1;szabad;nem;
+A015;k243;1;szabad;nem;
+A016;k204;1;szabad;nem;
+A017;k220;1;jelolo;nem;
+A018;k231;1;szabad;igen;vissza nem vezethető szám: 29,5, 3, 2017, 26,4
+A019;k228;1;jelolo;igen;a(z) 1,9 „Észak” értéke, de „Délkelet” mellett áll
+A020;k214;1;szabad;nem;
+A021;k230;1;jelolo;nem;
+A022;k228;1;szabad;igen;vissza nem vezethető szám: 3, 5 252, 3,8
+A023;k209;1;jelolo;nem;
+A024;k212;1;jelolo;nem;
+A025;k237;1;szabad;nem;
+A026;k202;1;szabad;nem;
+A027;k211;1;jelolo;nem;
+A028;k219;1;szabad;igen;a(z) 0,9 „2017. január” értéke, de „2017. december” mellett áll | „2017. december” nem a legkisebb érték (az: „2017. január”)
+A029;k206;1;szabad;nem;
+A030;k201;1;szabad;nem;
+A031;k226;1;szabad;nem;
+A032;k236;1;jelolo;nem;
+A033;k239;1;jelolo;igen;ismeretlen jelölő: {S1_N}, {S2_N}, {S3_N}
+A034;k240;1;szabad;igen;vissza nem vezethető szám: 1, 2
+A035;k212;1;szabad;igen;vissza nem vezethető szám: 35,8, 14,6
+A036;k226;1;jelolo;nem;
+A037;k235;1;jelolo;nem;
+A038;k221;1;jelolo;igen;a(z) {S1_X} „Közép-Nyugat” értéke, de „Dél” mellett áll
+A039;k238;1;szabad;igen;„2017. május” nem a legnagyobb érték (az: „2017. december”)
+A040;k229;1;szabad;nem;
+A041;k216;1;jelolo;igen;„2018. március” nem a legnagyobb érték (az: „2018. május”)
+A042;k205;1;jelolo;nem;
+A043;k234;1;szabad;nem;
+A044;k243;1;jelolo;nem;
+A045;k245;1;jelolo;nem;
+A046;k215;1;jelolo;nem;
+A047;k220;1;szabad;nem;
+A048;k224;1;szabad;nem;
+A049;k214;1;jelolo;igen;a(z) {S2_X} „vasárnap” értéke, de „szerda” mellett áll
+A050;k205;1;szabad;igen;vissza nem vezethető szám: 10
+A051;k224;1;jelolo;nem;
+A052;k247;1;jelolo;igen;vissza nem vezethető szám: 600 | „2017. január” nem a legnagyobb érték (az: „2017. április”) | „2017. december” nem a legkisebb érték (az: „2017. június”)
+A053;k203;1;jelolo;igen;"állítás a szűrésről (a hatókört a rendszer írja; a modell tagadta a szűrést)"
+A054;k215;1;szabad;nem;
+A055;k233;1;szabad;nem;
+A056;k222;1;jelolo;nem;
+A057;k225;1;jelolo;nem;
+A058;k237;1;jelolo;igen;vissza nem vezethető szám: 53, 2
+A059;k238;1;jelolo;nem;
+A060;k209;1;szabad;igen;vissza nem vezethető szám: 5 | a(z) 48,61 „konyhai, étkezőhöz, mosókonyhába és kertbe való bútorok” értéke, de „hálószobabútorok” mellett áll | a(z) 47,13 „jelzőberendezések és biztonságtechnika” értéke, de „hálószobabútorok” mellett áll
