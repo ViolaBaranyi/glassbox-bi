@@ -1,0 +1,17 @@
+{
+ "gep": "rakepc",
+ "felveve": "2026-11-03T21:44:37",
+ "gepnev": "RAKE_PC",
+ "rendszer": "Windows-11-10.0.26200-SP0",
+ "processzor": "AMD Ryzen 7 9700X 8-Core Processor",
+ "memoria_gb": 31.1,
+ "videokartyak": [],
+ "egyeb_kijelzo": "AMD  Radeon RX 7800 XT; AMD Radeon(TM) Graphics",
+ "osztaly": "processzor",
+ "ollama": "ollama version is 0.40.13",
+ "modellek": {
+  "qwen3.5:9b": "56671c2ab938",
+  "qwen3.5:4b": "d8b0f5e9760c"
+ },
+ "tarhaz": "4c52bcaa899fea926d49d4b13e4e3b0c7086812660ebf497d9b6caa559b2ec07"
+}
