@@ -56,8 +56,8 @@ def test_a_protokoll_rogziti_az_eszkozt_es_a_parokat():
     for p in P["parok"]:
         assert meres.sha256_text(ROOT / p["kerdessor"]["fajl"]) == p["kerdessor"]["sha256"]
         assert fu.RECEPTEK[p["id"]]["kod"] == p["kod"]["verzio"] and p["modell"] in P["modellfajlok"]
-    gepek, hely, foreign = gv.slots(P, MERES)
-    assert list(gepek) == ["violapc"] and not foreign
+    gepek, hely, foreign = gv.slots(P, MERES)      # a tároló mindenkori állapota: a futások fokozatosan érkeznek
+    assert list(gepek)[0] == "violapc" and "laptop" not in gepek and not foreign
     for p in P["parok"]:
         assert list(p["korabbi"]) == ["violapc"]
         s = hely[p["id"]]["violapc"]
@@ -66,12 +66,13 @@ def test_a_protokoll_rogziti_az_eszkozt_es_a_parokat():
             assert s["korabbi"]["allapot"] == "megvan", (p["id"], s["korabbi"]["megjegyzes"])
         else:
             assert s["korabbi"] is None
-        assert s["uj"]["allapot"] == "hiányzik"
+        for g in gepek:
+            assert hely[p["id"]][g]["uj"]["allapot"] != "hiba", (p["id"], g, hely[p["id"]][g]["uj"]["megjegyzes"])
     assert sum(bool(p["korabbi"]["violapc"]) for p in P["parok"]) == 5
     for k in P["kovetkeztetesek"]:
         assert all(pid in ids for pid in k.get("futasok", [k.get("a"), k.get("b")]))
-    todo = fu.Futtato("violapc").terv()             # körökben: mind a tíz egyszer, aztán másodszor, harmadszor
-    assert todo == ids * 3
+    have = {pid: len(hely[pid]["violapc"]["uj"]["futasok"]) for pid in ids}
+    assert fu.Futtato("violapc").terv() == [pid for kor in (1, 2, 3) for pid in ids if have[pid] < kor]
 
 
 def test_a_meglevo_futasok_ideje_a_gepuk_osztalya():
@@ -154,9 +155,8 @@ def test_uj_futasok_a_gep_mappajaban_haromszor(tmp_path):
 def test_ismetelhetoseg_megismetles_es_gepek_kozott(tmp_path):
     meres_dir, gepek = tmp_path / "meres", tmp_path / "gepek"
     meres_dir.mkdir()
-    for d in MERES.iterdir():
-        if (d / "fej.json").exists():
-            (meres_dir / d.name).symlink_to(d, target_is_directory=True)
+    for name in ("20261022_1902_qwen3.5-4b", "20261022_1919_qwen3.5-9b"):   # a violapc két korábbi futása
+        shutil.copytree(MERES / name, meres_dir / name)
     _registry(gepek, "gepx", "GEPX")
     for i in (1, 2, 3):
         _replica(meres_dir, i)
@@ -323,9 +323,19 @@ def test_a_futtato_nem_indul_ha_valami_nem_a_protokoll_szerinti(tmp_path, monkey
 
 
 def test_a_tarhaz_ujjlenyomata_a_protokolle():
+    """Csak a valódi Olist-adatból épült tárházon (a CI szintetikus adaton fut, annak más az ujjlenyomata)."""
+    import duckdb
+
     db = ROOT / "data" / "warehouse.duckdb"
     if not db.exists():
         pytest.skip("nincs tárház (uv run python inditas.py)")
+    con = duckdb.connect(str(db), read_only=True)
+    try:
+        forras = con.execute("SELECT adatforras FROM meta_build").fetchone()[0]
+    finally:
+        con.close()
+    if forras != "valós":
+        pytest.skip(f"a tárház nem a valódi adatból épült ({forras})")
     assert fu.tarhaz_ujjlenyomat(db) == P["tarhaz"]["ujjlenyomat"]
 
 
