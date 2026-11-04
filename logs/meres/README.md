@@ -35,8 +35,11 @@ modell nélkül újraszámolhatók (lásd lent). A mappa neve a futás kezdete �
 naplót onnan, változatlanul másoltuk ide. Melyik kód futott, a `fej.json` commitja és
 ujjlenyomata mutatja.
 
-**Géphatás (`docs/k1_protokoll_gepvaltas.json`).** Csak a két videókártyás gép számít (a szerző gépe,
-violapc, és egy RTX A4000-es gép); a laptop futásai nem. Az új futások (gépenként minden konfiguráció
+**Géphatás (`docs/k1_protokoll_gepvaltas.json`).** Csak a két videókártyás gép számít: a szerző gépe
+(violapc, NVIDIA GeForce RTX 4060 Laptop GPU) és a rakepc (AMD Radeon RX 7800 XT); a laptop futásai
+nem. Mindkét gépen 30 futás: `violapc/` (2026. nov. 1–2.), `rakepc/` (nov. 3–4.);
+az eredmény: `docs/k1_gepvaltas_eredmeny.md`. A rakepc nyilvántartásában „processzor” osztály áll, mert a
+futtató csak NVIDIA-kártyát ismer fel; a modell az `ollama ps` szerint ott is 100%-ban a videókártyán futott. Az új futások (gépenként minden konfiguráció
 háromszor, ugyanazzal a seeddel) gépenként külön mappába kerülnek
 (`logs/meres/<gép>/`, a gépek leírása: `docs/gepvaltas_gepek/`), mindegyik mellett a futtató
 `gep.json`-ja: melyik gépen és párra, minden indítás ideje és gépneve, az ollama változata, és az

@@ -85,7 +85,7 @@ def test_a_meglevo_futasok_ideje_a_gepuk_osztalya():
 
 def test_a_kozolt_osszeveteseket_pontosan_visszaadja():
     res = gv.analyze(rejudge=False)
-    assert not any(res["gepek_kozott"].values()) and set(res["gepek"]) == {"violapc"}
+    assert list(res["gepek"])[0] == "violapc" and "laptop" not in res["gepek"]
     k = {x["id"]: x for x in res["kovetkeztetesek"]}
     for kid, doc in (("K-e", "k1_9b_eredmeny"), ("K-g", "k1_v3_eredmeny")):
         got, pub = k[kid]["keszletenkent"]["violapc (korábbi)"], _pub(doc)

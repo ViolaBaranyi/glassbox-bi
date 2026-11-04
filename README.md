@@ -86,6 +86,7 @@ kapcsoló alapból be van kapcsolva.
 | Hű-e a magyarázat a modellhez? (K2) | igen: a törlési próbán 100%-ban jobb a véletlennél, a KernelSHAP-pal egyenértékű, a beültetett jelet mind a négy modellnél megtalálja | `docs/huseg_eredmeny.md`, `docs/roar_eredmeny.md` |
 | Stabil-e a magyarázat? (K3) | az iránya igen (92–100%), a sorrendje közepesen (RBO 0,75–0,93) | `docs/stabilitas_eredmeny.md` |
 | Véd-e a kapu? (K1) | a kapu által felismert hibás szöveg nem jut el a felhasználóhoz; a kapu által nem látott hibákkal együtt a fő modellnél a válaszok kb. 9–14%-a alátámasztatlan (kapu nélkül 31–48%), a legkisebb modell első változatánál 42% | `docs/k1_kezi_ellenorzes.md`, a nyers naplók: `logs/meres/` |
+| Függ-e a géptől? | ugyanazon a gépen, ugyanazzal a seeddel a futások (egy kivétellel) betűre azonosak; két különböző videókártya (NVIDIA, AMD) között a kérdések kb. 9%-ánál más az értelmezés, a teljes egyezés legfeljebb 4,4 ponttal tér el (sehol nem kimutatható); a nagy különbségek (2B–4B) mindkét gépen ugyanazok, a határeseti ítéletek (9B–4B az 1. kérdéssoron, v4–v3) a gépen múlhatnak | `docs/k1_gepvaltas_eredmeny.md` |
 
 A mérések előre rögzített protokoll szerint készültek; minden módszertani döntés, és hogy a
 döntés látta-e már a teszthalmazt, a `docs/dontesi_naplo.md`-ben van.
