@@ -1,0 +1,334 @@
+{
+ "kezdes": "2026-11-04T02:04:47",
+ "modell": "qwen3.5:2b",
+ "digest": "0689d44085e06d165161a8a9a1731344278cfb5aade63a3c3dbdb48ab54b130a",
+ "szolgaltato": "ollama",
+ "kontextus": 4096,
+ "tartas": "30m",
+ "homerseklet": {
+  "to_spec": 0.0,
+  "to_text": 0.2,
+  "to_text_szabad": 0.2
+ },
+ "protokoll": {
+  "fajl": "docs/k1_protokoll.json",
+  "sha256": "7663856c9d3fdf65755d58a8718964f5aee7ac24ad6d57193cd67159e9cd79a6",
+  "verzio": 1
+ },
+ "kerdessor": {
+  "fajl": "eval/meresi_kerdessor.toml",
+  "sha256": "ce87d85fd44038c96f107f6474b4c6cdf1a5978afb88b3bfa6629784a69bc01f",
+  "kerdesek": 130
+ },
+ "promptok": {
+  "to_spec": {
+   "fajl": "prompts/to_spec.v3.md",
+   "sha256": "9266f32853112f0de53840f4cb4838baf7e84fc738ad0316c53ff3000ab54518"
+  },
+  "to_text": {
+   "fajl": "prompts/to_text.v3.md",
+   "sha256": "401ad3d593d22826719c545965681449cc60213acb87cd2185f557d0f5e01e08"
+  },
+  "to_text_szabad": {
+   "fajl": "prompts/to_text_szabad.v3.md",
+   "sha256": "4070fbfeeb31b74388d9599f2dc354159a35dae58ed4922375d90b1941bbfffe"
+  }
+ },
+ "ismetles": 3,
+ "csak_ertelmezes": false,
+ "kod": {
+  "commit": "f5db16915e45a111ac7b1c4adb6665c505b8352d",
+  "nem_commitolt_valtozas": false,
+  "ujjlenyomat": "db97e252c99023464139716f3634c781426f21fc3e8e5ce04c225ed81e792728"
+ },
+ "osszegzes": {
+  "egysegek": 390,
+  "hibas_egysegek": 0,
+  "F1": {
+   "k": 139,
+   "n": 306,
+   "arany": 0.4542483660130719,
+   "also": 0.3993727871009652,
+   "felso": 0.5102584155580576,
+   "ismetles": {
+    "ismetlesenkent": [
+     0.4411764705882353,
+     0.46078431372549017,
+     0.46078431372549017
+    ],
+    "atlag": 0.4542483660130719,
+    "szoras": 0.011320593513522065
+   }
+  },
+  "teljes_egyezes": {
+   "k": 82,
+   "n": 306,
+   "arany": 0.2679738562091503,
+   "also": 0.22145072038080765,
+   "felso": 0.32025037881852286
+  },
+  "F2": {
+   "k": 72,
+   "n": 84,
+   "arany": 0.8571428571428571,
+   "also": 0.7666989708237691,
+   "felso": 0.9163497945943307,
+   "ismetles": {
+    "ismetlesenkent": [
+     0.8571428571428571,
+     0.8571428571428571,
+     0.8571428571428571
+    ],
+    "atlag": 0.8571428571428571,
+    "szoras": 0.0
+   }
+  },
+  "F2_elvart_indok": {
+   "k": 66,
+   "n": 84,
+   "arany": 0.7857142857142857,
+   "also": 0.6865066777843957,
+   "felso": 0.8599323345500843
+  },
+  "tipus_szerint": {
+   "csapda": {
+    "n": 84,
+    "f1": 0,
+    "helyes": 66,
+    "elutasitva": 72
+   },
+   "idosor": {
+    "n": 39,
+    "f1": 21,
+    "helyes": 6,
+    "elutasitva": 9
+   },
+   "idoszak": {
+    "n": 48,
+    "f1": 36,
+    "helyes": 24,
+    "elutasitva": 4
+   },
+   "kombinalt": {
+    "n": 75,
+    "f1": 24,
+    "helyes": 3,
+    "elutasitva": 18
+   },
+   "nyelvi": {
+    "n": 33,
+    "f1": 3,
+    "helyes": 3,
+    "elutasitva": 24
+   },
+   "osszesito": {
+    "n": 18,
+    "f1": 15,
+    "helyes": 15,
+    "elutasitva": 0
+   },
+   "rangsor": {
+    "n": 51,
+    "f1": 15,
+    "helyes": 15,
+    "elutasitva": 21
+   },
+   "szures": {
+    "n": 42,
+    "f1": 25,
+    "helyes": 16,
+    "elutasitva": 4
+   }
+  },
+  "szerzo_szerint": {
+   "claude": {
+    "n": 240,
+    "f1": 97,
+    "helyes": 106,
+    "elutasitva": 89
+   },
+   "viola": {
+    "n": 150,
+    "f1": 42,
+    "helyes": 42,
+    "elutasitva": 63
+   }
+  },
+  "csapda_szerint": {
+   "adaton_kivul": {
+    "n": 6,
+    "f1": 0,
+    "helyes": 6,
+    "elutasitva": 6
+   },
+   "atveres": {
+    "n": 6,
+    "f1": 0,
+    "helyes": 6,
+    "elutasitva": 6
+   },
+   "jovo": {
+    "n": 9,
+    "f1": 0,
+    "helyes": 9,
+    "elutasitva": 9
+   },
+   "katalogus_kivul": {
+    "n": 15,
+    "f1": 0,
+    "helyes": 12,
+    "elutasitva": 12
+   },
+   "ketertelmu": {
+    "n": 3,
+    "f1": 0,
+    "helyes": 3,
+    "elutasitva": 3
+   },
+   "korlat": {
+    "n": 3,
+    "f1": 0,
+    "helyes": 0,
+    "elutasitva": 0
+   },
+   "nem_adat": {
+    "n": 3,
+    "f1": 0,
+    "helyes": 3,
+    "elutasitva": 3
+   },
+   "nincs_adat": {
+    "n": 33,
+    "f1": 0,
+    "helyes": 27,
+    "elutasitva": 30
+   },
+   "tiltott": {
+    "n": 3,
+    "f1": 0,
+    "helyes": 0,
+    "elutasitva": 3
+   },
+   "tobblepeses": {
+    "n": 3,
+    "f1": 0,
+    "helyes": 0,
+    "elutasitva": 0
+   }
+  },
+  "stabil_ertelmezes": {
+   "k": 126,
+   "n": 130
+  },
+  "K1": {
+   "jelolo": {
+    "szovegek": 226,
+    "fo": {
+     "k": 91,
+     "n": 226,
+     "arany": 0.4026548672566372,
+     "also": 0.34085750235125345,
+     "felso": 0.4677061909625553,
+     "ismetles": {
+      "ismetlesenkent": [
+       0.3918918918918919,
+       0.40789473684210525,
+       0.40789473684210525
+      ],
+      "atlag": 0.40256045519203415,
+      "szoras": 0.009239246839805532
+     }
+    },
+    "eljut": {
+     "k": 0,
+     "n": 226,
+     "arany": 0.0,
+     "also": 0.0,
+     "felso": 0.016713515657290345
+    },
+    "sablonra_valt": {
+     "k": 91,
+     "n": 226,
+     "arany": 0.4026548672566372,
+     "also": 0.34085750235125345,
+     "felso": 0.4677061909625553
+    },
+    "modell_szovege_latszik": 135,
+    "szamok": {
+     "fedetlen": 32,
+     "leirt": 252
+    },
+    "fajtak": {
+     "ismeretlen_jelolo": 53,
+     "kotes": 26,
+     "felsofok": 13,
+     "fedetlen_szam": 32,
+     "hatokor": 17,
+     "tartomany": 3
+    },
+    "ures": 0
+   },
+   "szabad": {
+    "szovegek": 226,
+    "fo": {
+     "k": 111,
+     "n": 226,
+     "arany": 0.4911504424778761,
+     "also": 0.4266679243730787,
+     "felso": 0.5559287750190857,
+     "ismetles": {
+      "ismetlesenkent": [
+       0.5,
+       0.4868421052631579,
+       0.4868421052631579
+      ],
+      "atlag": 0.4912280701754386,
+      "szoras": 0.007596714068284541
+     }
+    },
+    "eljut": {
+     "k": 111,
+     "n": 226,
+     "arany": 0.4911504424778761,
+     "also": 0.4266679243730787,
+     "felso": 0.5559287750190857
+    },
+    "sablonra_valt": {
+     "k": 0,
+     "n": 226,
+     "arany": 0.0,
+     "also": 0.0,
+     "felso": 0.016713515657290345
+    },
+    "modell_szovege_latszik": 226,
+    "szamok": {
+     "fedetlen": 71,
+     "leirt": 479
+    },
+    "fajtak": {
+     "fedetlen_szam": 71,
+     "hatokor": 55,
+     "kotes": 9,
+     "felsofok": 12,
+     "tartomany": 6
+    },
+    "ures": 0
+   }
+  },
+  "K1_paros": {
+   "kerdesek": 76,
+   "kulonbseg": 0.08771929824561404,
+   "also": -0.05263157894736842,
+   "felso": 0.22807017543859648
+  },
+  "ido": {
+   "ido1_median_ms": 2668.0,
+   "ido1_betoltes_median_ms": 6.0,
+   "ido1_prompt_median_ms": 105.0,
+   "ido1_generalas_median_ms": 495.0,
+   "ido2_jelolo_median_ms": 2556.0,
+   "ido2_szabad_median_ms": 2607.5,
+   "osszes_ms": 2594459
+  }
+ }
+}

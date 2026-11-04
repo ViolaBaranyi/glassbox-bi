@@ -1,0 +1,455 @@
+﻿kod;kerdes;eredmeny;szoveg;van_ala_nem_tamasztott_allitas (igen/nem);melyik;megjegyzes
+A001;csak a szépségápolást nézve mennyi a szállítási idő átlaga az idén?;"Szűrés: termékkategória: egészség és szépségápolás.
+Mérőszám: átlagos szállítási idő — A rendelés leadásától a kézbesítésig eltelt idő átlaga napban, tört nappal.
+Összesített érték: 11,8 nap.";Az egészség és szépségápolás kategóriában az idén az átlagos szállítási idő 11,8 nap volt. Ez az érték az összesített adatot képezi a termékkategória szűrése alapján.;;;
+A002;csokkent a vallalt szallitasi ido 2017 ota?;"Szűrés: nincs.
+Mérőszám: átlagos vállalt szállítási idő — A platform (Olist) által a rendeléskor vállalt határidő átlaga: a leadás napjától a határidő napjáig eltelt napok.
+Összesített érték: 23,8 nap.";Az átlagos vállalt szállítási idő 23,8 nappal csökkentett.;;;
+A003;atlagos tavolsag a vevohoz a delkeleti regioban tavaly nyaron?;"Szűrés: vevő régiója: Délkelet.
+Mérőszám: átlagos eladó–vevő távolság — Az eladó és a vevő irányítószámának középpontja közti légvonalbeli távolság átlaga, km-ben (közelítő érték; ahol a koordináta hiányzik, az a rendelés kimarad).
+Összesített érték: 366 km; alapja: 29 131 rendelés ismert távolsággal.";A Délkelet régióban az átlagos eladó–vevő távolság (366 km) 366 km volt tavaly nyarán. A mérték alapja 29 131 ismert távolsággal rendelkező rendelésből származik.;;;
+A004;top 10 kategoria elado-vevo tavolsag szerint (melyiknel utazik a legtobbet a csomag)?;"Szűrés: nincs.
+Mérőszám: átlagos eladó–vevő távolság — Az eladó és a vevő irányítószámának középpontja közti légvonalbeli távolság átlaga, km-ben (közelítő érték; ahol a koordináta hiányzik, az a rendelés kimarad).
+Összesített érték: 600 km; alapja: 95 993 rendelés ismert távolsággal.
+Bontás termékkategóriánként (a legnagyobb elöl; csak az elég adatból számolt csoportok):
+  számítógépek: 1 129 km; 176 rendelés ismert távolsággal; az összesített érték 1,9-szerese
+  DVD- és Blu-ray-lemezek: 777 km; 55 rendelés ismert távolsággal; az összesített érték 1,3-szerese
+  kerti szerszámok: 734 km; 186 rendelés ismert távolsággal; az összesített érték 1,2-szerese
+  cipők: 731 km; 232 rendelés ismert távolsággal; az összesített érték 1,2-szerese
+  munkavédelmi eszközök: 730 km; 154 rendelés ismert távolsággal; az összesített érték 1,2-szerese
+  játékkonzolok és videojátékok: 724 km; 1 009 rendelés ismert távolsággal; az összesített érték 1,2-szerese
+  tabletek, nyomtatás, képalkotás: 717 km; 78 rendelés ismert távolsággal; az összesített érték 1,2-szerese
+  telefonok és tartozékok: 697 km; 4 048 rendelés ismert távolsággal; az összesített érték 1,2-szerese
+  karácsonyi kellékek: 697 km; 124 rendelés ismert távolsággal; az összesített érték 1,2-szerese
+  egészség és szépségápolás: 680 km; 8 586 rendelés ismert távolsággal; az összesített érték 1,1-szerese
+  … (további 52 csoport kihagyva; az utolsó a sor másik vége:)
+  matracok és kárpitos bútorok: 266 km; 37 rendelés ismert távolsággal; az összesített érték 0,4-szerese";A számítógépek kategóriában a legnagyobb átlagos eladó–vevő távolság van (1 129 km), ez az összesített érték (600 km) 1,9-szerese. Utána a DVD- és Blu-ray-lemezek (777 km), majd a kerti szerszámok (734 km) következnek.;;;
+A005;melyik honapban fognak melle a legnagyobbat a vallalt szallitasi idovel a deli regioban?;"Szűrés: vevő régiója: Dél.
+Mérőszám: átlagos vállalt szállítási idő — A platform (Olist) által a rendeléskor vállalt határidő átlaga: a leadás napjától a határidő napjáig eltelt napok.
+Összesített érték: 27,1 nap.";A Dél régióban a vállalt szállítási idő átlaga 27,1 nap volt az összesített adat alapján. A válasz nem tartalmazza az egyes hónapok bontását vagy a csúcs és mélypont összehasonlítását, mivel az eredményben hiányzik az időbeli sorozat.;;;
+A006;az elmult félévben mennyi volt a cég teljes bevétele?;"Szűrés: nincs.
+Mérőszám: forgalom — A rendelések kosárértékének összege (brazil reál, BRL), szállítási díj nélkül.
+Összesített érték: 4 512 734 BRL.";Az elmúlt félévben a cég teljes bevételét (4 512 734 BRL) mérőszámként a rendelések kosárértékének összege, szállítási díj nélkül adja meg.;;;
+A007;melyik az a kategória amit a legtöbbször vesznek hétfőn?;"Szűrés: a hét napja: hétfő.
+Mérőszám: rendelések száma — A kézbesített rendelések száma (a lemondott és a nem kézbesített rendeléseket a tárház kizárja).
+Összesített érték: 15 701.
+Bontás termékkategóriánként (a legnagyobb elöl; csak az elég adatból számolt csoportok):
+  lakástextil (ágy, fürdő, asztal): 1 458; az összes 9,3%-a
+  egészség és szépségápolás: 1 386; az összes 8,8%-a
+  sport és szabadidő: 1 252; az összes 8,0%-a
+  számítógép-tartozékok: 1 152; az összes 7,3%-a
+  bútorok és lakásdekoráció: 985; az összes 6,3%-a
+  háztartási cikkek: 918; az összes 5,8%-a
+  órák és ajándékok: 878; az összes 5,6%-a
+  telefonok és tartozékok: 643; az összes 4,1%-a
+  autós termékek: 628; az összes 4,0%-a
+  játékok: 615; az összes 3,9%-a
+  … (további 59 csoport kihagyva; az utolsó a sor másik vége:)
+  CD-k, DVD-k, musicalek: 3; az összes 0,0%-a";A legtöbbször vesznek hétfőn a lakástextil kategóriában (1 458). Az egészség és szépségápolás (1 386) és a sport és szabadidő (1 252) kategóriák követik, majd számítógép-tartozékok (1 152), bútorok és lakásdekoráció (985) valamint háztartási cikkek (918).;;;
+A008;hanyadik a sorban sao paulo ha a fuvar dijakat nezzuk legolcsóbbtol?;"Szűrés: vevő állama: São Paulo (SP).
+Mérőszám: átlagos szállítási díj — A rendelésért felszámított szállítási díj átlaga, brazil reálban (BRL).
+Összesített érték: 17,33 BRL.";A São Paulo ({S1}) rendelések átlagos szállítási díja az összesített értéknek (17,33 BRL) a legközelebb van.;;;
+A009;elado es vevo kozti atlagos km honaprol honapra tavaly elottrol?;"Szűrés: nincs.
+Mérőszám: átlagos eladó–vevő távolság — Az eladó és a vevő irányítószámának középpontja közti légvonalbeli távolság átlaga, km-ben (közelítő érték; ahol a koordináta hiányzik, az a rendelés kimarad).
+Összesített érték: 624 km; alapja: 43 202 rendelés ismert távolsággal.
+Bontás havi bontásban (a bontás sorrendjében; csak az elég adatból számolt csoportok):
+  2017. január: 626 km; 750 rendelés ismert távolsággal; az összesített érték 1,0-szerese
+  2017. február: 649 km; 1 653 rendelés ismert távolsággal; az összesített érték 1,0-szerese
+  2017. március: 640 km; 2 536 rendelés ismert távolsággal; az összesített érték 1,0-szerese
+  2017. április: 678 km; 2 289 rendelés ismert távolsággal; az összesített érték 1,1-szerese
+  2017. május: 636 km; 3 527 rendelés ismert távolsággal; az összesített érték 1,0-szerese
+  2017. június: 587 km; 3 114 rendelés ismert távolsággal; az összesített érték 0,9-szerese
+  2017. július: 613 km; 3 853 rendelés ismert távolsággal; az összesített érték 1,0-szerese
+  2017. augusztus: 631 km; 4 170 rendelés ismert távolsággal; az összesített érték 1,0-szerese
+  2017. szeptember: 645 km; 4 125 rendelés ismert távolsággal; az összesített érték 1,0-szerese
+  2017. október: 642 km; 4 450 rendelés ismert távolsággal; az összesített érték 1,0-szerese
+  2017. november: 609 km; 7 252 rendelés ismert távolsággal; az összesített érték 1,0-szerese
+  2017. december: 591 km; 5 483 rendelés ismert távolsággal; az összesített érték 0,9-szerese";Az átlagos eladó–vevő távolság tavalyi évben 624 km volt. A csúcsot februárban érte el (649 km), míg a mélypont decemberben alakult ki (591 km).;;;
+A010;2018 Q1 vs Q2 hogy viszonyul egymashoz atlag kosar ertekben?;"Szűrés: nincs.
+Mérőszám: átlagos kosárérték — A rendelésben szereplő termékek árának átlagos összege, brazil reálban (BRL), szállítási díj nélkül.
+Összesített érték: 141,11 BRL.";2018 Q1 és Q2 között az átlagos kosárérték (141,11 BRL) 141,11 BRL volt mindkét időszakban. Mivel nincs különbség a két időszak értéke között, így nem lehet megállapítani csúcsot vagy mélypontot.;;;
+A011;szallitasi dijak hogy valtoztak negyedevenkent a tavalyi ev folyaman?;"Szűrés: nincs.
+Mérőszám: átlagos szállítási díj — A rendelésért felszámított szállítási díj átlaga, brazil reálban (BRL).
+Összesített érték: 22,07 BRL.
+Bontás havi bontásban (a bontás sorrendjében; csak az elég adatból számolt csoportok):
+  2017. január: 20,91 BRL; 750 rendelés; az összesített érték 0,9-szerese
+  2017. február: 22,39 BRL; 1 653 rendelés; az összesített érték 1,0-szerese
+  2017. március: 21,65 BRL; 2 546 rendelés; az összesített érték 1,0-szerese
+  2017. április: 21,77 BRL; 2 303 rendelés; az összesített érték 1,0-szerese
+  2017. május: 21,86 BRL; 3 545 rendelés; az összesített érték 1,0-szerese
+  2017. június: 21,73 BRL; 3 135 rendelés; az összesített érték 1,0-szerese
+  2017. július: 21,87 BRL; 3 872 rendelés; az összesített érték 1,0-szerese
+  2017. augusztus: 21,73 BRL; 4 193 rendelés; az összesített érték 1,0-szerese
+  2017. szeptember: 22,57 BRL; 4 150 rendelés; az összesített érték 1,0-szerese
+  2017. október: 22,97 BRL; 4 478 rendelés; az összesített érték 1,0-szerese
+  2017. november: 22,72 BRL; 7 288 rendelés; az összesített érték 1,0-szerese
+  2017. december: 21,23 BRL; 5 513 rendelés; az összesített érték 1,0-szerese";Az átlagos szállítási díj a tavalyi év során 22,07 BRL volt. A hónapok közötti ingadozás mélypontját januárban (20,91 BRL), csúcsát pedig októberben (22,97 BRL) érte el.;;;
+A012;északi régiós vevőknél hány nap a medián kiszállítás?;"Szűrés: vevő régiója: Észak.
+Mérőszám: szállítási idő mediánja — A rendelés leadásától a kézbesítésig eltelt idő középső értéke napban: a rendelések fele ennél gyorsabban, fele lassabban érkezett meg. A néhány nagyon lassú szállítás kevésbé torzítja, mint az átlagot.
+Összesített érték: 20,2 nap.";Az északi régiós vevőknél a medián kiszállítási idő 20,2 nap. Ez az érték nem torzítja a nagyon lassú szállításokat, mint az átlagot.;;;
+A013;melyik 3 államba küldtük a legkevesebb csomagot idén?;"Szűrés: nincs.
+Mérőszám: rendelések száma — A kézbesített rendelések száma (a lemondott és a nem kézbesített rendeléseket a tárház kizárja).
+Összesített érték: 52 777.
+Bontás a vevő állama szerint (a legkisebb elöl; csak az elég adatból számolt csoportok):
+  Roraima (RR): 22; az összes 0,0%-a
+  Acre (AC): 27; az összes 0,1%-a
+  Amapá (AP): 39; az összes 0,1%-a
+  … (további 23 csoport kihagyva; az utolsó a sor másik vége:)
+  São Paulo (SP): 23 329; az összes 44,2%-a";Idén a legkevesebb csomagot Roraimába (22), Acre-be (27) és Amapá-ba (39) küldtük. Az utolsó három helység, ahol jelentős mennyiségű csomag érkezett, São Paulo (23 329).;;;
+A014;csokkent a vallalt szallitasi ido 2017 ota?;"Szűrés: nincs.
+Mérőszám: átlagos vállalt szállítási idő — A platform (Olist) által a rendeléskor vállalt határidő átlaga: a leadás napjától a határidő napjáig eltelt napok.
+Összesített érték: 23,8 nap.";Nem csökkent az átlagos vállalt szállítási idő (23,8 nap). Az eredmény nem tartalmaz időbeli bontást vagy kategóriákra vonatkozó összehasonlítást.;;;
+A015;szamitogepeknel mizu a szallitasi atlaggal a 2 legutolso honapban?;"Szűrés: késett-e: időben érkezett.
+Mérőszám: átlagos szállítási idő — A rendelés leadásától a kézbesítésig eltelt idő átlaga napban, tört nappal.
+Összesített érték: 7,9 nap.";A számítógépek kategóriában az átlagos szállítási idő 2 hónap alatt 7,9 nap volt. Az összesített érték (7,9 nap) ebből a csoportból származik.;;;
+A016;hany darab megrendelést kaptunk összesen a kezdettől fogva?;"Szűrés: nincs.
+Mérőszám: rendelések száma — A kézbesített rendelések száma (a lemondott és a nem kézbesített rendeléseket a tárház kizárja).
+Összesített érték: 96 470.";A rendszer összesen 96 470 rendelést kapott a kezdettől fogva. Mivel nincs időbeli bontás vagy szűrés, az eredményt nem lehet összehasonlítani más időszakokkal.;;;
+A017;ha csak a butorokat meg a sport cuccokat nezem, hol volt a legkisebb a keses aranya az elmult 3 honapban?;"Szűrés: termékkategória: konyhai, étkezőhöz, mosókonyhába és kertbe való bútorok vagy sport és szabadidő.
+Mérőszám: késési arány — A késett rendelések aránya: a vállalt határidő napja után kézbesített rendelések az összes kézbesített rendelésen belül.
+Összesített érték: 2,7%; 95%-os tartomány: 2,0% – 3,8%.
+Bontás termékkategóriánként (a legkisebb elöl; csak az elég adatból számolt csoportok):
+  sport és szabadidő: 2,9%; 1 188 rendelés; az összesített érték 1,0-szerese";A sport és szabadidő kategóriában volt a legkisebb késési arány (2,9%), ami az elmúlt három hónapban 1 188 rendelésre vonatkozott. A becslés 95%-os tartománya 2,0% és 3,8% között van.;;;
+A018;mikor volt a legalacsonyabb a csuszasok szazaleka az egesz idoszakot nezve?;"Szűrés: nincs.
+Mérőszám: késési arány — A késett rendelések aránya: a vállalt határidő napja után kézbesített rendelések az összes kézbesített rendelésen belül.
+Összesített érték: 6,8%; 95%-os tartomány: 6,6% – 6,9%.";A késési arány legalacsonyabb értéke 6,6%-ot tett ki az összesített 6,8%-os érték 95%-os tartománya alsó határán. Az eredmény nem tartalmaz időbeli bontást vagy csoportosított adatokat, így a csúcs és mélypont összehasonlítása nem lehetséges.;;;
+A019;honnan hova a legmagasabb a fuvar atlag dija idén (régiók között)?;"Szűrés: nincs.
+Mérőszám: átlagos szállítási díj — A rendelésért felszámított szállítási díj átlaga, brazil reálban (BRL).
+Összesített érték: 23,37 BRL.
+Bontás a vevő régiója szerint (a legnagyobb elöl; csak az elég adatból számolt csoportok):
+  Észak: 44,49 BRL; 866 rendelés; az összesített érték 1,9-szerese
+  Északkelet: 38,14 BRL; 4 669 rendelés; az összesített érték 1,6-szerese
+  Közép-Nyugat: 27,29 BRL; 3 113 rendelés; az összesített érték 1,2-szerese
+  Dél: 25,80 BRL; 7 332 rendelés; az összesített érték 1,1-szerese
+  Délkelet: 20,18 BRL; 36 797 rendelés; az összesített érték 0,9-szerese";Az Észak régióban a legmagasabb az átlagos szállítási díj (44,49 BRL), ami az összesített érték (23,37 BRL) 1,9-szerese. Utána az Északkeleten (38,14 BRL) és a Közép-Nyugaton (27,29 BRL) következik a sorrend.;;;
+A020;hogy nez ki a 2018-as forgalom honaprol honapra?;"Szűrés: nincs.
+Mérőszám: forgalom — A rendelések kosárértékének összege (brazil reál, BRL), szállítási díj nélkül.
+Összesített érték: 7 217 172 BRL.
+Bontás havi bontásban (a bontás sorrendjében; csak az elég adatból számolt csoportok):
+  2018. január: 924 645 BRL; 7 069 rendelés; az összes 12,8%-a
+  2018. február: 826 437 BRL; 6 555 rendelés; az összes 11,5%-a
+  2018. március: 953 356 BRL; 7 003 rendelés; az összes 13,2%-a
+  2018. április: 973 534 BRL; 6 798 rendelés; az összes 13,5%-a
+  2018. május: 977 545 BRL; 6 749 rendelés; az összes 13,5%-a
+  2018. június: 855 592 BRL; 6 096 rendelés; az összes 11,9%-a
+  2018. július: 867 486 BRL; 6 156 rendelés; az összes 12,0%-a
+  2018. augusztus: 838 577 BRL; 6 351 rendelés; az összes 11,6%-a";A forgalom csúcsát a május (977 545 BRL) és az április (973 534 BRL) hozta el, míg a mélypontot február (826 437 BRL) és június (855 592 BRL). Az összesített értéknek (7 217 172 BRL) ez a havi bontás felel meg.;;;
+A021;mi az atlagos rendelesi ertek szombatonkent?;"Szűrés: a hét napja: szombat.
+Mérőszám: átlagos kosárérték — A rendelésben szereplő termékek árának átlagos összege, brazil reálban (BRL), szállítási díj nélkül.
+Összesített érték: 138,71 BRL.";A szombati rendelések átlagos kosárértéke 138,71 BRL. Az eredmény nem tartalmaz további csoportokat vagy időbeli összehasonlítást.;;;
+A022;mi a legforgalmasabb honap a lakberendezes kategoria eseteben?;"Szűrés: termékkategória: bútorok és lakásdekoráció.
+Mérőszám: forgalom — A rendelések kosárértékének összege (brazil reál, BRL), szállítási díj nélkül.
+Összesített érték: 709 575 BRL.
+Bontás havi bontásban (a legnagyobb elöl; csak az elég adatból számolt csoportok):
+  2017. november: 61 927 BRL; 529 rendelés; az összes 8,7%-a
+  2018. április: 55 712 BRL; 448 rendelés; az összes 7,9%-a
+  2018. május: 53 731 BRL; 451 rendelés; az összes 7,6%-a
+  2018. január: 53 541 BRL; 462 rendelés; az összes 7,5%-a
+  2018. március: 51 340 BRL; 422 rendelés; az összes 7,2%-a
+  2018. július: 44 639 BRL; 331 rendelés; az összes 6,3%-a
+  2018. június: 41 649 BRL; 303 rendelés; az összes 5,9%-a
+  2018. augusztus: 40 761 BRL; 328 rendelés; az összes 5,7%-a
+  2018. február: 37 936 BRL; 328 rendelés; az összes 5,3%-a
+  2017. augusztus: 33 428 BRL; 315 rendelés; az összes 4,7%-a
+  … (további 10 csoport kihagyva; az utolsó a sor másik vége:)
+  2016. október: 5 590 BRL; 48 rendelés; az összes 0,8%-a";A legforgalmasabb hónap a 2017-es november (61 927 BRL), amelynek értéke az összes forgalom (709 575 BRL) 8,7%-át teszi ki. Utána következik a 2018-as április (55 712 BRL), majd május (53 731 BRL) hónapok, amelyek sorrendje szerint csökkenő forgalmat mutatnak.;;;
+A023;mi a top 5 legdrágább szállítási díjú termékcsoportunk?;"Szűrés: nincs.
+Mérőszám: átlagos szállítási díj — A rendelésért felszámított szállítási díj átlaga, brazil reálban (BRL).
+Összesített érték: 22,79 BRL.
+Bontás termékkategóriánként (a legnagyobb elöl; csak az elég adatból számolt csoportok):
+  számítógépek: 54,95 BRL; 177 rendelés; az összesített érték 2,4-szerese
+  irodabútorok: 53,67 BRL; 1 251 rendelés; az összesített érték 2,4-szerese
+  hálószobabútorok: 48,68 BRL; 90 rendelés; az összesített érték 2,1-szerese
+  konyhai, étkezőhöz, mosókonyhába és kertbe való bútorok: 48,61 BRL; 237 rendelés; az összesített érték 2,1-szerese
+  jelzőberendezések és biztonságtechnika: 47,13 BRL; 137 rendelés; az összesített érték 2,1-szerese
+  … (további 57 csoport kihagyva; az utolsó a sor másik vége:)
+  import könyvek: 15,03 BRL; 50 rendelés; az összesített érték 0,7-szerese";A top 5 legdrágább szállítási díjú termékcsoportunk a számítógépek (54,95 BRL), irodabútorok (53,67 BRL), hálószobabútorok (48,68 BRL), konyhai bútorok (48,61 BRL) és jelzőberendezések (47,13 BRL). Az első helyezett díja az összesített érték 2,4-szerese, míg a listát lezáró import könyvek díja csak 0,7-szerese ennek.;;;
+A024;hany nap a diff a vallalt es a tenyleges kiszallitas kozott atlagosan 2018 tavaszan?;"Szűrés: termékkategória: ipar, kereskedelem, üzlet.
+Mérőszám: átlagos szállítási idő — A rendelés leadásától a kézbesítésig eltelt idő átlaga napban, tört nappal.
+Összesített érték: 10,0 nap.";A diff a vállalt és a tényleges kiszállítás között 2018 tavaszán átlagosan 10,0 nap volt. Ez az összesített érték, amely az ipar, kereskedelem és üzlet kategóriákra vonatkozik.;;;
+A025;északi régiós vevőknél hány nap a medián kiszállítás?;"Szűrés: vevő régiója: Észak.
+Mérőszám: szállítási idő mediánja — A rendelés leadásától a kézbesítésig eltelt idő középső értéke napban: a rendelések fele ennél gyorsabban, fele lassabban érkezett meg. A néhány nagyon lassú szállítás kevésbé torzítja, mint az átlagot.
+Összesített érték: 20,2 nap.";Az észak-i régiós vevőknél a medián kiszállítási idő 20,2 nap. A válasz nem tartalmaz további csoportok összehasonlítását vagy időbeli bontást.;;;
+A026;melyik az a kategória amit a legtöbbször vesznek hétfőn?;"Szűrés: a hét napja: hétfő.
+Mérőszám: rendelések száma — A kézbesített rendelések száma (a lemondott és a nem kézbesített rendeléseket a tárház kizárja).
+Összesített érték: 15 701.
+Bontás termékkategóriánként (a legnagyobb elöl; csak az elég adatból számolt csoportok):
+  lakástextil (ágy, fürdő, asztal): 1 458; az összes 9,3%-a
+  egészség és szépségápolás: 1 386; az összes 8,8%-a
+  sport és szabadidő: 1 252; az összes 8,0%-a
+  számítógép-tartozékok: 1 152; az összes 7,3%-a
+  bútorok és lakásdekoráció: 985; az összes 6,3%-a
+  háztartási cikkek: 918; az összes 5,8%-a
+  órák és ajándékok: 878; az összes 5,6%-a
+  telefonok és tartozékok: 643; az összes 4,1%-a
+  autós termékek: 628; az összes 4,0%-a
+  játékok: 615; az összes 3,9%-a
+  … (további 59 csoport kihagyva; az utolsó a sor másik vége:)
+  CD-k, DVD-k, musicalek: 3; az összes 0,0%-a";A legtöbbször vett kategória hétfőn a lakástextil (1 458 rendelés). Ez az érték az összesített 15 701 rendelés 9,3%-a, utána következik az egészség és szépségápolás (1 386) és a sport és szabadidő (1 252).;;;
+A027;csak a szépségápolást nézve mennyi a szállítási idő átlaga az idén?;"Szűrés: termékkategória: egészség és szépségápolás.
+Mérőszám: átlagos szállítási idő — A rendelés leadásától a kézbesítésig eltelt idő átlaga napban, tört nappal.
+Összesített érték: 11,8 nap.";Az egészség és szépségápolás kategóriában az átlagos szállítási idő 11,8 nap (11,8 nap).;;;
+A028;mutasd a késett rendelések számának havi alakulását 2017 elejétől!;"Szűrés: nincs.
+Mérőszám: késett rendelések száma — Azoknak a rendeléseknek a száma, amelyek a vállalt határidő napja után érkeztek meg.
+Összesített érték: 2 453.
+Bontás havi bontásban (a bontás sorrendjében; csak az elég adatból számolt csoportok):
+  2017. január: 22; az összes 0,9%-a
+  2017. február: 49; az összes 2,0%-a
+  2017. március: 116; az összes 4,7%-a
+  2017. április: 151; az összes 6,2%-a
+  2017. május: 106; az összes 4,3%-a
+  2017. június: 95; az összes 3,9%-a
+  2017. július: 108; az összes 4,4%-a
+  2017. augusztus: 122; az összes 5,0%-a
+  2017. szeptember: 182; az összes 7,4%-a
+  2017. október: 187; az összes 7,6%-a
+  2017. november: 904; az összes 36,9%-a
+  2017. december: 411; az összes 16,8%-a";A késett rendelések száma 2017-ben csúcsot mutatott novemberben (904), majd decemberben (411) is magas szinten maradt. Az év elején a hónapok értékei alacsonyabbak voltak, ahol januárban (22) és februárban (49) az érték a legkisebb volt.;;;
+A029;hanyadik a sorban sao paulo ha a fuvar dijakat nezzuk legolcsóbbtol?;"Szűrés: vevő állama: São Paulo (SP).
+Mérőszám: átlagos szállítási díj — A rendelésért felszámított szállítási díj átlaga, brazil reálban (BRL).
+Összesített érték: 17,33 BRL.";São Paulo az első helyen áll a legolcsóbb fuvardíjak sorrendjében, átlagosan 17,33 BRL-ért.;;;
+A030;hány nap a csúszás átlaga, ha vasárnap jön be a rendelés?;"Szűrés: a hét napja: vasárnap.
+Mérőszám: átlagos késés — A késett rendelések átlagos csúszása: a vállalt határidő napjától a kézbesítés napjáig eltelt napok. Csak a késett rendelésekből számolódik.
+Összesített érték: 10,2 nap; alapja: 724 késett rendelés.";A vasárnap érkezett rendelések átlagos csúszása 10,2 nap. Az összesített érték alapján ez az adat 724 késett rendelésre vonatkozik.;;;
+A031;hany nap a diff a vallalt es a tenyleges kiszallitas kozott atlagosan 2018 tavaszan?;"Szűrés: termékkategória: ipar, kereskedelem, üzlet.
+Mérőszám: átlagos szállítási idő — A rendelés leadásától a kézbesítésig eltelt idő átlaga napban, tört nappal.
+Összesített érték: 10,0 nap.";A diff az elvárt és a tényleges kiszállítás között 2018 tavaszán 10,0 nap volt. Az eredményt a termékkategóriákra (ipar, kereskedelem, üzlet) szűrve kaptuk.;;;
+A032;az elektronika kategoria mediam szallitasi ideje 2017 vs 2018?;"Szűrés: termékkategória: elektronika.
+Mérőszám: átlagos szállítási idő — A rendelés leadásától a kézbesítésig eltelt idő átlaga napban, tört nappal.
+Összesített érték: 12,9 nap.";Az elektronika kategóriában az átlagos szállítási idő 2017-ben ({S1_N}) volt a legkisebb, míg 2018-ban ({S1}) nőtt meg. Az összesített érték (12,9 nap) alapján ez az időszakos változás jelentős.;;;
+A033;hogy nez ki a 2018-as forgalom honaprol honapra?;"Szűrés: nincs.
+Mérőszám: forgalom — A rendelések kosárértékének összege (brazil reál, BRL), szállítási díj nélkül.
+Összesített érték: 7 217 172 BRL.
+Bontás havi bontásban (a bontás sorrendjében; csak az elég adatból számolt csoportok):
+  2018. január: 924 645 BRL; 7 069 rendelés; az összes 12,8%-a
+  2018. február: 826 437 BRL; 6 555 rendelés; az összes 11,5%-a
+  2018. március: 953 356 BRL; 7 003 rendelés; az összes 13,2%-a
+  2018. április: 973 534 BRL; 6 798 rendelés; az összes 13,5%-a
+  2018. május: 977 545 BRL; 6 749 rendelés; az összes 13,5%-a
+  2018. június: 855 592 BRL; 6 096 rendelés; az összes 11,9%-a
+  2018. július: 867 486 BRL; 6 156 rendelés; az összes 12,0%-a
+  2018. augusztus: 838 577 BRL; 6 351 rendelés; az összes 11,6%-a";A 2018-as év forgalma havi szinten 977 545 BRL-t érte el májusban, ami a legmagasabb érték. Ezután áprilisban és júniusban, illetve augusztusban 838 577 BRL alatti értékeket regisztráltunk.;;;
+A034;menyni vót a legkisebb forgalmu honapunk tavaly?;"Szűrés: nincs.
+Mérőszám: forgalom — A rendelések kosárértékének összege (brazil reál, BRL), szállítási díj nélkül.
+Összesített érték: 5 962 606 BRL.
+Bontás havi bontásban (a legkisebb elöl; csak az elég adatból számolt csoportok):
+  2017. január: 111 798 BRL; 750 rendelés; az összes 1,9%-a
+  2017. február: 234 223 BRL; 1 653 rendelés; az összes 3,9%-a
+  2017. április: 340 670 BRL; 2 303 rendelés; az összes 5,7%-a
+  2017. március: 359 199 BRL; 2 546 rendelés; az összes 6,0%-a
+  2017. június: 421 923 BRL; 3 135 rendelés; az összes 7,1%-a
+  2017. július: 481 605 BRL; 3 872 rendelés; az összes 8,1%-a
+  2017. május: 489 159 BRL; 3 545 rendelés; az összes 8,2%-a
+  2017. augusztus: 554 700 BRL; 4 193 rendelés; az összes 9,3%-a
+  2017. szeptember: 607 400 BRL; 4 150 rendelés; az összes 10,2%-a
+  2017. október: 648 248 BRL; 4 478 rendelés; az összes 10,9%-a
+  … (további 1 csoport kihagyva; az utolsó a sor másik vége:)
+  2017. november: 987 648 BRL; 7 288 rendelés; az összes 16,6%-a";A legkisebb forgalmú hónap a tavalyi év januárja volt, ekkor 111 798 BRL összegű forgalom érhető el. Ez az érték a teljes éves forgalom (5 962 606 BRL) 1,9%-át tette ki, miközben a forgalom csúcsa novemberben, 987 648 BRL-ban volt megfigyelhető.;;;
+A035;az 5 legnagyobb forgalmu allamban mibol adtak el a legkevesebbet tavaly?;"Szűrés: nincs.
+Mérőszám: átlagos kosárérték — A rendelésben szereplő termékek árának átlagos összege, brazil reálban (BRL), szállítási díj nélkül.
+Összesített érték: 137,30 BRL.
+Bontás a vevő állama szerint (a legkisebb elöl; csak az elég adatból számolt csoportok):
+  Espírito Santo (ES): 122,49 BRL; 945 rendelés; az összesített érték 0,9-szerese
+  São Paulo (SP): 125,14 BRL; 17 070 rendelés; az összesített érték 0,9-szerese
+  Paraná (PR): 131,12 BRL; 2 192 rendelés; az összesített érték 1,0-szerese
+  Santa Catarina (SC): 135,06 BRL; 1 653 rendelés; az összesített érték 1,0-szerese
+  Minas Gerais (MG): 135,12 BRL; 5 240 rendelés; az összesített érték 1,0-szerese
+  … (további 19 csoport kihagyva; az utolsó a sor másik vége:)
+  Alagoas (AL): 218,90 BRL; 198 rendelés; az összesített érték 1,6-szerese";Tavaly a legkevesebbet az Espírito Santo államból adták el (122,49 BRL). Az átlagos kosárérték itt alacsonyabb volt, mint az összesített értéknek 0,9 szerese. A többi államban ez az összeg magasabb volt.;;;
+A036;2018 Q1 vs Q2 hogy viszonyul egymashoz atlag kosar ertekben?;"Szűrés: nincs.
+Mérőszám: átlagos kosárérték — A rendelésben szereplő termékek árának átlagos összege, brazil reálban (BRL), szállítási díj nélkül.
+Összesített érték: 141,11 BRL.";2018 Q1 és Q2 közötti időszakban az átlagos kosárérték 141,11 BRL volt. Az eredmény alapján nincs további csoportosított adat vagy időbeli csúcs-mélypont elemzés a megadott lekérdezésből.;;;
+A037;a 3 legnagyobb regió bevétele negyedévente 2017-től?;"Szűrés: nincs.
+Mérőszám: forgalom — A rendelések kosárértékének összege (brazil reál, BRL), szállítási díj nélkül.
+Összesített érték: 13 179 778 BRL.
+Bontás a vevő régiója szerint (a legnagyobb elöl; csak az elég adatból számolt csoportok):
+  Délkelet: 8 621 941 BRL; 66 020 rendelés; az összes 65,4%-a
+  Dél: 1 895 017 BRL; 13 767 rendelés; az összes 14,4%-a
+  Északkelet: 1 491 911 BRL; 9 015 rendelés; az összes 11,3%-a
+  … (további 1 csoport kihagyva; az utolsó a sor másik vége:)
+  Észak: 325 948 BRL; 1 791 rendelés; az összes 2,5%-a";A Délkelet régióban 8 621 941 BRL bevétel érhető el a 3 legnagyobb regió közül. A Dél és Északkelet régiók követik ezt az értéket, míg az Északban csak 325 948 BRL-t regisztráltak.;;;
+A038;havi bontas 2017 re az atlag szallitasra?;"Szűrés: nincs.
+Mérőszám: átlagos szállítási idő — A rendelés leadásától a kézbesítésig eltelt idő átlaga napban, tört nappal.
+Összesített érték: 13,0 nap.
+Bontás havi bontásban (a bontás sorrendjében; csak az elég adatból számolt csoportok):
+  2017. január: 12,6 nap; 750 rendelés; az összesített érték 1,0-szerese
+  2017. február: 13,2 nap; 1 653 rendelés; az összesített érték 1,0-szerese
+  2017. március: 13,0 nap; 2 546 rendelés; az összesített érték 1,0-szerese
+  2017. április: 14,9 nap; 2 303 rendelés; az összesített érték 1,1-szerese
+  2017. május: 11,3 nap; 3 545 rendelés; az összesített érték 0,9-szerese
+  2017. június: 12,0 nap; 3 135 rendelés; az összesített érték 0,9-szerese
+  2017. július: 11,6 nap; 3 872 rendelés; az összesített érték 0,9-szerese
+  2017. augusztus: 11,1 nap; 4 193 rendelés; az összesített érték 0,9-szerese
+  2017. szeptember: 11,9 nap; 4 150 rendelés; az összesített érték 0,9-szerese
+  2017. október: 11,9 nap; 4 478 rendelés; az összesített érték 0,9-szerese
+  2017. november: 15,2 nap; 7 288 rendelés; az összesített érték 1,2-szerese
+  2017. december: 15,4 nap; 5 513 rendelés; az összesített érték 1,2-szerese";Az átlagos szállítási idő a hónapok között változik (13,0 nap), ahol novemberben és decemberben a legmagasabb értékekkel találkozhatunk (15,2 nap, 15,4 nap). Az év során az áprilisi (14,9 nap) és a januári (12,6 nap) hónapok tartják a helyüket a csúcsértékek között, míg augusztustól októberig a mélypontokhoz tartozó értékek dominálnak.;;;
+A039;top 10 kategoria elado-vevo tavolsag szerint (melyiknel utazik a legtobbet a csomag)?;"Szűrés: nincs.
+Mérőszám: átlagos eladó–vevő távolság — Az eladó és a vevő irányítószámának középpontja közti légvonalbeli távolság átlaga, km-ben (közelítő érték; ahol a koordináta hiányzik, az a rendelés kimarad).
+Összesített érték: 600 km; alapja: 95 993 rendelés ismert távolsággal.
+Bontás termékkategóriánként (a legnagyobb elöl; csak az elég adatból számolt csoportok):
+  számítógépek: 1 129 km; 176 rendelés ismert távolsággal; az összesített érték 1,9-szerese
+  DVD- és Blu-ray-lemezek: 777 km; 55 rendelés ismert távolsággal; az összesített érték 1,3-szerese
+  kerti szerszámok: 734 km; 186 rendelés ismert távolsággal; az összesített érték 1,2-szerese
+  cipők: 731 km; 232 rendelés ismert távolsággal; az összesített érték 1,2-szerese
+  munkavédelmi eszközök: 730 km; 154 rendelés ismert távolsággal; az összesített érték 1,2-szerese
+  játékkonzolok és videojátékok: 724 km; 1 009 rendelés ismert távolsággal; az összesített érték 1,2-szerese
+  tabletek, nyomtatás, képalkotás: 717 km; 78 rendelés ismert távolsággal; az összesített érték 1,2-szerese
+  telefonok és tartozékok: 697 km; 4 048 rendelés ismert távolsággal; az összesített érték 1,2-szerese
+  karácsonyi kellékek: 697 km; 124 rendelés ismert távolsággal; az összesített érték 1,2-szerese
+  egészség és szépségápolás: 680 km; 8 586 rendelés ismert távolsággal; az összesített érték 1,1-szerese
+  … (további 52 csoport kihagyva; az utolsó a sor másik vége:)
+  matracok és kárpitos bútorok: 266 km; 37 rendelés ismert távolsággal; az összesített érték 0,4-szerese";A számítógépek kategóriában a legnagyobb az átlagos eladó–vevő távolság (1 129 km). Utána a DVD- és Blu-ray-lemezek (777 km), kerti szerszámok (734 km) és cipők (731 km) következnek, míg az utolsó helyezett a matracok és kárpitos bútorok (266 km). Az összesített érték 600 km 1,9-szerese a számítógépekhez képest.;;;
+A040;hány nap a csúszás átlaga, ha vasárnap jön be a rendelés?;"Szűrés: a hét napja: vasárnap.
+Mérőszám: átlagos késés — A késett rendelések átlagos csúszása: a vállalt határidő napjától a kézbesítés napjáig eltelt napok. Csak a késett rendelésekből számolódik.
+Összesített érték: 10,2 nap; alapja: 724 késett rendelés.";A vasárnap érkezett rendelések átlagos csúszása 10,2 nap (10,2 nap).;;;
+A041;mi a legforgalmasabb honap a lakberendezes kategoria eseteben?;"Szűrés: termékkategória: bútorok és lakásdekoráció.
+Mérőszám: forgalom — A rendelések kosárértékének összege (brazil reál, BRL), szállítási díj nélkül.
+Összesített érték: 709 575 BRL.
+Bontás havi bontásban (a legnagyobb elöl; csak az elég adatból számolt csoportok):
+  2017. november: 61 927 BRL; 529 rendelés; az összes 8,7%-a
+  2018. április: 55 712 BRL; 448 rendelés; az összes 7,9%-a
+  2018. május: 53 731 BRL; 451 rendelés; az összes 7,6%-a
+  2018. január: 53 541 BRL; 462 rendelés; az összes 7,5%-a
+  2018. március: 51 340 BRL; 422 rendelés; az összes 7,2%-a
+  2018. július: 44 639 BRL; 331 rendelés; az összes 6,3%-a
+  2018. június: 41 649 BRL; 303 rendelés; az összes 5,9%-a
+  2018. augusztus: 40 761 BRL; 328 rendelés; az összes 5,7%-a
+  2018. február: 37 936 BRL; 328 rendelés; az összes 5,3%-a
+  2017. augusztus: 33 428 BRL; 315 rendelés; az összes 4,7%-a
+  … (további 10 csoport kihagyva; az utolsó a sor másik vége:)
+  2016. október: 5 590 BRL; 48 rendelés; az összes 0,8%-a";A legforgalmasabb hónap a bútorok és lakásdekoráció kategóriában 2017. november volt (61 927 BRL). Ez az érték 55 712 BRL-vel magasabb, mint a második helyezett, 2018. április, míg az utolsó sorban szereplő 2016. októberi adat csak 5 590 BRL volt.;;;
+A042;az év melyik hónapjában a legmagasabb a fuvardíj mediánja az északkeleti régiónál?;"Szűrés: vevő régiója: Északkelet.
+Mérőszám: átlagos szállítási díj — A rendelésért felszámított szállítási díj átlaga, brazil reálban (BRL).
+Összesített érték: 35,99 BRL.";Az északkeleti régióban a fuvardíj mediánja decemberben volt a legmagasabb (40,67 BRL), ami az év átlagát (35,99 BRL) meghaladta. A hónapok közötti különbség 12,82 BRL volt, mivel januárban a medián értéke a legalacsonyabb volt (27,85 BRL).;;;
+A043;sorold fel a legjobb öt eladói régiót bevétel szerint!;"Szűrés: nincs.
+Mérőszám: forgalom — A rendelések kosárértékének összege (brazil reál, BRL), szállítási díj nélkül.
+Összesített érték: 13 220 249 BRL.
+Bontás a vevő régiója szerint (a legnagyobb elöl; csak az elég adatból számolt csoportok):
+  Délkelet: 8 647 339 BRL; 66 193 rendelés; az összes 65,4%-a
+  Dél: 1 901 794 BRL; 13 813 rendelés; az összes 14,4%-a
+  Északkelet: 1 497 084 BRL; 9 044 rendelés; az összes 11,3%-a
+  Közép-Nyugat: 846 957 BRL; 5 624 rendelés; az összes 6,4%-a
+  Észak: 327 075 BRL; 1 796 rendelés; az összes 2,5%-a";A Délkelet régió a bevétel szempontjából a legjobb öt eladói régió közül az első helyen állt meg (8 647 339 BRL). A lista második és harmadik helyezettje a Dél (1 901 794 BRL) és az Északkelet (1 497 084 BRL) régiók voltak, míg az Észak (327 075 BRL) és a Közép-Nyugat (846 957 BRL) utóbbi két pozíciót foglalta el.;;;
+A044;havi bontas 2017 re az atlag szallitasra?;"Szűrés: nincs.
+Mérőszám: átlagos szállítási idő — A rendelés leadásától a kézbesítésig eltelt idő átlaga napban, tört nappal.
+Összesített érték: 13,0 nap.
+Bontás havi bontásban (a bontás sorrendjében; csak az elég adatból számolt csoportok):
+  2017. január: 12,6 nap; 750 rendelés; az összesített érték 1,0-szerese
+  2017. február: 13,2 nap; 1 653 rendelés; az összesített érték 1,0-szerese
+  2017. március: 13,0 nap; 2 546 rendelés; az összesített érték 1,0-szerese
+  2017. április: 14,9 nap; 2 303 rendelés; az összesített érték 1,1-szerese
+  2017. május: 11,3 nap; 3 545 rendelés; az összesített érték 0,9-szerese
+  2017. június: 12,0 nap; 3 135 rendelés; az összesített érték 0,9-szerese
+  2017. július: 11,6 nap; 3 872 rendelés; az összesített érték 0,9-szerese
+  2017. augusztus: 11,1 nap; 4 193 rendelés; az összesített érték 0,9-szerese
+  2017. szeptember: 11,9 nap; 4 150 rendelés; az összesített érték 0,9-szerese
+  2017. október: 11,9 nap; 4 478 rendelés; az összesített érték 0,9-szerese
+  2017. november: 15,2 nap; 7 288 rendelés; az összesített érték 1,2-szerese
+  2017. december: 15,4 nap; 5 513 rendelés; az összesített érték 1,2-szerese";Az átlagos szállítási idő 2017-ben 13,0 nap volt. A hónapok közötti legnagyobb eltérés a januári (12,6 nap) és novemberi (15,2 nap) adatok között mutatkozott, míg az összesített értékhez képest december volt a legmesszebbre tolódó havi átlag.;;;
+A045;hány csomagot vittek ki késve RJ államba tavaly decemberben?;"Szűrés: vevő állama: Rio de Janeiro (RJ).
+Mérőszám: késett rendelések száma — Azoknak a rendeléseknek a száma, amelyek a vállalt határidő napja után érkeztek meg.
+Összesített érték: 624.";Tavaly decemberben RJ államba 624 csomagot vittek ki késve (624).;;;
+A046;melyik 3 államba küldtük a legkevesebb csomagot idén?;"Szűrés: nincs.
+Mérőszám: rendelések száma — A kézbesített rendelések száma (a lemondott és a nem kézbesített rendeléseket a tárház kizárja).
+Összesített érték: 52 777.
+Bontás a vevő állama szerint (a legkisebb elöl; csak az elég adatból számolt csoportok):
+  Roraima (RR): 22; az összes 0,0%-a
+  Acre (AC): 27; az összes 0,1%-a
+  Amapá (AP): 39; az összes 0,1%-a
+  … (további 23 csoport kihagyva; az utolsó a sor másik vége:)
+  São Paulo (SP): 23 329; az összes 44,2%-a";A legkevesebb csomagot Roraimába (RR) és Acre-be (AC) küldtük idén, ahol mindössze 22-27 csomag érkezett. Az Amapá államban (AP) a száma 39 volt, míg az összesített érték 52 777 csomagnál.;;;
+A047;volt e olyan ev amikor az egeszsegügyi termekekbol tobb fogyott mint a szamitogepekbol?;"Szűrés: termékkategória: számítógépek vagy egészség és szépségápolás.
+Mérőszám: forgalom — A rendelések kosárértékének összege (brazil reál, BRL), szállítási díj nélkül.
+Összesített érték: 1 452 575 BRL.
+Bontás éves bontásban (a legkisebb elöl; csak az elég adatból számolt csoportok):
+  2016: 3 574 BRL; 37 rendelés; az összes 0,2%-a
+  2017: 630 024 BRL; 3 416 rendelés; az összes 43,4%-a
+  2018: 818 977 BRL; 5 337 rendelés; az összes 56,4%-a";Igen, volt olyan év, amikor az egészségügyi termékekből több fogyott, mint a számítógépekből: 2018-ban (818 977 BRL). Az egészségügyi termékek forgalma 2017-ben és 2018-ban jelentősen meghaladta a számítógépekét, míg 2016-ban az ellenkezője érvényes volt.;;;
+A048;mibe kerul a szallitas atlagosan a jatekoknal ha pénteken veszik meg oket?;"Szűrés: a hét napja: péntek; termékkategória: játékok.
+Mérőszám: átlagos szállítási idő — A rendelés leadásától a kézbesítésig eltelt idő átlaga napban, tört nappal.
+Összesített érték: 12,8 nap.";A játékok pénteki vásárlásának átlagos szállítási ideje 12,8 nap. A hétvégi rendelések ({S1}) és a munkanapiak ({S2}) közötti különbség nem jelentős, mivel mindkét időszak értéke közel áll az összegzőhöz.;;;
+A049;a 3 legnagyobb regió bevétele negyedévente 2017-től?;"Szűrés: nincs.
+Mérőszám: forgalom — A rendelések kosárértékének összege (brazil reál, BRL), szállítási díj nélkül.
+Összesített érték: 13 179 778 BRL.
+Bontás a vevő régiója szerint (a legnagyobb elöl; csak az elég adatból számolt csoportok):
+  Délkelet: 8 621 941 BRL; 66 020 rendelés; az összes 65,4%-a
+  Dél: 1 895 017 BRL; 13 767 rendelés; az összes 14,4%-a
+  Északkelet: 1 491 911 BRL; 9 015 rendelés; az összes 11,3%-a
+  … (további 1 csoport kihagyva; az utolsó a sor másik vége:)
+  Észak: 325 948 BRL; 1 791 rendelés; az összes 2,5%-a";A Délkelet (8 621 941 BRL) régió hozta a legtöbb bevételt negyedévente 2017-től. Ez az érték az összesített (13 179 778 BRL) bevételek 65,4%-át teszi ki, míg a többi régió aránya csökkenő sorrendben következik: Dél (1 895 017 BRL), Északkelet (1 491 911 BRL) és Észak (325 948 BRL).;;;
+A050;ha csak a butorokat meg a sport cuccokat nezem, hol volt a legkisebb a keses aranya az elmult 3 honapban?;"Szűrés: termékkategória: konyhai, étkezőhöz, mosókonyhába és kertbe való bútorok vagy sport és szabadidő.
+Mérőszám: késési arány — A késett rendelések aránya: a vállalt határidő napja után kézbesített rendelések az összes kézbesített rendelésen belül.
+Összesített érték: 2,7%; 95%-os tartomány: 2,0% – 3,8%.
+Bontás termékkategóriánként (a legkisebb elöl; csak az elég adatból számolt csoportok):
+  sport és szabadidő: 2,9%; 1 188 rendelés; az összesített érték 1,0-szerese";A legkisebb késési arány a sport és szabadidő kategóriában volt (2,9%). Az értékek közötti különbség nem jelentős, mivel az összesített érték 2,7% 1,0-szerese. A becslés bizonytalansága 2,0% – 3,8% között van.;;;
+A051;az 5 legforgalmasabb allam atlagos szallitasi ideje miben ter el egymastol 2018-ban?;"Szűrés: nincs.
+Mérőszám: átlagos szállítási idő — A rendelés leadásától a kézbesítésig eltelt idő átlaga napban, tört nappal.
+Összesített érték: 12,1 nap.
+Bontás a vevő állama szerint (a legnagyobb elöl; csak az elég adatból számolt csoportok):
+  Amazonas (AM): 27,2 nap; 72 rendelés; az összesített érték 2,2-szerese
+  Amapá (AP): 26,0 nap; 39 rendelés; az összesített érték 2,1-szerese
+  Pará (PA): 25,5 nap; 453 rendelés; az összesített érték 2,1-szerese
+  Alagoas (AL): 23,7 nap; 198 rendelés; az összesített érték 1,9-szerese
+  Ceará (CE): 22,1 nap; 633 rendelés; az összesített érték 1,8-szerese
+  … (további 19 csoport kihagyva; az utolsó a sor másik vége:)
+  São Paulo (SP): 8,3 nap; 23 329 rendelés; az összesített érték 0,7-szerese";Az átlagos szállítási idő legnagyobb eltérése a Amazonas államban (27,2 nap) és São Paulo államban (8,3 nap) között van. Az összesített érték 12,1 nap volt, amelynek az Amazonas állami érték 2,2-szerese.;;;
+A052;atlagos tavolsag a vevohoz a delkeleti regioban tavaly nyaron?;"Szűrés: vevő régiója: Délkelet.
+Mérőszám: átlagos eladó–vevő távolság — Az eladó és a vevő irányítószámának középpontja közti légvonalbeli távolság átlaga, km-ben (közelítő érték; ahol a koordináta hiányzik, az a rendelés kimarad).
+Összesített érték: 366 km; alapja: 29 131 rendelés ismert távolsággal.";Az átlagos távolság Délkeleten 366 km, ami 29 131 ismert távolságra vonatkozott. Az eredmény nem tartalmaz külön csoportok értékeit vagy időbeli csúcs-mélypont elemzést.;;;
+A053;mikor volt a legalacsonyabb a csuszasok szazaleka az egesz idoszakot nezve?;"Szűrés: nincs.
+Mérőszám: késési arány — A késett rendelések aránya: a vállalt határidő napja után kézbesített rendelések az összes kézbesített rendelésen belül.
+Összesített érték: 6,8%; 95%-os tartomány: 6,6% – 6,9%.";Az északkeleten volt a legalacsonyabb késési arány ({S1}). Az északnyugaton és a délnyugaton ez az érték magasabb, mint az átlag (6,8%), míg a délkeleten a legmagasabb ({S2}).;;;
+A054;mennyi volt a forgalom minas gerais-ban 2018 Q2-ben?;"Szűrés: eladó állama: Minas Gerais (MG).
+Mérőszám: forgalom — A rendelések kosárértékének összege (brazil reál, BRL), szállítási díj nélkül.
+Összesített érték: 190 675 BRL.";Minas Geraisban ({S1}) a forgalom 190 675 BRL volt az adott időszakban.;;;
+A055;mennyi idő alatt ér oda egy csomag átlagosan ha a vevő és az eladó is SP-ben van?;"Szűrés: eladó állama: São Paulo (SP); vevő állama: São Paulo (SP).
+Mérőszám: átlagos szállítási idő — A rendelés leadásától a kézbesítésig eltelt idő átlaga napban, tört nappal.
+Összesített érték: 7,9 nap.";A vevő és az eladó is São Paulo (SP) államban lévő rendelések átlagos szállítási ideje 7,9 nap. Az értékek közötti különbséget a regionális bontás nem mutatja ki, mivel a lekérdezés csak egy területre szűrt.;;;
+A056;honnan hova a legmagasabb a fuvar atlag dija idén (régiók között)?;"Szűrés: nincs.
+Mérőszám: átlagos szállítási díj — A rendelésért felszámított szállítási díj átlaga, brazil reálban (BRL).
+Összesített érték: 23,37 BRL.
+Bontás a vevő régiója szerint (a legnagyobb elöl; csak az elég adatból számolt csoportok):
+  Észak: 44,49 BRL; 866 rendelés; az összesített érték 1,9-szerese
+  Északkelet: 38,14 BRL; 4 669 rendelés; az összesített érték 1,6-szerese
+  Közép-Nyugat: 27,29 BRL; 3 113 rendelés; az összesített érték 1,2-szerese
+  Dél: 25,80 BRL; 7 332 rendelés; az összesített érték 1,1-szerese
+  Délkelet: 20,18 BRL; 36 797 rendelés; az összesített érték 0,9-szerese";Idén a legmagasabb átlagos fuvardíj az Észak régiójában (44,49 BRL) származik. Az Északkelet (38,14 BRL) és a Közép-Nyugat (27,29 BRL) régiók követik ezt a sorrendet, míg a Délkelet (20,18 BRL) a legolcsóbb szállítást biztosítja.;;;
+A057;elado es vevo kozti atlagos km honaprol honapra tavaly elottrol?;"Szűrés: nincs.
+Mérőszám: átlagos eladó–vevő távolság — Az eladó és a vevő irányítószámának középpontja közti légvonalbeli távolság átlaga, km-ben (közelítő érték; ahol a koordináta hiányzik, az a rendelés kimarad).
+Összesített érték: 624 km; alapja: 43 202 rendelés ismert távolsággal.
+Bontás havi bontásban (a bontás sorrendjében; csak az elég adatból számolt csoportok):
+  2017. január: 626 km; 750 rendelés ismert távolsággal; az összesített érték 1,0-szerese
+  2017. február: 649 km; 1 653 rendelés ismert távolsággal; az összesített érték 1,0-szerese
+  2017. március: 640 km; 2 536 rendelés ismert távolsággal; az összesített érték 1,0-szerese
+  2017. április: 678 km; 2 289 rendelés ismert távolsággal; az összesített érték 1,1-szerese
+  2017. május: 636 km; 3 527 rendelés ismert távolsággal; az összesített érték 1,0-szerese
+  2017. június: 587 km; 3 114 rendelés ismert távolsággal; az összesített érték 0,9-szerese
+  2017. július: 613 km; 3 853 rendelés ismert távolsággal; az összesített érték 1,0-szerese
+  2017. augusztus: 631 km; 4 170 rendelés ismert távolsággal; az összesített érték 1,0-szerese
+  2017. szeptember: 645 km; 4 125 rendelés ismert távolsággal; az összesített érték 1,0-szerese
+  2017. október: 642 km; 4 450 rendelés ismert távolsággal; az összesített érték 1,0-szerese
+  2017. november: 609 km; 7 252 rendelés ismert távolsággal; az összesített érték 1,0-szerese
+  2017. december: 591 km; 5 483 rendelés ismert távolsággal; az összesített érték 0,9-szerese";Az átlagos eladó–vevő távolság tavaly decemberben volt a legkisebb (591 km), januárban pedig a legnagyobb (626 km). A hónapok közötti különbség nem jelentős, mivel az összesített értékhez képest mindössze 0,9-szeres és 1,1-szerese a mért értékek.;;;
+A058;vasarnaponkent tobb a bevétel mint szerdán?;"Szűrés: a hét napja: szerda vagy vasárnap.
+Mérőszám: forgalom — A rendelések kosárértékének összege (brazil reál, BRL), szállítási díj nélkül.
+Összesített érték: 3 596 340 BRL.";Vasárnap nagyobb a bevétel ({S1}), mint szerdán ({S2}).;;;
+A059;az elmult félévben mennyi volt a cég teljes bevétele?;"Szűrés: nincs.
+Mérőszám: forgalom — A rendelések kosárértékének összege (brazil reál, BRL), szállítási díj nélkül.
+Összesített érték: 4 512 734 BRL.";Az elmúlt félévben a cég forgalma 4 512 734 BRL volt. Az eredményt az összesített érték adja meg, mivel nincs időbeli vagy kategóriás bontás.;;;
+A060;szallitasi dijak hogy valtoztak negyedevenkent a tavalyi ev folyaman?;"Szűrés: nincs.
+Mérőszám: átlagos szállítási díj — A rendelésért felszámított szállítási díj átlaga, brazil reálban (BRL).
+Összesített érték: 22,07 BRL.
+Bontás havi bontásban (a bontás sorrendjében; csak az elég adatból számolt csoportok):
+  2017. január: 20,91 BRL; 750 rendelés; az összesített érték 0,9-szerese
+  2017. február: 22,39 BRL; 1 653 rendelés; az összesített érték 1,0-szerese
+  2017. március: 21,65 BRL; 2 546 rendelés; az összesített érték 1,0-szerese
+  2017. április: 21,77 BRL; 2 303 rendelés; az összesített érték 1,0-szerese
+  2017. május: 21,86 BRL; 3 545 rendelés; az összesített érték 1,0-szerese
+  2017. június: 21,73 BRL; 3 135 rendelés; az összesített érték 1,0-szerese
+  2017. július: 21,87 BRL; 3 872 rendelés; az összesített érték 1,0-szerese
+  2017. augusztus: 21,73 BRL; 4 193 rendelés; az összesített érték 1,0-szerese
+  2017. szeptember: 22,57 BRL; 4 150 rendelés; az összesített érték 1,0-szerese
+  2017. október: 22,97 BRL; 4 478 rendelés; az összesített érték 1,0-szerese
+  2017. november: 22,72 BRL; 7 288 rendelés; az összesített érték 1,0-szerese
+  2017. december: 21,23 BRL; 5 513 rendelés; az összesített érték 1,0-szerese";Az átlagos szállítási díj negyedéves változása a tavalyi év során: 2017. januárban 20,91 BRL volt, majd a hónapok végére 22,97 BRL-re emelkedett októberben, mielőtt decemberben 21,23 BRL-re csökkent volna. A negyedéves csúcs az első negyedév elején (20,91 BRL), a mélypont pedig a harmadik negyedév végén (21,23 BRL) alakult ki.;;;

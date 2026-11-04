@@ -1,0 +1,61 @@
+﻿kod;id;ismetles;ag;a_kapu_talalt;problemak
+A001;k108;1;szabad;igen;vissza nem vezethető szám: 32,5
+A002;k084;3;jelolo;nem;
+A003;k100;1;jelolo;nem;
+A004;k083;3;jelolo;igen;a(z) {S3} „lakástextil (ágy, fürdő, asztal)” értéke, de „órák és ajándékok” mellett áll
+A005;k124;3;szabad;nem;
+A006;k023;1;jelolo;nem;
+A007;k023;2;szabad;nem;
+A008;k049;1;szabad;nem;
+A009;k023;2;jelolo;nem;
+A010;k047;1;jelolo;igen;vissza nem vezethető szám: 7,5 | a(z) 7,5 „sport és szabadidő” értéke, de „bútorok és lakásdekoráció” mellett áll
+A011;k029;1;jelolo;igen;ismeretlen jelölő: {S1}
+A012;k011;3;szabad;nem;
+A013;k128;1;szabad;nem;
+A014;k042;3;szabad;nem;
+A015;k003;2;szabad;nem;
+A016;k085;2;szabad;nem;
+A017;k083;1;szabad;igen;vissza nem vezethető szám: 1,5 | a(z) 1 024 244 „lakástextil (ágy, fürdő, asztal)” értéke, de „órák és ajándékok” mellett áll
+A018;k054;3;jelolo;nem;
+A019;k018;1;szabad;nem;
+A020;k045;1;jelolo;nem;
+A021;k030;1;szabad;nem;
+A022;k046;2;jelolo;igen;a(z) {S4} „2017. december” értéke, de „2018. június” mellett áll
+A023;k123;1;szabad;nem;
+A024;k043;3;jelolo;igen;ismeretlen jelölő: {S1}
+A025;k064;2;jelolo;nem;
+A026;k004;2;jelolo;nem;
+A027;k108;2;jelolo;nem;
+A028;k043;1;jelolo;igen;ismeretlen jelölő: {S1}
+A029;k063;3;jelolo;nem;
+A030;k012;1;szabad;nem;
+A031;k058;2;szabad;igen;a(z) 0,8 „vasárnap” értéke, de „szombat” mellett áll | „szombat” nem a legnagyobb érték (az: „hétfő”)
+A032;k022;3;szabad;nem;
+A033;k092;1;jelolo;nem;
+A034;k010;2;szabad;igen;a(z) 48,61 „konyhai, étkezőhöz, mosókonyhába és kertbe való bútorok” értéke, de „hálószobabútorok” mellett áll
+A035;k085;3;jelolo;nem;
+A036;k122;3;jelolo;igen;a(z) {S3} „lakástextil (ágy, fürdő, asztal)” értéke, de „órák és ajándékok” mellett áll
+A037;k086;1;jelolo;nem;
+A038;k026;3;szabad;igen;vissza nem vezethető szám: 542
+A039;k042;2;szabad;nem;
+A040;k002;3;szabad;nem;
+A041;k046;2;szabad;igen;a(z) 28,3 „2017. december” értéke, de „2018. június” mellett áll
+A042;k034;3;jelolo;nem;
+A043;k020;2;szabad;igen;vissza nem vezethető szám: 2,6
+A044;k085;2;jelolo;nem;
+A045;k015;2;jelolo;nem;
+A046;k086;1;szabad;nem;
+A047;k083;1;jelolo;igen;a(z) {S3} „lakástextil (ágy, fürdő, asztal)” értéke, de „órák és ajándékok” mellett áll
+A048;k057;2;szabad;nem;
+A049;k082;1;szabad;igen;"állítás a szűrésről (a hatókört a rendszer írja; a modell tagadta a szűrést)"
+A050;k092;2;jelolo;nem;
+A051;k097;1;jelolo;nem;
+A052;k042;1;szabad;igen;„2017” nem a legkisebb érték (az: „2018”)
+A053;k053;1;jelolo;igen;a(z) 0,7 „São Paulo (SP)” értéke, de „Amazonas (AM)” mellett áll
+A054;k090;3;jelolo;nem;
+A055;k058;2;jelolo;nem;
+A056;k021;2;szabad;nem;
+A057;k041;2;szabad;nem;
+A058;k105;2;szabad;nem;
+A059;k108;2;szabad;igen;vissza nem vezethető szám: 32,5
+A060;k035;1;jelolo;igen;"állítás a szűrésről (a hatókört a rendszer írja; a modell tagadta a szűrést)"

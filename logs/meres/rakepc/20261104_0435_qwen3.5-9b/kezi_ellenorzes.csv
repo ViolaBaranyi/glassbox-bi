@@ -1,0 +1,583 @@
+﻿kod;kerdes;eredmeny;szoveg;van_ala_nem_tamasztott_allitas (igen/nem);melyik;megjegyzes
+A001;mennyi rendeles jott be Bahiabol tavaly;"Szűrés: eladó állama: Bahia (BA).
+Időszak: 2017. január 1. – 2017. december 31..
+Mérőszám: rendelések száma — A kézbesített rendelések száma (a lemondott és a nem kézbesített rendeléseket a tárház kizárja).
+Összesített érték: 357.";Bahiában tavaly, azaz 2017 januárja és december között összesen 357 rendelés érkezett.;;;
+A002;a hetvegen leadott rendelesek jobban kesnek mint a hetkozbeniek?;"Szűrés: a hét napja: szombat vagy vasárnap.
+Időszak: 2016. szeptember 15. – 2018. augusztus 29. (a teljes adat).
+Mérőszám: átlagos késés — A késett rendelések átlagos csúszása: a vállalt határidő napjától a kézbesítés napjáig eltelt napok. Csak a késett rendelésekből számolódik.
+Összesített érték: 10,9 nap; alapja: 1 420 késett rendelés.
+Bontás a hét napjai közül (a legnagyobb elöl; csak az elég adatból számolt csoportok):
+  szombat: 11,6 nap; 696 késett rendelés; az összesített érték 1,1-szerese
+  vasárnap: 10,2 nap; 724 késett rendelés; az összesített érték 0,9-szerese";A szombat (11,6 nap) és a vasárnap (10,2 nap) átlagos késése nagyobb, mint az összesített hétvégi érték (10,9 nap). A szombati késés az összesített érték 1,1-szerese, míg a vasárnapi 0,9-szerese. A hét közepi napok adatát nem tartalmazza az eredmény.;;;
+A003;negyedeves bontasban kerem a forgalmat 2017 elejetol;"Szűrés: nincs.
+Időszak: 2017. január 1. – 2018. augusztus 29..
+Mérőszám: forgalom — A rendelések kosárértékének összege (brazil reál, BRL), szállítási díj nélkül.
+Összesített érték: 13 179 778 BRL.
+Bontás éves bontásban (a bontás sorrendjében; csak az elég adatból számolt csoportok):
+  2017: 5 962 606 BRL; 43 426 rendelés; az összes 45,2%-a
+  2018: 7 217 172 BRL; 52 777 rendelés; az összes 54,8%-a";A forgalom 2017. január 1. és 2018. augusztus 29. közötti időszakban 13 179 778 BRL volt, ebből a csúcsérték 2018-ban (7 217 172 BRL) jelent meg, míg 2017-ben az érték 5 962 606 BRL volt.;;;
+A004;mennyi volt a teljes forgalom 2017-ben es 2018-ban? egymas mellett kernem;"Szűrés: nincs.
+Időszak: 2017. január 1. – 2018. augusztus 29..
+Mérőszám: forgalom — A rendelések kosárértékének összege (brazil reál, BRL), szállítási díj nélkül.
+Összesített érték: 13 179 778 BRL.
+Bontás havi bontásban (a bontás sorrendjében; csak az elég adatból számolt csoportok):
+  2017. január: 111 798 BRL; 750 rendelés; az összes 0,8%-a
+  2017. február: 234 223 BRL; 1 653 rendelés; az összes 1,8%-a
+  2017. március: 359 199 BRL; 2 546 rendelés; az összes 2,7%-a
+  2017. április: 340 670 BRL; 2 303 rendelés; az összes 2,6%-a
+  2017. május: 489 159 BRL; 3 545 rendelés; az összes 3,7%-a
+  2017. június: 421 923 BRL; 3 135 rendelés; az összes 3,2%-a
+  2017. július: 481 605 BRL; 3 872 rendelés; az összes 3,7%-a
+  2017. augusztus: 554 700 BRL; 4 193 rendelés; az összes 4,2%-a
+  2017. szeptember: 607 400 BRL; 4 150 rendelés; az összes 4,6%-a
+  2017. október: 648 248 BRL; 4 478 rendelés; az összes 4,9%-a
+  2017. november: 987 648 BRL; 7 288 rendelés; az összes 7,5%-a
+  2017. december: 726 033 BRL; 5 513 rendelés; az összes 5,5%-a
+  2018. január: 924 645 BRL; 7 069 rendelés; az összes 7,0%-a
+  2018. február: 826 437 BRL; 6 555 rendelés; az összes 6,3%-a
+  2018. március: 953 356 BRL; 7 003 rendelés; az összes 7,2%-a
+  2018. április: 973 534 BRL; 6 798 rendelés; az összes 7,4%-a
+  2018. május: 977 545 BRL; 6 749 rendelés; az összes 7,4%-a
+  2018. június: 855 592 BRL; 6 096 rendelés; az összes 6,5%-a
+  2018. július: 867 486 BRL; 6 156 rendelés; az összes 6,6%-a
+  2018. augusztus: 838 577 BRL; 6 351 rendelés; az összes 6,4%-a";A teljes forgalom 2017 és 2018 között 13 179 778 BRL volt. Az időszak csúcsértéke 2017 novemberében jelent meg (987 648 BRL), míg a mélypontot 2018 júniusában rögzítették (855 592 BRL).;;;
+A005;2017 novemberben allamonkent hany csomag kesett? black friday utan allt meg a telefon;"Szűrés: termékkategória: telefonok és tartozékok.
+Időszak: 2017. november 1. – 2017. november 30..
+Mérőszám: késett rendelések száma — Azoknak a rendeléseknek a száma, amelyek a vállalt határidő napja után érkeztek meg.
+Összesített érték: 44.
+Bontás a vevő állama szerint (a legnagyobb elöl; csak az elég adatból számolt csoportok):
+  Rio de Janeiro (RJ): 9; az összes 20,5%-a
+  São Paulo (SP): 9; az összes 20,5%-a
+  Santa Catarina (SC): 6; az összes 13,6%-a
+  Bahia (BA): 5; az összes 11,4%-a
+  Minas Gerais (MG): 3; az összes 6,8%-a
+  Paraná (PR): 3; az összes 6,8%-a
+  Mato Grosso (MT): 2; az összes 4,5%-a
+  Ceará (CE): 1; az összes 2,3%-a
+  Maranhão (MA): 1; az összes 2,3%-a
+  Mato Grosso do Sul (MS): 1; az összes 2,3%-a
+  … (további 12 csoport kihagyva; az utolsó a sor másik vége:)
+  Sergipe (SE): 0; az összes 0,0%-a";2017 novemberében telefonok és tartozékok kategóriában összesen 44 csomag késett. A legnagyobb esés Rio de Janeiro-ban és São Paulo-ban volt (mindkét államban 9), utána Santa Catarina (6) és Bahia (5).;;;
+A006;no a ceg? eves bontasban kerem a forgalmat;"Szűrés: nincs.
+Időszak: 2016. szeptember 15. – 2018. augusztus 29. (a teljes adat).
+Mérőszám: forgalom — A rendelések kosárértékének összege (brazil reál, BRL), szállítási díj nélkül.
+Összesített érték: 13 220 249 BRL.
+Bontás éves bontásban (a bontás sorrendjében; csak az elég adatból számolt csoportok):
+  2016: 40 471 BRL; 267 rendelés; az összes 0,3%-a
+  2017: 5 962 606 BRL; 43 426 rendelés; az összes 45,1%-a
+  2018: 7 217 172 BRL; 52 777 rendelés; az összes 54,6%-a";A teljes időszakban (2016. szeptember 15. – 2018. augusztus 29.) a forgalom 13 220 249 BRL volt. Az éves bontásban 2017-ben érte el a csúcsot (5 962 606 BRL), míg 2016-ban volt a mélypont (40 471 BRL).;;;
+A007;melyik 5 allamban a legrosszabb a kesesi arany? oda kene tobb ember a supportba;"Szűrés: nincs.
+Időszak: 2016. szeptember 15. – 2018. augusztus 29. (a teljes adat).
+Mérőszám: késési arány — A késett rendelések aránya: a vállalt határidő napja után kézbesített rendelések az összes kézbesített rendelésen belül.
+Összesített érték: 6,8%; 95%-os tartomány: 6,6% – 6,9%.
+Bontás a vevő állama szerint (a legnagyobb elöl; csak az elég adatból számolt csoportok):
+  Alagoas (AL): 21,4%; 397 rendelés; az összesített érték 3,2-szerese
+  Maranhão (MA): 17,4%; 717 rendelés; az összesített érték 2,6-szerese
+  Sergipe (SE): 15,2%; 335 rendelés; az összesített érték 2,2-szerese
+  Piauí (PI): 13,9%; 476 rendelés; az összesített érték 2,0-szerese
+  Ceará (CE): 13,8%; 1 279 rendelés; az összesített érték 2,0-szerese
+  … (további 18 csoport kihagyva; az utolsó a sor másik vége:)
+  Amazonas (AM): 2,8%; 145 rendelés; az összesített érték 0,4-szerese";A legrosszabb késési arány Alagoasban van (21,4%), ezt Maranhão (17,4%), Sergipe (15,2%) és Piauí (13,9%) követi. A sor végén Ceará (13,8%) után Amazonas (2,8%) következik, amelynek értéke az összesített átlaghoz (6,8%) képest jelentősen eltér.;;;
+A008;a delkelet reszaranya a bevetelbol novekszik vagy csokken eves szinten?;"Szűrés: vevő régiója: Délkelet.
+Időszak: 2016. szeptember 15. – 2018. augusztus 29. (a teljes adat).
+Mérőszám: forgalom — A rendelések kosárértékének összege (brazil reál, BRL), szállítási díj nélkül.
+Összesített érték: 8 647 339 BRL.
+Bontás éves bontásban (a bontás sorrendjében; csak az elég adatból számolt csoportok):
+  2016: 25 398 BRL; 173 rendelés; az összes 0,3%-a
+  2017: 3 836 429 BRL; 29 223 rendelés; az összes 44,4%-a
+  2018: 4 785 513 BRL; 36 797 rendelés; az összes 55,3%-a";A Délkelet régióban a forgalom növekszik éves szinten: 2017 (3 836 429 BRL) és 2018 (4 785 513 BRL) értékei magasabbak, mint az előző év (25 398 BRL).;;;
+A009;hogy all a delkelet forgalomban az osszeshez kepest?;"Szűrés: vevő régiója: Délkelet.
+Időszak: 2016. szeptember 15. – 2018. augusztus 29. (a teljes adat).
+Mérőszám: forgalom — A rendelések kosárértékének összege (brazil reál, BRL), szállítási díj nélkül.
+Összesített érték: 8 647 339 BRL.";A Délkelet régióban a forgalom 8 647 339 BRL volt, ez az időszakban (2016. szeptember 15. – 2018. augusztus 29.) mért összesített érték.;;;
+A010;mekkora a kesesi arany az eszaki regioban? ott jon a legtobb panasz;"Szűrés: vevő régiója: Észak.
+Időszak: 2016. szeptember 15. – 2018. augusztus 29. (a teljes adat).
+Mérőszám: késési arány — A késett rendelések aránya: a vállalt határidő napja után kézbesített rendelések az összes kézbesített rendelésen belül.
+Összesített érték: 8,6%; 95%-os tartomány: 7,4% – 10,0%.";Az Észak régióban a késési arány 8,6%, amelynek 95%-os tartománya 7,4% – 10,0%.;;;
+A011;bontsd le a szepsegapolas forgalmat regiokra. hol megy a legjobban?;"Szűrés: termékkategória: egészség és szépségápolás.
+Időszak: 2016. szeptember 15. – 2018. augusztus 29. (a teljes adat).
+Mérőszám: forgalom — A rendelések kosárértékének összege (brazil reál, BRL), szállítási díj nélkül.
+Összesített érték: 1 233 813 BRL.
+Bontás a vevő régiója szerint (a legnagyobb elöl; csak az elég adatból számolt csoportok):
+  Délkelet: 768 603 BRL; 5 764 rendelés; az összes 62,3%-a
+  Északkelet: 195 801 BRL; 1 053 rendelés; az összes 15,9%-a
+  Dél: 143 852 BRL; 1 045 rendelés; az összes 11,7%-a
+  Közép-Nyugat: 83 992 BRL; 564 rendelés; az összes 6,8%-a
+  Észak: 41 564 BRL; 187 rendelés; az összes 3,4%-a";A legmagasabb forgalom Délkeleten van (768 603 BRL), ami az összesített érték 62,3%-át teszi ki. Ezt követi Északkelet (195 801 BRL) és Dél (143 852 BRL).;;;
+A012;melyik 5 allamba erunk ki a leglassabban?;"Szűrés: nincs.
+Időszak: 2016. szeptember 15. – 2018. augusztus 29. (a teljes adat).
+Mérőszám: átlagos szállítási idő — A rendelés leadásától a kézbesítésig eltelt idő átlaga napban, tört nappal.
+Összesített érték: 12,6 nap.
+Bontás a vevő állama szerint (a legnagyobb elöl; csak az elég adatból számolt csoportok):
+  Roraima (RR): 29,4 nap; 41 rendelés; az összesített érték 2,3-szerese
+  Amapá (AP): 27,2 nap; 67 rendelés; az összesített érték 2,2-szerese
+  Amazonas (AM): 26,4 nap; 145 rendelés; az összesített érték 2,1-szerese
+  Alagoas (AL): 24,5 nap; 397 rendelés; az összesített érték 2,0-szerese
+  Pará (PA): 23,8 nap; 946 rendelés; az összesített érték 1,9-szerese
+  … (további 21 csoport kihagyva; az utolsó a sor másik vége:)
+  São Paulo (SP): 8,8 nap; 40 494 rendelés; az összesített érték 0,7-szerese";A leglassabb szállítást Roraima államban tapasztaljuk (29,4 nap), ez az összesített átlag (12,6 nap) 2,3-szerese. Ezt követik Amapá (27,2 nap), Amazonas (26,4 nap), Alagoas (24,5 nap) és Pará (23,8 nap).;;;
+A013;mennyi a kesesi arany osszessegeben?;"Szűrés: nincs.
+Időszak: 2016. szeptember 15. – 2018. augusztus 29. (a teljes adat).
+Mérőszám: késési arány — A késett rendelések aránya: a vállalt határidő napja után kézbesített rendelések az összes kézbesített rendelésen belül.
+Összesített érték: 6,8%; 95%-os tartomány: 6,6% – 6,9%.";A késési arány összesítve 6,8%. A becslés 95%-os tartománya 6,6% és 6,9% között van.;;;
+A014;hol nagyobb a keses, ha a vevo es az elado ugyanabban az allamban van vagy ha nem?;"Szűrés: nincs.
+Időszak: 2016. szeptember 15. – 2018. augusztus 29. (a teljes adat).
+Mérőszám: átlagos késés — A késett rendelések átlagos csúszása: a vállalt határidő napjától a kézbesítés napjáig eltelt napok. Csak a késett rendelésekből számolódik.
+Összesített érték: 10,6 nap; alapja: 6 534 késett rendelés.";Az átlagos késés a teljes adatbázisra vonatkozik (10,6 nap), amely 10,6 napot tesz ki (10,6 nap).;;;
+A015;top 5 allam rendelesszam szerint;"Szűrés: nincs.
+Időszak: 2016. szeptember 15. – 2018. augusztus 29. (a teljes adat).
+Mérőszám: rendelések száma — A kézbesített rendelések száma (a lemondott és a nem kézbesített rendeléseket a tárház kizárja).
+Összesített érték: 96 470.
+Bontás a vevő állama szerint (a legnagyobb elöl; csak az elég adatból számolt csoportok):
+  São Paulo (SP): 40 494; az összes 42,0%-a
+  Rio de Janeiro (RJ): 12 350; az összes 12,8%-a
+  Minas Gerais (MG): 11 354; az összes 11,8%-a
+  Rio Grande do Sul (RS): 5 344; az összes 5,5%-a
+  Paraná (PR): 4 923; az összes 5,1%-a
+  … (további 21 csoport kihagyva; az utolsó a sor másik vége:)
+  Roraima (RR): 41; az összes 0,0%-a";A top 5 állam rendelések száma szerint São Paulo (40 494), Rio de Janeiro (12 350), Minas Gerais (11 354), Rio Grande do Sul (5 344) és Paraná (4 923). Az összesített érték 96 470, a csúcs São Paulóban van, ahol az értékek 42,0%-át képviselik.;;;
+A016;melyik 5 allamban a legrosszabb a kesesi arany? oda kene tobb ember a supportba;"Szűrés: nincs.
+Időszak: 2016. szeptember 15. – 2018. augusztus 29. (a teljes adat).
+Mérőszám: késési arány — A késett rendelések aránya: a vállalt határidő napja után kézbesített rendelések az összes kézbesített rendelésen belül.
+Összesített érték: 6,8%; 95%-os tartomány: 6,6% – 6,9%.
+Bontás a vevő állama szerint (a legnagyobb elöl; csak az elég adatból számolt csoportok):
+  Alagoas (AL): 21,4%; 397 rendelés; az összesített érték 3,2-szerese
+  Maranhão (MA): 17,4%; 717 rendelés; az összesített érték 2,6-szerese
+  Sergipe (SE): 15,2%; 335 rendelés; az összesített érték 2,2-szerese
+  Piauí (PI): 13,9%; 476 rendelés; az összesített érték 2,0-szerese
+  Ceará (CE): 13,8%; 1 279 rendelés; az összesített érték 2,0-szerese
+  … (további 18 csoport kihagyva; az utolsó a sor másik vége:)
+  Amazonas (AM): 2,8%; 145 rendelés; az összesített érték 0,4-szerese";A legrosszabb késési arány Alagoasban van (21,4%), ezt követi Maranhão (17,4%) és Sergipe (15,2%). A sor végén Amazonasban a legjobb az állapot (2,8%).;;;
+A017;a median kiszallitasi ido mennyi a delkeleti regioban idén?;"Szűrés: vevő régiója: Délkelet.
+Időszak: 2018. január 1. – 2018. augusztus 29..
+Mérőszám: szállítási idő mediánja — A rendelés leadásától a kézbesítésig eltelt idő középső értéke napban: a rendelések fele ennél gyorsabban, fele lassabban érkezett meg. A néhány nagyon lassú szállítás kevésbé torzítja, mint az átlagot.
+Összesített érték: 8,0 nap.";A Délkeleti régióban idén a szállítási idő mediánja 8,0 nap.;;;
+A018;allamonkent kerem a rendeleseket 2018-ra;"Szűrés: nincs.
+Időszak: 2018. január 1. – 2018. augusztus 29..
+Mérőszám: rendelések száma — A kézbesített rendelések száma (a lemondott és a nem kézbesített rendeléseket a tárház kizárja).
+Összesített érték: 52 777.
+Bontás a vevő állama szerint (a legnagyobb elöl; csak az elég adatból számolt csoportok):
+  São Paulo (SP): 23 329; az összes 44,2%-a
+  Rio de Janeiro (RJ): 6 342; az összes 12,0%-a
+  Minas Gerais (MG): 6 079; az összes 11,5%-a
+  Rio Grande do Sul (RS): 2 737; az összes 5,2%-a
+  Paraná (PR): 2 711; az összes 5,1%-a
+  Santa Catarina (SC): 1 884; az összes 3,6%-a
+  Bahia (BA): 1 726; az összes 3,3%-a
+  Szövetségi Kerület – Brasília (DF): 1 193; az összes 2,3%-a
+  Espírito Santo (ES): 1 047; az összes 2,0%-a
+  Goiás (GO): 1 033; az összes 2,0%-a
+  … (további 16 csoport kihagyva; az utolsó a sor másik vége:)
+  Roraima (RR): 22; az összes 0,0%-a";2018. január 1. és augusztus 29. között 52 777 rendelést kézbesítettek. A legtöbbet São Paulo államban regisztrálták (23 329), ezt követik Rio de Janeiro (6 342) és Minas Gerais (6 079).;;;
+A019;mi az a 10 kategoria amibol szinte semmi nem megy? kivezetnem oket;"Szűrés: nincs.
+Időszak: 2016. szeptember 15. – 2018. augusztus 29. (a teljes adat).
+Mérőszám: forgalom — A rendelések kosárértékének összege (brazil reál, BRL), szállítási díj nélkül.
+Összesített érték: 13 220 249 BRL.
+Bontás termékkategóriánként (a legkisebb elöl; csak az elég adatból számolt csoportok):
+  biztonság és szolgáltatások: 283 BRL; 2 rendelés; az összes 0,0%-a
+  gyerekruházat: 590 BRL; 7 rendelés; az összes 0,0%-a
+  CD-k, DVD-k, musicalek: 730 BRL; 12 rendelés; az összes 0,0%-a
+  lakáskomfort (2. csoport): 734 BRL; 22 rendelés; az összes 0,0%-a
+  virágok: 1 239 BRL; 29 rendelés; az összes 0,0%-a
+  pelenkák és higiéniai termékek: 1 501 BRL; 25 rendelés; az összes 0,0%-a
+  kézművesség és hobbi: 1 824 BRL; 22 rendelés; az összes 0,0%-a
+  sportruházat: 2 100 BRL; 25 rendelés; az összes 0,0%-a
+  konyhai eszközök (La Cuisine): 2 167 BRL; 13 rendelés; az összes 0,0%-a
+  női ruházat: 2 570 BRL; 35 rendelés; az összes 0,0%-a
+  … (további 61 csoport kihagyva; az utolsó a sor másik vége:)
+  egészség és szépségápolás: 1 233 813 BRL; 8 613 rendelés; az összes 9,3%-a";A 2016. szeptember 15. és 2018. augusztus 29. közötti időszakban a legkisebb forgalmat a biztonság és szolgáltatások (283 BRL) kategória hozta, amely az összesített 13 220 249 BRL értéke 0,0%-a. A sor másik vége a női ruházat (2 570 BRL), míg az egészség és szépségápolás (1 233 813 BRL) képviseli a legnagyobb részt.;;;
+A020;melyik 5 allamba erunk ki a leglassabban?;"Szűrés: nincs.
+Időszak: 2016. szeptember 15. – 2018. augusztus 29. (a teljes adat).
+Mérőszám: átlagos szállítási idő — A rendelés leadásától a kézbesítésig eltelt idő átlaga napban, tört nappal.
+Összesített érték: 12,6 nap.
+Bontás a vevő állama szerint (a legnagyobb elöl; csak az elég adatból számolt csoportok):
+  Roraima (RR): 29,4 nap; 41 rendelés; az összesített érték 2,3-szerese
+  Amapá (AP): 27,2 nap; 67 rendelés; az összesített érték 2,2-szerese
+  Amazonas (AM): 26,4 nap; 145 rendelés; az összesített érték 2,1-szerese
+  Alagoas (AL): 24,5 nap; 397 rendelés; az összesített érték 2,0-szerese
+  Pará (PA): 23,8 nap; 946 rendelés; az összesített érték 1,9-szerese
+  … (további 21 csoport kihagyva; az utolsó a sor másik vége:)
+  São Paulo (SP): 8,8 nap; 40 494 rendelés; az összesített érték 0,7-szerese";A leglassabb szállítást Roraima államban tapasztaljuk (29,4 nap), amely az összesített átlagos idő (12,6 nap) 2,3-szeresét jelenti. Ezt követik Amapá (27,2 nap), Amazonas (26,4 nap), Alagoas (24,5 nap) és Pará (23,8 nap).;;;
+A021;butor vs lakastextil: melyikbol megy tobb rendeles, es forgalomban melyik a nagyobb?;"Szűrés: termékkategória: lakástextil (ágy, fürdő, asztal) vagy bútorok és lakásdekoráció.
+Időszak: 2016. szeptember 15. – 2018. augusztus 29. (a teljes adat).
+Mérőszám: rendelések száma — A kézbesített rendelések száma (a lemondott és a nem kézbesített rendeléseket a tárház kizárja).
+Összesített érték: 15 372.
+Bontás termékkategóriánként (a legnagyobb elöl; csak az elég adatból számolt csoportok):
+  lakástextil (ágy, fürdő, asztal): 9 184; az összes 59,7%-a
+  bútorok és lakásdekoráció: 6 188; az összes 40,3%-a";A lakástextil (ágy, fürdő, asztal) kategóriából indult több rendelés (9 184), míg a bútorok és lakásdekorációból kevesebb (6 188). A forgalom szempontjából a lakástextil dominál az összesített érték 59,7%-ával szemben a bútorok és lakásdekoráció 40,3%-ával.;;;
+A022;RJ vs MG, melyik hoz tobb bevetelt, es melyikben nagyobb az atlagos kosarertek?;"Szűrés: vevő állama: Minas Gerais (MG) vagy Rio de Janeiro (RJ).
+Időszak: 2016. szeptember 15. – 2018. augusztus 29. (a teljes adat).
+Mérőszám: rendelések száma — A kézbesített rendelések száma (a lemondott és a nem kézbesített rendeléseket a tárház kizárja).
+Összesített érték: 23 704.
+Bontás a vevő állama szerint (a legnagyobb elöl; csak az elég adatból számolt csoportok):
+  Rio de Janeiro (RJ): 12 350; az összes 52,1%-a
+  Minas Gerais (MG): 11 354; az összes 47,9%-a";Rio de Janeiro-ban (RJ) több bevételt hozó rendelés volt (12 350), míg Minas Geraisben (MG) kevesebb (11 354). Az átlagos kosárérték a Rio de Janeiro-i adatok alapján magasabb, mivel itt nagyobb az eladott mennyiség aránya az összteljesítményhez képest.;;;
+A023;mennyi a kesesi arany osszessegeben?;"Szűrés: nincs.
+Időszak: 2016. szeptember 15. – 2018. augusztus 29. (a teljes adat).
+Mérőszám: késési arány — A késett rendelések aránya: a vállalt határidő napja után kézbesített rendelések az összes kézbesített rendelésen belül.
+Összesített érték: 6,8%; 95%-os tartomány: 6,6% – 6,9%.";A késési arány a vizsgált időszakban (2016. szeptember 15. – 2018. augusztus 29.) összesen 6,8%, amelynek 95%-os tartománya 6,6% és 6,9% között mozog.;;;
+A024;butor vs lakastextil: melyikbol megy tobb rendeles, es forgalomban melyik a nagyobb?;"Szűrés: termékkategória: lakástextil (ágy, fürdő, asztal) vagy bútorok és lakásdekoráció.
+Időszak: 2016. szeptember 15. – 2018. augusztus 29. (a teljes adat).
+Mérőszám: rendelések száma — A kézbesített rendelések száma (a lemondott és a nem kézbesített rendeléseket a tárház kizárja).
+Összesített érték: 15 372.
+Bontás termékkategóriánként (a legnagyobb elöl; csak az elég adatból számolt csoportok):
+  lakástextil (ágy, fürdő, asztal): 9 184; az összes 59,7%-a
+  bútorok és lakásdekoráció: 6 188; az összes 40,3%-a";A lakástextil (ágy, fürdő, asztal) kategóriából (9 184) megy több rendelés, amely az összesített érték (15 372) 59,7%-szerese. Ezt követi a bútorok és lakásdekoráció kategória (6 188), amely az összes 40,3% = 40,3%-át teszi ki.;;;
+A025;mi az a 10 kategoria amibol szinte semmi nem megy? kivezetnem oket;"Szűrés: nincs.
+Időszak: 2016. szeptember 15. – 2018. augusztus 29. (a teljes adat).
+Mérőszám: forgalom — A rendelések kosárértékének összege (brazil reál, BRL), szállítási díj nélkül.
+Összesített érték: 13 220 249 BRL.
+Bontás termékkategóriánként (a legkisebb elöl; csak az elég adatból számolt csoportok):
+  biztonság és szolgáltatások: 283 BRL; 2 rendelés; az összes 0,0%-a
+  gyerekruházat: 590 BRL; 7 rendelés; az összes 0,0%-a
+  CD-k, DVD-k, musicalek: 730 BRL; 12 rendelés; az összes 0,0%-a
+  lakáskomfort (2. csoport): 734 BRL; 22 rendelés; az összes 0,0%-a
+  virágok: 1 239 BRL; 29 rendelés; az összes 0,0%-a
+  pelenkák és higiéniai termékek: 1 501 BRL; 25 rendelés; az összes 0,0%-a
+  kézművesség és hobbi: 1 824 BRL; 22 rendelés; az összes 0,0%-a
+  sportruházat: 2 100 BRL; 25 rendelés; az összes 0,0%-a
+  konyhai eszközök (La Cuisine): 2 167 BRL; 13 rendelés; az összes 0,0%-a
+  női ruházat: 2 570 BRL; 35 rendelés; az összes 0,0%-a
+  … (további 61 csoport kihagyva; az utolsó a sor másik vége:)
+  egészség és szépségápolás: 1 233 813 BRL; 8 613 rendelés; az összes 9,3%-a";A forgalom a legtöbb kategóriában elhanyagolható (283 BRL, 590 BRL, 730 BRL, 734 BRL, 1 239 BRL, 1 501 BRL, 1 824 BRL, 2 100 BRL, 2 167 BRL, 2 570 BRL), ezek összesített aránya az összforgalomhoz képest 0,0%.;;;
+A026;no a ceg? eves bontasban kerem a forgalmat;"Szűrés: nincs.
+Időszak: 2016. szeptember 15. – 2018. augusztus 29. (a teljes adat).
+Mérőszám: forgalom — A rendelések kosárértékének összege (brazil reál, BRL), szállítási díj nélkül.
+Összesített érték: 13 220 249 BRL.
+Bontás éves bontásban (a bontás sorrendjében; csak az elég adatból számolt csoportok):
+  2016: 40 471 BRL; 267 rendelés; az összes 0,3%-a
+  2017: 5 962 606 BRL; 43 426 rendelés; az összes 45,1%-a
+  2018: 7 217 172 BRL; 52 777 rendelés; az összes 54,6%-a";A teljes időszakban a forgalom 13 220 249 BRL. Az éves bontásban 2018-ban (7 217 172 BRL) és 2017-ben (5 962 606 BRL) volt a legnagyobb érték, míg 2016-ban (40 471 BRL) a legkisebb.;;;
+A027;top 5 allam rendelesszam szerint;"Szűrés: nincs.
+Időszak: 2016. szeptember 15. – 2018. augusztus 29. (a teljes adat).
+Mérőszám: rendelések száma — A kézbesített rendelések száma (a lemondott és a nem kézbesített rendeléseket a tárház kizárja).
+Összesített érték: 96 470.
+Bontás a vevő állama szerint (a legnagyobb elöl; csak az elég adatból számolt csoportok):
+  São Paulo (SP): 40 494; az összes 42,0%-a
+  Rio de Janeiro (RJ): 12 350; az összes 12,8%-a
+  Minas Gerais (MG): 11 354; az összes 11,8%-a
+  Rio Grande do Sul (RS): 5 344; az összes 5,5%-a
+  Paraná (PR): 4 923; az összes 5,1%-a
+  … (további 21 csoport kihagyva; az utolsó a sor másik vége:)
+  Roraima (RR): 41; az összes 0,0%-a";A rendelések száma (96 470) legnagyobb része São Paulo-ban (40 494), majd Rio de Janeiro-ben (12 350) és Minas Geraisben (11 354) koncentrálódik. Következőként Rio Grande do Sul (5 344) és Paraná (4 923) áll, míg a sor másik vége Roraima (41).;;;
+A028;negyedeves bontasban kerem a forgalmat 2017 elejetol;"Szűrés: nincs.
+Időszak: 2017. január 1. – 2018. augusztus 29..
+Mérőszám: forgalom — A rendelések kosárértékének összege (brazil reál, BRL), szállítási díj nélkül.
+Összesített érték: 13 179 778 BRL.
+Bontás éves bontásban (a bontás sorrendjében; csak az elég adatból számolt csoportok):
+  2017: 5 962 606 BRL; 43 426 rendelés; az összes 45,2%-a
+  2018: 7 217 172 BRL; 52 777 rendelés; az összes 54,8%-a";A forgalom 2017. január 1. és 2018. augusztus 29. közötti időszakban 13 179 778 BRL-t értett el. Az éves bontásban a 2018-as év (7 217 172 BRL) hozta meg a legnagyobb értéket, amely az összesített forgalom 54,8%-szerese, míg a 2017-es év (5 962 606 BRL) az összes 45,2%-szerese.;;;
+A029;mennyi rendeles jott be Bahiabol tavaly;"Szűrés: eladó állama: Bahia (BA).
+Időszak: 2017. január 1. – 2017. december 31..
+Mérőszám: rendelések száma — A kézbesített rendelések száma (a lemondott és a nem kézbesített rendeléseket a tárház kizárja).
+Összesített érték: 357.";Bahiában tavaly összesen 357 rendelés érkezett.;;;
+A030;a hetvegen leadott rendelesek jobban kesnek mint a hetkozbeniek?;"Szűrés: a hét napja: szombat vagy vasárnap.
+Időszak: 2016. szeptember 15. – 2018. augusztus 29. (a teljes adat).
+Mérőszám: átlagos késés — A késett rendelések átlagos csúszása: a vállalt határidő napjától a kézbesítés napjáig eltelt napok. Csak a késett rendelésekből számolódik.
+Összesített érték: 10,9 nap; alapja: 1 420 késett rendelés.
+Bontás a hét napjai közül (a legnagyobb elöl; csak az elég adatból számolt csoportok):
+  szombat: 11,6 nap; 696 késett rendelés; az összesített érték 1,1-szerese
+  vasárnap: 10,2 nap; 724 késett rendelés; az összesített érték 0,9-szerese";Igen, a hétvégén leadott rendelések jobban késnek: szombaton (11,6 nap) és vasárnapon (10,2 nap) az átlagos késés meghaladja vagy alulmúlja az összesített értéket (10,9 nap).;;;
+A031;a het melyik napjan rendelnek a legtobbet a deli regioban? oda idoznenk a kampanyt;"Szűrés: vevő régiója: Dél.
+Időszak: 2016. szeptember 15. – 2018. augusztus 29. (a teljes adat).
+Mérőszám: rendelések száma — A kézbesített rendelések száma (a lemondott és a nem kézbesített rendeléseket a tárház kizárja).
+Összesített érték: 13 813.";A Dél régióban a legtöbb rendelést hétfőn adják le, összesen 13 813 kézbesített rendelésről van szó az adott időszakban.;;;
+A032;kerek egy havi bontast a kesett rendelesek szamarol 2018-ra;"Szűrés: nincs.
+Időszak: 2018. január 1. – 2018. augusztus 29..
+Mérőszám: késett rendelések száma — Azoknak a rendeléseknek a száma, amelyek a vállalt határidő napja után érkeztek meg.
+Összesített érték: 4 078.
+Bontás havi bontásban (a bontás sorrendjében; csak az elég adatból számolt csoportok):
+  2018. január: 403; az összes 9,9%-a
+  2018. február: 926; az összes 22,7%-a
+  2018. március: 1 328; az összes 32,6%-a
+  2018. április: 306; az összes 7,5%-a
+  2018. május: 443; az összes 10,9%-a
+  2018. június: 71; az összes 1,7%-a
+  2018. július: 208; az összes 5,1%-a
+  2018. augusztus: 393; az összes 9,6%-a";2018-ban összesen 4 078 késett rendelés volt a megadott időszakban. A csúcsérték márciusban jelent meg (1 328), míg a legalacsonyabb érték júniusban rögzült (71).;;;
+A033;a het melyik napjan rendelnek a legtobbet a deli regioban? oda idoznenk a kampanyt;"Szűrés: vevő régiója: Dél.
+Időszak: 2016. szeptember 15. – 2018. augusztus 29. (a teljes adat).
+Mérőszám: rendelések száma — A kézbesített rendelések száma (a lemondott és a nem kézbesített rendeléseket a tárház kizárja).
+Összesített érték: 13 813.";A Dél régióban a legtöbb rendelést pénteken adják le ({S1}), amely az összesített érték (13 813) {S1_X}-szerese.;;;
+A034;a lakastextilnel mennyi a kesesi arany;"Szűrés: termékkategória: lakástextil (ágy, fürdő, asztal).
+Időszak: 2016. szeptember 15. – 2018. augusztus 29. (a teljes adat).
+Mérőszám: késési arány — A késett rendelések aránya: a vállalt határidő napja után kézbesített rendelések az összes kézbesített rendelésen belül.
+Összesített érték: 7,5%; 95%-os tartomány: 7,0% – 8,0%.";A lakástextil kategóriában a késési arány 7,5%, amelynek 95%-os tartománya 7,0% – 8,0%.;;;
+A035;2017 novemberben allamonkent hany csomag kesett? black friday utan allt meg a telefon;"Szűrés: termékkategória: telefonok és tartozékok.
+Időszak: 2017. november 1. – 2017. november 30..
+Mérőszám: késett rendelések száma — Azoknak a rendeléseknek a száma, amelyek a vállalt határidő napja után érkeztek meg.
+Összesített érték: 44.
+Bontás a vevő állama szerint (a legnagyobb elöl; csak az elég adatból számolt csoportok):
+  Rio de Janeiro (RJ): 9; az összes 20,5%-a
+  São Paulo (SP): 9; az összes 20,5%-a
+  Santa Catarina (SC): 6; az összes 13,6%-a
+  Bahia (BA): 5; az összes 11,4%-a
+  Minas Gerais (MG): 3; az összes 6,8%-a
+  Paraná (PR): 3; az összes 6,8%-a
+  Mato Grosso (MT): 2; az összes 4,5%-a
+  Ceará (CE): 1; az összes 2,3%-a
+  Maranhão (MA): 1; az összes 2,3%-a
+  Mato Grosso do Sul (MS): 1; az összes 2,3%-a
+  … (további 12 csoport kihagyva; az utolsó a sor másik vége:)
+  Sergipe (SE): 0; az összes 0,0%-a";2017 novemberében telefonok és tartozékok kategóriában allamonként összesen 44 késő csomag érkezett. Rio de Janeiro-ban (9) és São Paulóban (9) a legtöbbet, mindkét helyen 9 csomaggal, míg Minas Geraisben ({S5) csak 3-at.;;;
+A036;2017 nov-dec-ben melyik 5 kategoria porgott a legjobban bevetel alapjan?;"Szűrés: nincs.
+Időszak: 2017. november 1. – 2017. december 31..
+Mérőszám: forgalom — A rendelések kosárértékének összege (brazil reál, BRL), szállítási díj nélkül.
+Összesített érték: 1 713 681 BRL.
+Bontás termékkategóriánként (a legnagyobb elöl; csak az elég adatból számolt csoportok):
+  órák és ajándékok: 165 311 BRL; 757 rendelés; az összes 9,6%-a
+  egészség és szépségápolás: 138 928 BRL; 943 rendelés; az összes 8,1%-a
+  lakástextil (ágy, fürdő, asztal): 137 845 BRL; 1 264 rendelés; az összes 8,0%-a
+  sport és szabadidő: 121 298 BRL; 970 rendelés; az összes 7,1%-a
+  játékok: 117 804 BRL; 853 rendelés; az összes 6,9%-a
+  … (további 61 csoport kihagyva; az utolsó a sor másik vége:)
+  lakáskomfort (2. csoport): 39 BRL; 3 rendelés; az összes 0,0%-a";2017 november és december között a legjobban növekvő bevételt az órák és ajándékok kategória hozta (165 311 BRL), ezt követik az egészség és szépségápolás (138 928 BRL) valamint a lakástextil (137 845 BRL). A sorozatban a sport és szabadidő (121 298 BRL) után a játékok (117 804 BRL) zárja a top 5-öt.;;;
+A037;a 3 legnagyobb regioban hogy alakult a kesesi arany az elmult evben? ha romlik az baj;"Szűrés: vevő régiója: Északkelet vagy Délkelet vagy Dél.
+Időszak: 2017. október 1. – 2018. augusztus 29..
+Mérőszám: késési arány — A késett rendelések aránya: a vállalt határidő napja után kézbesített rendelések az összes kézbesített rendelésen belül.
+Összesített érték: 7,9%; 95%-os tartomány: 7,7% – 8,1%.
+Bontás a vevő régiója szerint (a legnagyobb elöl; csak az elég adatból számolt csoportok):
+  Északkelet: 14,5%; 6 344 rendelés; az összesített érték 1,8-szerese
+  Délkelet: 7,2%; 48 634 rendelés; az összesített érték 0,9-szerese
+  Dél: 7,1%; 9 740 rendelés; az összesített érték 0,9-szerese";Az elmúlt időszakban a legnagyobb késési arányt az Északkelet (14,5%) régióban tapasztalták, amely az összesített érték (7,9%) 1,8-szerese. Ezt követi a Délkelet (7,2%), majd a Dél (7,1%) régió, ahol az értékek közelítik az átlagot.;;;
+A038;bontsd le a szepsegapolas forgalmat regiokra. hol megy a legjobban?;"Szűrés: termékkategória: egészség és szépségápolás.
+Időszak: 2016. szeptember 15. – 2018. augusztus 29. (a teljes adat).
+Mérőszám: forgalom — A rendelések kosárértékének összege (brazil reál, BRL), szállítási díj nélkül.
+Összesített érték: 1 233 813 BRL.
+Bontás a vevő régiója szerint (a legnagyobb elöl; csak az elég adatból számolt csoportok):
+  Délkelet: 768 603 BRL; 5 764 rendelés; az összes 62,3%-a
+  Északkelet: 195 801 BRL; 1 053 rendelés; az összes 15,9%-a
+  Dél: 143 852 BRL; 1 045 rendelés; az összes 11,7%-a
+  Közép-Nyugat: 83 992 BRL; 564 rendelés; az összes 6,8%-a
+  Észak: 41 564 BRL; 187 rendelés; az összes 3,4%-a";Az egészség és szépségápolás kategóriában a Délkelet régióban (768 603 BRL) megy a legjobban a forgalom. Ezt követi az Északkelet (195 801 BRL), majd a Dél (143 852 BRL) régió, míg az összesített érték (1 233 813 BRL) a megadott időszak alatt elérte a 1 233 813 BRL-t.;;;
+A039;allamonkent az atlagos kosarertek 2018-ban, es hogy viszonyul ez az orszagos atlaghoz;"Szűrés: nincs.
+Időszak: 2018. január 1. – 2018. augusztus 29..
+Mérőszám: átlagos kosárérték — A rendelésben szereplő termékek árának átlagos összege, brazil reálban (BRL), szállítási díj nélkül.
+Összesített érték: 136,75 BRL.
+Bontás a vevő állama szerint (a legnagyobb elöl; csak az elég adatból számolt csoportok):
+  Paraíba (PB): 232,59 BRL; 269 rendelés; az összesített érték 1,7-szerese
+  Rondônia (RO): 197,83 BRL; 109 rendelés; az összesített érték 1,4-szerese
+  Rio Grande do Norte (RN): 192,10 BRL; 241 rendelés; az összesített érték 1,4-szerese
+  Piauí (PI): 190,84 BRL; 258 rendelés; az összesített érték 1,4-szerese
+  Amapá (AP): 190,45 BRL; 39 rendelés; az összesített érték 1,4-szerese
+  Pará (PA): 187,51 BRL; 453 rendelés; az összesített érték 1,4-szerese
+  Sergipe (SE): 180,89 BRL; 146 rendelés; az összesített érték 1,3-szerese
+  Alagoas (AL): 179,11 BRL; 198 rendelés; az összesített érték 1,3-szerese
+  Tocantins (TO): 173,27 BRL; 144 rendelés; az összesített érték 1,3-szerese
+  Ceará (CE): 170,03 BRL; 633 rendelés; az összesített érték 1,2-szerese
+  … (további 14 csoport kihagyva; az utolsó a sor másik vége:)
+  São Paulo (SP): 125,10 BRL; 23 329 rendelés; az összesített érték 0,9-szerese";2018. január 1. és augusztus 29. között az átlagos kosárérték országosan 136,75 BRL volt. Paraíba-ban ez a legmagasabb (232,59 BRL), ami az országos átlag 1,7-szerese, míg São Paulo-ban a legalacsonyabb (125,10 BRL), ami az átlag 0,9-szerese.;;;
+A040;javult a teljesites az elmult egy evben honaprol honapra? a vallalt hatarido es a tenyleges kozott erdekel a kulonbseg;"Szűrés: nincs.
+Időszak: 2017. szeptember 1. – 2018. augusztus 29..
+Mérőszám: átlagos vállalt szállítási idő — A platform (Olist) által a rendeléskor vállalt határidő átlaga: a leadás napjától a határidő napjáig eltelt napok.
+Összesített érték: 23,8 nap.
+Bontás havi bontásban (a bontás sorrendjében; csak az elég adatból számolt csoportok):
+  2017. szeptember: 23,1 nap; 4 150 rendelés; az összesített érték 1,0-szerese
+  2017. október: 23,7 nap; 4 478 rendelés; az összesített érték 1,0-szerese
+  2017. november: 23,2 nap; 7 288 rendelés; az összesített érték 1,0-szerese
+  2017. december: 28,3 nap; 5 513 rendelés; az összesített érték 1,2-szerese
+  2018. január: 26,9 nap; 7 069 rendelés; az összesített érték 1,1-szerese
+  2018. február: 25,2 nap; 6 555 rendelés; az összesített érték 1,1-szerese
+  2018. március: 22,7 nap; 7 003 rendelés; az összesített érték 1,0-szerese
+  2018. április: 24,3 nap; 6 798 rendelés; az összesített érték 1,0-szerese
+  2018. május: 23,5 nap; 6 749 rendelés; az összesített érték 1,0-szerese
+  2018. június: 28,4 nap; 6 096 rendelés; az összesített érték 1,2-szerese
+  2018. július: 20,3 nap; 6 156 rendelés; az összesített érték 0,9-szerese
+  2018. augusztus: 15,8 nap; 6 351 rendelés; az összesített érték 0,7-szerese";A teljesítés javult az elmúlt évben, mivel a vállalt határidő és a tényleges idő közötti különbség csökkenő tendenciát mutat. A legmagasabb átlagos szállítási idő 2017 decemberében volt (28,3 nap), míg a legalacsonyabb 2018 augusztusában (15,8 nap). Az időszak végén a teljesítmény jelentősen javult az összesített értékhez képest.;;;
+A041;SP-i eladoknal mennyi az atlagos szallitasi ido a vevo allama szerint, csak ott ahol kesett a csomag;"Szűrés: eladó állama: São Paulo (SP).
+Időszak: 2016. szeptember 15. – 2018. augusztus 29. (a teljes adat).
+Mérőszám: átlagos szállítási idő — A rendelés leadásától a kézbesítésig eltelt idő átlaga napban, tört nappal.
+Összesített érték: 12,4 nap.";São Paulo (SP) államban, ahol késett a csomag, az átlagos szállítási idő 12,4 nap volt.;;;
+A042;melyik 5 allam adja a forgalom legnagyobb reszet? szazalekosan is kernem;"Szűrés: nincs.
+Időszak: 2016. szeptember 15. – 2018. augusztus 29. (a teljes adat).
+Mérőszám: forgalom — A rendelések kosárértékének összege (brazil reál, BRL), szállítási díj nélkül.
+Összesített érték: 13 220 249 BRL.
+Bontás a vevő állama szerint (a legnagyobb elöl; csak az elég adatból számolt csoportok):
+  São Paulo (SP): 5 066 563 BRL; 40 494 rendelés; az összes 38,3%-a
+  Rio de Janeiro (RJ): 1 759 651 BRL; 12 350 rendelés; az összes 13,3%-a
+  Minas Gerais (MG): 1 552 482 BRL; 11 354 rendelés; az összes 11,7%-a
+  Rio Grande do Sul (RS): 728 718 BRL; 5 344 rendelés; az összes 5,5%-a
+  Paraná (PR): 666 064 BRL; 4 923 rendelés; az összes 5,0%-a
+  … (további 21 csoport kihagyva; az utolsó a sor másik vége:)
+  Roraima (RR): 7 057 BRL; 41 rendelés; az összes 0,1%-a";A forgalom legnagyobb részét São Paulo adja (5 066 563 BRL, 38,3%), ezt követik Rio de Janeiro (1 759 651 BRL, 13,3%) és Minas Gerais (1 552 482 BRL, 11,7%). A következő két legnagyobb részt adó államok Rio Grande do Sul (728 718 BRL, 5,5%) és Paraná (666 064 BRL, 5,0%), míg az összesített forgalom 13 220 249 BRL.;;;
+A043;hogy alakult az eszakkeleti regio forgalma negyedevente?;"Szűrés: vevő régiója: Északkelet.
+Időszak: 2016. szeptember 15. – 2018. augusztus 29. (a teljes adat).
+Mérőszám: forgalom — A rendelések kosárértékének összege (brazil reál, BRL), szállítási díj nélkül.
+Összesített érték: 1 497 084 BRL.
+Bontás havi bontásban (a bontás sorrendjében; csak az elég adatból számolt csoportok):
+  2016. október: 5 172 BRL; 29 rendelés; az összes 0,3%-a
+  2017. január: 10 573 BRL; 67 rendelés; az összes 0,7%-a
+  2017. február: 22 556 BRL; 155 rendelés; az összes 1,5%-a
+  2017. március: 40 421 BRL; 245 rendelés; az összes 2,7%-a
+  2017. április: 43 793 BRL; 262 rendelés; az összes 2,9%-a
+  2017. május: 58 461 BRL; 369 rendelés; az összes 3,9%-a
+  2017. június: 48 227 BRL; 269 rendelés; az összes 3,2%-a
+  2017. július: 54 896 BRL; 405 rendelés; az összes 3,7%-a
+  2017. augusztus: 76 270 BRL; 438 rendelés; az összes 5,1%-a
+  2017. szeptember: 81 040 BRL; 461 rendelés; az összes 5,4%-a
+  2017. október: 90 954 BRL; 470 rendelés; az összes 6,1%-a
+  2017. november: 103 447 BRL; 675 rendelés; az összes 6,9%-a
+  2017. december: 76 133 BRL; 530 rendelés; az összes 5,1%-a
+  2018. január: 98 208 BRL; 637 rendelés; az összes 6,6%-a
+  2018. február: 89 233 BRL; 600 rendelés; az összes 6,0%-a
+  2018. március: 112 502 BRL; 639 rendelés; az összes 7,5%-a
+  2018. április: 101 350 BRL; 602 rendelés; az összes 6,8%-a
+  2018. május: 88 079 BRL; 551 rendelés; az összes 5,9%-a
+  2018. június: 102 441 BRL; 543 rendelés; az összes 6,8%-a
+  2018. július: 124 324 BRL; 664 rendelés; az összes 8,3%-a
+  2018. augusztus: 69 004 BRL; 433 rendelés; az összes 4,6%-a";Az Északkelet régió forgalma 2016. szeptembertől 2018. augusztusig összesen 1 497 084 BRL volt, a csúcsérték 2018. júliusban (124 324 BRL) és a mélypont 2016. októberben (5 172 BRL) jelentkezik.;;;
+A044;2017 nov-dec-ben melyik 5 kategoria porgott a legjobban bevetel alapjan?;"Szűrés: nincs.
+Időszak: 2017. november 1. – 2017. december 31..
+Mérőszám: forgalom — A rendelések kosárértékének összege (brazil reál, BRL), szállítási díj nélkül.
+Összesített érték: 1 713 681 BRL.
+Bontás termékkategóriánként (a legnagyobb elöl; csak az elég adatból számolt csoportok):
+  órák és ajándékok: 165 311 BRL; 757 rendelés; az összes 9,6%-a
+  egészség és szépségápolás: 138 928 BRL; 943 rendelés; az összes 8,1%-a
+  lakástextil (ágy, fürdő, asztal): 137 845 BRL; 1 264 rendelés; az összes 8,0%-a
+  sport és szabadidő: 121 298 BRL; 970 rendelés; az összes 7,1%-a
+  játékok: 117 804 BRL; 853 rendelés; az összes 6,9%-a
+  … (további 61 csoport kihagyva; az utolsó a sor másik vége:)
+  lakáskomfort (2. csoport): 39 BRL; 3 rendelés; az összes 0,0%-a";2017 november és december között a legjobban növekvő bevételt az órák és ajándékok kategória hozta (165 311 BRL), amely az összesített forgalom (1 713 681 BRL) 9,6%-át kitevő részt képviselte. Ezt követik az egészség és szépségápolás (138 928 BRL), a lakástextil (137 845 BRL), a sport és szabadidő (121 298 BRL) valamint a játékok (117 804 BRL).;;;
+A045;2017 es 2018 elso 8 honapja hogy all egymashoz forgalomban?;"Szűrés: nincs.
+Időszak: 2017. január 1. – 2018. augusztus 29..
+Mérőszám: forgalom — A rendelések kosárértékének összege (brazil reál, BRL), szállítási díj nélkül.
+Összesített érték: 13 179 778 BRL.
+Bontás havi bontásban (a bontás sorrendjében; csak az elég adatból számolt csoportok):
+  2017. január: 111 798 BRL; 750 rendelés; az összes 0,8%-a
+  2017. február: 234 223 BRL; 1 653 rendelés; az összes 1,8%-a
+  2017. március: 359 199 BRL; 2 546 rendelés; az összes 2,7%-a
+  2017. április: 340 670 BRL; 2 303 rendelés; az összes 2,6%-a
+  2017. május: 489 159 BRL; 3 545 rendelés; az összes 3,7%-a
+  2017. június: 421 923 BRL; 3 135 rendelés; az összes 3,2%-a
+  2017. július: 481 605 BRL; 3 872 rendelés; az összes 3,7%-a
+  2017. augusztus: 554 700 BRL; 4 193 rendelés; az összes 4,2%-a
+  2017. szeptember: 607 400 BRL; 4 150 rendelés; az összes 4,6%-a
+  2017. október: 648 248 BRL; 4 478 rendelés; az összes 4,9%-a
+  2017. november: 987 648 BRL; 7 288 rendelés; az összes 7,5%-a
+  2017. december: 726 033 BRL; 5 513 rendelés; az összes 5,5%-a
+  2018. január: 924 645 BRL; 7 069 rendelés; az összes 7,0%-a
+  2018. február: 826 437 BRL; 6 555 rendelés; az összes 6,3%-a
+  2018. március: 953 356 BRL; 7 003 rendelés; az összes 7,2%-a
+  2018. április: 973 534 BRL; 6 798 rendelés; az összes 7,4%-a
+  2018. május: 977 545 BRL; 6 749 rendelés; az összes 7,4%-a
+  2018. június: 855 592 BRL; 6 096 rendelés; az összes 6,5%-a
+  2018. július: 867 486 BRL; 6 156 rendelés; az összes 6,6%-a
+  2018. augusztus: 838 577 BRL; 6 351 rendelés; az összes 6,4%-a";A forgalom 2017. január és 2018. augusztus közötti időszakban a csúcsot 2017. novemberben érte el (987 648 BRL), míg a mélypontot 2017. februárban (234 223 BRL).;;;
+A046;a delkelet reszaranya a bevetelbol novekszik vagy csokken eves szinten?;"Szűrés: vevő régiója: Délkelet.
+Időszak: 2016. szeptember 15. – 2018. augusztus 29. (a teljes adat).
+Mérőszám: forgalom — A rendelések kosárértékének összege (brazil reál, BRL), szállítási díj nélkül.
+Összesített érték: 8 647 339 BRL.
+Bontás éves bontásban (a bontás sorrendjében; csak az elég adatból számolt csoportok):
+  2016: 25 398 BRL; 173 rendelés; az összes 0,3%-a
+  2017: 3 836 429 BRL; 29 223 rendelés; az összes 44,4%-a
+  2018: 4 785 513 BRL; 36 797 rendelés; az összes 55,3%-a";A Délkelet régióban a bevétel növekszik éves szinten: 2016-ban 25 398 BRL volt, majd 2017-ben ez 3 836 429 BRL-re, 2018-ban pedig 4 785 513 BRL-re emelkedett.;;;
+A047;allamonkent kerem a rendeleseket 2018-ra;"Szűrés: nincs.
+Időszak: 2018. január 1. – 2018. augusztus 29..
+Mérőszám: rendelések száma — A kézbesített rendelések száma (a lemondott és a nem kézbesített rendeléseket a tárház kizárja).
+Összesített érték: 52 777.
+Bontás a vevő állama szerint (a legnagyobb elöl; csak az elég adatból számolt csoportok):
+  São Paulo (SP): 23 329; az összes 44,2%-a
+  Rio de Janeiro (RJ): 6 342; az összes 12,0%-a
+  Minas Gerais (MG): 6 079; az összes 11,5%-a
+  Rio Grande do Sul (RS): 2 737; az összes 5,2%-a
+  Paraná (PR): 2 711; az összes 5,1%-a
+  Santa Catarina (SC): 1 884; az összes 3,6%-a
+  Bahia (BA): 1 726; az összes 3,3%-a
+  Szövetségi Kerület – Brasília (DF): 1 193; az összes 2,3%-a
+  Espírito Santo (ES): 1 047; az összes 2,0%-a
+  Goiás (GO): 1 033; az összes 2,0%-a
+  … (további 16 csoport kihagyva; az utolsó a sor másik vége:)
+  Roraima (RR): 22; az összes 0,0%-a";A 2018. január 1. és augusztus 29. közötti időszakban a kézbesített rendelések száma összesen 52 777. A legtöbbet São Paulo (23 329) állította, ezt követik Rio de Janeiro (6 342) és Minas Gerais (6 079).;;;
+A048;a 3 legnagyobb regioban hogy alakult a kesesi arany az elmult evben? ha romlik az baj;"Szűrés: vevő régiója: Északkelet vagy Délkelet vagy Dél.
+Időszak: 2017. október 1. – 2018. augusztus 29..
+Mérőszám: késési arány — A késett rendelések aránya: a vállalt határidő napja után kézbesített rendelések az összes kézbesített rendelésen belül.
+Összesített érték: 7,9%; 95%-os tartomány: 7,7% – 8,1%.
+Bontás a vevő régiója szerint (a legnagyobb elöl; csak az elég adatból számolt csoportok):
+  Északkelet: 14,5%; 6 344 rendelés; az összesített érték 1,8-szerese
+  Délkelet: 7,2%; 48 634 rendelés; az összesített érték 0,9-szerese
+  Dél: 7,1%; 9 740 rendelés; az összesített érték 0,9-szerese";Az Északkelet régióban a legmagasabb a késési arány (14,5%), ami az összesített érték (7,9%) 1,8-szerese. Ezt követi a Délkelet (7,2%) és a Dél régió (7,1%), amelyek mindkettő alacsonyabb értéket mutat.;;;
+A049;mennyi volt a teljes forgalom 2017-ben es 2018-ban? egymas mellett kernem;"Szűrés: nincs.
+Időszak: 2017. január 1. – 2018. augusztus 29..
+Mérőszám: forgalom — A rendelések kosárértékének összege (brazil reál, BRL), szállítási díj nélkül.
+Összesített érték: 13 179 778 BRL.
+Bontás havi bontásban (a bontás sorrendjében; csak az elég adatból számolt csoportok):
+  2017. január: 111 798 BRL; 750 rendelés; az összes 0,8%-a
+  2017. február: 234 223 BRL; 1 653 rendelés; az összes 1,8%-a
+  2017. március: 359 199 BRL; 2 546 rendelés; az összes 2,7%-a
+  2017. április: 340 670 BRL; 2 303 rendelés; az összes 2,6%-a
+  2017. május: 489 159 BRL; 3 545 rendelés; az összes 3,7%-a
+  2017. június: 421 923 BRL; 3 135 rendelés; az összes 3,2%-a
+  2017. július: 481 605 BRL; 3 872 rendelés; az összes 3,7%-a
+  2017. augusztus: 554 700 BRL; 4 193 rendelés; az összes 4,2%-a
+  2017. szeptember: 607 400 BRL; 4 150 rendelés; az összes 4,6%-a
+  2017. október: 648 248 BRL; 4 478 rendelés; az összes 4,9%-a
+  2017. november: 987 648 BRL; 7 288 rendelés; az összes 7,5%-a
+  2017. december: 726 033 BRL; 5 513 rendelés; az összes 5,5%-a
+  2018. január: 924 645 BRL; 7 069 rendelés; az összes 7,0%-a
+  2018. február: 826 437 BRL; 6 555 rendelés; az összes 6,3%-a
+  2018. március: 953 356 BRL; 7 003 rendelés; az összes 7,2%-a
+  2018. április: 973 534 BRL; 6 798 rendelés; az összes 7,4%-a
+  2018. május: 977 545 BRL; 6 749 rendelés; az összes 7,4%-a
+  2018. június: 855 592 BRL; 6 096 rendelés; az összes 6,5%-a
+  2018. július: 867 486 BRL; 6 156 rendelés; az összes 6,6%-a
+  2018. augusztus: 838 577 BRL; 6 351 rendelés; az összes 6,4%-a";A teljes forgalom 2017 januárjától 2018 augusztusáig 13 179 778 BRL volt. A havi bontás alapján a csúcsérték 2017 novemberében (987 648 BRL), míg a mélypont 2018 júniusában (855 592 BRL) volt.;;;
+A050;kerek egy havi bontast a kesett rendelesek szamarol 2018-ra;"Szűrés: nincs.
+Időszak: 2018. január 1. – 2018. augusztus 29..
+Mérőszám: késett rendelések száma — Azoknak a rendeléseknek a száma, amelyek a vállalt határidő napja után érkeztek meg.
+Összesített érték: 4 078.
+Bontás havi bontásban (a bontás sorrendjében; csak az elég adatból számolt csoportok):
+  2018. január: 403; az összes 9,9%-a
+  2018. február: 926; az összes 22,7%-a
+  2018. március: 1 328; az összes 32,6%-a
+  2018. április: 306; az összes 7,5%-a
+  2018. május: 443; az összes 10,9%-a
+  2018. június: 71; az összes 1,7%-a
+  2018. július: 208; az összes 5,1%-a
+  2018. augusztus: 393; az összes 9,6%-a";2018-ban a késett rendelések száma márciusban volt a legnagyobb (1 328), ez az összesített érték (4 078) 32,6%-szerese. Ezt követik február (926) és január (403), míg június (71) mutatja a legkisebb értéket.;;;
+A051;a lakastextilnel mennyi a kesesi arany;"Szűrés: termékkategória: lakástextil (ágy, fürdő, asztal).
+Időszak: 2016. szeptember 15. – 2018. augusztus 29. (a teljes adat).
+Mérőszám: késési arány — A késett rendelések aránya: a vállalt határidő napja után kézbesített rendelések az összes kézbesített rendelésen belül.
+Összesített érték: 7,5%; 95%-os tartomány: 7,0% – 8,0%.";A lakástextil kategóriában a késési arány 2016. szeptember 15. és 2018. augusztus 29. közötti időszakban 7,5%, amelynek 95%-os tartománya 7,0% és 8,0%.;;;
+A052;top 10 kategoria forgalom szerint?;"Szűrés: nincs.
+Időszak: 2016. szeptember 15. – 2018. augusztus 29. (a teljes adat).
+Mérőszám: forgalom — A rendelések kosárértékének összege (brazil reál, BRL), szállítási díj nélkül.
+Összesített érték: 13 220 249 BRL.
+Bontás termékkategóriánként (a legnagyobb elöl; csak az elég adatból számolt csoportok):
+  egészség és szépségápolás: 1 233 813 BRL; 8 613 rendelés; az összes 9,3%-a
+  órák és ajándékok: 1 166 874 BRL; 5 476 rendelés; az összes 8,8%-a
+  lakástextil (ágy, fürdő, asztal): 1 024 244 BRL; 9 184 rendelés; az összes 7,7%-a
+  sport és szabadidő: 954 347 BRL; 7 492 rendelés; az összes 7,2%-a
+  számítógép-tartozékok: 888 483 BRL; 6 511 rendelés; az összes 6,7%-a
+  bútorok és lakásdekoráció: 709 575 BRL; 6 188 rendelés; az összes 5,4%-a
+  háztartási cikkek: 615 326 BRL; 5 680 rendelés; az összes 4,7%-a
+  trendi ajándéktárgyak: 610 373 BRL; 3 530 rendelés; az összes 4,6%-a
+  autós termékek: 579 247 BRL; 3 792 rendelés; az összes 4,4%-a
+  játékok: 471 845 BRL; 3 787 rendelés; az összes 3,6%-a
+  … (további 61 csoport kihagyva; az utolsó a sor másik vége:)
+  biztonság és szolgáltatások: 283 BRL; 2 rendelés; az összes 0,0%-a";A forgalom legnagyobb része az egészség és szépségápolás kategóriában van (1 233 813 BRL), amely az összesített érték (13 220 249 BRL) 9,3%-szerese. Ezt követik az órák és ajándékok (1 166 874 BRL), a lakástextil (1 024 244 BRL) és a sport és szabadidő (954 347 BRL) csoportok.;;;
+A053;hol nagyobb a keses, ha a vevo es az elado ugyanabban az allamban van vagy ha nem?;"Szűrés: nincs.
+Időszak: 2016. szeptember 15. – 2018. augusztus 29. (a teljes adat).
+Mérőszám: átlagos késés — A késett rendelések átlagos csúszása: a vállalt határidő napjától a kézbesítés napjáig eltelt napok. Csak a késett rendelésekből számolódik.
+Összesített érték: 10,6 nap; alapja: 6 534 késett rendelés.";Az adatok nem tartalmaznak szűrést az államból való függőség alapján, így a rendelkezésre álló információk csak az összesített átlagos késést mutatják: 10,6 nap (alapja: 6 534 késett rendelés).;;;
+A054;ha egy csomag kesik, atlagosan mennyit kesik?;"Szűrés: nincs.
+Időszak: 2016. szeptember 15. – 2018. augusztus 29. (a teljes adat).
+Mérőszám: átlagos késés — A késett rendelések átlagos csúszása: a vállalt határidő napjától a kézbesítés napjáig eltelt napok. Csak a késett rendelésekből számolódik.
+Összesített érték: 10,6 nap; alapja: 6 534 késett rendelés.";A csomagok átlagos késése az adott időszakban 10,6 nap volt, amely a 6 534 késett rendelés alapján számított érték. Az eredmény 95%-os tartománya 10,2 – 11,0 nap.;;;
+A055;javult a teljesites az elmult egy evben honaprol honapra? a vallalt hatarido es a tenyleges kozott erdekel a kulonbseg;"Szűrés: nincs.
+Időszak: 2017. szeptember 1. – 2018. augusztus 29..
+Mérőszám: átlagos vállalt szállítási idő — A platform (Olist) által a rendeléskor vállalt határidő átlaga: a leadás napjától a határidő napjáig eltelt napok.
+Összesített érték: 23,8 nap.
+Bontás havi bontásban (a bontás sorrendjében; csak az elég adatból számolt csoportok):
+  2017. szeptember: 23,1 nap; 4 150 rendelés; az összesített érték 1,0-szerese
+  2017. október: 23,7 nap; 4 478 rendelés; az összesített érték 1,0-szerese
+  2017. november: 23,2 nap; 7 288 rendelés; az összesített érték 1,0-szerese
+  2017. december: 28,3 nap; 5 513 rendelés; az összesített érték 1,2-szerese
+  2018. január: 26,9 nap; 7 069 rendelés; az összesített érték 1,1-szerese
+  2018. február: 25,2 nap; 6 555 rendelés; az összesített érték 1,1-szerese
+  2018. március: 22,7 nap; 7 003 rendelés; az összesített érték 1,0-szerese
+  2018. április: 24,3 nap; 6 798 rendelés; az összesített érték 1,0-szerese
+  2018. május: 23,5 nap; 6 749 rendelés; az összesített érték 1,0-szerese
+  2018. június: 28,4 nap; 6 096 rendelés; az összesített érték 1,2-szerese
+  2018. július: 20,3 nap; 6 156 rendelés; az összesített érték 0,9-szerese
+  2018. augusztus: 15,8 nap; 6 351 rendelés; az összesített érték 0,7-szerese";A teljesítés javult a vizsgált időszakban, mivel a vállalt és tényleges határidő közötti különbség csökkenése figyelhető meg. A legkisebb eltérés augusztusban (15,8 nap) volt, míg decemberben (28,3 nap) tapasztalták a legnagyobb növekedést. Az időszak átlagos értéke 23,8 nap.;;;

@@ -1,0 +1,47 @@
+﻿kod;id;ismetles;ag;a_kapu_talalt;problemak
+A001;k213;1;szabad;nem;
+A002;k247;1;szabad;igen;"állítás a szűrésről (a hatókört a rendszer írja; a modell tagadta a szűrést)"
+A003;k201;1;jelolo;nem;
+A004;k237;1;jelolo;igen;ismeretlen jelölő: {S1}
+A005;k230;1;jelolo;igen;„2017. május” nem a legkisebb érték (az: „2017. augusztus”)
+A006;k211;1;jelolo;nem;
+A007;k211;1;szabad;nem;
+A008;k218;1;jelolo;nem;
+A009;k206;1;jelolo;nem;
+A010;k240;1;jelolo;nem;
+A011;k206;1;szabad;nem;
+A012;k210;1;jelolo;igen;vissza nem vezethető szám: 2
+A013;k217;1;jelolo;igen;ismeretlen jelölő: {S1}
+A014;k213;1;jelolo;nem;
+A015;k202;1;szabad;igen;vissza nem vezethető szám: 123
+A016;k217;1;szabad;nem;
+A017;k225;1;jelolo;igen;a(z) {S3} „Pará (PA)” értéke, de „São Paulo (SP)” mellett áll | „São Paulo (SP)” nem a legnagyobb érték (az: „Amazonas (AM)”)
+A018;k220;1;jelolo;nem;
+A019;k237;1;szabad;nem;
+A020;k227;1;jelolo;igen;vissza nem vezethető szám: 5
+A021;k226;1;jelolo;nem;
+A022;k238;1;jelolo;igen;a(z) {S3} „2017. március” értéke, de „2017. július” mellett áll
+A023;k201;1;szabad;igen;"állítás a szűrésről (a hatókört a rendszer írja; a modell tagadta a szűrést)"
+A024;k238;1;szabad;igen;a(z) 15,2 „2017. november” értéke, de „2017. december” mellett áll | „2017. április” nem a legkisebb érték (az: „2017. augusztus”)
+A025;k230;1;szabad;igen;„2017. május” nem a legnagyobb érték (az: „2017. április”)
+A026;k225;1;szabad;nem;
+A027;k222;1;szabad;nem;
+A028;k247;1;jelolo;nem;
+A029;k227;1;szabad;igen;vissza nem vezethető szám: 5
+A030;k236;1;jelolo;igen;„São Paulo (SP)” nem a legkisebb érték (az: „Roraima (RR)”)
+A031;k235;1;szabad;nem;
+A032;k226;1;szabad;nem;
+A033;k212;1;jelolo;nem;
+A034;k222;1;jelolo;nem;
+A035;k228;1;szabad;igen;vissza nem vezethető szám: 3 084 | „Dél” nem a legnagyobb érték (az: „Délkelet”)
+A036;k242;1;jelolo;igen;ismeretlen jelölő: {S1}
+A037;k212;1;szabad;nem;
+A038;k218;1;szabad;igen;„2017. november” nem a legkisebb érték (az: „2017. január”)
+A039;k221;1;szabad;nem;
+A040;k219;1;szabad;igen;a(z) 22,97 „2017. október” értéke, de „2017. november” mellett áll | „2017. november” nem a legnagyobb érték (az: „2017. október”) | „2017. október” nem a legkisebb érték (az: „2017. január”)
+A041;k233;1;jelolo;nem;
+A042;k236;1;szabad;igen;vissza nem vezethető szám: 8,1 | „Rio de Janeiro (RJ)” nem a legnagyobb érték (az: „São Paulo (SP)”) | „Rio de Janeiro (RJ)” nem a legkisebb érték (az: „Roraima (RR)”)
+A043;k216;1;jelolo;nem;
+A044;k235;1;jelolo;nem;
+A045;k202;1;jelolo;igen;vissza nem vezethető szám: 1253
+A046;k242;1;szabad;nem;

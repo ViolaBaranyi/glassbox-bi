@@ -1,0 +1,56 @@
+﻿kod;id;ismetles;ag;a_kapu_talalt;problemak
+A001;k337;1;szabad;nem;
+A002;k350;1;szabad;nem;
+A003;k322;1;szabad;nem;
+A004;k321;1;szabad;igen;„2018. június” nem a legkisebb érték (az: „2017. január”)
+A005;k349;1;szabad;nem;
+A006;k352;1;szabad;igen;„2017” nem a legnagyobb érték (az: „2018”)
+A007;k342;1;jelolo;nem;
+A008;k360;1;jelolo;igen;a(z) {S1} „2016” értéke, de „2018” mellett áll
+A009;k331;1;szabad;nem;
+A010;k302;1;jelolo;nem;
+A011;k317;1;szabad;nem;
+A012;k303;1;szabad;nem;
+A013;k341;1;jelolo;nem;
+A014;k348;1;jelolo;nem;
+A015;k332;1;szabad;igen;vissza nem vezethető szám: 5
+A016;k342;1;szabad;nem;
+A017;k310;1;jelolo;nem;
+A018;k333;1;szabad;nem;
+A019;k319;1;szabad;nem;
+A020;k303;1;jelolo;nem;
+A021;k315;1;szabad;igen;a(z) 59,7 „lakástextil (ágy, fürdő, asztal)” értéke, de „bútorok és lakásdekoráció” mellett áll
+A022;k336;1;szabad;nem;
+A023;k341;1;szabad;nem;
+A024;k315;1;jelolo;nem;
+A025;k319;1;jelolo;nem;
+A026;k352;1;jelolo;igen;„2017” nem a legnagyobb érték (az: „2018”)
+A027;k332;1;jelolo;nem;
+A028;k322;1;jelolo;nem;
+A029;k337;1;jelolo;nem;
+A030;k350;1;jelolo;nem;
+A031;k340;1;szabad;nem;
+A032;k304;1;szabad;nem;
+A033;k340;1;jelolo;igen;ismeretlen jelölő: {S1}, {S1_X}
+A034;k346;1;jelolo;nem;
+A035;k349;1;jelolo;igen;vissza nem vezethető szám: 9, 5, 3
+A036;k320;1;szabad;igen;vissza nem vezethető szám: 5
+A037;k359;1;jelolo;nem;
+A038;k317;1;jelolo;nem;
+A039;k330;1;szabad;nem;
+A040;k307;1;szabad;igen;„2017. december” nem a legnagyobb érték (az: „2018. június”)
+A041;k308;1;szabad;nem;
+A042;k325;1;szabad;igen;„Rio Grande do Sul (RS)” nem a legnagyobb érték (az: „São Paulo (SP)”)
+A043;k335;1;jelolo;nem;
+A044;k320;1;jelolo;nem;
+A045;k355;1;jelolo;igen;„2017. február” nem a legkisebb érték (az: „2017. január”)
+A046;k360;1;szabad;nem;
+A047;k333;1;jelolo;nem;
+A048;k359;1;szabad;nem;
+A049;k321;1;jelolo;igen;„2018. június” nem a legkisebb érték (az: „2017. január”)
+A050;k304;1;jelolo;nem;
+A051;k346;1;szabad;nem;
+A052;k311;1;jelolo;nem;
+A053;k348;1;szabad;nem;
+A054;k343;1;szabad;igen;vissza nem vezethető szám: 10,2, 11,0
+A055;k307;1;jelolo;igen;„2017. december” nem a legnagyobb érték (az: „2018. június”)

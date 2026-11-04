@@ -1,0 +1,61 @@
+﻿kod;id;ismetles;ag;a_kapu_talalt;problemak
+A001;k029;2;jelolo;igen;ismeretlen jelölő: {S1}
+A002;k083;3;jelolo;igen;a(z) {S3} „lakástextil (ágy, fürdő, asztal)” értéke, de „órák és ajándékok” mellett áll
+A003;k021;1;szabad;nem;
+A004;k035;3;szabad;igen;"állítás a szűrésről (a hatókört a rendszer írja; a modell tagadta a szűrést)"
+A005;k042;2;jelolo;nem;
+A006;k063;1;jelolo;nem;
+A007;k015;1;szabad;nem;
+A008;k047;3;jelolo;igen;a(z) 7,9 „órák és ajándékok” értéke, de „sport és szabadidő” mellett áll
+A009;k056;2;szabad;nem;
+A010;k023;1;jelolo;nem;
+A011;k111;1;szabad;nem;
+A012;k050;3;szabad;nem;
+A013;k050;2;szabad;nem;
+A014;k024;1;szabad;nem;
+A015;k005;2;szabad;nem;
+A016;k097;2;jelolo;nem;
+A017;k086;2;szabad;nem;
+A018;k091;2;szabad;nem;
+A019;k084;1;jelolo;nem;
+A020;k011;3;szabad;igen;a(z) 777 „DVD- és Blu-ray-lemezek” értéke, de „kerti szerszámok” mellett áll
+A021;k088;2;jelolo;nem;
+A022;k045;2;jelolo;igen;„2018. augusztus” nem a legkisebb érték (az: „2018. június”)
+A023;k063;2;szabad;nem;
+A024;k043;3;jelolo;igen;ismeretlen jelölő: {S1}
+A025;k049;3;jelolo;igen;vissza nem vezethető szám: 40, 46
+A026;k063;3;jelolo;nem;
+A027;k003;2;jelolo;nem;
+A028;k107;3;jelolo;nem;
+A029;k046;3;jelolo;igen;a(z) {S4} „2017. december” értéke, de „2018. június” mellett áll
+A030;k022;3;jelolo;nem;
+A031;k092;1;szabad;nem;
+A032;k054;3;szabad;nem;
+A033;k015;2;szabad;nem;
+A034;k088;3;jelolo;nem;
+A035;k095;2;szabad;igen;vissza nem vezethető szám: 21,32 | a(z) 21,68 „2018. január” értéke, de „2018. február” mellett áll
+A036;k085;1;jelolo;nem;
+A037;k035;2;jelolo;igen;"állítás a szűrésről (a hatókört a rendszer írja; a modell tagadta a szűrést)"
+A038;k085;2;jelolo;nem;
+A039;k095;1;szabad;igen;vissza nem vezethető szám: 21,32 | a(z) 21,68 „2018. január” értéke, de „2018. február” mellett áll
+A040;k039;2;szabad;igen;a(z) 21,23 „2017. december” értéke, de „2018. augusztus” mellett áll | a(z) 25,96 „2018. július” értéke, de „2018. augusztus” mellett áll | a(z) 25,96 „2018. július” értéke, de „2018. június” mellett áll | „2018. június” nem a legnagyobb érték (az: „2018. július”)
+A041;k004;1;szabad;nem;
+A042;k034;2;szabad;igen;"állítás a szűrésről (a hatókört a rendszer írja; a modell tagadta a szűrést)"
+A043;k034;2;jelolo;nem;
+A044;k126;1;szabad;igen;"állítás a szűrésről (a hatókört a rendszer írja; a modell tagadta a szűrést)"
+A045;k084;3;jelolo;nem;
+A046;k016;1;jelolo;nem;
+A047;k128;2;szabad;nem;
+A048;k124;2;jelolo;igen;ismeretlen jelölő: {S1}, {S2} | vissza nem vezethető szám: 11
+A049;k049;3;szabad;nem;
+A050;k046;3;szabad;igen;a(z) 28,3 „2017. december” értéke, de „2018. június” mellett áll
+A051;k128;2;jelolo;nem;
+A052;k088;1;jelolo;nem;
+A053;k004;3;szabad;igen;"állítás a szűrésről (a hatókört a rendszer írja; a modell tagadta a szűrést)"
+A054;k046;1;jelolo;igen;a(z) {S4} „2017. december” értéke, de „2018. június” mellett áll
+A055;k055;1;jelolo;nem;
+A056;k058;3;jelolo;nem;
+A057;k027;1;szabad;nem;
+A058;k036;2;szabad;nem;
+A059;k025;2;szabad;nem;
+A060;k016;2;szabad;igen;a(z) 27,3 „Közép-Nyugat” értéke, de „Északkelet” mellett áll

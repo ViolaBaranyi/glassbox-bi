@@ -1,0 +1,36 @@
+{
+ "gep": "rakepc",
+ "par": "m1-2b",
+ "gepnev": "RAKE_PC",
+ "rendszer": "Windows-11-10.0.26200-SP0",
+ "processzor": "AMD Ryzen 7 9700X 8-Core Processor",
+ "memoria_gb": 31.1,
+ "videokartyak": [],
+ "egyeb_kijelzo": "AMD  Radeon RX 7800 XT; AMD Radeon(TM) Graphics",
+ "osztaly": "processzor",
+ "ollama": "ollama version is 0.40.13",
+ "modellfajl": "0689d44085e0",
+ "tarhaz": "4c52bcaa899fea926d49d4b13e4e3b0c7086812660ebf497d9b6caa559b2ec07",
+ "kod_mappa": "v3_kod",
+ "parancs": [
+  "uv",
+  "run",
+  "python",
+  "-m",
+  "narrative.meres",
+  "--modell",
+  "qwen3.5:2b"
+ ],
+ "futtato": "a51861d3f067347ccd641f99b1810f1e14b796e208b98cc68713201300cf8f29",
+ "inditasok": [
+  {
+   "azon": "18e4bd60549bcdb8",
+   "kezdes": "2026-11-04T05:32:53",
+   "gepnev": "RAKE_PC",
+   "folytatas": false,
+   "vege": "2026-11-04T06:16:21",
+   "kilepes": 0
+  }
+ ],
+ "ollama_ps_utana": "NAME          ID              SIZE      PROCESSOR    CONTEXT    RUNNER      UNTIL               \nqwen3.5:2b    0689d44085e0    2.4 GB    100% GPU     4096       llamacpp    29 minutes from now"
+}

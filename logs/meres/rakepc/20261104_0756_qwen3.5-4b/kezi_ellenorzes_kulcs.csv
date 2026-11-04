@@ -1,0 +1,61 @@
+﻿kod;id;ismetles;ag;a_kapu_talalt;problemak
+A001;k349;1;szabad;igen;oksági állítás: okozták
+A002;k306;1;szabad;nem;
+A003;k307;1;jelolo;igen;„2018. június” nem a legkisebb érték (az: „2018. augusztus”)
+A004;k330;1;jelolo;igen;„Alagoas (AL)” nem a legnagyobb érték (az: „Paraíba (PB)”)
+A005;k322;1;szabad;nem;
+A006;k359;1;jelolo;igen;„Dél” nem a legnagyobb érték (az: „Északkelet”)
+A007;k342;1;jelolo;nem;
+A008;k355;1;szabad;igen;vissza nem vezethető szám: 8
+A009;k302;1;szabad;nem;
+A010;k354;1;jelolo;igen;ismeretlen jelölő: {S1} | vissza nem vezethető szám: 2015
+A011;k315;1;szabad;igen;a(z) 6 188 „bútorok és lakásdekoráció” értéke, de „lakástextil (ágy, fürdő, asztal)” mellett áll
+A012;k348;1;jelolo;nem;
+A013;k335;1;jelolo;nem;
+A014;k332;1;szabad;igen;vissza nem vezethető szám: 5 | a(z) 42,0 „São Paulo (SP)” értéke, de „Roraima (RR)” mellett áll
+A015;k331;1;szabad;nem;
+A016;k359;1;szabad;nem;
+A017;k339;1;szabad;nem;
+A018;k303;1;jelolo;nem;
+A019;k338;1;jelolo;nem;
+A020;k338;1;szabad;nem;
+A021;k319;1;jelolo;nem;
+A022;k350;1;szabad;nem;
+A023;k330;1;szabad;nem;
+A024;k353;1;szabad;nem;
+A025;k320;1;szabad;nem;
+A026;k317;1;szabad;igen;„Dél” nem a legnagyobb érték (az: „Délkelet”)
+A027;k346;1;szabad;nem;
+A028;k352;1;jelolo;nem;
+A029;k314;1;jelolo;nem;
+A030;k315;1;jelolo;nem;
+A031;k308;1;szabad;nem;
+A032;k343;1;szabad;nem;
+A033;k353;1;jelolo;nem;
+A034;k337;1;jelolo;nem;
+A035;k301;1;jelolo;nem;
+A036;k301;1;szabad;nem;
+A037;k302;1;jelolo;igen;ismeretlen jelölő: {S1}, {S1_A}, {S1_F}
+A038;k346;1;jelolo;nem;
+A039;k331;1;jelolo;igen;ismeretlen jelölő: {S1}
+A040;k311;1;szabad;igen;vissza nem vezethető szám: 10
+A041;k321;1;szabad;nem;
+A042;k352;1;szabad;igen;a(z) 5 962 606 „2017” értéke, de „2016” mellett áll
+A043;k351;1;jelolo;nem;
+A044;k340;1;szabad;igen;vissza nem vezethető szám: 82,5
+A045;k355;1;jelolo;igen;vissza nem vezethető szám: 8
+A046;k341;1;jelolo;nem;
+A047;k320;1;jelolo;nem;
+A048;k319;1;szabad;nem;
+A049;k307;1;szabad;igen;„2018. február” nem a legnagyobb érték (az: „2018. június”)
+A050;k351;1;szabad;nem;
+A051;k304;1;jelolo;nem;
+A052;k340;1;jelolo;nem;
+A053;k333;1;jelolo;nem;
+A054;k356;1;jelolo;igen;a(z) {S2} „Dél” értéke, de „Észak” mellett áll | a(z) {S3} „Északkelet” értéke, de „Észak” mellett áll | a(z) {S4} „Közép-Nyugat” értéke, de „Észak” mellett áll
+A055;k356;1;szabad;igen;vissza nem vezethető szám: 135 670, 48,8 | a(z) 14,4 „Dél” értéke, de „Északkelet” mellett áll | a(z) 11,3 „Északkelet” értéke, de „Közép-Nyugat” mellett áll
+A056;k308;1;jelolo;igen;ismeretlen jelölő: {S1}
+A057;k335;1;szabad;nem;
+A058;k321;1;jelolo;nem;
+A059;k303;1;szabad;nem;
+A060;k306;1;jelolo;igen;a(z) 1,8 „Észak” értéke, de „Délkelet” mellett áll

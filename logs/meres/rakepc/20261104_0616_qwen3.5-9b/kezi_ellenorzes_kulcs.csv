@@ -1,0 +1,61 @@
+﻿kod;id;ismetles;ag;a_kapu_talalt;problemak
+A001;k059;2;jelolo;igen;„2018” nem a legnagyobb érték (az: „2017”)
+A002;k058;1;jelolo;nem;
+A003;k092;1;jelolo;nem;
+A004;k124;2;szabad;nem;
+A005;k109;1;szabad;nem;
+A006;k058;2;jelolo;nem;
+A007;k086;3;szabad;nem;
+A008;k019;1;jelolo;igen;vissza nem vezethető szám: 3
+A009;k020;3;jelolo;nem;
+A010;k118;2;jelolo;igen;vissza nem vezethető szám: 2015
+A011;k016;1;szabad;nem;
+A012;k003;3;szabad;nem;
+A013;k089;2;szabad;nem;
+A014;k093;2;szabad;igen;„2017. december” nem a legnagyobb érték (az: „2017. november”)
+A015;k002;2;szabad;nem;
+A016;k103;2;szabad;nem;
+A017;k106;1;jelolo;nem;
+A018;k048;3;szabad;nem;
+A019;k055;2;jelolo;nem;
+A020;k095;2;szabad;igen;vissza nem vezethető szám: 21,68 | a(z) 21,68 „2018. január” értéke, de „2018. július” mellett áll
+A021;k033;1;szabad;nem;
+A022;k095;3;szabad;igen;vissza nem vezethető szám: 21,68 | a(z) 21,68 „2018. január” értéke, de „2018. július” mellett áll
+A023;k045;1;szabad;igen;a(z) 7 003 „2018. március” értéke, de „2018. január” mellett áll
+A024;k052;2;jelolo;nem;
+A025;k003;2;jelolo;nem;
+A026;k084;2;jelolo;nem;
+A027;k123;2;jelolo;nem;
+A028;k032;3;szabad;nem;
+A029;k097;2;szabad;igen;vissza nem vezethető szám: 6
+A030;k042;1;jelolo;igen;a(z) {S3} „2018” értéke, de „2017” mellett áll | „2017” nem a legnagyobb érték (az: „2016”)
+A031;k061;2;szabad;nem;
+A032;k130;3;szabad;igen;vissza nem vezethető szám: 17
+A033;k109;1;jelolo;nem;
+A034;k128;1;jelolo;igen;vissza nem vezethető szám: 3
+A035;k095;3;jelolo;nem;
+A036;k019;3;szabad;igen;a(z) 734 „lakáskomfort (2. csoport)” értéke, de „CD-k, DVD-k, musicalek” mellett áll
+A037;k060;3;szabad;nem;
+A038;k025;3;szabad;nem;
+A039;k043;1;jelolo;igen;a(z) {S2} „2016. október” értéke, de „2016. szeptember” mellett áll
+A040;k029;1;jelolo;nem;
+A041;k095;1;szabad;igen;vissza nem vezethető szám: 21,68 | a(z) 21,68 „2018. január” értéke, de „2018. július” mellett áll
+A042;k055;3;jelolo;nem;
+A043;k013;3;jelolo;nem;
+A044;k059;2;szabad;nem;
+A045;k045;1;jelolo;igen;a(z) {S3} „2018. március” értéke, de „2018. január” mellett áll | a(z) {S4} „2018. április” értéke, de „2018. január” mellett áll
+A046;k030;2;szabad;nem;
+A047;k042;2;jelolo;igen;a(z) {S3} „2018” értéke, de „2017” mellett áll | „2017” nem a legnagyobb érték (az: „2016”)
+A048;k123;1;jelolo;nem;
+A049;k062;1;jelolo;nem;
+A050;k094;1;szabad;igen;a(z) 137,30 „2017” értéke, de „2018” mellett áll
+A051;k042;3;jelolo;igen;a(z) {S3} „2018” értéke, de „2017” mellett áll | „2017” nem a legnagyobb érték (az: „2016”)
+A052;k033;2;jelolo;nem;
+A053;k047;2;jelolo;nem;
+A054;k016;2;szabad;nem;
+A055;k034;1;szabad;nem;
+A056;k125;1;szabad;nem;
+A057;k039;3;jelolo;igen;a(z) {S13} „2017. december” értéke, de „2018. július” mellett áll | „2018. július” nem a legkisebb érték (az: „2017. január”)
+A058;k082;1;szabad;nem;
+A059;k093;3;szabad;igen;„2017. december” nem a legnagyobb érték (az: „2017. november”)
+A060;k056;1;jelolo;nem;

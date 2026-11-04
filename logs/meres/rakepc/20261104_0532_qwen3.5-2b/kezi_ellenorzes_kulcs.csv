@@ -1,0 +1,61 @@
+﻿kod;id;ismetles;ag;a_kapu_talalt;problemak
+A001;k058;3;jelolo;igen;ismeretlen jelölő: {S1}, {S1_N}
+A002;k038;3;jelolo;igen;"állítás a szűrésről (a hatókört a rendszer írja; a modell tagadta a szűrést)"
+A003;k090;3;szabad;nem;
+A004;k105;1;szabad;igen;"vissza nem vezethető szám: 1 | állítás a szűrésről (a hatókört a rendszer írja; a modell tagadta a szűrést)"
+A005;k081;3;jelolo;nem;
+A006;k028;2;jelolo;nem;
+A007;k044;1;szabad;nem;
+A008;k047;1;jelolo;igen;ismeretlen jelölő: {S1}
+A009;k036;1;szabad;nem;
+A010;k027;3;jelolo;nem;
+A011;k056;3;szabad;nem;
+A012;k056;2;szabad;nem;
+A013;k053;2;szabad;nem;
+A014;k084;3;szabad;nem;
+A015;k005;3;szabad;nem;
+A016;k123;3;jelolo;nem;
+A017;k051;3;szabad;nem;
+A018;k090;1;szabad;nem;
+A019;k026;1;jelolo;nem;
+A020;k089;1;szabad;igen;„Északkelet” nem a legnagyobb érték (az: „Észak”)
+A021;k107;3;jelolo;nem;
+A022;k052;2;jelolo;igen;„Dél” nem a legnagyobb érték (az: „Délkelet”)
+A023;k033;2;szabad;nem;
+A024;k082;3;jelolo;igen;"vissza nem vezethető szám: 3 | állítás a szűrésről (a hatókört a rendszer írja; a modell tagadta a szűrést)"
+A025;k019;2;szabad;igen;vissza nem vezethető szám: 612,40, 8,0
+A026;k108;3;jelolo;nem;
+A027;k003;2;jelolo;nem;
+A028;k021;3;jelolo;nem;
+A029;k007;3;szabad;igen;"állítás a szűrésről (a hatókört a rendszer írja; a modell tagadta a szűrést)"
+A030;k016;3;jelolo;nem;
+A031;k108;1;szabad;nem;
+A032;k044;3;szabad;nem;
+A033;k047;3;szabad;nem;
+A034;k093;3;jelolo;nem;
+A035;k100;3;szabad;igen;"a(z) 977 545 „2018. május” értéke, de „2018. április” mellett áll | állítás a szűrésről (a hatókört a rendszer írja; a modell tagadta a szűrést)"
+A036;k110;1;jelolo;nem;
+A037;k062;3;jelolo;igen;ismeretlen jelölő: {S1}
+A038;k108;2;jelolo;nem;
+A039;k087;1;szabad;nem;
+A040;k022;1;szabad;igen;"állítás a szűrésről (a hatókört a rendszer írja; a modell tagadta a szűrést)"
+A041;k001;2;szabad;nem;
+A042;k089;2;szabad;igen;„Északkelet” nem a legnagyobb érték (az: „Észak”)
+A043;k044;2;jelolo;nem;
+A044;k040;1;szabad;igen;"állítás a szűrésről (a hatókört a rendszer írja; a modell tagadta a szűrést)"
+A045;k056;2;jelolo;igen;vissza nem vezethető szám: 2657
+A046;k053;1;jelolo;nem;
+A047;k104;2;jelolo;nem;
+A048;k021;3;szabad;nem;
+A049;k052;3;jelolo;igen;„Dél” nem a legnagyobb érték (az: „Délkelet”)
+A050;k059;1;jelolo;igen;a(z) {S1_X} „2018” értéke, de „2016” mellett áll
+A051;k001;1;szabad;nem;
+A052;k105;3;szabad;igen;"vissza nem vezethető szám: 1 | állítás a szűrésről (a hatókört a rendszer írja; a modell tagadta a szűrést)"
+A053;k027;2;jelolo;nem;
+A054;k051;1;jelolo;nem;
+A055;k110;3;szabad;igen;"állítás a szűrésről (a hatókört a rendszer írja; a modell tagadta a szűrést)"
+A056;k059;3;jelolo;igen;a(z) {S1_X} „2018” értéke, de „2016” mellett áll
+A057;k035;2;jelolo;nem;
+A058;k090;2;jelolo;nem;
+A059;k018;1;szabad;nem;
+A060;k099;3;szabad;nem;

@@ -1,0 +1,61 @@
+﻿kod;id;ismetles;ag;a_kapu_talalt;problemak
+A001;k215;1;szabad;nem;
+A002;k229;1;szabad;nem;
+A003;k222;1;szabad;nem;
+A004;k244;1;szabad;nem;
+A005;k215;1;jelolo;igen;ismeretlen jelölő: {S1}
+A006;k238;1;jelolo;igen;a(z) {S5} „2017. május” értéke, de „2017. június” mellett áll | a(z) {S11} „2017. november” értéke, de „2017. december” mellett áll | „2017. május” nem a legkisebb érték (az: „2017. augusztus”)
+A007;k209;1;jelolo;igen;vissza nem vezethető szám: 5
+A008;k202;1;szabad;nem;
+A009;k226;1;szabad;nem;
+A010;k240;1;jelolo;nem;
+A011;k239;1;jelolo;nem;
+A012;k248;1;jelolo;nem;
+A013;k234;1;jelolo;nem;
+A014;k231;1;jelolo;igen;„Észak” nem a legkisebb érték (az: „Délkelet”)
+A015;k207;1;szabad;nem;
+A016;k229;1;jelolo;igen;vissza nem vezethető szám: 1 | a(z) {S2} „egészség és szépségápolás” értéke, de „számítógépek” mellett áll
+A017;k218;1;szabad;nem;
+A018;k241;1;szabad;nem;
+A019;k224;1;jelolo;nem;
+A020;k221;1;jelolo;igen;a(z) {S1} „Minas Gerais (MG)” értéke, de „Rio Grande do Sul (RS)” mellett áll | „São Paulo (SP)” nem a legnagyobb érték (az: „Rio de Janeiro (RJ)”)
+A021;k205;1;szabad;igen;a(z) 9,5 „lakáskomfort (párnák, takarók)” értéke, de „fehérnemű és strandruházat” mellett áll
+A022;k240;1;szabad;igen;vissza nem vezethető szám: 2
+A023;k222;1;jelolo;nem;
+A024;k204;1;jelolo;nem;
+A025;k235;1;szabad;nem;
+A026;k242;1;szabad;nem;
+A027;k246;1;jelolo;nem;
+A028;k206;1;szabad;nem;
+A029;k237;1;szabad;nem;
+A030;k208;1;jelolo;nem;
+A031;k247;1;szabad;igen;"„2017. december” nem a legkisebb érték (az: „2017. június”) | állítás a szűrésről (a hatókört a rendszer írja; a modell tagadta a szűrést)"
+A032;k213;1;szabad;nem;
+A033;k201;1;szabad;nem;
+A034;k234;1;szabad;nem;
+A035;k217;1;jelolo;igen;a(z) {S2} „2017” értéke, de „2018” mellett áll
+A036;k210;1;szabad;nem;
+A037;k227;1;szabad;igen;vissza nem vezethető szám: 5
+A038;k230;1;szabad;igen;a(z) 15,8 „2018. augusztus” értéke, de „2018. június” mellett áll | „2018. június” nem a legkisebb érték (az: „2018. augusztus”)
+A039;k201;1;jelolo;nem;
+A040;k211;1;jelolo;nem;
+A041;k207;1;jelolo;nem;
+A042;k212;1;jelolo;nem;
+A043;k230;1;jelolo;nem;
+A044;k225;1;szabad;nem;
+A045;k219;1;szabad;igen;a(z) 22,97 „2017. október” értéke, de „2017. december” mellett áll | „2017. december” nem a legnagyobb érték (az: „2017. október”)
+A046;k216;1;jelolo;igen;„2018. augusztus” nem a legkisebb érték (az: „2018. február”)
+A047;k205;1;jelolo;igen;a(z) {S2} „lakáskomfort (párnák, takarók)” értéke, de „fehérnemű és strandruházat” mellett áll
+A048;k231;1;szabad;igen;„Délkelet” nem a legnagyobb érték (az: „Észak”)
+A049;k233;1;jelolo;igen;vissza nem vezethető szám: 18 | „2018. május” nem a legnagyobb érték (az: „2017. november”)
+A050;k220;1;szabad;igen;vissza nem vezethető szám: 52 776
+A051;k208;1;szabad;nem;
+A052;k248;1;szabad;nem;
+A053;k233;1;szabad;igen;a(z) 973 534 „2018. április” értéke, de „2018. május” mellett áll
+A054;k210;1;jelolo;nem;
+A055;k235;1;jelolo;nem;
+A056;k243;1;jelolo;nem;
+A057;k206;1;jelolo;nem;
+A058;k238;1;szabad;igen;a(z) 15,2 „2017. november” értéke, de „2017. december” mellett áll | „2017. május” nem a legkisebb érték (az: „2017. augusztus”)
+A059;k214;1;jelolo;nem;
+A060;k225;1;jelolo;nem;

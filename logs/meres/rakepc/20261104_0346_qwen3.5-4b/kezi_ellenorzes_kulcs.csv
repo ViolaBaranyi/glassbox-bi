@@ -1,0 +1,61 @@
+﻿kod;id;ismetles;ag;a_kapu_talalt;problemak
+A001;k231;1;szabad;igen;vissza nem vezethető szám: 29, 34, 2017
+A002;k231;1;jelolo;igen;ismeretlen jelölő: {S1}, {S2}
+A003;k238;1;jelolo;nem;
+A004;k239;1;szabad;igen;a 95%-os tartomány határa ({O_A}) nem tartományként szerepel
+A005;k223;1;jelolo;igen;ismeretlen jelölő: {S1}
+A006;k224;1;jelolo;igen;vissza nem vezethető szám: 22
+A007;k246;1;jelolo;nem;
+A008;k235;1;jelolo;nem;
+A009;k234;1;jelolo;nem;
+A010;k203;1;szabad;nem;
+A011;k243;1;jelolo;nem;
+A012;k226;1;szabad;nem;
+A013;k247;1;szabad;igen;„2017. március” nem a legnagyobb érték (az: „2017. április”) | „2017. december” nem a legkisebb érték (az: „2017. június”)
+A014;k227;1;jelolo;igen;vissza nem vezethető szám: 5
+A015;k248;1;szabad;igen;vissza nem vezethető szám: 2017, 46,85, 39,50
+A016;k208;1;szabad;nem;
+A017;k244;1;jelolo;igen;ismeretlen jelölő: {S1}
+A018;k214;1;jelolo;nem;
+A019;k233;1;jelolo;nem;
+A020;k209;1;szabad;igen;vissza nem vezethető szám: 5 | a(z) 48,61 „konyhai, étkezőhöz, mosókonyhába és kertbe való bútorok” értéke, de „hálószobabútorok” mellett áll | a(z) 47,13 „jelzőberendezések és biztonságtechnika” értéke, de „hálószobabútorok” mellett áll
+A021;k203;1;jelolo;igen;"állítás a szűrésről (a hatókört a rendszer írja; a modell tagadta a szűrést)"
+A022;k213;1;jelolo;nem;
+A023;k204;1;szabad;nem;
+A024;k206;1;szabad;nem;
+A025;k207;1;szabad;nem;
+A026;k212;1;szabad;nem;
+A027;k228;1;jelolo;nem;
+A028;k213;1;szabad;nem;
+A029;k230;1;jelolo;nem;
+A030;k242;1;szabad;igen;vissza nem vezethető szám: 2017, 13,6, 12,5
+A031;k237;1;jelolo;igen;vissza nem vezethető szám: 2 | a(z) {S1_X} „2017. január” értéke, de „2017. november” mellett áll
+A032;k221;1;jelolo;nem;
+A033;k236;1;szabad;nem;
+A034;k244;1;szabad;nem;
+A035;k229;1;szabad;nem;
+A036;k232;1;jelolo;nem;
+A037;k233;1;szabad;nem;
+A038;k222;1;jelolo;nem;
+A039;k202;1;jelolo;nem;
+A040;k217;1;jelolo;nem;
+A041;k216;1;szabad;nem;
+A042;k224;1;szabad;nem;
+A043;k218;1;szabad;igen;„2017. január” nem a legnagyobb érték (az: „2017. november”) | „2017. szeptember” nem a legkisebb érték (az: „2017. január”)
+A044;k219;1;jelolo;nem;
+A045;k242;1;jelolo;igen;ismeretlen jelölő: {S1}, {S2}, {S3_X} | vissza nem vezethető szám: 2017
+A046;k240;1;jelolo;igen;ismeretlen jelölő: {S1}, {S2_N}
+A047;k214;1;szabad;nem;
+A048;k232;1;szabad;nem;
+A049;k211;1;jelolo;nem;
+A050;k226;1;jelolo;nem;
+A051;k238;1;szabad;igen;„2017. május” nem a legnagyobb érték (az: „2017. december”)
+A052;k245;1;jelolo;nem;
+A053;k227;1;szabad;igen;vissza nem vezethető szám: 5
+A054;k243;1;szabad;nem;
+A055;k222;1;szabad;nem;
+A056;k219;1;szabad;igen;vissza nem vezethető szám: 2, 1
+A057;k236;1;jelolo;nem;
+A058;k247;1;jelolo;igen;„2017. január” nem a legnagyobb érték (az: „2017. április”) | „2017. december” nem a legkisebb érték (az: „2017. június”)
+A059;k221;1;szabad;nem;
+A060;k202;1;szabad;nem;
