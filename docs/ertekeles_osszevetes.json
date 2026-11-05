@@ -1,0 +1,130 @@
+{
+ "rendelesek_a_tarhazban": 96470,
+ "ertekelesek_a_tarhaz_rendelesein": 96353,
+ "ertekelt_rendelesek": 95824,
+ "tobb_ertekeles": 525,
+ "szabalyok": {
+  "atlag": {
+   "leiras": "rendelésenként az értékelések átlaga (fő szabály)",
+   "kesett": {
+    "n": 6381,
+    "atlag": 2.2718225983388183,
+    "alacsony_k": 3979,
+    "alacsony_arany": 0.6235699733584078,
+    "ci95": [
+     0.6116115281263813,
+     0.6353797261053739
+    ]
+   },
+   "idoben": {
+    "n": 89443,
+    "atlag": 4.290589164793965,
+    "alacsony_k": 8257,
+    "alacsony_arany": 0.09231577652806816,
+    "ci95": [
+     0.0904361886833513,
+     0.0942303818682153
+    ]
+   }
+  },
+  "ertekelesenkent": {
+   "leiras": "értékelésenként, összevonás nélkül",
+   "kesett": {
+    "n": 6409,
+    "atlag": 2.271025120923701,
+    "alacsony_k": 4000,
+    "alacsony_arany": 0.6241223279762833,
+    "ci95": [
+     0.6121933043739132,
+     0.6359026465709814
+    ]
+   },
+   "idoben": {
+    "n": 89944,
+    "atlag": 4.289980432268967,
+    "alacsony_k": 8346,
+    "alacsony_arany": 0.09279106999911056,
+    "ci95": [
+     0.09091228888808442,
+     0.09470463296449416
+    ]
+   }
+  },
+  "elso": {
+   "leiras": "rendelésenként a legkorábban létrehozott értékelés",
+   "kesett": {
+    "n": 6381,
+    "atlag": 2.272841247453377,
+    "alacsony_k": 3980,
+    "alacsony_arany": 0.6237266886068015,
+    "ci95": [
+     0.611769129560094,
+     0.6355353665920564
+    ]
+   },
+   "idoben": {
+    "n": 89443,
+    "atlag": 4.290933890857865,
+    "alacsony_k": 8282,
+    "alacsony_arany": 0.09259528414744586,
+    "ci95": [
+     0.09071310740282817,
+     0.09451245437955774
+    ]
+   }
+  },
+  "utolso": {
+   "leiras": "rendelésenként a legkésőbb létrehozott értékelés",
+   "kesett": {
+    "n": 6381,
+    "atlag": 2.2708039492242595,
+    "alacsony_k": 3982,
+    "alacsony_arany": 0.6240401191035888,
+    "ci95": [
+     0.6120843363990617,
+     0.6358466435938795
+    ]
+   },
+   "idoben": {
+    "n": 89443,
+    "atlag": 4.2902407119618085,
+    "alacsony_k": 8290,
+    "alacsony_arany": 0.09268472658564672,
+    "ci95": [
+     0.09080172250384297,
+     0.09460271647240512
+    ]
+   }
+  },
+  "barmelyik": {
+   "leiras": "rendelésenként az átlag; alacsony, ha bármelyik értékelés legfeljebb 2 csillagos",
+   "kesett": {
+    "n": 6381,
+    "atlag": 2.2718225983388183,
+    "alacsony_k": 3986,
+    "alacsony_arany": 0.6246669800971635,
+    "ci95": [
+     0.6127147659723726,
+     0.6364691817021502
+    ]
+   },
+   "idoben": {
+    "n": 89443,
+    "atlag": 4.290589164793965,
+    "alacsony_k": 8324,
+    "alacsony_arany": 0.0930648569480004,
+    "ci95": [
+     0.091178342669718,
+     0.09498632438044435
+    ]
+   }
+  }
+ },
+ "keszult": "2026-11-04 17:21 UTC",
+ "forras": {
+  "ertekelesek": "olist_order_reviews_dataset.csv",
+  "sha256": "012b61c7593e34f51fa614efdf802b9c7056ce6aae5307ddb93236e7cfc797d7",
+  "tarhaz": "warehouse.duckdb",
+  "adatforras": "valós"
+ }
+}
